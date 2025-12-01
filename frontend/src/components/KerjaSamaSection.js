@@ -27,14 +27,14 @@ const KerjaSamaSection = () => {
       {loading && <p className="text-sm text-gray-500">Memuat...</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
       {!loading && !error && (
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-nowrap items-center gap-8 overflow-x-auto py-2">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="flex flex-nowrap items-center justify-center gap-28 py-4">
             {items.map(p => (
-              <div key={p.id} className="group rounded-xl p-6 transition flex items-center justify-center flex-shrink-0 w-48">
+              <div key={p.id} className="group flex items-center justify-center flex-shrink-0">
                 <img
                   src={p.logo}
                   alt={p.name}
-                  className="h-20 sm:h-24 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
+                  className="h-16 sm:h-20 w-auto object-contain transition-all duration-500"
                 />
               </div>
             ))}

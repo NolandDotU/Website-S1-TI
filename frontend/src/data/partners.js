@@ -1,8 +1,15 @@
 // Dummy partners data
+// Import images from src so webpack/vite produces correct URLs
+import alfamartLogo from '../assets/logos/Alfamart_logo.svg.png';
+import ctiLogo from '../assets/logos/cti.webp';
+import puraBarutamaLogo from '../assets/logos/purabarutama.png';
+import sinarmasLogo from '../assets/logos/Sinarmas-Logo.png';
+import bcaLogo from '../assets/logos/bca.png';
+
 export const partners = [
-  { id: 1, name: 'Alfamart', logo: '/logos/.png' },
-  { id: 2, name: 'CTI Group', logo: '/logos/.png' },
-  { id: 3, name: 'Pura Barutama', logo: '/logos/.png' },
-  { id: 4, name: 'Sinarmas', logo: '/logos/.png' },
-  { id: 5, name: 'BCA', logo: '/logos/.png' }
+  { id: 1, name: 'Alfamart', logo: alfamartLogo },
+  { id: 2, name: 'CTI Group', logo: ctiLogo },
+  { id: 3, name: 'Pura Barutama', logo: puraBarutamaLogo },
+  { id: 4, name: 'Sinarmas', logo: sinarmasLogo },
+  { id: 5, name: 'BCA', logo: bcaLogo }
 ];
