@@ -23,9 +23,9 @@ const KerjaSamaSection = () => {
 
   return (
     <section className="py-12 px-12" aria-labelledby="kerjasama-heading">
-      <h2 id="kerjasama-heading" className="text-2xl font-bold mb-6 text-center">Kerja Sama</h2>
-      {loading && <p className="text-sm text-gray-500">Memuat...</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      <h2 id="kerjasama-heading" className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">Kerja Sama</h2>
+      {loading && <p className="text-sm text-gray-500 dark:text-gray-400">Memuat...</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
       {!loading && !error && (
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-wrap items-center justify-center gap-12 py-4">

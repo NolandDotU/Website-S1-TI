@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import TentangTISection from './components/TentangTISection';
 import LayananKampusSection from './components/LayananKampusSection';
 import HeroBanner from './components/HeroBanner';
+import Carousel from './components/Carousel';
 import AdmissionsHighlights from './components/AdmissionsHighlights';
 import FeaturedNews from './components/FeaturedNews';
 import CTASection from './components/CTASection';
@@ -26,7 +27,7 @@ function App() {
   };
 
   return (
-    <div className={`flex flex-col min-h-screen bg-gray-50 dark:bg-gray-800`}>
+    <div className={`flex flex-col min-h-screen dark:bg-gray-800 px-4 md:px-8 lg:px-12`}>
       <div className="fixed top-4 right-4 z-50">
         <Toggle theme={theme} toggleTheme={toggleTheme} />
       </div>
@@ -35,6 +36,7 @@ function App() {
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
         <main className="w-full flex-grow bg-white dark:bg-gray-900">
+          <Carousel />
           <HeroBanner />
           <AdmissionsHighlights />
           <FeaturedNews />
