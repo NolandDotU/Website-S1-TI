@@ -7,9 +7,9 @@ import sinarmasLogo from '../assets/logos/Sinarmas-Logo.png';
 import bcaLogo from '../assets/logos/bca.png';
 
 export const partners = [
-  { id: 1, name: 'Alfamart', logo: alfamartLogo },
-  { id: 2, name: 'CTI Group', logo: ctiLogo },
-  { id: 3, name: 'Pura Barutama', logo: puraBarutamaLogo },
-  { id: 4, name: 'Sinarmas', logo: sinarmasLogo },
-  { id: 5, name: 'BCA', logo: bcaLogo }
+  { id: 1, name: 'Alfamart', logo: alfamartLogo, scale: 1 },
+  { id: 2, name: 'CTI Group', logo: ctiLogo, scale: 1 },
+  { id: 3, name: 'Pura Barutama', logo: puraBarutamaLogo, scale: 1 },
+  { id: 4, name: 'Sinarmas', logo: sinarmasLogo, scale: 1 },
+  { id: 5, name: 'BCA', logo: bcaLogo, scale: 1 }
 ];

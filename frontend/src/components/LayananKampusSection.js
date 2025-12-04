@@ -22,7 +22,7 @@ const LayananKampusSection = () => {
   }, []);
 
   return (
-    <section className="py-12" aria-labelledby="layanan-kampus-heading">
+    <section className="py-12 px-12" aria-labelledby="layanan-kampus-heading">
       <h2 id="layanan-kampus-heading" className="text-2xl font-bold mb-6">Layanan Kampus</h2>
       {loading && <p className="text-sm text-gray-500">Memuat...</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}

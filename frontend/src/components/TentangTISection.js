@@ -22,7 +22,7 @@ const TentangTISection = () => {
   }, []);
 
   return (
-    <section className="py-12" aria-labelledby="tentang-ti-heading">
+    <section className="py-12 px-12" aria-labelledby="tentang-ti-heading">
       <h2 id="tentang-ti-heading" className="text-2xl font-bold mb-6">Tentang Teknik Informatika UKSW</h2>
       <div className="prose max-w-none mb-8 text-gray-700">
         <p>Program Studi Teknik Informatika UKSW berkomitmen menghasilkan lulusan yang siap menghadapi tantangan transformasi digital melalui fondasi akademik yang kuat dan pengalaman praktis.</p>

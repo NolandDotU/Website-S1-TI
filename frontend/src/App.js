@@ -1,37 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Carousel from './components/Carousel';
-import PengumumanSection from './components/PengumumanSection';
-import KerjaSamaSection from './components/KerjaSamaSection';
 import TentangTISection from './components/TentangTISection';
 import LayananKampusSection from './components/LayananKampusSection';
+import HeroBanner from './components/HeroBanner';
+import AdmissionsHighlights from './components/AdmissionsHighlights';
+import FeaturedNews from './components/FeaturedNews';
+import CTASection from './components/CTASection';
+import KerjaSamaSection from './components/KerjaSamaSection';
+import Toggle from './components/Toggle';
 
 function App() {
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative overflow-hidden">
-      {/* Vertical lines background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="h-full flex justify-around">
-          <div className="w-px bg-gray-200"></div>
-          <div className="w-px bg-gray-200"></div>
-          <div className="w-px bg-gray-200"></div>
-          <div className="w-px bg-gray-200"></div>
-          <div className="w-px bg-gray-200"></div>
-          <div className="w-px bg-gray-200"></div>
-        </div>
+    <div className={`flex flex-col min-h-screen bg-gray-50 dark:bg-gray-800`}>
+      <div className="fixed top-4 right-4 z-50">
+        <Toggle theme={theme} toggleTheme={toggleTheme} />
       </div>
       
       {/* Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
-        <main className="w-full flex-grow p-5 space-y-16">
-          <Carousel />
-          <PengumumanSection />
-          <KerjaSamaSection />
+        <main className="w-full flex-grow bg-white dark:bg-gray-900">
+          <HeroBanner />
+          <AdmissionsHighlights />
+          <FeaturedNews />
           <TentangTISection />
+          <KerjaSamaSection />
           <LayananKampusSection />
+          <CTASection />
         </main>
         <Footer className="p-20" />
       </div>
