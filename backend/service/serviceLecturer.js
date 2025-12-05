@@ -3,12 +3,12 @@
 // Specific implementation untuk Lecturer
 // ============================================
 import { BaseService } from "./base/baseService.js";
-import Lecturer from "../../model/lecturerModel.js";
+import LecturerModel from "../model/lecturerModel.js";
 import { AppError } from "../middleware/errorHandler.js";
 
 class LecturerService extends BaseService {
   constructor() {
-    super(Lecturer);
+    super(LecturerModel);
   }
 
   async getAll(query) {
@@ -83,29 +83,6 @@ class LecturerService extends BaseService {
         isActive: true,
       })
       .lean();
-  }
-
-  async getByPosition(position) {
-    return await this.model
-      .find({
-        position,
-        isActive: true,
-      })
-      .lean();
-  }
-
-  async getActiveCount() {
-    return await this.count({ isActive: true });
-  }
-
-  async deactivate(id) {
-    const lecturer = await this.getById(id);
-    return await this.update(id, { isActive: false });
-  }
-
-  async activate(id) {
-    const lecturer = await this.getById(id);
-    return await this.update(id, { isActive: true });
   }
 
   async bulkCreate(lecturersData) {

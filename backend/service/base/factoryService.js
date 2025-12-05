@@ -2,7 +2,7 @@
 // service/factory/ServiceFactory.js
 // Factory pattern untuk create service instances
 // ============================================
-import LecturerService from "../LecturerService.js";
+import LecturerService from "../serviceLecturer.js";
 
 class ServiceFactory {
   constructor() {

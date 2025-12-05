@@ -12,4 +12,28 @@ router.get(
   })
 );
 
-module.exports = router;
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    const result = await serviceFactory.get("lecturer").create(req.body);
+    res.json(result);
+  })
+);
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const result = await serviceFactory.get("lecturer").delete(req.params.id);
+    res.json(result);
+  })
+);
+router.put(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const result = await serviceFactory
+      .get("lecturer")
+      .update(req.params.id, req.body);
+    res.json(result);
+  })
+);
+
+export default router;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const lecturerSchema = new mongoose.Schema({
   username: {
@@ -6,17 +6,10 @@ const lecturerSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    errors: {
-      required: "Username is required",
-      unique: "Username already exists",
-    },
   },
   fullname: {
     type: String,
     required: true,
-    errors: {
-      required: "Fullname is required",
-    },
   },
   expertise: [
     {
@@ -25,25 +18,15 @@ const lecturerSchema = new mongoose.Schema({
     },
   ],
   email: {
-    type: Email,
+    type: String, // Bukan Email
     required: true,
     unique: true,
     trim: true,
-    errors: {
-      required: "Email is required",
-      unique: "Email already exists",
-    },
   },
-  externalLink: {
-    type: String,
-    required: false,
-  },
-  photo: {
-    type: String,
-    required: false,
-  },
+  externalLink: String,
+  photo: String,
 });
 
 const LecturerModel = mongoose.model("Lecturer", lecturerSchema);
 
-module.exports = LecturerModel;
+export default LecturerModel;

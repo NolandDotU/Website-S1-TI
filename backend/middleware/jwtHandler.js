@@ -2,7 +2,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const jwt = require("jsonwebtoken");
 const { TokenError } = require("jsonwebtoken");
 
-function JwtHandler(req, res, next) {
+function tokenValidation(req, res, next) {
   const authorization = req.headers.authorization;
   if (!authorization) {
     return res.status(401).json({
@@ -33,6 +33,19 @@ function JwtHandler(req, res, next) {
       });
     }
     res.status(500).json({
+      message: "Internal server Error",
+      error: error.message,
+      stack: error.stack,
+    });
+  }
+}
+
+function GenerateToken(payload) {
+  try {
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+    return token;
+  } catch (error) {
+    return res.status(500).json({
       message: "Internal server Error",
       error: error.message,
       stack: error.stack,
