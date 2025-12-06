@@ -5,7 +5,7 @@ import serviceFactory from "../service/base/factoryService.js";
 const router = express.Router();
 
 router.get(
-  "/?page=:page&limit=:limit",
+  "/",
   asyncHandler(async (req, res) => {
     const result = await serviceFactory.get("lecturer").getAll(req.query);
     console.log(result);
