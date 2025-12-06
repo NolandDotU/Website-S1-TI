@@ -18,15 +18,14 @@ const lecturerSchema = new mongoose.Schema({
     },
   ],
   email: {
-    type: String, // Bukan Email
-    required: true,
+    type: String,
+    required: [true, "Email is required"],
     unique: true,
-    trim: true,
   },
   externalLink: String,
   photo: String,
 });
 
-const LecturerModel = mongoose.model("Lecturer", lecturerSchema);
+const LecturerModel = mongoose.model("lecturers_collection", lecturerSchema);
 
 export default LecturerModel;
