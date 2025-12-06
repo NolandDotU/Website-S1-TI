@@ -2,12 +2,15 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import dotenv from "dotenv";
 import { connect } from "./utils/db.js";
 import lecturerRoutes from "./routes/lecturerRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
+dotenv.config();
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(morgan("dev"));
 
