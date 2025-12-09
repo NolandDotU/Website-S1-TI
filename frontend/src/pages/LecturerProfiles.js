@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
 import { getLecturers } from '../services/api';
+import LecturerCard from '../components/LecturerCard';
 
 const LecturerProfiles = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,13 +8,15 @@ const LecturerProfiles = () => {
   const [lecturers, setLecturers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   // Fetch lecturers from backend
   useEffect(() => {
     const fetchLecturers = async () => {
       try {
         setLoading(true);
-        const data = await getLecturers();
+        const { lecturers: data } = await getLecturers(1, 100); // Fetch all lecturers
         console.log('Fetched lecturers data:', data);
         // Ensure data is an array
         setLecturers(Array.isArray(data) ? data : []);
@@ -36,50 +38,38 @@ const LecturerProfiles = () => {
 
   // Filter lecturers based on search and expertise
   const filteredLecturers = Array.isArray(lecturers) ? lecturers.filter(lecturer => {
-    const matchesSearch = lecturer.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lecturer.expertise?.join(', ').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = searchTerm === '' || 
+                         lecturer.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (Array.isArray(lecturer.expertise) && lecturer.expertise.join(', ').toLowerCase().includes(searchTerm.toLowerCase()));
+    
     const matchesExpertise = selectedExpertise === 'All' || 
-                            lecturer.expertise?.some(exp => exp.toLowerCase().includes(selectedExpertise.toLowerCase()));
+                            (Array.isArray(lecturer.expertise) && lecturer.expertise.some(exp => exp.toLowerCase().includes(selectedExpertise.toLowerCase())));
+    
     return matchesSearch && matchesExpertise;
   }) : [];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredLecturers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedLecturers = filteredLecturers.slice(startIndex, endIndex);
 
-  const cardVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedExpertise]);
 
   return (
     <div className="min-h-screen py-16 px-4 md:px-8 lg:px-12">
       {/* Header Section */}
-      <m.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-7xl mx-auto mb-12"
-      >
+      <div className="max-w-7xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 text-center">
           Daftar Profil Dosen
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 text-center max-w-3xl mx-auto">
           Kenali para pengajar berkualitas di Program Studi Teknik Informatika UKSW
         </p>
-      </m.div>
+      </div>
 
       {/* Search and Filter Section */}
       <div className="max-w-7xl mx-auto mb-12">
@@ -151,100 +141,78 @@ const LecturerProfiles = () => {
 
       {/* Lecturer Cards Grid */}
       {!loading && !error && (
-        <m.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-        {console.log('About to render. Lecturers:', lecturers.length, 'Filtered:', filteredLecturers.length, 'Data:', filteredLecturers)}
-        {filteredLecturers.map((lecturer) => {
-          console.log('Mapping lecturer:', lecturer);
-          return (
-          <m.div
-            key={lecturer.id}
-            variants={cardVariants}
-            whileHover={{ y: -8, transition: { duration: 0.3 } }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border-2 border-gray-100 dark:border-gray-700 hover:shadow-2xl"
-          >
-            {/* Profile Image */}
-            <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600 overflow-hidden flex items-center justify-center">
-              {lecturer.photo ? (
-                <img
-                  src={lecturer.photo}
-                  alt={lecturer.fullname}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div class="text-white text-8xl">👨‍🏫</div>';
+        <>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {paginatedLecturers.map((lecturer) => (
+          <LecturerCard 
+            key={lecturer._id} 
+            lecturer={lecturer}
+          />
+        ))}
+        </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="max-w-7xl mx-auto mt-12 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: currentPage === 1 ? '#d1d5db' : '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                fontWeight: '600'
+              }}
+            >
+              ← Previous
+            </button>
+            
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  style={{
+                    padding: '10px 16px',
+                    backgroundColor: currentPage === page ? '#2563eb' : '#f3f4f6',
+                    color: currentPage === page ? 'white' : '#000000',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '600'
                   }}
-                />
-              ) : (
-                <div className="text-white text-8xl">👨‍🏫</div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            </div>
-
-            {/* Lecturer Info */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
-                {lecturer.fullname}
-              </h3>
-              
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                  Keahlian:
-                </p>
-                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3">
-                  {lecturer.expertise.join(', ')}
-                </p>
-              </div>
-
-              {/* Contact Info */}
-              <div className="space-y-2 mb-4">
-                <a
-                  href={`mailto:${lecturer.email}`}
-                  className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  {lecturer.email}
-                </a>
-                
-                {lecturer.externalLink && (
-                  <a
-                    href={lecturer.externalLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Profil Eksternal
-                  </a>
-                )}
-              </div>
-
-              {/* View Profile Button */}
-              <button className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                Lihat Profil Lengkap
-              </button>
+                  {page}
+                </button>
+              ))}
             </div>
-          </m.div>
-        );
-        })}
-        </m.div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: currentPage === totalPages ? '#d1d5db' : '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                fontWeight: '600'
+              }}
+            >
+              Next →
+            </button>
+          </div>
+        )}
+        </>
       )}
 
       {/* No Results Message */}
       {!loading && !error && filteredLecturers.length === 0 && (
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-16"
-        >
+        <div className="text-center py-16">
           <svg className="mx-auto w-24 h-24 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -254,7 +222,7 @@ const LecturerProfiles = () => {
           <p className="text-gray-600 dark:text-gray-400">
             Coba ubah kata kunci pencarian atau filter yang digunakan
           </p>
-        </m.div>
+        </div>
       )}
     </div>
   );
