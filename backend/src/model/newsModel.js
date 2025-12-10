@@ -10,4 +10,7 @@ const newsSchema = new mongoose.Schema({
     required: true,
     enum: ["berita", "pengumuman", "event"],
   },
+  link: {
+    type: String,
+  }
 });
