@@ -12,7 +12,7 @@ import CTASection from './components/CTASection';
 import KerjaSamaSection from './components/KerjaSamaSection';
 import Toggle from './components/Toggle';
 import LecturerProfiles from './pages/LecturerProfiles';
-import Admin from './pages/Admin';
+import { AdminDashboard } from './pages/admin';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -56,7 +56,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/profil-dosen" element={<LecturerProfiles />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>
         <Footer className="p-20" />
