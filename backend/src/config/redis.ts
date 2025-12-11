@@ -8,18 +8,19 @@ export const connectRedis = async (): Promise<RedisClientType> => {
   try {
     logger.info("Conneting Rediss !!!");
     redisClient = createClient({
-      socket: {
-        host: env.REDIS_HOST,
-        port: env.REDIS_PORT,
-        reconnectStrategy: (retries, cause) => {
-          if (retries > 10) {
-            throw new Error(
-              `Could not connect to Redis after ${retries} retries because: ${cause}`
-            );
-          }
-          return Math.min(retries * 100, 3000);
-        },
-      },
+      url: env.REDIS_URL,
+      // socket: {
+      //   host: env.REDIS_HOST,
+      //   port: env.REDIS_PORT,
+      //   reconnectStrategy: (retries, cause) => {
+      //     if (retries > 10) {
+      //       throw new Error(
+      //         `Could not connect to Redis after ${retries} retries because: ${cause}`
+      //       );
+      //     }
+      //     return Math.min(retries * 100, 3000);
+      //   },
+      // },
       password: env.REDIS_PASSWORD,
     });
 
