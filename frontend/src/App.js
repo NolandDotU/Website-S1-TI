@@ -13,6 +13,8 @@ import KerjaSamaSection from './components/KerjaSamaSection';
 import Toggle from './components/Toggle';
 import LecturerProfiles from './pages/LecturerProfiles';
 import { AdminDashboard } from './pages/admin';
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -44,24 +46,36 @@ function App() {
   );
 
   return (
-    <div className={`flex flex-col min-h-screen dark:bg-gray-900 px-4 md:px-8 lg:px-12`}>
-      <div className="fixed top-4 right-4 z-50">
-        <Toggle theme={theme} toggleTheme={toggleTheme} />
-      </div>
+    <Routes>
+      {/* Login route without navbar/footer */}
+      <Route path="/login" element={<Login />} />
       
-      {/* Content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Navbar />
-        <main className="w-full flex-grow bg-white dark:bg-gray-900">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/profil-dosen" element={<LecturerProfiles />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-          </Routes>
-        </main>
-        <Footer className="p-20" />
-      </div>
-    </div>
+      {/* All other routes with navbar/footer */}
+      <Route path="*" element={
+        <div className={`flex flex-col min-h-screen dark:bg-gray-900 px-4 md:px-8 lg:px-12`}>
+          <div className="fixed top-4 right-4 z-50">
+            <Toggle theme={theme} toggleTheme={toggleTheme} />
+          </div>
+          
+          {/* Content */}
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Navbar />
+            <main className="w-full flex-grow bg-white dark:bg-gray-900">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/profil-dosen" element={<LecturerProfiles />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </main>
+            <Footer className="p-20" />
+          </div>
+        </div>
+      } />
+    </Routes>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { m } from 'framer-motion';
-import { createLecturer } from '../services/api';
+import { createLecturer } from '../../services/api';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('berita');

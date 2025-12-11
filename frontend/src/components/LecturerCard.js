@@ -5,17 +5,20 @@ const LecturerCard = ({ lecturer }) => {
     <div
       style={{
         backgroundColor: '#ffffff',
-        borderRadius: '16px',
-        boxShadow: '0 10px 30px -3px rgba(0, 0, 0, 0.3)', // Stronger shadow
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         overflow: 'hidden',
-        border: '2px solid #d1d5db' // Darker border
+        border: '1px solid #e5e7eb',
+        transition: 'box-shadow 0.3s ease'
       }}
+      onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.15)'}
+      onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
     >
       {/* Profile Image */}
       <div style={{
         position: 'relative',
-        height: '256px',
-        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+        height: '280px',
+        backgroundColor: '#2563eb',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -30,57 +33,65 @@ const LecturerCard = ({ lecturer }) => {
               objectFit: 'cover'
             }}
             onError={(e) => {
-              e.target.style.display = 'none';
-              const fallback = document.createElement('div');
-              fallback.innerHTML = '👨‍🏫';
-              fallback.style.fontSize = '96px';
-              fallback.style.color = 'white';
-              e.target.parentElement.appendChild(fallback);
+              const parent = e.target.parentElement;
+              // Only add fallback if it doesn't already exist
+              if (!parent.querySelector('.fallback-icon')) {
+                e.target.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.className = 'fallback-icon';
+                fallback.innerHTML = `
+                  <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                `;
+                parent.appendChild(fallback);
+              }
             }}
           />
         ) : (
-          <div style={{ fontSize: '96px', color: 'white' }}>👨‍🏫</div>
+          <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
         )}
       </div>
 
       {/* Lecturer Info */}
       <div style={{ 
-        padding: '24px',
-        backgroundColor: '#f9fafb'
+        padding: '20px',
+        backgroundColor: '#ffffff'
       }}>
         <h3 style={{
-          fontSize: '24px',
-          fontWeight: '900',
-          color: '#000000',
-          marginBottom: '16px',
+          fontSize: '18px',
+          fontWeight: '700',
+          color: '#1f2937',
+          marginBottom: '12px',
           display: 'block',
-          minHeight: '48px',
-          backgroundColor: '#ffffff',
-          padding: '8px',
-          border: '2px solid #000000'
+          lineHeight: '1.4'
         }}>
           {lecturer.fullname || 'No Name'}
         </h3>
         
         <div style={{ 
           marginBottom: '16px',
-          backgroundColor: '#ffffff',
-          padding: '12px',
-          border: '1px solid #d1d5db'
+          paddingBottom: '16px',
+          borderBottom: '1px solid #e5e7eb'
         }}>
           <p style={{
-            fontSize: '14px',
-            fontWeight: '700',
-            color: '#000000',
-            marginBottom: '8px'
+            fontSize: '12px',
+            fontWeight: '600',
+            color: '#6b7280',
+            marginBottom: '6px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
           }}>
-            Keahlian:
+            Keahlian
           </p>
           <p style={{
             fontSize: '14px',
-            color: '#000000',
-            lineHeight: '1.5',
-            fontWeight: '600'
+            color: '#374151',
+            lineHeight: '1.6'
           }}>
             {Array.isArray(lecturer.expertise) && lecturer.expertise.length > 0 
               ? lecturer.expertise.join(', ') 
@@ -90,23 +101,23 @@ const LecturerCard = ({ lecturer }) => {
 
         {/* Contact Info */}
         <div style={{ 
-          marginBottom: '16px',
-          backgroundColor: '#ffffff',
-          padding: '12px'
+          marginBottom: '16px'
         }}>
           {lecturer.email && (
           <a
             href={`mailto:${lecturer.email}`}
             style={{
-              display: 'block',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
               fontSize: '14px',
-              color: '#dc2626',
-              textDecoration: 'underline',
-              marginBottom: '8px',
-              fontWeight: 'bold'
+              color: '#2563eb',
+              textDecoration: 'none',
+              marginBottom: '8px'
             }}
           >
-            📧 {lecturer.email}
+            <span>📧</span>
+            <span style={{ wordBreak: 'break-all' }}>{lecturer.email}</span>
           </a>
           )}
           
@@ -116,14 +127,16 @@ const LecturerCard = ({ lecturer }) => {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
                 fontSize: '14px',
-                color: '#dc2626',
-                textDecoration: 'underline',
-                fontWeight: 'bold'
+                color: '#2563eb',
+                textDecoration: 'none'
               }}
             >
-              🔗 Profil Eksternal
+              <span>🔗</span>
+              <span>Profil Eksternal</span>
             </a>
           )}
         </div>
@@ -132,16 +145,17 @@ const LecturerCard = ({ lecturer }) => {
         <button style={{
           width: '100%',
           padding: '12px',
-          background: 'linear-gradient(90deg, #2563eb 0%, #8b5cf6 100%)',
+          backgroundColor: '#2563eb',
           color: 'white',
           fontWeight: '600',
-          borderRadius: '12px',
+          fontSize: '14px',
+          borderRadius: '8px',
           border: 'none',
           cursor: 'pointer',
-          transition: 'transform 0.3s'
+          transition: 'background-color 0.3s'
         }}
-        onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
-        onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#2563eb'}
         >
           Lihat Profil Lengkap
         </button>
