@@ -1,6 +1,6 @@
+// utils/jwt.ts
 import jwt, {
   Secret,
-  SignOptions,
   JsonWebTokenError,
   TokenExpiredError,
 } from "jsonwebtoken";
@@ -13,28 +13,48 @@ export interface JWTPayload {
   role: string;
 }
 
+export interface DecodedJWT extends JWTPayload {
+  iat: number;
+  exp: number;
+}
+
+const ACCESS_TOKEN_SECRET = env.JWT_SECRET;
+const REFRESH_TOKEN_SECRET = env.JWT_SECRET + "_refresh";
+
 export const generateToken = (payload: JWTPayload): string => {
-  return jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: 60 * 60 * 12,
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+    expiresIn: "15m",
   });
 };
 
 export const generateRefreshToken = (payload: JWTPayload): string => {
-  return jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: 60 * 60 * 12 * 7,
+  return jwt.sign(payload, REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
   });
 };
 
-export const verifyToken = (token: string): JWTPayload => {
+export const verifyToken = (
+  token: string,
+  isRefreshToken = false
+): DecodedJWT => {
   try {
-    return jwt.verify(token, env.JWT_SECRET) as JWTPayload;
+    const secret = isRefreshToken ? REFRESH_TOKEN_SECRET : ACCESS_TOKEN_SECRET;
+    return jwt.verify(token, secret) as DecodedJWT;
   } catch (error) {
     if (error instanceof TokenExpiredError) {
-      throw ApiError.unauthorized("Token Expired");
+      throw ApiError.unauthorized("Token expired");
     }
     if (error instanceof JsonWebTokenError) {
-      throw ApiError.unauthorized("Invalid Token");
+      throw ApiError.unauthorized("Invalid token");
     }
-    throw ApiError.unauthorized("Failed to Verify Token");
+    throw ApiError.unauthorized("Failed to verify token");
+  }
+};
+
+export const decodeToken = (token: string): DecodedJWT | null => {
+  try {
+    return jwt.decode(token) as DecodedJWT;
+  } catch {
+    return null;
   }
 };

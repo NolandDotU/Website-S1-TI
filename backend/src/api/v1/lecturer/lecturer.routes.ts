@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { LecturerController } from "./lecturer.controller";
-import { LecturerService } from "./lecturer.service";
-
+// import { authMiddleware } from "../../../middlewares/auth.middleware";
+// import { validateRequest } from "../../../middlewares/validate.middleware";
+// import { lecturerValidation } from "./lecturer.validation";
+// import { cacheMiddleware } from "../../../middlewares/cache.middleware";
+// import { upload } from "../../../middlewares/upload.middleware";
 const router = Router();
 
 // Lazy initialization - only create instances when routes are actually called
