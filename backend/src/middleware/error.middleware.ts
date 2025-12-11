@@ -17,7 +17,7 @@ export const errorMiddleware = (
     message = err.message;
   }
 
-  // Log error
+  // Ini logging error
   logger.error({
     message: err.message,
     stack: err.stack,
@@ -25,13 +25,13 @@ export const errorMiddleware = (
     method: req.method,
   });
 
-  // Response
+  // ini payload response
   const response: any = {
     success: false,
     message,
   };
 
-  // Include stack trace in development
+  // Kalo di development ada stack errornya di file mana
   if (env.NODE_ENV === "development") {
     response.stack = err.stack;
   }

@@ -3,6 +3,7 @@ import { getDBStatus, disconnectDB, mongoConnect } from "./config/database";
 import { connectRedis } from "./config/redis";
 import { logger } from "./utils/logger";
 import { env } from "./config/env";
+import { log } from "console";
 
 const PORT = env.PORT || 5000; //ini PORT nya
 
@@ -34,4 +35,5 @@ const startServer = async () => {
   }
 };
 
+logger.info(`Starting Connection Server`);
 startServer();

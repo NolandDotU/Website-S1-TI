@@ -22,9 +22,13 @@ const envSchema = z.object({
   MONGODB_NAME: z.string(),
 
   // Redis
-  REDIS_HOST: z.string().default("localhost"),
+  REDIS_HOST: z.string().default("127.0.0.1"),
   REDIS_PORT: z.string().transform(Number).default(6379),
   REDIS_PASSWORD: z.string().optional(),
+  TTL: z
+    .string()
+    .transform(Number)
+    .default(60 * 15),
 
   // JWT
   JWT_SECRET: z.string(),

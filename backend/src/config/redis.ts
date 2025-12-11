@@ -6,6 +6,7 @@ let redisClient: RedisClientType | null = null;
 
 export const connectRedis = async (): Promise<RedisClientType> => {
   try {
+    logger.info("Conneting Rediss !!!");
     redisClient = createClient({
       socket: {
         host: env.REDIS_HOST,
