@@ -35,6 +35,10 @@ export const LecturerSchema = new Schema(
     photo: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

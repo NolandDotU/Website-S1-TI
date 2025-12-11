@@ -26,12 +26,14 @@ export class LecturerController {
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {
-    const lecturer = await this.service.update(req.body);
+    const { id } = req.params;
+    const lecturer = await this.service.update(req.body, id);
     return res.json(ApiResponse.success(lecturer));
   });
 
   delete = asyncHandler(async (req: Request, res: Response) => {
-    const lecturer = await this.service.delete(req.params.id);
+    const { id } = req.params;
+    const lecturer = await this.service.delete(id);
     return res.json(ApiResponse.success(lecturer));
   });
 }

@@ -15,10 +15,7 @@ export interface ILecturerResponse extends ILecturer {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface IUpdateInput extends ILecturer {
-  id: string;
+  isActive: boolean;
 }
 
 export interface LecturerQueryDTO {
