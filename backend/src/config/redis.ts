@@ -40,8 +40,11 @@ export const connectRedis = async (): Promise<RedisClientType> => {
   }
 };
 
-export const getRedisClient = (): RedisClientType => {
-  if (!redisClient) throw new Error("Redis client not initialized");
+export const getRedisClient = (): RedisClientType | null => {
+  if (!redisClient) {
+    logger.error("Redis client is not connected.");
+    return null;
+  }
   return redisClient;
 };
 

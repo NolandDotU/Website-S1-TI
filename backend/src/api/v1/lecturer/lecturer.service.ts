@@ -6,6 +6,7 @@ import {
 } from "./lecturer.dto";
 import { CacheManager, logger } from "../../../utils/index";
 import { getRedisClient } from "../../../config/redis";
+import { ApiError } from "../../../utils";
 
 export class LecturerService {
   private model: typeof LecturerModel;
@@ -19,7 +20,7 @@ export class LecturerService {
 
   async create(data: ILecturerInput): Promise<ILecturerResponse> {
     const existing = await this.model.findOne({ email: data.email });
-    if (existing) throw new Error("Email already exists");
+    if (existing) throw ApiError.conflict("Lecturer already exists");
 
     const lecturerDoc = await this.model.create(data);
     await this.cache.del("lecturers");
@@ -49,14 +50,11 @@ export class LecturerService {
         }
       : {};
 
-    const [docs] = await Promise.all([
-      this.model
-        .find(searchQuery)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit),
-      this.model.countDocuments(searchQuery),
-    ]);
+    const docs = await this.model
+      .find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     const data = docs.map((doc) => {
       return doc.toJSON() as unknown as ILecturerResponse;

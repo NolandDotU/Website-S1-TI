@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const LecturerValidation = z.object({
-  _id: z.string(),
   username: z
     .string()
     .min(4, "Username must be at least 4 characters long")

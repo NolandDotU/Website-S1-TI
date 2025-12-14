@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ILecturerDoc, ILecturer } from "../api/v1/lecturer/lecturer.dto";
+import { email } from "zod";
 
 export const LecturerSchema = new Schema(
   {
@@ -53,6 +54,8 @@ export const LecturerSchema = new Schema(
     },
   }
 );
+
+LecturerSchema.index({ fullname: "text", username: "text", email: "text" });
 
 export const LecturerModel = mongoose.model<ILecturerDoc>(
   "lecturers",

@@ -20,9 +20,11 @@ export class LecturerController {
     const { page, limit, search } = req.query as LecturerQueryDTO;
     logger.info("Query params: ", req.query);
     const lecturers = await this.service.getAll(page, limit, search);
-    res.json(
-      ApiResponse.success(lecturers, "Lecturers fetched successfully", 200)
-    );
+    res
+      .status(200)
+      .json(
+        ApiResponse.success(lecturers, "Lecturers fetched successfully", 200)
+      );
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {

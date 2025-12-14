@@ -3,14 +3,15 @@ import { logger } from "./logger";
 import { env } from "../config/env";
 
 export class CacheManager {
-  private client: RedisClientType;
+  private client: RedisClientType | null;
 
-  constructor(client: RedisClientType) {
+  constructor(client: RedisClientType | null) {
     this.client = client;
   }
 
   async get<T = any>(key: string): Promise<T | null> {
     try {
+      if (!this.client) return null;
       const data = await this.client.get(key);
       if (!data) return null;
       return JSON.parse(data) as T;
@@ -20,7 +21,8 @@ export class CacheManager {
     }
   }
 
-  async set(key: string, data: any): Promise<void> {
+  async set(key: string, data: any): Promise<void | null> {
+    if (!this.client) return null;
     try {
       const serialized = JSON.stringify(data);
       const ttl = env.TTL;
@@ -35,7 +37,8 @@ export class CacheManager {
     }
   }
 
-  async del(key: string | string[]): Promise<void> {
+  async del(key: string | string[]): Promise<void | null> {
+    if (!this.client) return null;
     try {
       await this.client.del(key);
     } catch (error) {
@@ -43,7 +46,8 @@ export class CacheManager {
     }
   }
 
-  async exists(key: string): Promise<boolean> {
+  async exists(key: string): Promise<boolean | null> {
+    if (!this.client) return null;
     try {
       const exist = await this.client.exists(key);
       return exist === 1;
@@ -53,7 +57,8 @@ export class CacheManager {
     }
   }
 
-  async flush(): Promise<void> {
+  async flush(): Promise<void | null> {
+    if (!this.client) return null;
     try {
       await this.client.flushAll();
     } catch (error) {
