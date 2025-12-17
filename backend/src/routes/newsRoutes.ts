@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import NewsService from "../service/newsService.js";
+import { asyncHandler } from "../utils/asyncHandler";
+import NewsService from "../service/newsService";
+import { embeddingInsertService } from "../service/embeddingInsertService";
 
 const router = express.Router();
 const newsService = new NewsService();
@@ -30,20 +31,53 @@ router.get(
 );
 
 // Create news
+// router.post(
+//   "/",
+//   asyncHandler(async (req: Request, res: Response) => {
+//     const result = await newsService.create(req.body);
+//     res.json(result);
+//   })
+// );
+
 router.post(
   "/",
-  asyncHandler(async (req: Request, res: Response) => {
-    const result = await newsService.create(req.body);
-    res.json(result);
+  asyncHandler(async (req, res) => {
+    const news = await newsService.create(req.body);
+
+    embeddingInsertService
+      .upsertOne(
+        "news",
+        news._id.toString(),
+        `${news.title}\n${news.category}\n${news.content}`
+      )
+      .catch(console.error);
+
+    res.json(news);
   })
 );
 
 // Update news
+// router.put(
+//   "/:id",
+//   asyncHandler(async (req: Request, res: Response) => {
+//     const result = await newsService.update(req.params.id, req.body);
+//     res.json(result);
+//   })
+// );
 router.put(
   "/:id",
-  asyncHandler(async (req: Request, res: Response) => {
-    const result = await newsService.update(req.params.id, req.body);
-    res.json(result);
+  asyncHandler(async (req, res) => {
+    const news = await newsService.update(req.params.id, req.body);
+
+    embeddingInsertService
+      .upsertOne(
+        "news",
+        news._id.toString(),
+        `${news.title}\n${news.category}\n${news.content}`
+      )
+      .catch(console.error);
+
+    res.json(news);
   })
 );
 

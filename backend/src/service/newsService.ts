@@ -1,4 +1,4 @@
-import NewsModel from "../model/newsModel.js";
+import NewsModel from "../model/newsModel";
 
 class NewsService {
   private model: typeof NewsModel;

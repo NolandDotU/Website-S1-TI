@@ -1,0 +1,36 @@
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-16 13:20:22"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-16 13:20:24"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-16 13:20:24"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:24"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:24"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:24"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:24"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:24"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:25"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:25"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:25"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:25"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:26"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:26"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:28"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:28"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:30"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:30"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:32"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:32"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:34"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:34"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:36"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:36"}
+{"level":"info","message":"Reconnecting to Redis.","timestamp":"2025-12-16 13:20:38"}
+{"level":"error","message":"Redis error: ","timestamp":"2025-12-16 13:20:38"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-16 13:20:39"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-16 13:46:38"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-16 13:46:41"}
+{"level":"info","message":"SIGINT received. Closing server gracefully...","timestamp":"2025-12-16 18:59:20"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-16 18:59:21"}
