@@ -43,7 +43,7 @@ const newsSchema = new mongoose.Schema(
   }
 );
 
-newsSchema.index({ title: "text" });
+newsSchema.index({ title: 1 });
 
 const NewsModel = mongoose.model("news_collection", newsSchema);
 export default NewsModel;

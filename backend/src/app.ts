@@ -7,6 +7,7 @@ import { corsOptions } from "./config/cors";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { logger, morganMiddleware } from "./utils/logger";
 import apiV1Router from "./api/v1";
+import { configureGoogleOAuth } from "./config/google-oauth";
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(compression());
+configureGoogleOAuth();
 
 // Body parsing
 app.use(express.json({ limit: "10mb" }));

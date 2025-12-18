@@ -34,12 +34,25 @@ export class LecturerService {
     search = ""
   ): Promise<ILecturerResponse[]> {
     const skip = (page - 1) * limit;
+    let cacheKey = "";
 
-    const cacheKey = `lecturers:page:${page}:limit:${limit}:search:${search}`;
+    if (this.cache) {
+      try {
+        const cacheVersion = (await this.cache.get("lecturers:version")) || "0";
+        const normalizedSearch = search.trim().toLowerCase();
+        cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
+        logger.info("Cache Key", cacheKey);
 
-    const cached = await this.cache.get<ILecturerResponse[]>(cacheKey);
-    logger.info("Cached Lecturers", cached?.length);
-    if (cached) return cached;
+        const cached = await this.cache.get<ILecturerResponse[]>(cacheKey);
+        if (cached) {
+          logger.info("Cache HIT - Returning cached lecturers", cached.length);
+          return cached;
+        }
+        logger.info("Cache MISS - Fetching from database");
+      } catch (error) {
+        logger.error("Cache error, falling back to database", error);
+      }
+    }
 
     const searchQuery = search
       ? {
@@ -61,7 +74,14 @@ export class LecturerService {
     });
 
     const result = data;
-    await this.cache.set(cacheKey, result);
+    if (this.cache && cacheKey) {
+      try {
+        await this.cache.set(cacheKey, data); // 1 hour TTL
+        logger.info("Cached news data", data.length);
+      } catch (error) {
+        logger.error("Failed to cache data", error);
+      }
+    }
 
     return result;
   }

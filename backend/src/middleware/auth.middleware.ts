@@ -9,28 +9,22 @@ import {
   JWTPayload,
 } from "../utils/jwt";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: DecodedJWT;
-    }
-  }
-}
-
-export const authMiddleware = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Check multiple sources for token
-    const accessToken =
-      req.cookies?.accessToken ||
-      req.headers.authorization?.replace("Bearer ", "");
+export const authMiddleware = (roles: string[] | null) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const accessToken = req.cookies?.accessToken;
 
     if (!accessToken) {
       throw ApiError.unauthorized("Access token required");
     }
 
     try {
-      const payload = verifyToken(accessToken);
-      req.user = payload;
+      const user = verifyToken(accessToken);
+      if (roles && !roles.includes(user.role)) {
+        throw ApiError.forbidden(
+          `Access denied. Required roles: ${roles.join(", ")}`
+        );
+      }
+      req.user = user;
       next();
     } catch (error) {
       if (error instanceof ApiError && error.message === "Token expired") {
@@ -47,6 +41,8 @@ export const authMiddleware = asyncHandler(
             _id: refreshPayload._id,
             email: refreshPayload.email,
             role: refreshPayload.role,
+            authProvider: refreshPayload.authProvider,
+            username: refreshPayload.username,
           };
 
           const newAccessToken = generateToken(newPayload);
@@ -66,7 +62,6 @@ export const authMiddleware = asyncHandler(
             maxAge: 7 * 24 * 60 * 60 * 1000,
           });
 
-          req.user = verifyToken(newAccessToken);
           next();
         } catch (refreshError) {
           throw ApiError.unauthorized(
@@ -77,42 +72,4 @@ export const authMiddleware = asyncHandler(
         throw error;
       }
     }
-  }
-);
-
-export const authorize = (...roles: string[]) =>
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user) {
-      throw ApiError.unauthorized("Authentication required");
-    }
-
-    if (roles.length > 0 && !roles.includes(req.user.role)) {
-      throw ApiError.forbidden(
-        `Access denied. Required roles: ${roles.join(", ")}`
-      );
-    }
-
-    next();
   });
-
-// Optional: Middleware to require specific permissions
-// export const requirePermissions = (...permissions: string[]) =>
-//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-//     if (!req.user) {
-//       throw ApiError.unauthorized("Authentication required");
-//     }
-
-//     const userPermissions = req.user.permissions || [];
-
-//     const hasPermission = permissions.every((permission) =>
-//       userPermissions.includes(permission)
-//     );
-
-//     if (!hasPermission) {
-//       throw ApiError.forbidden(
-//         `Insufficient permissions. Required: ${permissions.join(", ")}`
-//       );
-//     }
-
-//     next();
-//   });

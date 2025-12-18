@@ -10,7 +10,9 @@ import { ApiError } from "./ApiError";
 export interface JWTPayload {
   _id: string;
   email: string;
+  username: string;
   role: string;
+  authProvider: string;
 }
 
 export interface DecodedJWT extends JWTPayload {

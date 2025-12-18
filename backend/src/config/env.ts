@@ -38,7 +38,14 @@ const envSchema = z.object({
   FRONTEND_ORIGIN: z.string().default("http://localhost:3000"),
 
   UPLOAD_DIR: z.string().default("./uploads"),
-  FRONTEND_URL: z.string().default("http://localhost:3000"),
+
+  //GOOGLE OAUTH CONFIG
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_CALLBACK_URL: z.string(),
+  ALLOWED_DOMAIN_EMAIL: z
+    .string()
+    .transform((val) => val.split(",").map((v) => v.trim())),
 });
 
 const parseEnv = () => {
@@ -51,7 +58,7 @@ const parseEnv = () => {
         console.error(`  - ${err.path.join(".")}: ${err.message}`);
       });
     }
-    throw new Error("Invalid environment variables");
+    throw new Error(`Invalid environment variables ${error}`);
   }
 };
 

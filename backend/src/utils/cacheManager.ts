@@ -10,8 +10,8 @@ export class CacheManager {
   }
 
   async get<T = any>(key: string): Promise<T | null> {
+    if (this.client == null || !this.client) return null;
     try {
-      if (!this.client) return null;
       const data = await this.client.get(key);
       if (!data) return null;
       return JSON.parse(data) as T;
@@ -22,7 +22,7 @@ export class CacheManager {
   }
 
   async set(key: string, data: any): Promise<void | null> {
-    if (!this.client) return null;
+    if (this.client == null || !this.client) return null;
     try {
       const serialized = JSON.stringify(data);
       const ttl = env.TTL;
@@ -37,8 +37,18 @@ export class CacheManager {
     }
   }
 
+  async incr(key: string): Promise<string | any> {
+    if (this.client == null || !this.client) return null;
+    try {
+      this.client?.incr(key);
+      return this.client.get(key);
+    } catch (error) {
+      logger.error(`Failed to increment cache for: ${key}`, error);
+    }
+  }
+
   async del(key: string | string[]): Promise<void | null> {
-    if (!this.client) return null;
+    if (this.client == null || !this.client) return null;
     try {
       await this.client.del(key);
     } catch (error) {
@@ -47,7 +57,7 @@ export class CacheManager {
   }
 
   async exists(key: string): Promise<boolean | null> {
-    if (!this.client) return null;
+    if (this.client == null || !this.client) return null;
     try {
       const exist = await this.client.exists(key);
       return exist === 1;

@@ -1,7 +1,7 @@
 import { CorsOptions } from "cors";
 import { env } from "./env";
 
-const allowedOrigins = env.FRONTEND_URL.split(",").map((url) => url.trim());
+const allowedOrigins = env.FRONTEND_ORIGIN.split(",").map((url) => url.trim());
 
 export const corsOptions: CorsOptions = {
   origin: allowedOrigins,
