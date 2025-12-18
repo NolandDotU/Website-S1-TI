@@ -1,13 +1,19 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const news = [
-  { id: 1, title: 'Riset AI Terbaru Dipublikasikan', date: 'Nov 24, 2025', summary: 'Tim peneliti merilis temuan pada pengolahan bahasa.' },
-  { id: 2, title: 'Mahasiswa Raih Juara Hackathon', date: 'Nov 10, 2025', summary: 'Kolaborasi lintas jurusan menghasilkan solusi inovatif.' },
-  { id: 3, title: 'Kerja Sama Industri Baru', date: 'Oct 29, 2025', summary: 'Kemitraan strategis untuk magang dan riset terapan.' },
-];
+import news from '../data/news';
+import NewsCard from './NewsCard';
 
 const FeaturedNews = () => {
+  // Always show exactly 4 news items (min and max)
+  let latestNews = news.slice(0, 4);
+  // If less than 4, fill with empty placeholders
+  if (latestNews.length < 4) {
+    latestNews = [
+      ...latestNews,
+      ...Array(4 - latestNews.length).fill(null)
+    ];
+  }
   return (
     <motion.section 
       initial="hidden"
@@ -35,55 +41,39 @@ const FeaturedNews = () => {
           </p>
         </motion.div>
         <div className="grid gap-8 lg:grid-cols-2">
-          {news.map((n, index) => (
-            <motion.article 
-              key={n.id}
+          {latestNews.map((item, index) => (
+            <motion.div
+              key={item ? item.id : `empty-${index}`}
               custom={index}
               variants={{
-                hidden: (index) => ({
+                hidden: (i) => ({
                   opacity: 0,
-                  x: index % 2 === 0 ? -50 : 50,
+                  x: i % 2 === 0 ? -50 : 50,
                 }),
-                visible: (index) => ({
+                visible: (i) => ({
                   opacity: 1,
                   x: 0,
                   transition: {
                     duration: 0.8,
                     ease: "easeOut",
-                    delay: index * 0.3,
+                    delay: i * 0.3,
                   },
                 }),
               }}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800"
             >
-              <div className="mb-5 flex items-center justify-between text-gray-500">
-                <span className="text-sm">{n.date}</span>
-              </div>
-              <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href="#">{n.title}</a>
-              </h2>
-              <p className="mb-5 font-light text-gray-500 dark:text-gray-400">{n.summary}</p>
-              <div className="flex items-center justify-between">
-                <a
-                  href="#"
-                  className="inline-flex items-center font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Read more
-                  <svg
-                    className="ms-2 h-4 w-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </a>
-              </div>
-            </motion.article>
+              {item ? (
+                <NewsCard
+                  title={item.title}
+                  date={new Date(item.uploadDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  summary={item.content}
+                  image={item.photo}
+                />
+              ) : (
+                <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 h-full min-h-[180px] flex items-center justify-center text-slate-400">
+                  Berita belum tersedia
+                </div>
+              )}
+            </motion.div>
           ))}
         </div>
       </div>

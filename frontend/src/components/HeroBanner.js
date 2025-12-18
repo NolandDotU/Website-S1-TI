@@ -40,8 +40,14 @@ const HeroBanner = () => {
           className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0"
         >
           <a
-            href="#admissions"
+            href="https://www.uksw.edu/informasi-pendaftaran/"
             className="inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => {
+              e.preventDefault();
+              window.open("https://www.uksw.edu/informasi-pendaftaran/", "_blank", "noopener,noreferrer");
+            }}
           >
             Daftar Sekarang
             <svg
@@ -63,6 +69,10 @@ const HeroBanner = () => {
           <a
             href="#academics"
             className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800 sm:ms-4"
+            onClick={e => {
+              e.preventDefault();
+              window.open("#academics", "_blank");
+            }}
           >
             Lihat Program
           </a>

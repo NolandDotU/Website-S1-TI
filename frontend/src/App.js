@@ -8,13 +8,14 @@ import HeroBanner from './components/HeroBanner';
 import Carousel from './components/Carousel';
 import AdmissionsHighlights from './components/AdmissionsHighlights';
 import FeaturedNews from './components/FeaturedNews';
-import CTASection from './components/CTASection';
 import KerjaSamaSection from './components/KerjaSamaSection';
 import Toggle from './components/Toggle';
+
 import LecturerProfiles from './pages/LecturerProfiles';
 import { AdminDashboard } from './pages/admin';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import Berita from './pages/Berita';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -41,7 +42,6 @@ function App() {
       <TentangTISection />
       <KerjaSamaSection />
       <LayananKampusSection />
-      <CTASection />
     </>
   );
 
@@ -63,6 +63,7 @@ function App() {
             <main className="w-full flex-grow bg-white dark:bg-gray-900">
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/berita" element={<Berita />} />
                 <Route path="/profil-dosen" element={<LecturerProfiles />} />
                 <Route path="/admin" element={
                   <ProtectedRoute>

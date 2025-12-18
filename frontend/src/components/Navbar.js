@@ -43,7 +43,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/about" className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+              <Link to="/berita" className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
                 Berita
               </Link>
             </li>

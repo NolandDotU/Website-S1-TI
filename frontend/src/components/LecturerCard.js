@@ -11,7 +11,7 @@ const LecturerCard = ({ lecturer }) => {
     borderRadius: 16,
     position: 'relative',
     width: 420,
-    height: 260,
+    height: 210,
     overflow: 'hidden',
     boxShadow: '0 2px 12px 0 rgba(0,0,0,0.08)',
     display: 'flex',
@@ -128,9 +128,11 @@ const LecturerCard = ({ lecturer }) => {
   const expertise = Array.isArray(lecturer.expertise) ? lecturer.expertise : [];
   const badges = [];
   for (let i = 0; i < Math.min(6, expertise.length); i++) {
+    let text = expertise[i];
+    let displayText = text && text.length > 10 ? text.slice(0, 10) + '…' : text;
     badges.push(
-      <div key={i} style={badgeStyle()}>
-        {expertise[i]}
+      <div key={i} style={badgeStyle()} title={text}>
+        {displayText}
       </div>
     );
   }
@@ -152,10 +154,6 @@ const LecturerCard = ({ lecturer }) => {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
         </span>
         <span>{lecturer.email || 'dosen.ti@uksw.edu'}</span>
-      </div>
-      {/* Vector Icon */}
-      <div style={vectorStyle}>
-        <img src={vectorIcon} alt="icon" style={{ width: '100%', height: '100%' }} />
       </div>
       {/* Name */}
       <div style={nameStyle}>{lecturer.fullname || 'No Name'}</div>
