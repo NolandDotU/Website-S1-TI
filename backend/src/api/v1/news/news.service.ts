@@ -96,6 +96,20 @@ export class NewsService {
     return newsDoc.toJSON() as unknown as INewsResponse;
   }
 
+  async deactivate(id?: string): Promise<boolean> {
+    const newsDoc = await this.model.findOneAndUpdate(
+      { _id: id },
+      { isActive: false },
+      { new: true }
+    );
+    if (!newsDoc) throw ApiError.notFound("News not found");
+
+    await this.cache.incr("news:version");
+    await this.cache.del(`news:item:${id}`);
+
+    return true;
+  }
+
   async delete(id?: string): Promise<boolean> {
     const newsDoc = await this.model.findOneAndDelete({ _id: id });
     if (!newsDoc) throw ApiError.notFound("News not found");

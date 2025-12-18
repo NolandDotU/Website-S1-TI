@@ -22,7 +22,6 @@ const startServer = async () => {
       logger.info(`${signal} received. Closing server gracefully...`);
       server.close(async () => {
         await disconnectDB();
-        cacheManager.flush();
 
         logger.info("Server closed");
         process.exit(0);
