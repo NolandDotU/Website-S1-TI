@@ -1,0 +1,9 @@
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 22:21:39"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"Redis connected.","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 22:21:40"}
+{"level":"info","message":"SIGINT received. Closing server gracefully...","timestamp":"2025-12-18 22:32:52"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-18 22:32:53"}

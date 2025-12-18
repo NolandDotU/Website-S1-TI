@@ -4,53 +4,59 @@ import { logger } from "../utils/logger";
 
 let redisClient: RedisClientType | null = null;
 
-export const connectRedis = async (): Promise<RedisClientType> => {
+export const connectRedis = async (): Promise<RedisClientType | null> => {
   try {
-    logger.info("Conneting Rediss !!!");
+    logger.info("Connecting to Redis...");
+
     redisClient = createClient({
       url: env.REDIS_URL,
-      // socket: {
-      //   host: env.REDIS_HOST,
-      //   port: env.REDIS_PORT,
-      //   reconnectStrategy: (retries, cause) => {
-      //     if (retries > 10) {
-      //       throw new Error(
-      //         `Could not connect to Redis after ${retries} retries because: ${cause}`
-      //       );
-      //     }
-      //     return Math.min(retries * 100, 3000);
-      //   },
-      // },
       password: env.REDIS_PASSWORD,
+      socket: {
+        reconnectStrategy: (retries) => {
+          if (retries > 10) {
+            logger.error("Redis reconnection failed after 10 attempts");
+            return new Error("Max retries reached");
+          }
+          const delay = Math.min(retries * 100, 3000);
+          logger.info(
+            `Reconnecting to Redis in ${delay}ms (attempt ${retries})`
+          );
+          return delay;
+        },
+      },
     });
 
-    redisClient.on("error", (err) =>
-      logger.error("Redis error: " + err.message)
-    );
-    redisClient.on("connect", () => logger.info("Connected to Redis."));
-    redisClient.on("ready", () => logger.info("Redis ready."));
-    redisClient.on("reconnecting", () => logger.info("Reconnecting to Redis."));
+    redisClient.on("error", (err) => {
+      logger.error("Redis error:", err.message);
+    });
+
+    redisClient.on("reconnecting", () => {
+      logger.info("Redis reconnecting...");
+    });
 
     await redisClient.connect();
+    logger.info("Redis connected and ready");
 
     return redisClient;
   } catch (error) {
-    logger.error("Failed to connect to Redis:", error);
-    throw error;
+    logger.warn("Redis unavailable, continuing without cache");
+    redisClient = null;
+    return null;
   }
 };
 
 export const getRedisClient = (): RedisClientType | null => {
-  if (!redisClient) {
-    logger.error("Redis client is not connected.");
-    return null;
-  }
   return redisClient;
+};
+
+export const isRedisReady = (): boolean => {
+  return redisClient?.isReady ?? false;
 };
 
 export const disconnectRedis = async (): Promise<void> => {
   if (redisClient) {
     await redisClient.quit();
-    logger.info("Disconnected from Redis.");
+    redisClient = null;
+    logger.info("Disconnected from Redis");
   }
 };

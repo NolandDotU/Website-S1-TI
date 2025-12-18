@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { logger, ApiResponse, asyncHandler } from "../../../utils";
 import { LecturerService } from "./lecturer.service";
 import { LecturerQueryDTO } from "./lecturer.dto";
+import { validate } from "../../../middleware/validate.middleware";
 
 export class LecturerController {
-  service = new LecturerService();
+  constructor(private service: LecturerService = new LecturerService()) {}
 
   create = asyncHandler(async (req: Request, res: Response) => {
     const lecturer = await this.service.create(req.body);

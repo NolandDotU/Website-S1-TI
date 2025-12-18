@@ -3,6 +3,7 @@ import { LecturerController } from "./lecturer.controller";
 import { authMiddleware } from "../../../middleware/auth.middleware";
 import { validate } from "../../../middleware/validate.middleware";
 import { LecturerValidation } from "./lecturer.validation";
+import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
 const router = Router();
 
 // Lazy initialization - only create instances when routes are actually called
@@ -23,7 +24,7 @@ router.post(
   }
 );
 
-router.get("/", (req, res, next) => {
+router.get("/", globalLimiter, (req, res, next) => {
   getController().getAll(req, res, next);
 });
 
