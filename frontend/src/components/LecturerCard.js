@@ -1,165 +1,168 @@
 import React from 'react';
 
 const LecturerCard = ({ lecturer }) => {
+  // Figma asset fallback
+  const defaultPhoto = "http://localhost:3845/assets/b54b1a4408966511b4cec9353d765b04c33f2fcb.png";
+  const vectorIcon = "http://localhost:3845/assets/1bc2f8a0f78f483271663fe4b0bec0321d9afff4.svg";
+
+  // Card container style
+  const cardStyle = {
+    background: '#fff',
+    borderRadius: 16,
+    position: 'relative',
+    width: 420,
+    height: 260,
+    overflow: 'hidden',
+    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.08)',
+    display: 'flex',
+    alignItems: 'flex-start',
+    fontFamily: 'Inter, sans-serif',
+    margin: '0 auto',
+  };
+
+  // Photo style
+  const photoWrapStyle = {
+    position: 'absolute',
+    left: 18,
+    top: 18,
+    width: 90,
+    height: 90,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    background: '#2563eb',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
+  // Email style
+  const emailStyle = {
+    position: 'absolute',
+    left: 120,
+    top: 40,
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 13,
+    color: '#444',
+    fontWeight: 400,
+    whiteSpace: 'nowrap',
+    maxWidth: 260,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+  };
+
+  // Name style
+  const nameStyle = {
+    position: 'absolute',
+    left: 120,
+    top: 70,
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: 700,
+    fontSize: 16,
+    color: '#111',
+    width: 260,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    whiteSpace: 'normal',
+    lineHeight: 1.2,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  };
+
+  // Expertise label style
+  const expertiseLabelStyle = {
+    position: 'absolute',
+    left: 24,
+    top: 120,
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: 700,
+    fontSize: 10,
+    color: '#555',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  };
+
+  // Expertise grid style
+  const expertiseGridStyle = {
+    position: 'absolute',
+    left: 24,
+    top: 140,
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 8,
+    width: 370,
+    minHeight: 40,
+    alignItems: 'flex-start',
+  };
+
+  // Expertise badge style
+  const badgeStyle = () => ({
+    background: '#d9d9d9',
+    borderRadius: 14,
+    minWidth: 70,
+    height: 22,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 10,
+    color: '#222',
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: 400,
+    padding: '0 10px',
+    margin: 0,
+  });
+
+  // Vector icon style
+  const vectorStyle = {
+    position: 'absolute',
+    left: 24,
+    bottom: 18,
+    width: 18,
+    height: 15,
+  };
+
+  // Prepare expertise badges (up to 9, 3x3 grid)
+  const expertise = Array.isArray(lecturer.expertise) ? lecturer.expertise : [];
+  const badges = [];
+  for (let i = 0; i < Math.min(6, expertise.length); i++) {
+    badges.push(
+      <div key={i} style={badgeStyle()}>
+        {expertise[i]}
+      </div>
+    );
+  }
+
   return (
-    <div
-      style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '12px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        overflow: 'hidden',
-        border: '1px solid #e5e7eb',
-        transition: 'box-shadow 0.3s ease'
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.15)'}
-      onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'}
-    >
+    <div style={cardStyle}>
       {/* Profile Image */}
-      <div style={{
-        position: 'relative',
-        height: '280px',
-        backgroundColor: '#2563eb',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {lecturer.photo ? (
-          <img
-            src={lecturer.photo}
-            alt={lecturer.fullname}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-            onError={(e) => {
-              const parent = e.target.parentElement;
-              // Only add fallback if it doesn't already exist
-              if (!parent.querySelector('.fallback-icon')) {
-                e.target.style.display = 'none';
-                const fallback = document.createElement('div');
-                fallback.className = 'fallback-icon';
-                fallback.innerHTML = `
-                  <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                `;
-                parent.appendChild(fallback);
-              }
-            }}
-          />
-        ) : (
-          <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        )}
+      <div style={photoWrapStyle}>
+        <img
+          src={lecturer.photo || defaultPhoto}
+          alt={lecturer.fullname || 'Lecturer'}
+          style={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover' }}
+          onError={e => { e.target.onerror = null; e.target.src = defaultPhoto; }}
+        />
       </div>
-
-      {/* Lecturer Info */}
-      <div style={{ 
-        padding: '20px',
-        backgroundColor: '#ffffff'
-      }}>
-        <h3 style={{
-          fontSize: '18px',
-          fontWeight: '700',
-          color: '#1f2937',
-          marginBottom: '12px',
-          display: 'block',
-          lineHeight: '1.4'
-        }}>
-          {lecturer.fullname || 'No Name'}
-        </h3>
-        
-        <div style={{ 
-          marginBottom: '16px',
-          paddingBottom: '16px',
-          borderBottom: '1px solid #e5e7eb'
-        }}>
-          <p style={{
-            fontSize: '12px',
-            fontWeight: '600',
-            color: '#6b7280',
-            marginBottom: '6px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}>
-            Keahlian
-          </p>
-          <p style={{
-            fontSize: '14px',
-            color: '#374151',
-            lineHeight: '1.6'
-          }}>
-            {Array.isArray(lecturer.expertise) && lecturer.expertise.length > 0 
-              ? lecturer.expertise.join(', ') 
-              : 'Tidak ada data keahlian'}
-          </p>
-        </div>
-
-        {/* Contact Info */}
-        <div style={{ 
-          marginBottom: '16px'
-        }}>
-          {lecturer.email && (
-          <a
-            href={`mailto:${lecturer.email}`}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontSize: '14px',
-              color: '#2563eb',
-              textDecoration: 'none',
-              marginBottom: '8px'
-            }}
-          >
-            <span>📧</span>
-            <span style={{ wordBreak: 'break-all' }}>{lecturer.email}</span>
-          </a>
-          )}
-          
-          {lecturer.externalLink && lecturer.externalLink !== '-' && lecturer.externalLink !== 'null' && (
-            <a
-              href={lecturer.externalLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '14px',
-                color: '#2563eb',
-                textDecoration: 'none'
-              }}
-            >
-              <span>🔗</span>
-              <span>Profil Eksternal</span>
-            </a>
-          )}
-        </div>
-
-        {/* View Profile Button */}
-        <button style={{
-          width: '100%',
-          padding: '12px',
-          backgroundColor: '#2563eb',
-          color: 'white',
-          fontWeight: '600',
-          fontSize: '14px',
-          borderRadius: '8px',
-          border: 'none',
-          cursor: 'pointer',
-          transition: 'background-color 0.3s'
-        }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#2563eb'}
-        >
-          Lihat Profil Lengkap
-        </button>
+      {/* Email */}
+      <div style={emailStyle}>
+        <span style={{display:'flex',alignItems:'center'}}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <span>{lecturer.email || 'dosen.ti@uksw.edu'}</span>
       </div>
+      {/* Vector Icon */}
+      <div style={vectorStyle}>
+        <img src={vectorIcon} alt="icon" style={{ width: '100%', height: '100%' }} />
+      </div>
+      {/* Name */}
+      <div style={nameStyle}>{lecturer.fullname || 'No Name'}</div>
+      {/* Expertise Label */}
+      <div style={expertiseLabelStyle}>KEAHLIAN</div>
+      {/* Expertise Grid */}
+      <div style={expertiseGridStyle}>{badges.length > 0 ? badges : <div style={badgeStyle(0,0)}>Tidak ada data keahlian</div>}</div>
     </div>
   );
 };
