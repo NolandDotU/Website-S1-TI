@@ -1,6 +1,6 @@
 import { RedisClientType } from "redis";
+import { isRedisReady } from "../config/redis";
 import { logger } from "./logger";
-import { env } from "../config/env";
 
 export class CacheManager {
   private client: RedisClientType | null;
@@ -9,70 +9,51 @@ export class CacheManager {
     this.client = client;
   }
 
-  async get<T = any>(key: string): Promise<T | null> {
-    if (this.client == null || !this.client) return null;
+  private isAvailable(): boolean {
+    return this.client !== null && isRedisReady();
+  }
+
+  async get<T>(key: string): Promise<T | null> {
+    if (!this.isAvailable()) return null;
+
     try {
-      const data = await this.client.get(key);
-      if (!data) return null;
-      return JSON.parse(data) as T;
-    } catch (error) {
-      logger.error(`Failed to get cache for: ${key}`, error);
+      const data = await this.client!.get(key);
+      return data ? JSON.parse(data) : null;
+    } catch (err) {
+      logger.debug(`Cache get failed for key: ${key}`);
       return null;
     }
   }
 
-  async set(key: string, data: any): Promise<void | null> {
-    if (this.client == null || !this.client) return null;
-    try {
-      const serialized = JSON.stringify(data);
-      const ttl = env.TTL;
+  async set<T>(key: string, value: T, ttl = 3600): Promise<void> {
+    if (!this.isAvailable()) return;
 
-      if (ttl) {
-        await this.client.setEx(key, ttl, serialized);
-      } else {
-        await this.client.set(key, serialized);
-      }
-    } catch (error) {
-      logger.error(`Failed to set cache for: ${key}`, error);
+    try {
+      const serialized = JSON.stringify(value);
+      await this.client!.setEx(key, ttl, serialized);
+    } catch (err) {
+      logger.debug(`Cache set failed for key: ${key}`);
     }
   }
 
-  async incr(key: string): Promise<string | any> {
-    if (this.client == null || !this.client) return null;
+  async del(key: string): Promise<void> {
+    if (!this.isAvailable()) return;
+
     try {
-      this.client?.incr(key);
-      return this.client.get(key);
-    } catch (error) {
-      logger.error(`Failed to increment cache for: ${key}`, error);
+      await this.client!.del(key);
+    } catch (err) {
+      logger.debug(`Cache delete failed for key: ${key}`);
     }
   }
 
-  async del(key: string | string[]): Promise<void | null> {
-    if (this.client == null || !this.client) return null;
-    try {
-      await this.client.del(key);
-    } catch (error) {
-      logger.error(`Failed to delete cache for: ${key}`, error);
-    }
-  }
+  async incr(key: string): Promise<number> {
+    if (!this.isAvailable()) return 0;
 
-  async exists(key: string): Promise<boolean | null> {
-    if (this.client == null || !this.client) return null;
     try {
-      const exist = await this.client.exists(key);
-      return exist === 1;
-    } catch (error) {
-      logger.error(`Failed to check exists for: ${key}`, error);
-      return false;
-    }
-  }
-
-  async flush(): Promise<void | null> {
-    if (!this.client) return null;
-    try {
-      await this.client.flushAll();
-    } catch (error) {
-      logger.error(`Failed to flush cache`, error);
+      return await this.client!.incr(key);
+    } catch (err) {
+      logger.debug(`Cache incr failed for key: ${key}`);
+      return 0;
     }
   }
 }

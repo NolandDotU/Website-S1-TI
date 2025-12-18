@@ -3,6 +3,7 @@ import { NewsValidation } from "./news.validation";
 import { validate } from "../../../middleware/validate.middleware";
 import { NewsController } from "./news.controller";
 import { authMiddleware } from "../../../middleware/auth.middleware";
+import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.get("/:id", (req, res, next) => {
 
 router.put(
   "/:id",
+  globalLimiter,
   authMiddleware(["admin"]),
   validate(NewsValidation),
   (req, res, next) => {
