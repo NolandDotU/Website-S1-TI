@@ -1,16 +1,19 @@
 import EmbeddingModel from "../model/embeddingModel";
-import { embeddingServiceInstance } from "./embeddingService";
+import {EmbeddingServiceInstance } from "./embeddingService";
 import { env } from "../config/env";
 
-export class embeddingInsertService {
+export class EmbeddingInsertService {
   static async upsertOne(
     tableName: string,
     rowId: string,
     content: string
   ) {
-    if (!content.trim()) return;
+    if (!content.trim()) {
+      console.warn("Empty content, skip embedding");
+      return;
+    };
 
-    const vector = await embeddingServiceInstance.generateEmbedding(content);
+    const vector = await EmbeddingServiceInstance.generateEmbedding(content);
     if (!vector) return;
 
     if (vector.length !== env.EMBEDDING_DIMENSION) {
@@ -28,6 +31,10 @@ export class embeddingInsertService {
       { upsert: true, new: true }
     );
   }
+
+  static async deleteOne (tableName: string, rowId: string): Promise<void> {
+    await EmbeddingModel.deleteOne({ tableName, rowId });
+  }
 }
 
-export default embeddingInsertService;
+export default EmbeddingInsertService;

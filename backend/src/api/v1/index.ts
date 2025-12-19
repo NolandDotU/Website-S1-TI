@@ -3,8 +3,7 @@ import { globalLimiter } from "../../middleware/rateLimiter.middleware";
 import lecturerRoutes from "./lecturer/lecturer.routes";
 import newsRoutes from "../../routes/newsRoutes";
 
-import debugEmbeddingRoutes from "../../routes/debugEmbeddingRoutes"
-import debugHFRoutes from "../../routes/debugHFRoutes"
+import ragRoutes from "../../routes/ragRoutes";
 
 const router = express.Router();
 
@@ -13,8 +12,7 @@ router.use("/lecturers", lecturerRoutes);
 
 router.use("/news", newsRoutes);
 
-//test embedding
-router.use("/debug", debugEmbeddingRoutes);
-router.use("/debug", debugHFRoutes);
+//chat routes
+router.use("/chat", ragRoutes);
 
 export default router;

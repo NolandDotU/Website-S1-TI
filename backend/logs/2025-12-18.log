@@ -1,0 +1,363 @@
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 08:53:49"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 08:53:51"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 08:53:51"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 08:53:51"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 08:53:51"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 08:53:52"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 08:53:52"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:00:34"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:09:53"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:09:54"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:12:08"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:12:08"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:12:08"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:12:08"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:12:08"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:12:09"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:12:09"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:12:21"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:12:52"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:12:53"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:15:16"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:15:16"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:15:16"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:15:17"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:15:17"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:15:17"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:15:17"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:16:51"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:16:52"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:19:15"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:19:16"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:21:56"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:21:57"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:42:39"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:45:43"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:46:04"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:46:04"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:46:04"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:46:06"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:46:07"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:46:07"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 09:48:02"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 09:48:04"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 10:57:14"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 10:57:15"}
+{"level":"info","message":"SIGINT received. Closing server gracefully...","timestamp":"2025-12-18 10:57:21"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:41:24"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:41:25"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:43:40"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:50:47"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:50:48"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:51:39"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:52:39"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:52:41"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:53:55"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:54:31"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:54:31"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:54:31"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:54:32"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:54:32"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:54:32"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:54:32"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:55:12"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:56:03"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:56:04"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:57:33"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:57:34"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:57:50"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 13:58:11"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 13:58:12"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:03:07"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:03:08"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:03:41"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:04:10"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:04:11"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:04:29"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:05:38"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:05:39"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:50:40"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:50:41"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:54:30"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:55:17"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:55:17"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:55:28"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:55:28"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:55:28"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:55:28"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:55:28"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:55:29"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:55:29"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:55:38"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:55:39"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:57:42"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:57:45"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:58:41"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:58:42"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 14:59:43"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:03:07"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:03:08"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:03:37"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:04:21"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:04:22"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:04:40"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:04:54"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:04:55"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:05:08"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:07:13"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:07:14"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:11:15"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:11:55"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:13:52"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:13:53"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:14:06"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:15:01"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:17:09"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:18:53"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:18:55"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-18 15:22:32"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-18 15:22:33"}
+{"level":"info","message":"Conneting Rediss !!!","timestamp":"2025-12-18 15:22:33"}
+{"level":"info","message":"Connected to Redis.","timestamp":"2025-12-18 15:22:33"}
+{"level":"info","message":"Redis ready.","timestamp":"2025-12-18 15:22:33"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-18 15:22:33"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-18 15:22:33"}
