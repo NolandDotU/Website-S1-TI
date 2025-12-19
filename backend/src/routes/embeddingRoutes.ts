@@ -24,7 +24,7 @@ router.post("/news", async (req, res) => {
       _id: { $in: idOrder },
     });
 
-    // 🔥 jaga urutan relevansi
+    // jaga urutan relevansi
     const ordered = idOrder
       .map(id => newsDocs.find(n => n._id.toString() === id))
       .filter(Boolean);
@@ -33,7 +33,7 @@ router.post("/news", async (req, res) => {
       question,
       context: ordered.map(n => ({
         title: n?.title,
-        content: n?.content.slice(0, 1_500), // ⛔ batasi
+        content: n?.content.slice(0, 1_500), //batasi panjang konten
       })),
     });
   } catch (err: any) {
