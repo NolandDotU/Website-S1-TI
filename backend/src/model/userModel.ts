@@ -33,16 +33,8 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
       lowercase: true,
-      validate: {
-        validator: function (email: string) {
-          return isUKSWEmail(email);
-        },
-        message:
-          "Email harus menggunakan domain @student.uksw.edu atau @uksw.edu",
-      },
     },
     password: {
       type: String,
@@ -58,7 +50,6 @@ const userSchema = new mongoose.Schema<IUser>(
     role: {
       type: String,
       enum: ["lecturer", "student", "admin"],
-      default: "admin",
     },
     isActive: {
       type: Boolean,

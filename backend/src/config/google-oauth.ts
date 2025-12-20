@@ -38,40 +38,24 @@ export const configureGoogleOAuth = () => {
             );
           }
 
-          if (!isUKSWEmail(email)) {
-            logger.error(
-              `Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu). Email: ${email}`
-            );
-            return done(
-              ApiError.unauthorized(
-                `Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu). Email: ${email}`
-              ),
-              undefined
-            );
-          }
+          // REMOVE the email domain check here since it's checked in handleGoogleAuth
 
-          const userInfo = {
+          const userInfo: GoogleOAuthUser = {
             googleId: profile.id,
             email: email,
             username: profile.displayName,
             photo: profile.photos?.[0].value,
             emailVerified: profile.emails?.[0]?.verified || false,
-            fullname: profile.name?.givenName + " " + profile.name?.familyName,
+            fullname: `${profile.name?.givenName || ""} ${
+              profile.name?.familyName || ""
+            }`.trim(),
           };
 
-          return done(null, userInfo as GoogleOAuthUser);
+          return done(null, userInfo);
         } catch (error) {
           return done(error, undefined);
         }
       }
     )
   );
-
-  passport.serializeUser((user: any, done) => {
-    done(null, user);
-  });
-
-  passport.deserializeUser((user: any, done) => {
-    done(null, user);
-  });
 };

@@ -45,7 +45,8 @@ const envSchema = z.object({
   GOOGLE_CALLBACK_URL: z.string(),
   ALLOWED_DOMAIN_EMAIL: z
     .string()
-    .transform((val) => val.split(",").map((v) => v.trim())),
+    .default("@student.uksw.edu,@uksw.edu")
+    .transform((val) => val.split(",").map((d) => d.trim())),
 });
 
 const parseEnv = () => {

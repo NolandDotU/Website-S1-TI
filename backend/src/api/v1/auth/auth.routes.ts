@@ -18,7 +18,7 @@ router.post(
 );
 
 // Google
-router.post("/login", authController.googleAuthCallback);
+router.post("/login", authController.adminLogin);
 router.get("/google", authController.googleAuth);
 router.get(
   "/google/callback",

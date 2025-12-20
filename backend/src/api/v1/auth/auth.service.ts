@@ -32,11 +32,6 @@ class AuthService {
 
     logger.info("Google User", googleUser);
 
-    if (!email.endsWith("@student.uksw.edu") && !email.endsWith("@uksw.edu"))
-      throw ApiError.unauthorized(
-        "Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu)"
-      );
-
     let user = await userModel.findOne({ email });
     if (user) {
       user.googleId = googleId;

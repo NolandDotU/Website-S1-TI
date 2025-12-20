@@ -58,12 +58,24 @@ class AuthController {
 
     this.setCookies(res, result.accessToken, result.refreshToken);
 
+    const payloadUser = {
+      username: result.user.username,
+      photo: result.user.photo,
+      email: result.user.email,
+    };
+    res.cookie("user", JSON.stringify(payloadUser), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
     res.redirect(`${env.FRONTEND_ORIGIN}/auth/callback?success=true`);
   });
 
   logout = asyncHandler(async (req: Request, res: Response) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
+    res.clearCookie("user");
 
     res.json(ApiResponse.success(null, "Logout berhasil"));
   });

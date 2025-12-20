@@ -10,6 +10,6 @@ const router = express.Router();
 router.use("/lecturers", lecturerRoutes);
 router.use("/news", newsRoutes);
 router.use("/auth", authRoutes);
-router.use("highlight", highlightRoutes);
+router.use("/highlight", highlightRoutes);
 
 export default router;

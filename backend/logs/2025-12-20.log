@@ -20,3 +20,111 @@
 {"level":"error","message":"Unauthorized","method":"GET","stack":"TokenError: Unauthorized\n    at Strategy.OAuth2Strategy.parseErrorResponse (C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\passport-oauth2\\lib\\strategy.js:373:12)\n    at Strategy.OAuth2Strategy._createOAuthError (C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\passport-oauth2\\lib\\strategy.js:420:16)\n    at C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\passport-oauth2\\lib\\strategy.js:177:45\n    at C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\oauth\\lib\\oauth2.js:196:18\n    at passBackControl (C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\oauth\\lib\\oauth2.js:132:9)\n    at IncomingMessage.<anonymous> (C:\\Users\\zaida\\Documents\\website\\Website-S1-TI\\backend\\node_modules\\oauth\\lib\\oauth2.js:157:7)\n    at IncomingMessage.emit (node:events:530:35)\n    at IncomingMessage.emit (node:domain:489:12)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)","timestamp":"2025-12-20 16:32:41","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lM6GQHLoqGNmpIC6p7Z4fnQVGx-p2WpCdxxb5AnXITNgGnmrh0pOx-go8YVrHvvHQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&hd=student.uksw.edu&prompt=consent"}
 {"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lM6GQHLoqGNmpIC6p7Z4fnQVGx-p2WpCdxxb5AnXITNgGnmrh0pOx-go8YVrHvvHQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&hd=student.uksw.edu&prompt=consent 500 - - 297.405 ms","timestamp":"2025-12-20 16:32:41"}
 {"level":"http","message":"GET /favicon.ico 404 45 - 0.980 ms","timestamp":"2025-12-20 16:32:42"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:43:29"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:43:30"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:43:30"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:43:31"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:43:31"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:43:31"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.669 ms","timestamp":"2025-12-20 16:43:51"}
+{"level":"error","message":"Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu). Email: 672023095@student.uksw.edu","timestamp":"2025-12-20 16:44:00"}
+{"level":"error","message":"Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu). Email: 672023095@student.uksw.edu","method":"GET","stack":"Error: Email harus menggunakan domain UKSW (@uksw.edu atau @student.uksw.edu). Email: 672023095@student.uksw.edu\n    at Function.unauthorized (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:28:12)\n    at Strategy._verify (D:\\PROJECT\\Website-S1-TI\\backend\\src\\config\\google-oauth.ts:46:24)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\passport-oauth2\\lib\\strategy.js:205:24\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\passport-google-oauth20\\lib\\strategy.js:122:5\n    at passBackControl (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\oauth\\lib\\oauth2.js:134:9)\n    at IncomingMessage.<anonymous> (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\oauth\\lib\\oauth2.js:157:7)\n    at IncomingMessage.emit (node:events:536:35)\n    at IncomingMessage.emit (node:domain:489:12)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)","timestamp":"2025-12-20 16:44:00","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lN--riFi1Kpk79RbaN_bMKrkbAf9h8-Fo4Bagu0nXXOA42xD3LUMs6pEQqtGx7jYg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&hd=student.uksw.edu&prompt=consent"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lN--riFi1Kpk79RbaN_bMKrkbAf9h8-Fo4Bagu0nXXOA42xD3LUMs6pEQqtGx7jYg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&hd=student.uksw.edu&prompt=consent 401 - - 528.947 ms","timestamp":"2025-12-20 16:44:00"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:48:37"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:48:38"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:48:38"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:48:38"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:48:38"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:48:38"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:49:23"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:49:24"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:49:24"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:49:24"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:49:24"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:49:24"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 2.402 ms","timestamp":"2025-12-20 16:49:30"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:49:37","username":"Joseph Sebastian Rosario Putra"}
+{"level":"error","message":"user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu","method":"GET","stack":"ValidationError: user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu\n    at model.Document.invalidate (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3362:32)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3123:17\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1420:9\n    at processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-12-20 16:49:38","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lO0mJtfg-D0YnFGK69uEuME7N9Y05naGA9-9a0660Tq847rTmuNSf-irQ7YwVYRLA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&hd=student.uksw.edu&prompt=none"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lO0mJtfg-D0YnFGK69uEuME7N9Y05naGA9-9a0660Tq847rTmuNSf-irQ7YwVYRLA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&hd=student.uksw.edu&prompt=none 500 571 - 1187.560 ms","timestamp":"2025-12-20 16:49:38"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:51:59"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:52:00"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:52:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:52:00"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:52:00"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:52:00"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.673 ms","timestamp":"2025-12-20 16:52:01"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:52:06","username":"Joseph Sebastian Rosario Putra"}
+{"level":"info","message":"end email","timestamp":"2025-12-20 16:52:06"}
+{"level":"error","message":"user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu","method":"GET","stack":"ValidationError: user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu\n    at model.Document.invalidate (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3362:32)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3123:17\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1420:9\n    at processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-12-20 16:52:06","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lPOVquSMTKsrZIrzh8Z7HQkT7pUeyVig7LFJBy2wJ2Rg8RprFZpW8yjNO4TFxRu7A&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&hd=student.uksw.edu&prompt=none"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lPOVquSMTKsrZIrzh8Z7HQkT7pUeyVig7LFJBy2wJ2Rg8RprFZpW8yjNO4TFxRu7A&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&hd=student.uksw.edu&prompt=none 500 571 - 595.542 ms","timestamp":"2025-12-20 16:52:06"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:52:44"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:52:45"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:52:45"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:52:45"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:52:45"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:52:45"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.780 ms","timestamp":"2025-12-20 16:52:45"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:52:50","username":"Joseph Sebastian Rosario Putra"}
+{"level":"error","message":"user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu","method":"GET","stack":"ValidationError: user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu\n    at model.Document.invalidate (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3362:32)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3123:17\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1420:9\n    at processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-12-20 16:52:50","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lMv5_YI6ANfySsWAi_8Ysq-p8pPSABDFsETbXLKQjvm511nwSIBRrs_TSHauSr0Eg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&hd=student.uksw.edu&prompt=none"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lMv5_YI6ANfySsWAi_8Ysq-p8pPSABDFsETbXLKQjvm511nwSIBRrs_TSHauSr0Eg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&hd=student.uksw.edu&prompt=none 500 571 - 545.914 ms","timestamp":"2025-12-20 16:52:50"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:53:08"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:53:09"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:53:09"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:53:10"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:53:10"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:53:10"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.548 ms","timestamp":"2025-12-20 16:53:36"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:53:41","username":"Joseph Sebastian Rosario Putra"}
+{"level":"error","message":"user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu","method":"GET","stack":"ValidationError: user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu\n    at model.Document.invalidate (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3362:32)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3123:17\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1420:9\n    at processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-12-20 16:53:41","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lPX6PXmkN4gZbuIBbO1DaTWD3UU3AKBtAkSJGVLmvJPBR6Ek6eml9uHMvlxBxGmMQ&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&hd=student.uksw.edu&prompt=none"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lPX6PXmkN4gZbuIBbO1DaTWD3UU3AKBtAkSJGVLmvJPBR6Ek6eml9uHMvlxBxGmMQ&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&hd=student.uksw.edu&prompt=none 500 571 - 852.557 ms","timestamp":"2025-12-20 16:53:41"}
+{"level":"info","message":"SIGINT received. Closing server gracefully...","timestamp":"2025-12-20 16:55:44"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-20 16:55:45"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:55:59"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:56:00"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:56:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:56:00"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:56:00"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:56:00"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.941 ms","timestamp":"2025-12-20 16:56:25"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:56:30","username":"Joseph Sebastian Rosario Putra"}
+{"level":"error","message":"user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu","method":"GET","stack":"ValidationError: user_collection validation failed: email: Email harus menggunakan domain @student.uksw.edu atau @uksw.edu\n    at model.Document.invalidate (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3362:32)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\document.js:3123:17\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1420:9\n    at processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-12-20 16:56:30","url":"/api/v1/auth/google/callback?code=4%2F0ATX87lODXeEaQoP7uZEjD4z-gBme_KRV8g0uYzLhFBtjSwtNn6G25Xqg4-b3CAVAOKamKg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&hd=student.uksw.edu&prompt=none"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lODXeEaQoP7uZEjD4z-gBme_KRV8g0uYzLhFBtjSwtNn6G25Xqg4-b3CAVAOKamKg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&hd=student.uksw.edu&prompt=none 500 571 - 932.307 ms","timestamp":"2025-12-20 16:56:30"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 16:57:18"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 16:57:19"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 16:57:19"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 16:57:19"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 16:57:19"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 16:57:19"}
+{"level":"http","message":"GET /api/v1/auth/google 302 0 - 1.242 ms","timestamp":"2025-12-20 16:57:24"}
+{"email":"672023095@student.uksw.edu","emailVerified":true,"fullname":"Joseph Sebastian Rosario Putra","googleId":"107421162990304394489","level":"info","message":"Google User","photo":"https://lh3.googleusercontent.com/a/ACg8ocJw1f5ylGg9zvFT4qKAD3hVHNtyh7KrMuqCMu551PrpbjtrCw=s96-c","timestamp":"2025-12-20 16:57:28","username":"Joseph Sebastian Rosario Putra"}
+{"level":"http","message":"GET /api/v1/auth/google/callback?code=4%2F0ATX87lNju5NNXY13bniLCyhvG7XE5vqWHxqpRI0Rp5teoOVusH2cTaU9D8LTACBi4lrJkw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&hd=student.uksw.edu&prompt=none 302 77 - 657.812 ms","timestamp":"2025-12-20 16:57:28"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 17:01:11"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 17:01:12"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 17:01:12"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 17:01:12"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 17:01:12"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 17:01:12"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 17:03:06"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 17:03:07"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 17:03:07"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 17:03:07"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 17:03:07"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 17:03:07"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 17:03:35"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 17:03:35"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 17:03:35"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 17:03:36"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 17:03:36"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 17:03:36"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 17:03:52"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 17:03:52"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 17:03:52"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 17:03:53"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 17:03:53"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 17:03:53"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 17:04:35"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 17:04:36"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 17:04:36"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 17:04:36"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 17:04:36"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 17:04:36"}
