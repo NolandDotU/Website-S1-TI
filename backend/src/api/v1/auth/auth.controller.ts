@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import passport from "passport";
 import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
-import { GoogleOAuthUser } from "../../../config/google-oauth";
 import { ApiResponse } from "../../../utils";
 import { env } from "../../../config/env";
 

@@ -3,10 +3,13 @@ import path from "path";
 import fs from "fs/promises";
 import crypto from "crypto";
 import sharp from "sharp";
-import { fileTypeFromBuffer } from "file-type";
+import fileType from "file-type"; // ✅ DEFAULT IMPORT
 import { Request, Response, NextFunction } from "express";
-import { ApiError } from "../utils";
+import { ApiError, logger } from "../utils";
 
+// ============================================
+// VALIDATE IMAGE
+// ============================================
 export const validateImage = async (
   req: Request,
   res: Response,
@@ -15,22 +18,25 @@ export const validateImage = async (
   try {
     if (!req.file) return next();
 
-    const buffer = await fs.readFile(req.file?.path);
-    const type = await fileTypeFromBuffer(buffer);
+    const buffer = await fs.readFile(req.file.path);
+    const type = await fileType.fromBuffer(buffer); // ✅ fileType.fromBuffer (bukan fileTypeFromBuffer)
     const allowed = ["image/jpeg", "image/png", "image/webp"];
 
     if (!type || !allowed.includes(type.mime)) {
       await fs.unlink(req.file.path);
-      return res.status(400).json({ error: "Invalid image file" });
+      throw ApiError.badRequest("Invalid image file");
     }
 
     next();
   } catch (error) {
     if (req.file) await fs.unlink(req.file.path).catch(() => {});
-    throw ApiError.internal("Invalid image file");
+    next(error);
   }
 };
 
+// ============================================
+// OPTIMIZE IMAGE
+// ============================================
 export const optimizeImage = async (
   req: Request,
   res: Response,
@@ -54,11 +60,39 @@ export const optimizeImage = async (
     next();
   } catch (error) {
     if (req.file) await fs.unlink(req.file.path).catch(() => {});
-    throw ApiError.internal("Failed to optimize image");
+    next(ApiError.internal("Failed to optimize image"));
   }
 };
 
+// ============================================
+// DELETE IMAGE
+// ============================================
+export const deleteImage = async (filePath: string) => {
+  try {
+    const baseDir = path.resolve("uploads");
+    const targetPath = path.resolve(filePath);
+
+    if (!targetPath.startsWith(baseDir)) {
+      throw ApiError.badRequest("Invalid file path");
+    }
+
+    await fs.access(targetPath);
+    await fs.unlink(targetPath);
+
+    return true;
+  } catch (error: any) {
+    if (error.code === "ENOENT") {
+      return false;
+    }
+    throw error;
+  }
+};
+
+// ============================================
+// CREATE UPLOAD MIDDLEWARE
+// ============================================
 const createUpload = (destination: string, maxSize = 5 * 1024 * 1024) => {
+  logger.info(`Creating upload middleware for ${destination}`);
   const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
       const uploadPath = path.join("uploads", destination);
@@ -86,6 +120,9 @@ const createUpload = (destination: string, maxSize = 5 * 1024 * 1024) => {
   }).single("photo");
 };
 
+// ============================================
+// EXPORTS
+// ============================================
 export const uploadLecturerPhoto = createUpload("lecturers", 5 * 1024 * 1024);
 export const uploadNewsPhoto = createUpload("news", 10 * 1024 * 1024);
 export const uploadUserPhoto = createUpload("users", 2 * 1024 * 1024);
@@ -98,11 +135,16 @@ export const handleMulterError = (
 ) => {
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_SIZE") {
-      throw ApiError.badRequest("File size is too large");
+      return next(ApiError.badRequest("File size is too large"));
+    }
+    if (err.code === "LIMIT_UNEXPECTED_FILE") {
+      return next(ApiError.badRequest("Unexpected field"));
     }
   }
-  if (err.message.includes("Invalid file type")) {
-    throw ApiError.badRequest("Invalid file type");
+
+  if (err.message && err.message.includes("Invalid file type")) {
+    return next(ApiError.badRequest("Invalid file type"));
   }
+
   next(err);
 };

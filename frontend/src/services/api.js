@@ -13,7 +13,10 @@ export async function logout() {
       method: "POST",
     });
     if (!response.ok) throw new Error("Failed to logout");
-  } catch (error) {}
+    return response.json();
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
 }
 
 // Lecturers API

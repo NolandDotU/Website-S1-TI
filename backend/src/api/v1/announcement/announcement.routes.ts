@@ -4,6 +4,14 @@ import { validate } from "../../../middleware/validate.middleware";
 import { NewsController } from "./announcement.controller";
 import { authMiddleware } from "../../../middleware/auth.middleware";
 import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
+import {
+  uploadNewsPhoto,
+  handleMulterError,
+  optimizeImage,
+  validateImage,
+  deleteImage,
+} from "../../../middleware/uploads.middleware";
+import { ApiResponse, logger } from "../../../utils";
 
 const router = express.Router();
 
@@ -14,6 +22,35 @@ const getController = () => {
   }
   return controller;
 };
+
+router.post(
+  "/uploads",
+  uploadNewsPhoto,
+  handleMulterError, // ✅ Tambahin ini
+  validateImage,
+  optimizeImage,
+  (req: any, res: any) => {
+    logger.info("Image uploaded successfully", req.file);
+
+    // ✅ WRAP dengan res.status().json()
+    const response = ApiResponse.success(
+      {
+        path: req.file?.path,
+        filename: req.file?.filename,
+      },
+      "Image uploaded successfully"
+    );
+
+    return res.status(response.statusCode).json(response);
+  }
+);
+
+router.delete("/uploads", (req, res, next) => {
+  deleteImage(req.body.path).then(() => {
+    ApiResponse.success(null, "Image deleted successfully", 200);
+  });
+});
+
 router.get("/", globalLimiter, (req, res, next) => {
   getController().getAllPublished(req, res, next);
 });

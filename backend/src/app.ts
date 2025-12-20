@@ -8,6 +8,8 @@ import { errorMiddleware } from "./middleware/error.middleware";
 import { logger, morganMiddleware } from "./utils/logger";
 import apiV1Router from "./api/v1";
 import { configureGoogleOAuth } from "./config/google-oauth";
+import multer from "multer";
+import { handleMulterError } from "./middleware/uploads.middleware";
 
 const app: Application = express();
 
@@ -16,6 +18,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(compression());
+app.use(handleMulterError);
 configureGoogleOAuth();
 
 // Body parsing

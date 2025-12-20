@@ -9,7 +9,9 @@ const AdminNavbar = () => {
     try {
       const response = await logout();
       if (response.ok) navigate("/");
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
