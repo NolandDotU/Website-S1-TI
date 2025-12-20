@@ -59,7 +59,8 @@ function App() {
           
           {/* Content */}
           <div className="relative z-10 flex flex-col min-h-screen">
-            <Navbar />
+            {/* Only show Navbar for non-admin routes */}
+            {window.location.pathname !== '/admin' && <Navbar />}
             <main className="w-full flex-grow bg-white dark:bg-gray-900">
               <Routes>
                 <Route path="/" element={<HomePage />} />
