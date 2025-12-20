@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { m } from 'framer-motion';
 import { createLecturer } from '../../services/api';
+import AdminNavbar from '../../components/AdminNavbar';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('berita');
@@ -157,7 +158,9 @@ const Admin = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 md:px-8 lg:px-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <AdminNavbar />
+      <div className="py-8 px-4 md:px-8 lg:px-12">
       <m.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -693,7 +696,8 @@ const Admin = () => {
         </div>
       </m.div>
     </div>
+  </div>
   );
-};
+}
 
 export default Admin;

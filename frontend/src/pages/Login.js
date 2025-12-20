@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -27,103 +28,55 @@ const Login = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-      padding: '20px',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Animated background circles */}
-      <div style={{
-        position: 'absolute',
-        width: '500px',
-        height: '500px',
-        borderRadius: '50%',
-        background: 'rgba(255, 255, 255, 0.1)',
-        top: '-200px',
-        left: '-200px',
-        animation: 'float 6s ease-in-out infinite'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        width: '400px',
-        height: '400px',
-        borderRadius: '50%',
-        background: 'rgba(255, 255, 255, 0.1)',
-        bottom: '-150px',
-        right: '-150px',
-        animation: 'float 8s ease-in-out infinite reverse'
-      }}></div>
-
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)',
-        padding: '50px 40px',
-        borderRadius: '20px',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-        width: '100%',
-        maxWidth: '420px',
-        position: 'relative',
-        zIndex: 1
-      }}>
-        {/* Logo or Icon */}
-        <div style={{
-          width: '80px',
-          height: '80px',
-          margin: '0 auto 24px',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          borderRadius: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 10px 30px rgba(59, 130, 246, 0.4)'
-        }}>
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-            <path d="M2 17l10 5 10-5"></path>
-            <path d="M2 12l10 5 10-5"></path>
-          </svg>
-        </div>
-
-        <h1 style={{
-          fontSize: '28px',
-          fontWeight: '800',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '8px',
-          textAlign: 'center',
-          letterSpacing: '-0.5px'
-        }}>
+    <motion.section
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeInOut" } }
+      }}
+      className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center"
+    >
+      <div className="mx-auto w-full max-w-md px-4 py-8 text-center lg:py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
+          className="mb-6 flex justify-center"
+        >
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
+          className="mb-2 text-3xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-4xl lg:text-4xl"
+        >
           Admin Portal
-        </h1>
-        <p style={{
-          fontSize: '14px',
-          color: '#6b7280',
-          marginBottom: '32px',
-          textAlign: 'center',
-          fontWeight: '500'
-        }}>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.4 }}
+          className="mb-8 text-base font-medium text-gray-500 dark:text-gray-400"
+        >
           Teknik Informatika UKSW
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{
-              display: 'block',
-              fontSize: '13px',
-              fontWeight: '700',
-              color: '#374151',
-              marginBottom: '8px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>
-              Username
-            </label>
+        </motion.p>
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.5 }}
+          onSubmit={handleSubmit}
+          className="space-y-6 text-left"
+        >
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">Username</label>
             <input
               type="text"
               value={credentials.username}
@@ -131,33 +84,12 @@ const Login = () => {
               onFocus={() => setFocusedField('username')}
               onBlur={() => setFocusedField('')}
               required
-              style={{
-                width: '100%',
-                padding: '14px 16px',
-                border: focusedField === 'username' ? '2px solid #3b82f6' : '2px solid #e5e7eb',
-                borderRadius: '12px',
-                fontSize: '15px',
-                outline: 'none',
-                transition: 'all 0.3s',
-                backgroundColor: '#f9fafb',
-                fontWeight: '500'
-              }}
+              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${focusedField === 'username' ? 'border-blue-600' : 'border-gray-200 dark:border-gray-700'}`}
               placeholder="Enter your username"
             />
           </div>
-
-          <div style={{ marginBottom: '28px' }}>
-            <label style={{
-              display: 'block',
-              fontSize: '13px',
-              fontWeight: '700',
-              color: '#374151',
-              marginBottom: '8px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>
-              Password
-            </label>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">Password</label>
             <input
               type="password"
               value={credentials.password}
@@ -165,94 +97,38 @@ const Login = () => {
               onFocus={() => setFocusedField('password')}
               onBlur={() => setFocusedField('')}
               required
-              style={{
-                width: '100%',
-                padding: '14px 16px',
-                border: focusedField === 'password' ? '2px solid #3b82f6' : '2px solid #e5e7eb',
-                borderRadius: '12px',
-                fontSize: '15px',
-                outline: 'none',
-                transition: 'all 0.3s',
-                backgroundColor: '#f9fafb',
-                fontWeight: '500'
-              }}
+              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${focusedField === 'password' ? 'border-blue-600' : 'border-gray-200 dark:border-gray-700'}`}
               placeholder="Enter your password"
             />
           </div>
-
           {error && (
-            <div style={{
-              padding: '14px',
-              backgroundColor: '#fee2e2',
-              color: '#dc2626',
-              borderRadius: '12px',
-              fontSize: '14px',
-              marginBottom: '20px',
-              textAlign: 'center',
-              fontWeight: '600',
-              border: '2px solid #fecaca'
-            }}>
+            <div className="p-3 bg-red-100 text-red-700 rounded-xl text-sm mb-2 text-center font-semibold border-2 border-red-200">
               {error}
             </div>
           )}
-
           <button
             type="submit"
             disabled={loading}
-            style={{
-              width: '100%',
-              padding: '16px',
-              background: loading ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              color: 'white',
-              fontSize: '16px',
-              fontWeight: '700',
-              border: 'none',
-              borderRadius: '12px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.3s',
-              boxShadow: loading ? 'none' : '0 10px 25px rgba(59, 130, 246, 0.4)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}
-            onMouseEnter={(e) => !loading && (e.target.style.transform = 'translateY(-2px)')}
-            onMouseLeave={(e) => !loading && (e.target.style.transform = 'translateY(0)')}
+            className={`w-full py-3 bg-gradient-to-r from-blue-600 to-blue-900 text-white font-bold rounded-xl transition-all shadow-lg text-base uppercase tracking-wide ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-900'}`}
           >
             {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <span style={{ 
-                  width: '16px', 
-                  height: '16px', 
-                  border: '2px solid white',
-                  borderTopColor: 'transparent',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite'
-                }}></span>
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 Processing...
               </span>
             ) : 'Sign In'}
           </button>
-        </form>
-
-        <p style={{
-          fontSize: '12px',
-          color: '#9ca3af',
-          textAlign: 'center',
-          marginTop: '24px'
-        }}>
+        </motion.form>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.6 }}
+          className="text-xs text-gray-400 text-center mt-8"
+        >
           Secure admin access only
-        </p>
+        </motion.p>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    </motion.section>
   );
 };
 
