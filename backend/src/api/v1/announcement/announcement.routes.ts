@@ -1,7 +1,7 @@
 import express from "express";
-import { NewsValidation } from "./news.validation";
+import { AnnouncementSchema } from "./announcement.validation";
 import { validate } from "../../../middleware/validate.middleware";
-import { NewsController } from "./news.controller";
+import { NewsController } from "./announcement.controller";
 import { authMiddleware } from "../../../middleware/auth.middleware";
 import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
 
@@ -14,14 +14,18 @@ const getController = () => {
   }
   return controller;
 };
-
-router.get("/", (req, res, next) => {
-  getController().getAll(req, res, next);
+router.get("/", globalLimiter, (req, res, next) => {
+  getController().getAllPublished(req, res, next);
 });
+
+router.get("/admin", authMiddleware(["admin"]), (req, res, next) => {
+  getController().getAllContent(req, res, next);
+});
+
 router.post(
   "/",
   authMiddleware(["admin"]),
-  validate(NewsValidation),
+  validate(AnnouncementSchema),
   (req, res, next) => {
     getController().create(req, res, next);
   }
@@ -35,16 +39,20 @@ router.put(
   "/:id",
   globalLimiter,
   authMiddleware(["admin"]),
-  validate(NewsValidation),
+  validate(AnnouncementSchema),
   (req, res, next) => {
     getController().update(req, res, next);
   }
 );
 
-router.delete("/:id", authMiddleware(["admin"]), (req, res, next) => {
-  getController().deactivate(req, res, next);
-});
-
+router.put(
+  "/:id/publish",
+  globalLimiter,
+  authMiddleware(["admin"]),
+  (req, res, next) => {
+    getController().publish(req, res, next);
+  }
+);
 router.delete("/permanent/:id", authMiddleware(["admin"]), (req, res, next) => {
   getController().delete(req, res, next);
 });

@@ -1,15 +1,28 @@
 import { Request, Response } from "express";
 import { logger, ApiResponse, asyncHandler } from "../../../utils";
-import { NewsService } from "./news.service";
-import { INewsQueryDTO } from "./news.dto";
+import { AnnouncementService } from "./announcement.service";
+import { IAnnouncementQueryDTO } from "./announcement.dto";
 
 export class NewsController {
-  service = new NewsService();
+  service = new AnnouncementService();
 
-  getAll = asyncHandler(async (req: Request, res: Response) => {
-    const { page = 1, limit = 10 } = req.query as INewsQueryDTO;
-    const result = await this.service.getAll(Number(page), Number(limit));
+  getAllPublished = asyncHandler(async (req: Request, res: Response) => {
+    const { page = 1, limit = 10 } = req.query as IAnnouncementQueryDTO;
+    const result = await this.service.getAllPublished(
+      Number(page),
+      Number(limit)
+    );
     return ApiResponse.success(result, "News fetched successfully", 200);
+  });
+
+  getAllContent = asyncHandler(async (req: Request, res: Response) => {
+    const { page = 1, limit = 10, search } = req.query as IAnnouncementQueryDTO;
+    const result = await this.service.getAllPublished(
+      Number(page),
+      Number(limit),
+      search
+    );
+    return ApiResponse.success(result, "Content fetched successfully", 200);
   });
 
   create = asyncHandler(async (req: Request, res: Response) => {
@@ -29,10 +42,16 @@ export class NewsController {
     return ApiResponse.success(news, "News updated successfully", 200);
   });
 
-  deactivate = asyncHandler(async (req: Request, res: Response) => {
+  publish = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.service.deactivate(id);
+    const result = await this.service.changeStatus(id, "published");
     return ApiResponse.success(result, "News deactivated successfully", 200);
+  });
+
+  archive = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await this.service.changeStatus(id, "archived");
+    return ApiResponse.success(result, "News activated successfully", 200);
   });
 
   delete = asyncHandler(async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import express from "express";
 import { globalLimiter } from "../../middleware/rateLimiter.middleware";
 import lecturerRoutes from "./lecturer/lecturer.routes";
-import newsRoutes from "./news/news.routes";
+import newsRoutes from "./announcement/announcement.routes";
 import authRoutes from "./auth/auth.routes";
 import highlightRoutes from "./highlight/highlight.routes";
 

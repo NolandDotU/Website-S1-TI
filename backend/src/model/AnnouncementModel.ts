@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const newsSchema = new mongoose.Schema(
+const announcementSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -10,24 +10,28 @@ const newsSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["berita", "lowongan", "pengumuman"],
+      enum: ["event", "lowongan", "pengumuman"],
     },
     content: {
       type: String,
       required: true,
-      maxLength: 20000,
     },
     link: String,
     photo: String,
+    source: String,
     uploadDate: {
       type: Date,
       default: Date.now,
     },
-    eventDate: Date,
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      default: "draft",
+      enum: ["draft", "scheduled", "published", "archived"],
     },
+    scheduleDate: {
+      type: Date,
+    },
+    eventDate: Date,
   },
   {
     timestamps: true,
@@ -43,7 +47,10 @@ const newsSchema = new mongoose.Schema(
   }
 );
 
-newsSchema.index({ title: 1 });
+announcementSchema.index({ title: 1 });
 
-const NewsModel = mongoose.model("news_collection", newsSchema);
-export default NewsModel;
+const AnnouncementModel = mongoose.model(
+  "announcement_collection",
+  announcementSchema
+);
+export default AnnouncementModel;

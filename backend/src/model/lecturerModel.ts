@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ILecturerDoc, ILecturer } from "../api/v1/lecturer/lecturer.dto";
-import { email } from "zod";
 
 export const LecturerSchema = new Schema(
   {
