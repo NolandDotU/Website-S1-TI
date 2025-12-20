@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ftiLogo from '../assets/logoFTI-CNN7ms1i.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -44,12 +45,8 @@ const Login = () => {
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
           className="mb-6 flex justify-center"
         >
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg overflow-hidden">
+            <img src={ftiLogo} alt="FTI Logo" className="w-16 h-16 object-contain" />
           </div>
         </motion.div>
         <motion.h1
@@ -117,6 +114,19 @@ const Login = () => {
                 Processing...
               </span>
             ) : 'Sign In'}
+          </button>
+          <div className="flex items-center my-4">
+            <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+            <span className="mx-3 text-gray-400 text-xs font-semibold uppercase">or</span>
+            <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+          </div>
+          <button
+            type="button"
+            onClick={() => window.location.href = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/api/v1/auth/google`}
+            className="w-full flex items-center justify-center gap-3 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-base"
+          >
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Google" className="w-6 h-6" />
+            Sign in with Google
           </button>
         </motion.form>
         <motion.p
