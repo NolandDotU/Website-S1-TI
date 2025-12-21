@@ -3,15 +3,20 @@ import EmbeddingModel from "../model/embeddingModel";
 import { env } from "../config/env";
 
 export class EmbeddingService {
-  private apiKey = env.HF_API_KEY;
-  private baseUrl = env.HF_BASE_URL;
-  private modelName = env.HF_MODEL_NAME;
+  //pakai yang di comment ini kalau mau pake hugging face
+  // private apiKey = env.HF_API_KEY;
+  // private baseUrl = env.HF_BASE_URL;
+  // private modelName = env.HF_MODEL_NAME;
+  // private modelName = env.HF_MODEL_NAME;
 
-  constructor() {
-    if (!this.apiKey || !this.baseUrl || !this.modelName) {
-      throw new Error("Missing embedding service configuration");
-    }
-  }
+  // constructor() {
+  //   if (!this.apiKey || !this.baseUrl || !this.modelName) {
+  //     throw new Error("Missing embedding service configuration");
+  //   }
+  // }
+
+  private baseUrl = env.EMBEDDING_BASE_URL;
+  private dimension = Number(env.EMBEDDING_DIMENSION);
 
   async generateEmbedding(text: string): Promise<number[]> {
     if (!text.trim()) {
@@ -19,28 +24,39 @@ export class EmbeddingService {
     }
 
     try {
+      // const res = await axios.post(
+      //   `${this.baseUrl}/v1/embeddings`,
+      //   {
+      //     model: this.modelName,
+      //     input: text,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${this.apiKey}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //     timeout: 180_000,
+      //   }
+      // );
+      
       const res = await axios.post(
-        `${this.baseUrl}/v1/embeddings`,
+        `${this.baseUrl}/embed`,
         {
-          model: this.modelName,
-          input: text,
+          texts: [text],
         },
         {
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-            "Content-Type": "application/json",
-          },
           timeout: 180_000,
         }
       );
 
-      const embedding = res.data?.data?.[0]?.embedding;
+      // const embedding = res.data?.data?.[0]?.embedding;
+      const embedding = res.data?.embeddings?.[0];
 
       if (!Array.isArray(embedding)) {
         throw new Error("Invalid embedding response format");
       }
 
-      if (embedding.length !== env.EMBEDDING_DIMENSION) {
+      if (embedding.length !== this.dimension) {
         throw new Error(
           `Embedding dimension mismatch: ${embedding.length}`
         );
@@ -49,8 +65,15 @@ export class EmbeddingService {
       return embedding.map(Number);
     } catch (err: any) {
       console.error("Embedding service error:", err.response?.data || err.message);
-      throw new Error("Embedding service unavailable");
+      throw new Error(`Embedding service unavaible: ${err.message}`);
     }
+  }
+
+  async genereateEmbeddings(texts: string[]): Promise<number[][]> {
+    if (texts.length === 0) return [];
+
+    const res = await axios.post(`${this.baseUrl}/embed`, { texts });
+    return res.data.embeddings;
   }
 
   async semanticSearch(

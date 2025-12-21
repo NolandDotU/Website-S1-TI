@@ -44,7 +44,9 @@ const envSchema = z.object({
   HF_API_KEY: z.string(),
   HF_BASE_URL: z.string().default("https://router.huggingface.co"),
   HF_MODEL_NAME: z.string().default("Qwen/Qwen3-Embedding-8B"),
-  EMBEDDING_DIMENSION: z.coerce.number().default(4096),
+
+  EMBEDDING_BASE_URL: z.string().default("http://localhost:8001"),
+  EMBEDDING_DIMENSION: z.coerce.number().default(384),
 
   //OpenRouter
   OPENROUTER_API_KEY: z.string(),
