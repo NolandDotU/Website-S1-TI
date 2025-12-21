@@ -9,5 +9,5 @@
     "esModuleInterop": true,
     "sourceMap": true
   },
-  "include": ["src"]
+  "include": ["src", "src/**/*", "src/**/*.d.ts"]
 }

@@ -26,13 +26,12 @@ const getController = () => {
 router.post(
   "/uploads",
   uploadNewsPhoto,
-  handleMulterError, // ✅ Tambahin ini
+  handleMulterError,
   validateImage,
   optimizeImage,
   (req: any, res: any) => {
     logger.info("Image uploaded successfully", req.file);
 
-    // ✅ WRAP dengan res.status().json()
     const response = ApiResponse.success(
       {
         path: req.file?.path,

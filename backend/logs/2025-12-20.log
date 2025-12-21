@@ -88,3 +88,63 @@
 {"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 18:05:41"}
 {"destination":"uploads\\news","encoding":"7bit","fieldname":"photo","filename":"d799d99f-4bca-49a0-b212-a8d57e451535.webp","level":"info","message":"Image uploaded successfully","mimetype":"image/jpeg","originalname":"IMG-20250811-WA0005.jpg","path":"uploads\\news\\d799d99f-4bca-49a0-b212-a8d57e451535.webp","size":20858,"timestamp":"2025-12-20 18:05:46"}
 {"level":"http","message":"POST /api/v1/news/uploads 200 203 - 46.435 ms","timestamp":"2025-12-20 18:05:46"}
+{"level":"info","message":"SIGINT received. Closing server gracefully...","timestamp":"2025-12-20 18:06:34"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-20 18:06:34"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2025-12-20 18:55:19"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2025-12-20 18:55:19"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2025-12-20 18:55:19"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 18:55:20"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 18:55:21"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 18:55:21"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 18:55:22"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 18:55:22"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 18:55:22"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2025-12-20 18:56:59"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2025-12-20 18:56:59"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2025-12-20 18:56:59"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 18:57:00"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 18:57:01"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 18:57:01"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 18:57:02"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 18:57:02"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 18:57:02"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2025-12-20 18:58:24"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2025-12-20 18:58:24"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2025-12-20 18:58:24"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 18:58:26"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 18:58:27"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 18:58:27"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 18:58:33"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 18:58:33"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 18:58:33"}
+{"0":"r","1":"e","10":"R","11":"E","12":"S","13":"E","14":"T","2":"a","3":"d","4":" ","5":"E","6":"C","7":"O","8":"N","9":"N","level":"error","message":"Redis error:","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Reconnecting to Redis in 0ms (attempt 0)","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Redis reconnecting...","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Reconnecting to Redis in 0ms (attempt 0)","timestamp":"2025-12-20 19:00:02"}
+{"0":"g","1":"e","10":"o","11":" ","12":"E","13":"N","14":"O","15":"T","16":"F","17":"O","18":"U","19":"N","2":"t","20":"D","21":" ","22":"m","23":"a","24":"s","25":"s","26":"i","27":"v","28":"e","29":"-","3":"a","30":"c","31":"o","32":"u","33":"g","34":"a","35":"r","36":"-","37":"9","38":"5","39":"2","4":"d","40":"0","41":".","42":"u","43":"p","44":"s","45":"t","46":"a","47":"s","48":"h","49":".","5":"d","50":"i","51":"o","6":"r","7":"i","8":"n","9":"f","level":"error","message":"Redis error:","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Redis reconnecting...","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Reconnecting to Redis in 100ms (attempt 1)","timestamp":"2025-12-20 19:00:02"}
+{"0":"g","1":"e","10":"o","11":" ","12":"E","13":"N","14":"O","15":"T","16":"F","17":"O","18":"U","19":"N","2":"t","20":"D","21":" ","22":"m","23":"a","24":"s","25":"s","26":"i","27":"v","28":"e","29":"-","3":"a","30":"c","31":"o","32":"u","33":"g","34":"a","35":"r","36":"-","37":"9","38":"5","39":"2","4":"d","40":"0","41":".","42":"u","43":"p","44":"s","45":"t","46":"a","47":"s","48":"h","49":".","5":"d","50":"i","51":"o","6":"r","7":"i","8":"n","9":"f","level":"error","message":"Redis error:","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Redis reconnecting...","timestamp":"2025-12-20 19:00:02"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 19:00:13"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2025-12-20 19:57:51"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2025-12-20 19:57:51"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2025-12-20 19:57:51"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 19:57:53"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 19:57:59"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 19:57:59"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 19:57:59"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 19:57:59"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 19:57:59"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2025-12-20 20:40:11"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2025-12-20 20:40:11"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2025-12-20 20:40:11"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2025-12-20 20:40:13"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 20:40:25"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2025-12-20 20:40:25"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2025-12-20 20:40:27"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2025-12-20 20:40:27"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2025-12-20 20:40:27"}
+{"level":"info","message":"Disconnected from MongoDB","timestamp":"2025-12-20 20:45:26"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-12-20 20:45:27"}

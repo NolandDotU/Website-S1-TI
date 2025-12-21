@@ -1,7 +1,15 @@
 declare global {
   namespace Express {
     interface Request {
-      user?: JWTPayload;
+      user?: {
+        id: string;
+        email: string;
+        username: string;
+        role: string;
+        authProvider: string;
+      };
     }
   }
 }
+
+export {};

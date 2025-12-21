@@ -11,6 +11,19 @@ import { logger } from "../../../utils";
 import { hashingPassword } from "../../../utils";
 
 class AuthService {
+  async checkMe(id: string) {
+    const user = await userModel.findById(id);
+    if (!user) throw ApiError.notFound("User not found");
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+      photo: user.photo,
+      authProvider: user.authProvider,
+    };
+  }
+
   async createAdmin(data: AdminRegisterDTO) {
     const existing = await userModel.findOne({ email: data.email });
     if (existing) throw ApiError.conflict("Admin account already exists");
@@ -34,6 +47,9 @@ class AuthService {
 
     let user = await userModel.findOne({ email });
     if (user) {
+      if (user.isActive === false) {
+        throw ApiError.unauthorized("User tidak aktif!");
+      }
       user.googleId = googleId;
       user.photo = photo;
       user.isEmailVerified = emailVerified;
@@ -116,7 +132,7 @@ class AuthService {
 
   private generateToken(user: any) {
     const payload: JWTPayload = {
-      _id: user._id,
+      id: user._id,
       email: user.email,
       username: user.username,
       role: user.role,

@@ -3,9 +3,8 @@ import { Request, Response } from "express";
 import passport from "passport";
 import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
-import { ApiResponse } from "../../../utils";
+import { ApiResponse, verifyToken } from "../../../utils";
 import { env } from "../../../config/env";
-
 class AuthController {
   service = authService;
 
@@ -28,6 +27,19 @@ class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   };
+
+  checkMe = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user;
+    console.log("user : ", typeof user);
+
+    if (!user) {
+      throw ApiError.unauthorized("User not authenticated");
+    }
+
+    // const currentUser = await this.service.checkMe(user.id);
+
+    // return ApiResponse.success(currentUser, "User retrieved successfully", 200);
+  });
 
   adminLogin = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.service.adminLogin(req.body);

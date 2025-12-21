@@ -2,7 +2,7 @@ import AnnouncementModel from "../../../model/AnnouncementModel";
 import { getRedisClient } from "../../../config/redis";
 import { logger, CacheManager, ApiError } from "../../../utils";
 import { IAnnouncementInput, IAnnouncementResponse } from "./announcement.dto";
-
+import historyService from "../../../utils/history";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
   private cache: CacheManager;
@@ -124,6 +124,13 @@ export class AnnouncementService {
     const newsDoc = await this.model.create(data);
 
     await this.cache.incr("news:version");
+    // await historyService.create({
+    //   user:
+    //   action: "create",
+    //   entity: "announcement",
+    //   entityId: newsDoc._id,
+    //   description: `Announcement titled "${newsDoc.title}" was created.`,
+    // });
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
   }

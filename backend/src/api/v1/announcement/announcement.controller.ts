@@ -26,6 +26,7 @@ export class NewsController {
   });
 
   create = asyncHandler(async (req: Request, res: Response) => {
+    // const userId = req.user?.id;
     const news = await this.service.create(req.body);
     return ApiResponse.success(news, "News created successfully", 201);
   });

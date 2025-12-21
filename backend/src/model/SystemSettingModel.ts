@@ -42,7 +42,7 @@ const systemSettingSchema = new mongoose.Schema(
 );
 
 const SystemSettingModel = mongoose.model(
-  "system_setting_collection",
+  "settings_collection",
   systemSettingSchema
 );
 export default SystemSettingModel;

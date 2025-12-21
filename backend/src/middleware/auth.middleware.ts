@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils";
+import { asyncHandler, CacheManager } from "../utils";
 import {
   verifyToken,
   generateToken,
@@ -38,7 +38,7 @@ export const authMiddleware = (roles: string[] | null) =>
           const refreshPayload = verifyToken(refreshToken, true);
 
           const newPayload: JWTPayload = {
-            _id: refreshPayload._id,
+            id: refreshPayload.id,
             email: refreshPayload.email,
             role: refreshPayload.role,
             authProvider: refreshPayload.authProvider,
@@ -47,6 +47,13 @@ export const authMiddleware = (roles: string[] | null) =>
 
           const newAccessToken = generateToken(newPayload);
           const newRefreshToken = generateRefreshToken(newPayload);
+          const user = verifyToken(newAccessToken);
+
+          if (roles && !roles.includes(user.role)) {
+            throw ApiError.forbidden(
+              `Access denied. Required roles: ${roles.join(", ")}`
+            );
+          }
 
           res.cookie("accessToken", newAccessToken, {
             httpOnly: true,
@@ -62,6 +69,7 @@ export const authMiddleware = (roles: string[] | null) =>
             maxAge: 7 * 24 * 60 * 60 * 1000,
           });
 
+          req.user = user;
           next();
         } catch (refreshError) {
           throw ApiError.unauthorized(

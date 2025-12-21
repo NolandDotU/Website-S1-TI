@@ -1,30 +1,26 @@
-import React, { useState } from 'react';
-import ftiLogo from '../assets/logoFTI-CNN7ms1i.png';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import ftiLogo from "../assets/logoFTI-CNN7ms1i.png";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: '',
-    password: ''
+    username: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState('');
+  const [focusedField, setFocusedField] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     // Simple authentication (you should implement proper backend authentication)
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
-      localStorage.setItem('isAuthenticated', 'true');
-      navigate('/admin');
-    } else {
-      setError('Username atau password salah');
-    }
+    try {
+    } catch (error) {}
     setLoading(false);
   };
 
@@ -34,35 +30,39 @@ const Login = () => {
       animate="visible"
       variants={{
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeInOut" } }
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.8, ease: "easeInOut" },
+        },
       }}
-      className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center"
-    >
+      className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
       <div className="mx-auto w-full max-w-md px-4 py-8 text-center lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
-          className="mb-6 flex justify-center"
-        >
+          className="mb-6 flex justify-center">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg overflow-hidden">
-            <img src={ftiLogo} alt="FTI Logo" className="w-16 h-16 object-contain" />
+            <img
+              src={ftiLogo}
+              alt="FTI Logo"
+              className="w-16 h-16 object-contain"
+            />
           </div>
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
-          className="mb-2 text-3xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-4xl lg:text-4xl"
-        >
+          className="mb-2 text-3xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-4xl lg:text-4xl">
           Admin Portal
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.4 }}
-          className="mb-8 text-base font-medium text-gray-500 dark:text-gray-400"
-        >
+          className="mb-8 text-base font-medium text-gray-500 dark:text-gray-400">
           Teknik Informatika UKSW
         </motion.p>
         <motion.form
@@ -70,31 +70,46 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.5 }}
           onSubmit={handleSubmit}
-          className="space-y-6 text-left"
-        >
+          className="space-y-6 text-left">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">Username</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+              Username
+            </label>
             <input
               type="text"
               value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-              onFocus={() => setFocusedField('username')}
-              onBlur={() => setFocusedField('')}
+              onChange={(e) =>
+                setCredentials({ ...credentials, username: e.target.value })
+              }
+              onFocus={() => setFocusedField("username")}
+              onBlur={() => setFocusedField("")}
               required
-              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${focusedField === 'username' ? 'border-blue-600' : 'border-gray-200 dark:border-gray-700'}`}
+              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${
+                focusedField === "username"
+                  ? "border-blue-600"
+                  : "border-gray-200 dark:border-gray-700"
+              }`}
               placeholder="Enter your username"
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">Password</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+              Password
+            </label>
             <input
               type="password"
               value={credentials.password}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-              onFocus={() => setFocusedField('password')}
-              onBlur={() => setFocusedField('')}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField("")}
               required
-              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${focusedField === 'password' ? 'border-blue-600' : 'border-gray-200 dark:border-gray-700'}`}
+              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium ${
+                focusedField === "password"
+                  ? "border-blue-600"
+                  : "border-gray-200 dark:border-gray-700"
+              }`}
               placeholder="Enter your password"
             />
           </div>
@@ -106,26 +121,40 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 bg-gradient-to-r from-blue-600 to-blue-900 text-white font-bold rounded-xl transition-all shadow-lg text-base uppercase tracking-wide ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-900'}`}
-          >
+            className={`w-full py-3 bg-gradient-to-r from-blue-600 to-blue-900 text-white font-bold rounded-xl transition-all shadow-lg text-base uppercase tracking-wide ${
+              loading
+                ? "opacity-60 cursor-not-allowed"
+                : "hover:from-blue-700 hover:to-blue-900"
+            }`}>
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 Processing...
               </span>
-            ) : 'Sign In'}
+            ) : (
+              "Sign In"
+            )}
           </button>
           <div className="flex items-center my-4">
             <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
-            <span className="mx-3 text-gray-400 text-xs font-semibold uppercase">or</span>
+            <span className="mx-3 text-gray-400 text-xs font-semibold uppercase">
+              or
+            </span>
             <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
           </div>
           <button
             type="button"
-            onClick={() => window.location.href = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/api/v1/auth/google`}
-            className="w-full flex items-center justify-center gap-3 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-base"
-          >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Google" className="w-6 h-6" />
+            onClick={() =>
+              (window.location.href = `${
+                process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+              }/api/v1/auth/google`)
+            }
+            className="w-full flex items-center justify-center gap-3 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-base">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
+              alt="Google"
+              className="w-6 h-6"
+            />
             Sign in with Google
           </button>
         </motion.form>
@@ -133,8 +162,7 @@ const Login = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut", delay: 0.6 }}
-          className="text-xs text-gray-400 text-center mt-8"
-        >
+          className="text-xs text-gray-400 text-center mt-8">
           Secure admin access only
         </motion.p>
       </div>

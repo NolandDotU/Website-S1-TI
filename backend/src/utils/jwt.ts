@@ -8,7 +8,7 @@ import { env } from "../config/env";
 import { ApiError } from "./ApiError";
 
 export interface JWTPayload {
-  _id: string;
+  id: string;
   email: string;
   username: string;
   role: string;

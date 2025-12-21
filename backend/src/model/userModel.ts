@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { isUKSWEmail } from "../config/google-oauth";
 import { comparePassword, hashingPassword } from "../utils";
 
 export interface IUser extends mongoose.Document {

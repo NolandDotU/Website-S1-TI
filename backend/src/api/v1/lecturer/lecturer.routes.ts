@@ -4,6 +4,14 @@ import { authMiddleware } from "../../../middleware/auth.middleware";
 import { validate } from "../../../middleware/validate.middleware";
 import { LecturerValidation } from "./lecturer.validation";
 import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
+import { ApiResponse, logger } from "../../../utils";
+import {
+  deleteImage,
+  handleMulterError,
+  optimizeImage,
+  uploadLecturerPhoto,
+  validateImage,
+} from "../../../middleware/uploads.middleware";
 const router = Router();
 
 // Lazy initialization - only create instances when routes are actually called
@@ -15,6 +23,34 @@ const getController = (): LecturerController => {
   }
   return lecturerController;
 };
+
+router.post(
+  "/uploads",
+  uploadLecturerPhoto,
+  handleMulterError,
+  validateImage,
+  optimizeImage,
+  (req: any, res: any) => {
+    logger.info("Image uploaded successfully", req.file);
+
+    const response = ApiResponse.success(
+      {
+        path: req.file?.path,
+        filename: req.file?.filename,
+      },
+      "Image uploaded successfully"
+    );
+
+    return res.status(response.statusCode).json(response);
+  }
+);
+
+router.delete("/uploads", (req, res, next) => {
+  deleteImage(req.body.path).then(() => {
+    ApiResponse.success(null, "Image deleted successfully", 200);
+  });
+});
+
 router.post(
   "/",
   authMiddleware(["admin"]),
