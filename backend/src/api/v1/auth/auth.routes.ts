@@ -13,6 +13,7 @@ import {
 } from "../../../middleware/uploads.middleware";
 import authController from "./auth.controller";
 import passport from "passport";
+import { env } from "../../../config/env";
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ router.delete("/uploads", (req, res, next) => {
 });
 
 //admin
-router.post("/admin", authController.adminLogin);
+router.get("/admin", authMiddleware(["admin"]), authController.checkMe);
 router.post(
   "/new/admin",
   validate(AdminRegisterSchema),
@@ -53,12 +54,12 @@ router.post(
 );
 
 // Google
-router.post("/login", authController.adminLogin);
+router.post("/admin", authController.adminLogin);
 router.get("/google", authController.googleAuth);
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/api/v1/auth/google/failure",
+    failureRedirect: `${env.FRONTEND_ORIGIN}/auth/google/error`,
     session: false,
   }),
   authController.googleAuthCallback

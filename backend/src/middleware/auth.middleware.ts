@@ -72,6 +72,7 @@ export const authMiddleware = (roles: string[] | null) =>
           req.user = user;
           next();
         } catch (refreshError) {
+          res.redirect("/no-access");
           throw ApiError.unauthorized(
             "Invalid refresh token. Please login again"
           );

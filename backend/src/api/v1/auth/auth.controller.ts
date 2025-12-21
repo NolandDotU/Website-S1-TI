@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import passport from "passport";
 import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
-import { ApiResponse, verifyToken } from "../../../utils";
+import { ApiResponse, logger, verifyToken } from "../../../utils";
 import { env } from "../../../config/env";
 class AuthController {
   service = authService;
@@ -43,8 +43,11 @@ class AuthController {
 
   adminLogin = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.service.adminLogin(req.body);
+    logger.info("Admin logged in:", user);
     this.setCookies(res, user.accessToken, user.refreshToken);
-    return ApiResponse.success(null, "Admin logged in successfully", 200);
+    return res.send(
+      ApiResponse.success(null, "Admin logged in successfully", 200)
+    );
   });
 
   createAdmin = asyncHandler(async (req: Request, res: Response) => {

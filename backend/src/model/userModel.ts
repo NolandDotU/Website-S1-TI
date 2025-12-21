@@ -22,13 +22,9 @@ const userSchema = new mongoose.Schema<IUser>(
     username: {
       type: String,
       required: true,
-      minLength: [4, "Username must be at least 4 characters long"],
-      maxLength: [100, "Username must be at most 100 characters long"],
     },
     fullname: {
       type: String,
-      minLength: [4, "Username must be at least 4 characters long"],
-      maxLength: [100, "Username must be at most 100 characters long"],
     },
     email: {
       type: String,
@@ -38,8 +34,6 @@ const userSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       required: false,
-      minLength: [8, "Password must be at least 4 characters long"],
-      maxLength: [12, "Password must be at most 100 characters long"],
     },
     photo: {
       type: String,

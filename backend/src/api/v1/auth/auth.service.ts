@@ -88,10 +88,12 @@ class AuthService {
   async adminLogin(data: AdminLoginDTO): Promise<AuthResponseDTO> {
     const { username, password } = data;
     const user = await userModel.findOne({ username });
+    if (!user) throw ApiError.unauthorized("Username atau password salah!");
+
+    logger.info("User", user);
 
     if (user?.role !== "admin")
       throw ApiError.unauthorized("User bukan admin!");
-    if (!user) throw ApiError.unauthorized("Email atau password salah!");
     if (!user.isActive) throw ApiError.unauthorized("User tidak aktif!");
     if (!user.password && user.googleId)
       throw ApiError.unauthorized("Login menggunakan Google!");
@@ -131,6 +133,7 @@ class AuthService {
   }
 
   private generateToken(user: any) {
+    logger.info("Generating token : ", user);
     const payload: JWTPayload = {
       id: user._id,
       email: user.email,

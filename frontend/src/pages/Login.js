@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ftiLogo from "../assets/logoFTI-CNN7ms1i.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { env } from "../services/utils/env";
+import axios from "axios";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -18,9 +20,16 @@ const Login = () => {
     setLoading(true);
     setError("");
 
-    // Simple authentication (you should implement proper backend authentication)
     try {
-    } catch (error) {}
+      const res = await axios.post(
+        `${env.BACKEND_URL}/api/v1/auth/admin`,
+        credentials
+      );
+      console.log(res);
+      navigate("/admin/dashboard");
+    } catch (error) {
+      setError(error.response.data.message);
+    }
     setLoading(false);
   };
 

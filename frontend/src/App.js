@@ -1,83 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import TentangTISection from './components/TentangTISection';
-import LayananKampusSection from './components/LayananKampusSection';
-import HeroBanner from './components/HeroBanner';
-import Carousel from './components/Carousel';
-import AdmissionsHighlights from './components/AdmissionsHighlights';
-import FeaturedNews from './components/FeaturedNews';
-import KerjaSamaSection from './components/KerjaSamaSection';
-import Toggle from './components/Toggle';
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 
-import LecturerProfiles from './pages/LecturerProfiles';
-import { AdminDashboard } from './pages/admin';
-import Login from './pages/Login';
-import ProtectedRoute from './components/ProtectedRoute';
-import Berita from './pages/Berita';
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Toggle from "./components/Toggle";
+
+// Pages
+import HomePage from "./pages/Home";
+import LecturerProfiles from "./pages/LecturerProfiles";
+import Berita from "./pages/Berita";
+import Login from "./pages/Login";
+import { AdminDashboard } from "./pages/admin";
+import { GoogleAuthError } from "./pages/middleware/googleAuth_error";
+import { NoAccessPage } from "./pages/middleware/notHaveAccess";
+
+// Middleware
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
+  const location = useLocation();
 
+  // Theme handler
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  // Home page component
-  const HomePage = () => (
-    <>
-      <Carousel />
-      <HeroBanner />
-      <AdmissionsHighlights />
-      <FeaturedNews />
-      <TentangTISection />
-      <KerjaSamaSection />
-      <LayananKampusSection />
-    </>
-  );
+  // Routes yang ga perlu navbar/footer
+  const noLayoutRoutes = [
+    "/login",
+    "/auth/google/error",
+    "/no-access",
+    "/admin",
+  ];
+  const shouldShowLayout = !noLayoutRoutes.includes(location.pathname);
 
   return (
-    <Routes>
-      {/* Login route without navbar/footer */}
-      <Route path="/login" element={<Login />} />
-      
-      {/* All other routes with navbar/footer */}
-      <Route path="*" element={
-        <div className={`flex flex-col min-h-screen dark:bg-gray-900 px-4 md:px-8 lg:px-12`}>
-          <div className="fixed top-4 right-4 z-50">
-            <Toggle theme={theme} toggleTheme={toggleTheme} />
-          </div>
-          
-          {/* Content */}
-          <div className="relative z-10 flex flex-col min-h-screen">
-            {/* Only show Navbar for non-admin routes */}
-            {window.location.pathname !== '/admin' && <Navbar />}
-            <main className="w-full flex-grow bg-white dark:bg-gray-900">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/berita" element={<Berita />} />
-                <Route path="/profil-dosen" element={<LecturerProfiles />} />
-                <Route path="/admin" element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } />
-              </Routes>
-            </main>
-            <Footer className="p-20" />
-          </div>
-        </div>
-      } />
-    </Routes>
+    <div className="flex flex-col min-h-screen dark:bg-gray-900">
+      {/* Theme Toggle - always visible */}
+      <div className="fixed top-4 right-4 z-50">
+        <Toggle theme={theme} toggleTheme={toggleTheme} />
+      </div>
+
+      {/* Navbar - conditional */}
+      {shouldShowLayout && <Navbar />}
+
+      {/* Main Content */}
+      <main
+        className={`flex-grow ${
+          shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
+        } bg-white dark:bg-gray-900`}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/berita" element={<Berita />} />
+          <Route path="/profil-dosen" element={<LecturerProfiles />} />
+
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/auth/google/error" element={<GoogleAuthError />} />
+          <Route path="/no-access" element={<NoAccessPage />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+
+      {/* Footer - conditional */}
+      {shouldShowLayout && <Footer />}
+    </div>
   );
 }
 
