@@ -20,6 +20,7 @@ const router = express.Router();
 router.get("/me", authMiddleware(null), authController.checkMe);
 router.post(
   "/uploads",
+  authMiddleware(["admin"]),
   uploadUserPhoto,
   handleMulterError,
   validateImage,
@@ -50,6 +51,7 @@ router.get("/admin", authMiddleware(["admin"]), authController.checkMe);
 router.post(
   "/new/admin",
   validate(AdminRegisterSchema),
+  authMiddleware(["admin"]),
   authController.createAdmin
 );
 

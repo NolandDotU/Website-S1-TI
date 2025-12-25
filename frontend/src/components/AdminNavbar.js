@@ -1,9 +1,10 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../services/api";
+import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { logout } from "../services/authAPI";
 
-const AdminNavbar = () => {
+const AdminLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -14,35 +15,31 @@ const AdminNavbar = () => {
     }
   };
 
+  const isActive = (path) => {
+    return (
+      location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
+
+  const navLinks = [
+    { path: "/admin/dashboard", label: "Dashboard" },
+    { path: "/admin/berita", label: "Berita" },
+    { path: "/admin/dosen", label: "Dosen" },
+    { path: "/admin/carousel", label: "Carousel" },
+    { path: "/admin/profil", label: "Profil Prodi" },
+  ];
+
   return (
-    <nav className="bg-blue-900 text-white shadow-lg py-4 px-6 flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <span className="font-extrabold text-xl tracking-tight">
-          Admin Portal
-        </span>
-        <Link to="/admin" className="hover:underline font-medium">
-          Dashboard
-        </Link>
-        <Link to="/admin?tab=berita" className="hover:underline font-medium">
-          Berita
-        </Link>
-        <Link to="/admin?tab=dosen" className="hover:underline font-medium">
-          Dosen
-        </Link>
-        <Link to="/admin?tab=carousel" className="hover:underline font-medium">
-          Carousel
-        </Link>
-        <Link to="/admin?tab=profil" className="hover:underline font-medium">
-          Profil Prodi
-        </Link>
-      </div>
-      <button
-        onClick={handleLogout}
-        className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg transition-all">
-        Logout
-      </button>
-    </nav>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <nav className="bg-white shadow-md "></nav>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
-export default AdminNavbar;
+export default AdminLayout;

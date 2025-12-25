@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/ApiError";
-import { asyncHandler, CacheManager } from "../utils";
+import { asyncHandler, CacheManager, logger } from "../utils";
 import {
   verifyToken,
   generateToken,
@@ -11,7 +11,9 @@ import {
 
 export const authMiddleware = (roles: string[] | null) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken = req.cookies?.accessToken;
+    const accessToken =
+      req.cookies?.accessToken || req.cookies?.refreshToken || null;
+    logger.info("Access Token in auth middleware : ", accessToken);
 
     if (!accessToken) {
       throw ApiError.unauthorized("Access token required");
@@ -58,14 +60,14 @@ export const authMiddleware = (roles: string[] | null) =>
           res.cookie("accessToken", newAccessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
             maxAge: 15 * 60 * 1000,
           });
 
           res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
           });
 

@@ -1,20 +1,44 @@
-import axios from "axios";
 import React from "react";
-import { Navigate, Routes } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/Context";
 
-const ProtectedRoute = async ({ children }) => {
-  console.log("Checking authentication for protected route...");
-  try {
-    const isAuthenticated = await axios.get("/api/v1/auth/admin");
-    console.log(isAuthenticated);
-    if (isAuthenticated.status !== 200) {
-      return <Navigate to="/no-access" />;
-    }
-  } catch (error) {
-    console.log("Not authenticated:", error);
-    return <Navigate to="/login" />;
+const ProtectedRoute = ({ children, requiredRole = null }) => {
+  const { user, loading } = useAuth();
+
+  console.log("ProtectedRoute - Loading:", loading, "User:", user);
+
+  // ✅ Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium text-lg">
+            Checking authentication...
+          </p>
+        </div>
+      </div>
+    );
   }
 
+  // ✅ Redirect to login if not authenticated
+  if (!user) {
+    console.log(
+      "ProtectedRoute - User not authenticated, redirecting to /login"
+    );
+    return <Navigate to="/login" replace />;
+  }
+
+  // ✅ Check role if required (e.g., admin only)
+  if (requiredRole && user.role !== requiredRole) {
+    console.log(
+      `ProtectedRoute - User role (${user.role}) does not match required role (${requiredRole})`
+    );
+    return <Navigate to="/no-access" replace />;
+  }
+
+  // ✅ User is authenticated and authorized
+  console.log("ProtectedRoute - Access granted");
   return children;
 };
 

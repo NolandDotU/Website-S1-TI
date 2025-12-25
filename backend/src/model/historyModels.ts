@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { ref } from "process";
 
 export interface IHistoryInput {
   user: string | mongoose.Types.ObjectId;
@@ -41,7 +40,14 @@ const Historyschema = new mongoose.Schema(
     },
     entity: {
       type: String,
-      enum: ["lecturer", "announcement", "user", "settings", "highlight"],
+      enum: [
+        "lecturer",
+        "announcement",
+        "user",
+        "auth",
+        "settings",
+        "highlight",
+      ],
     },
     entityId: {
       type: mongoose.Schema.Types.ObjectId,

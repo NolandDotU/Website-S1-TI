@@ -10,6 +10,7 @@ import apiV1Router from "./api/v1";
 import { configureGoogleOAuth } from "./config/google-oauth";
 import multer from "multer";
 import { handleMulterError } from "./middleware/uploads.middleware";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
@@ -19,6 +20,7 @@ app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(compression());
 app.use(handleMulterError);
+app.use(cookieParser());
 configureGoogleOAuth();
 
 // Body parsing

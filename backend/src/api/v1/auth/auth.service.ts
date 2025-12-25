@@ -9,8 +9,21 @@ import {
 import { generateToken, generateRefreshToken } from "../../../utils";
 import { logger } from "../../../utils";
 import { hashingPassword } from "../../../utils";
+import historyService from "../../../utils/history";
 
 class AuthService {
+  history: typeof historyService | null = historyService || null;
+
+  async madeHistory(
+    action: string,
+    userId: any,
+    entity: string,
+    description?: string
+  ) {
+    if (this.history !== null) {
+      await this.history.create({ user: userId, action, entity, description });
+    }
+  }
   async checkMe(id: string) {
     const user = await userModel.findById(id);
     if (!user) throw ApiError.notFound("User not found");
@@ -24,10 +37,14 @@ class AuthService {
     };
   }
 
-  async createAdmin(data: AdminRegisterDTO) {
+  async createAdmin(data: AdminRegisterDTO, userId?: any) {
     const existing = await userModel.findOne({ email: data.email });
-    if (existing) throw ApiError.conflict("Admin account already exists");
+    if (existing) {
+      await this.madeHistory("POST", existing.id, "auth");
+      throw ApiError.conflict("Admin account already exists");
+    }
     const user = await userModel.create(data);
+    await this.madeHistory("POST", user.id, "auth");
     return user;
   }
 

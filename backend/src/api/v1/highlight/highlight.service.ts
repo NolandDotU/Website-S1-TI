@@ -2,7 +2,7 @@ import { ApiError, logger } from "../../../utils";
 import { HighlightModel } from "../../../model/highlightModel";
 import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
-import { IHighlightInput } from "./highlight.dto";
+import { INewsHighlightInput } from "./highlight.dto";
 
 class HighlightService {
   private model: typeof HighlightModel;
@@ -13,7 +13,7 @@ class HighlightService {
     this.cache = cache || new CacheManager(getRedisClient());
   }
 
-  async create(data: IHighlightInput[]): Promise<any> {
+  async create(data: INewsHighlightInput[]): Promise<any> {
     const count = await this.model.countDocuments();
     if (count + data.length > 4) {
       throw ApiError.conflict("Highlight limit exceeded (max 4)");

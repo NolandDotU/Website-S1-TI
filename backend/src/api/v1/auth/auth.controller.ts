@@ -1,10 +1,11 @@
 import authService from "./auth.service";
-import { Request, Response } from "express";
+import { request, Request, Response } from "express";
 import passport from "passport";
 import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
-import { ApiResponse, logger, verifyToken } from "../../../utils";
+import { ApiResponse, JWTPayload, logger, verifyToken } from "../../../utils";
 import { env } from "../../../config/env";
+import { JWTAlgorithm } from "zod/v4/core/util.cjs";
 class AuthController {
   service = authService;
 
@@ -16,35 +17,40 @@ class AuthController {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   };
 
   checkMe = asyncHandler(async (req: Request, res: Response) => {
-    const user = req.user;
+    const token = req.cookies["accessToken"] || null;
+    if (!token) {
+      throw ApiError.unauthorized("User not authenticated");
+    }
+    const user = verifyToken(token);
     console.log("user : ", typeof user);
 
     if (!user) {
       throw ApiError.unauthorized("User not authenticated");
     }
 
-    // const currentUser = await this.service.checkMe(user.id);
+    const currentUser = await this.service.checkMe(user.id);
 
-    // return ApiResponse.success(currentUser, "User retrieved successfully", 200);
+    return ApiResponse.success(currentUser, "User retrieved successfully", 200);
   });
 
   adminLogin = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.service.adminLogin(req.body);
     logger.info("Admin logged in:", user);
     this.setCookies(res, user.accessToken, user.refreshToken);
+    logger.info("Cookies set for admin login : ", res.cookie);
     return res.send(
       ApiResponse.success(null, "Admin logged in successfully", 200)
     );
@@ -52,7 +58,9 @@ class AuthController {
 
   createAdmin = asyncHandler(async (req: Request, res: Response) => {
     if (process.env.NODE_ENV !== "development") throw ApiError.forbidden();
-    const user = await this.service.createAdmin(req.body);
+    const currentUser = req.user as JWTPayload | undefined;
+    logger.info("Current User creating admin:", currentUser);
+    const user = await this.service.createAdmin(req.body, currentUser?.id);
     return ApiResponse.success(null, "Admin created successfully", 201);
   });
 
@@ -80,7 +88,7 @@ class AuthController {
     res.cookie("user", JSON.stringify(payloadUser), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 15 * 60 * 1000,
     });
     res.redirect(`${env.FRONTEND_ORIGIN}/auth/callback?success=true`);
@@ -90,6 +98,7 @@ class AuthController {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     res.clearCookie("user");
+    res.redirect(env.FRONTEND_ORIGIN);
 
     res.json(ApiResponse.success(null, "Logout berhasil"));
   });

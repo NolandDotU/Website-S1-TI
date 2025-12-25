@@ -17,6 +17,7 @@ import { NoAccessPage } from "./pages/middleware/notHaveAccess";
 
 // Middleware
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLayout from "./components/AdminNavbar";
 
 function App() {
   const [theme, setTheme] = useState("light");
@@ -75,10 +76,11 @@ function App() {
             path="/admin"
             element={
               <ProtectedRoute requiredRole="admin">
-                <AdminDashboard />
+                <AdminLayout />
               </ProtectedRoute>
-            }
-          />
+            }>
+            <Route path="dashboard" element={<AdminDashboard />} />
+          </Route>
         </Routes>
       </main>
 

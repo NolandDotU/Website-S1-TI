@@ -7,10 +7,15 @@ export class NewsController {
   service = new AnnouncementService();
 
   getAllPublished = asyncHandler(async (req: Request, res: Response) => {
-    const { page = 1, limit = 10 } = req.query as IAnnouncementQueryDTO;
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+    } = req.query as IAnnouncementQueryDTO;
     const result = await this.service.getAllPublished(
       Number(page),
-      Number(limit)
+      Number(limit),
+      search
     );
     return ApiResponse.success(result, "News fetched successfully", 200);
   });
