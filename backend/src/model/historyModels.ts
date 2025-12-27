@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 export interface IHistoryInput {
-  user: string | mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
   action: string;
   entity: string;
-  entityId?: string | mongoose.Types.ObjectId;
+  entityId?: mongoose.Types.ObjectId;
   description?: string;
 }
 

@@ -1,4 +1,3 @@
-import { ca } from "zod/v4/locales";
 import { getRedisClient } from "../config/redis";
 import HistoryModel, { IHistoryInput } from "../model/historyModels";
 import { IHistory, IHistoryResponse } from "../model/historyModels";

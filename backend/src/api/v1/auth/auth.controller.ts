@@ -42,8 +42,11 @@ class AuthController {
     }
 
     const currentUser = await this.service.checkMe(user.id);
+    console.log("currentUser : ", currentUser);
 
-    return ApiResponse.success(currentUser, "User retrieved successfully", 200);
+    return res.send(
+      ApiResponse.success(currentUser, "User retrieved successfully", 200)
+    );
   });
 
   adminLogin = asyncHandler(async (req: Request, res: Response) => {
@@ -98,9 +101,8 @@ class AuthController {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     res.clearCookie("user");
-    res.redirect(env.FRONTEND_ORIGIN);
 
-    res.json(ApiResponse.success(null, "Logout berhasil"));
+    return res.send(ApiResponse.success(null, "Logout berhasil", 200));
   });
 }
 

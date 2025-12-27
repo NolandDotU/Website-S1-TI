@@ -17,14 +17,14 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     try {
       console.log("🔍 Checking auth via /auth/me...");
-      const data = await api.get("/auth/me");
+      const response = await api.get("/auth/me");
 
-      console.log("📦 Auth check response:", data);
+      console.log("📦 Auth check response:", response.data);
 
       // ✅ Handle backend ApiResponse format
-      if (data.success && data.data) {
-        setUser(data.data);
-        console.log("✅ User authenticated:", data.data);
+      if (response.data.success && response.data.data) {
+        setUser(response.data.data);
+        console.log("✅ User authenticated:", response.data.data);
       } else {
         setUser(null);
         console.log("❌ User not authenticated");

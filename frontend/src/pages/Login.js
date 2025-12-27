@@ -3,29 +3,31 @@ import ftiLogo from "../assets/logoFTI-CNN7ms1i.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/Context";
-import { useToast } from "../components/toastProvider"; // ← Import toast
+import { useToast } from "../components/toastProvider";
+import loginIllustration from "../assets/illustration/login.svg";
 
 const Login = () => {
   const navigate = useNavigate();
   const { user, loginAdmin, loginWithGoogle } = useAuth();
-  const toast = useToast(); // ← Use toast
+  const toast = useToast();
 
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  // ✅ Redirect jika sudah login
   useEffect(() => {
     if (user) {
-      toast.success(`Welcome back, ${user.username}!`);
-      navigate("/admin/dashboard");
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
-  }, [user, navigate]);
+  }, [user, navigate, toast]);
 
-  // ✅ Handle admin login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -35,7 +37,6 @@ const Login = () => {
         credentials.username,
         credentials.password
       );
-      console.log("Login result:", result);
 
       if (result.success) {
         toast.success("Login successful! Redirecting...");
@@ -43,18 +44,15 @@ const Login = () => {
           navigate("/admin/dashboard");
         }, 500);
       } else {
-        console.error("Login failed:", result.error);
         toast.error(result.error || "Login failed");
       }
     } catch (error) {
-      console.error("Login error:", error);
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Handle Google login
   const handleGoogleLogin = () => {
     toast.info("Redirecting to Google...");
     setTimeout(() => {
@@ -63,175 +61,237 @@ const Login = () => {
   };
 
   return (
-    <motion.section
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.8, ease: "easeInOut" },
-        },
-      }}
-      className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
-      <div className="mx-auto w-full max-w-md px-4 py-8 text-center lg:py-16">
-        {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
-          className="mb-6 flex justify-center">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg overflow-hidden">
-            <img
-              src={ftiLogo}
-              alt="FTI Logo"
-              className="w-16 h-16 object-contain"
-            />
-          </div>
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
-          className="mb-2 text-3xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-4xl lg:text-4xl">
-          Admin Portal
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.4 }}
-          className="mb-8 text-base font-medium text-gray-500 dark:text-gray-400">
-          Teknik Informatika UKSW
-        </motion.p>
-
-        {/* Form */}
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.5 }}
-          onSubmit={handleSubmit}
-          className="space-y-6 text-left">
-          {/* Username Input */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-              Username
-            </label>
-            <input
-              type="text"
-              value={credentials.username}
-              onChange={(e) =>
-                setCredentials({ ...credentials, username: e.target.value })
-              }
-              onFocus={() => setFocusedField("username")}
-              onBlur={() => setFocusedField("")}
-              required
-              disabled={loading}
-              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
-                focusedField === "username"
-                  ? "border-blue-600"
-                  : "border-gray-200 dark:border-gray-700"
-              }`}
-              placeholder="Enter your username"
-            />
-          </div>
-
-          {/* Password Input */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-              Password
-            </label>
-            <input
-              type="password"
-              value={credentials.password}
-              onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
-              }
-              onFocus={() => setFocusedField("password")}
-              onBlur={() => setFocusedField("")}
-              required
-              disabled={loading}
-              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none transition-all bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
-                focusedField === "password"
-                  ? "border-blue-600"
-                  : "border-gray-200 dark:border-gray-700"
-              }`}
-              placeholder="Enter your password"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 bg-gradient-to-r from-blue-600 to-blue-900 text-white font-bold rounded-xl transition-all shadow-lg text-base uppercase tracking-wide ${
-              loading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:from-blue-700 hover:to-blue-900 hover:shadow-xl"
-            }`}>
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Processing...
-              </span>
-            ) : (
-              "Sign In"
-            )}
-          </button>
-
-          {/* Divider */}
-          <div className="flex items-center my-4">
-            <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
-            <span className="mx-3 text-gray-400 text-xs font-semibold uppercase">
-              or
-            </span>
-            <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
-          </div>
-
-          {/* Google Login Button */}
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className={`w-full flex items-center justify-center gap-3 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg font-bold text-gray-700 dark:text-gray-200 transition-all text-base ${
-              loading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:bg-gray-50 dark:hover:bg-gray-700 hover:shadow-xl"
-            }`}>
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
-              alt="Google"
-              className="w-6 h-6"
-            />
-            Sign in with Google
-          </button>
-        </motion.form>
-
-        {/* Security Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut", delay: 0.6 }}
-          className="mt-8">
-          <p className="text-xs text-gray-400 text-center">
-            Secure admin access only
-          </p>
-          <div className="mt-3 flex items-center justify-center gap-2 text-xs text-green-600 dark:text-green-400">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clipRule="evenodd"
+    <div className="min-h-screen flex bg-white dark:bg-gray-900">
+      {/* Left Side - Form */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-gray-900">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="mb-8">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg overflow-hidden mb-4">
+              <img
+                src={ftiLogo}
+                alt="FTI Logo"
+                className="w-12 h-12 object-contain"
               />
-            </svg>
-            <span className="font-semibold">Protected by HttpOnly Cookies</span>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              Hallo,
+              <br />
+              Welcome Back
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Hey, welcome back to your special place
+            </p>
           </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Username Input */}
+            <div>
+              <input
+                type="text"
+                value={credentials.username}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, username: e.target.value })
+                }
+                required
+                disabled={loading}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 
+                  focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 
+                  transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
+                  placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
+                placeholder="username"
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <input
+                type="password"
+                value={credentials.password}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, password: e.target.value })
+                }
+                required
+                disabled={loading}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 
+                  focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 
+                  transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
+                  placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
+                placeholder="••••••••••••"
+              />
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 
+                    text-blue-600 focus:ring-blue-500 cursor-pointer 
+                    dark:bg-gray-800 dark:checked:bg-blue-600"
+                />
+                <span className="ml-2 text-gray-700 dark:text-gray-300">
+                  Remember me
+                </span>
+              </label>
+              <a
+                href="#"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 
+                  dark:hover:text-blue-300 font-medium">
+                Forgot Password?
+              </a>
+            </div>
+
+            {/* Sign In Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 
+                dark:from-blue-500 dark:to-blue-600 text-white font-semibold 
+                rounded-xl transition-all shadow-md ${
+                  loading
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:shadow-lg hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700"
+                }`}>
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Processing...
+                </span>
+              ) : (
+                "Sign In"
+              )}
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+              <span className="mx-3 text-gray-400 dark:text-gray-500 text-sm">
+                Or Sign in with
+              </span>
+              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full flex items-center justify-center py-3 border 
+                border-gray-200 dark:border-gray-700 rounded-xl 
+                hover:bg-gray-50 dark:hover:bg-gray-800 transition-all 
+                disabled:opacity-50 bg-white dark:bg-gray-800">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                alt="Google"
+                className="w-6 h-6"
+              />
+            </button>
+
+            {/* Security Badge */}
+            <div
+              className="mt-6 flex items-center justify-center gap-2 text-xs 
+              text-green-600 dark:text-green-400">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="font-semibold">
+                Secure Login with HttpOnly Cookies
+              </span>
+            </div>
+          </form>
+        </div>
+      </motion.div>
+
+      {/* Right Side - Illustration */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-500 via-blue-600 
+          to-blue-700 dark:from-blue-600 dark:via-blue-700 dark:to-blue-800 
+          items-center justify-center p-12 relative overflow-hidden">
+        {/* Decorative Clouds - Animated */}
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-0 left-0 w-64 h-64 bg-white/10 dark:bg-white/5 rounded-full blur-3xl"
+        />
+
+        <motion.div
+          animate={{
+            y: [0, -15, 0],
+            x: [0, -10, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3,
+          }}
+          className="absolute top-20 right-0 w-96 h-96 bg-white/10 dark:bg-white/5 rounded-full blur-3xl"
+        />
+
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+            x: [0, 5, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 6,
+          }}
+          className="absolute bottom-0 left-20 w-80 h-80 bg-white/10 dark:bg-white/5 rounded-full blur-3xl"
+        />
+
+        {/* Main Illustration */}
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="relative z-10 flex items-center justify-center">
+          <img
+            src={loginIllustration}
+            alt="Login Illustration"
+            className="max-w-lg w-full h-auto object-contain drop-shadow-2xl"
+          />
         </motion.div>
-      </div>
-    </motion.section>
+
+        {/* Decorative Elements */}
+        <div
+          className="absolute top-20 left-20 w-16 h-16 border-4 border-white/20 
+          rounded-full animate-pulse"></div>
+        <div
+          className="absolute bottom-32 right-32 w-20 h-20 border-4 border-white/20 
+          rounded-lg rotate-45 animate-pulse"
+          style={{ animationDelay: "1s" }}></div>
+      </motion.div>
+    </div>
   );
 };
 
