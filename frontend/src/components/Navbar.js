@@ -1,11 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Logo from '../assets/Logo-DMl9ckBx.png';
+import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Logo from "../assets/Logo-DMl9ckBx.png";
+import { useAuth } from "../context/Context";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropDownUser, setIsDropDownUser] = useState(false);
   const dropdownRef = useRef(null);
   const timeoutRef = useRef(null);
+  const user = useAuth().user;
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
@@ -38,46 +41,51 @@ const Navbar = () => {
             </Link>
             <ul className="flex bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
               <li>
-                <Link to="/" className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                <Link
+                  to="/"
+                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/berita" className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                <Link
+                  to="/berita"
+                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
                   Berita
                 </Link>
               </li>
-              <li 
+              <li
                 className="relative"
                 ref={dropdownRef}
                 onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center gap-1"
-                >
+                onMouseLeave={handleMouseLeave}>
+                <button className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center gap-1">
                   Lainnya
                   <svg
-                    className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                    className={`w-4 h-4 transition-transform ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
                     fill="none"
                     stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
                     <Link
                       to="/profil-dosen"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                    >
+                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                       Daftar Profil Dosen
                     </Link>
                     <Link
                       to="/admin"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-t border-gray-200 dark:border-gray-700"
-                    >
+                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-t border-gray-200 dark:border-gray-700">
                       Admin Dashboard
                     </Link>
                   </div>
@@ -86,9 +94,22 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="flex items-center">
-            <Link to="/login" className="py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700 transition">
-              Login
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <img
+                  src={`${user.photo}=s96-c`}
+                  alt={user.photo}
+                  srcset=""
+                  className="h-4 w-4 rounded-full"
+                />
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700 transition">
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>

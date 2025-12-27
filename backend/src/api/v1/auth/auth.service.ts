@@ -10,7 +10,10 @@ import { generateToken, generateRefreshToken } from "../../../utils";
 import { logger } from "../../../utils";
 import { hashingPassword } from "../../../utils";
 import historyService from "../../../utils/history";
-
+import axios from "axios";
+import { uploadNewsPhoto } from "../../../middleware/uploads.middleware";
+import path from "path";
+import fs from "fs";
 class AuthService {
   history: typeof historyService | null = historyService || null;
 
@@ -55,6 +58,19 @@ class AuthService {
     await user.save();
     return user;
   }
+  saveImage = async (buffer: Buffer, username: string) => {
+    const dirPath = path.join("uploads/user");
+    const fileName = `google-avatar-${username}.jpg`;
+    const filePath = path.join("uploads/user", fileName);
+
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, buffer);
+
+    return `/uploads/user/${fileName}`;
+  };
 
   async handleGoogleAuth(googleUser: any): Promise<AuthResponseDTO> {
     const { googleId, email, username, photo, emailVerified, fullname } =
@@ -67,18 +83,28 @@ class AuthService {
       if (user.isActive === false) {
         throw ApiError.unauthorized("User tidak aktif!");
       }
+
       user.googleId = googleId;
-      user.photo = photo;
       user.isEmailVerified = emailVerified;
       user.lastLogin = new Date();
       await user.save();
 
       logger.info("Existing user logged in", user);
     } else {
+      const googleImage = await axios.get(photo, {
+        responseType: "arraybuffer",
+      });
+
+      const fileName =
+        (await this.saveImage(
+          Buffer.from(googleImage.data, "binary"),
+          username
+        )) || "";
+
       user = await userModel.create({
         googleId,
         email,
-        photo,
+        photo: fileName,
         isEmailVerified: emailVerified,
         authProvider: "google",
         username,

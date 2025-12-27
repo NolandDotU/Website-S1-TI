@@ -94,7 +94,7 @@ class AuthController {
       sameSite: "lax",
       maxAge: 15 * 60 * 1000,
     });
-    res.redirect(`${env.FRONTEND_ORIGIN}/auth/callback?success=true`);
+    res.redirect(`${env.FRONTEND_ORIGIN}/`);
   });
 
   logout = asyncHandler(async (req: Request, res: Response) => {

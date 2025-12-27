@@ -3,7 +3,7 @@ import ftiLogo from "../assets/logoFTI-CNN7ms1i.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/Context";
-import { useToast } from "../components/toastProvider";
+import { useToast } from "../context/toastProvider";
 import loginIllustration from "../assets/illustration/login.svg";
 
 const Login = () => {
@@ -16,7 +16,6 @@ const Login = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -42,7 +41,7 @@ const Login = () => {
         toast.success("Login successful! Redirecting...");
         setTimeout(() => {
           navigate("/admin/dashboard");
-        }, 500);
+        }, 200);
       } else {
         toast.error(result.error || "Login failed");
       }
@@ -127,27 +126,6 @@ const Login = () => {
             </div>
 
             {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 
-                    text-blue-600 focus:ring-blue-500 cursor-pointer 
-                    dark:bg-gray-800 dark:checked:bg-blue-600"
-                />
-                <span className="ml-2 text-gray-700 dark:text-gray-300">
-                  Remember me
-                </span>
-              </label>
-              <a
-                href="#"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 
-                  dark:hover:text-blue-300 font-medium">
-                Forgot Password?
-              </a>
-            </div>
 
             {/* Sign In Button */}
             <button

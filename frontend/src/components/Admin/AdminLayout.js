@@ -5,14 +5,16 @@ import { AdminNavbar } from "./AdminNavbar";
 
 const AdminLayout = ({ theme, toggleTheme }) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen font-dmsans bg-gray-100 dark:bg-gray-800 w-full">
       {/* Admin Navbar */}
       <AdminNavbar theme={theme} toggleTheme={toggleTheme} />
 
       {/* Admin Content */}
-      <main className="pt-16">
-        <Outlet />
-      </main>
+      <section className="flex flex-col w-full">
+        <main className=" px-4  w-full">
+          <Outlet />
+        </main>
+      </section>
     </div>
   );
 };
