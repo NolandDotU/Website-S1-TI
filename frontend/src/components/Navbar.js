@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
+import { env } from "../services/utils/env";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -9,6 +10,8 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const timeoutRef = useRef(null);
   const user = useAuth().user;
+
+  const BEurl = env.BACKEND_URL || "http://localhost:5000";
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
@@ -97,7 +100,7 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center gap-4">
                 <img
-                  src={`${user.photo}=s96-c`}
+                  src={`${BEurl}${user.photo}`}
                   alt={user.photo}
                   srcset=""
                   className="h-4 w-4 rounded-full"

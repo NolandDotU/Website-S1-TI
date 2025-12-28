@@ -68,6 +68,26 @@ const Login = () => {
         transition={{ duration: 0.6 }}
         className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-gray-900">
         <div className="w-full max-w-md">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate("/")}
+            className="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 
+              hover:text-blue-600 dark:hover:text-blue-400 transition-colors group">
+            <svg
+              className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            <span className="font-medium">Back to Home</span>
+          </button>
+
           {/* Logo */}
           <div className="mb-8">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center shadow-lg overflow-hidden mb-4">
@@ -124,8 +144,6 @@ const Login = () => {
                 placeholder="••••••••••••"
               />
             </div>
-
-            {/* Remember Me & Forgot Password */}
 
             {/* Sign In Button */}
             <button

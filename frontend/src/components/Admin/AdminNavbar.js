@@ -17,7 +17,7 @@ import {
   Settings,
 } from "lucide-react";
 
-export const AdminNavbar = ({ theme, toggleTheme }) => {
+export const AdminNavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuth();

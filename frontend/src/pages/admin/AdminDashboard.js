@@ -90,17 +90,9 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div>
-      {/* Dashboard Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Admin Dashboard
-        </h1>
-        <p className="text-gray-600">Selamat datang di panel admin FTI</p>
-      </div>
-
+    <div className="flex flex-col w-full h-full justify-center">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
         {stats.map((stat, index) => (
           <div
             key={index}

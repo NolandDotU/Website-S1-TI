@@ -1,5 +1,5 @@
 import highlightService from "./highlight.service";
-import { IHighlightInput } from "./highlight.dto";
+import { CreateHighlightDTO } from "./highlight.dto";
 import { ApiResponse, asyncHandler, logger } from "../../../utils";
 import { Request, Response } from "express";
 class HighlightController {
@@ -8,7 +8,7 @@ class HighlightController {
   create = asyncHandler(async (req: Request, res: Response) => {
     const content = (
       Array.isArray(req.body) ? req.body : [req.body]
-    ) as IHighlightInput[];
+    ) as CreateHighlightDTO[];
     const highlight = await this.service.create(content);
     logger.info("Highlight created successfully");
     res
