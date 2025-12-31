@@ -109,7 +109,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700 transition">
+                className="py-2 px-4 rounded-2xl border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white transition">
                 Login
               </Link>
             )}
