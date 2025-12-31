@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Toggle from "./components/Toggle";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomePage from "./pages/Home";
@@ -16,21 +16,29 @@ import { NoAccessPage } from "./pages/middleware/notHaveAccess";
 
 import AdminLayout from "./components/Admin/AdminLayout";
 import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
+import ListAnnouncement from "./pages/admin/modulAnnouncement/listAnnouncemenet";
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  // Initialize theme from localStorage or default to 'light'
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme || "light";
+  });
+
   const location = useLocation();
 
+  // Apply theme to document and save to localStorage
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
   // Routes yang ga perlu navbar/footer
@@ -41,14 +49,8 @@ function App() {
     !noLayoutRoutes.includes(location.pathname) && !isAdminRoute;
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
-      {shouldShowLayout && (
-        <div className="fixed top-4 right-4 z-50">
-          <Toggle theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-
-      {shouldShowLayout && <Navbar />}
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+      {shouldShowLayout && <Navbar theme={theme} toggleTheme={toggleTheme} />}
 
       <main
         className={`flex-grow ${
@@ -69,12 +71,12 @@ function App() {
           <Route
             path="/admin/*"
             element={
-              <ProtectedRoute allowedRoles="admin">
+              <ProtectedRoute requiredRole="admin">
                 <AdminLayout theme={theme} toggleTheme={toggleTheme} />
               </ProtectedRoute>
             }>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="berita/*" element={<Berita />} />
+            <Route path="berita/*" element={<ListAnnouncement />} />
             <Route path="dosen" element={<LecturerManagement />} />
           </Route>
         </Routes>

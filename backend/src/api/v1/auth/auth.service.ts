@@ -109,6 +109,7 @@ class AuthService {
         authProvider: "google",
         username,
         fullname,
+        role: "student",
       });
     }
 

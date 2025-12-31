@@ -12,13 +12,12 @@ import {
 export const authMiddleware = (roles: string[] | null) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.cookies?.accessToken || null;
-    logger.info("Access Token in auth middleware : ", accessToken);
-
-    if (!accessToken) {
-      throw ApiError.unauthorized("Access token required");
-    }
 
     try {
+      if (!accessToken) {
+        throw ApiError.unauthorized("Access token required");
+      }
+
       const user = verifyToken(accessToken);
       if (roles && !roles.includes(user.role)) {
         throw ApiError.forbidden(
@@ -30,6 +29,7 @@ export const authMiddleware = (roles: string[] | null) =>
     } catch (error) {
       if (error instanceof ApiError && error.message === "Token expired") {
         const refreshToken = req.cookies?.refreshToken;
+        console.log("Refresh Token:", refreshToken);
 
         if (!refreshToken) {
           throw ApiError.unauthorized("Session expired. Please login again");

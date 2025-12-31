@@ -19,9 +19,8 @@ const announcementSchema = new mongoose.Schema(
     link: String,
     photo: String,
     source: String,
-    uploadDate: {
+    publishDate: {
       type: Date,
-      default: Date.now,
     },
     status: {
       type: String,

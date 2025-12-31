@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Settings,
+  HistoryIcon,
 } from "lucide-react";
 
 export const AdminNavbar = () => {
@@ -73,6 +74,11 @@ export const AdminNavbar = () => {
       path: "/admin/settings",
       label: "Settings",
     },
+    {
+      icon: HistoryIcon,
+      path: "/admin/history",
+      label: "History",
+    },
   ];
 
   return (
@@ -112,7 +118,7 @@ export const AdminNavbar = () => {
                   Admin Panel
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                  FTI UKSW
+                  S1 Teknik Informatika
                 </p>
               </div>
               <button

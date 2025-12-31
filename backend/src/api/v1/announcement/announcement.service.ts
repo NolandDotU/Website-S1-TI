@@ -3,13 +3,18 @@ import { getRedisClient } from "../../../config/redis";
 import { logger, CacheManager, ApiError } from "../../../utils";
 import { IAnnouncementInput, IAnnouncementResponse } from "./announcement.dto";
 import historyService from "../../../utils/history";
+import { IHistoryInput } from "../../../model/historyModels";
+import mongoose from "mongoose";
+import { deleteImage } from "../../../middleware/uploads.middleware";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
   private cache: CacheManager;
+  private history: typeof historyService | null = historyService || null;
 
   constructor(model = AnnouncementModel, cache?: CacheManager) {
     this.model = model;
     this.cache = cache || new CacheManager(getRedisClient());
+    this.history = historyService || null;
   }
 
   async getAllPublished(
@@ -115,29 +120,37 @@ export class AnnouncementService {
     return data;
   }
 
-  async create(data: IAnnouncementInput): Promise<IAnnouncementResponse> {
+  async create(
+    data: IAnnouncementInput,
+    createdBy: any
+  ): Promise<IAnnouncementResponse> {
     const exist = await this.model.findOne({ title: data.title });
     if (exist) throw ApiError.conflict("News already exists");
-    if (data.scheduleDate || data.scheduleDate !== null)
+    if (data.scheduleDate && data.scheduleDate !== null)
       data.status = "scheduled";
 
     const newsDoc = await this.model.create(data);
 
     await this.cache.incr("news:version");
-    // await historyService.create({
-    //   user:
-    //   action: "create",
-    //   entity: "announcement",
-    //   entityId: newsDoc._id,
-    //   description: `Announcement titled "${newsDoc.title}" was created.`,
-    // });
+    await this.cache.del(`news:item:${newsDoc.id}`);
+
+    const historyData: IHistoryInput = {
+      user: new mongoose.Types.ObjectId(createdBy.id),
+      action: "POST",
+      entity: "announcement",
+      entityId: newsDoc._id,
+      description: `Announcement titled "${newsDoc.title}" was created by ${createdBy.username}.`,
+    };
+
+    await this.history?.create(historyData);
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
   }
 
   async update(
     data: IAnnouncementInput,
-    id?: string
+    id?: string,
+    createdBy?: any
   ): Promise<IAnnouncementResponse> {
     const exist = await this.model.findOne({
       _id: { $ne: id },
@@ -150,29 +163,79 @@ export class AnnouncementService {
     });
     if (!newsDoc) throw ApiError.notFound("News not found");
 
+    const historyData: IHistoryInput = {
+      user: new mongoose.Types.ObjectId(createdBy),
+      action: "UPDATE",
+      entity: "announcement",
+      entityId: newsDoc._id,
+      description: `Announcement titled "${newsDoc.title}" was updated by ${createdBy.username}.`,
+    };
+
+    await this.history?.create(historyData);
+
     await this.cache.incr("news:version");
     await this.cache.del(`news:item:${id}`);
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
   }
 
-  async changeStatus(id?: string, status?: string): Promise<boolean> {
-    const newsDoc = await this.model.findOneAndUpdate(
-      { _id: id },
-      { status: "published" },
-      { new: true }
-    );
+  async changeStatus(
+    id?: string,
+    status?: string,
+    createdBy?: any
+  ): Promise<boolean> {
+    let newsDoc;
+    if (status === "published") {
+      const publishDate = new Date();
+      newsDoc = await this.model.findOneAndUpdate(
+        { _id: id },
+        { status: status, publishDate: publishDate },
+        { new: true }
+      );
+    }
+    if (status === "archived") {
+      newsDoc = await this.model.findOneAndUpdate(
+        { _id: id },
+        { status: status },
+        { new: true }
+      );
+    }
     if (!newsDoc) throw ApiError.notFound("News not found");
 
+    const historyData: IHistoryInput = {
+      user: new mongoose.Types.ObjectId(createdBy),
+      action: "PATCH",
+      entity: "announcement",
+      entityId: newsDoc._id,
+      description: `Announcement titled "${newsDoc.title}" status changed to "${status}" by ${createdBy.username}.`,
+    };
+
+    await this.history?.create(historyData);
     await this.cache.incr("news:version");
     await this.cache.del(`news:item:${id}`);
 
     return true;
   }
 
-  async delete(id?: string): Promise<boolean> {
-    const newsDoc = await this.model.findOneAndDelete({ _id: id });
+  async delete(id?: string, createdBy?: any): Promise<boolean> {
+    const newsDoc = await this.model.findOne({ _id: id });
     if (!newsDoc) throw ApiError.notFound("News not found");
+    deleteImage(newsDoc.photo || "").catch((err) => {
+      logger.error("Error deleting announcement image: ", err);
+    });
+
+    await this.model.deleteOne({ _id: id }).catch((err) => {
+      throw ApiError.internal("Failed to delete announcement");
+    });
+
+    const historyData: IHistoryInput = {
+      user: new mongoose.Types.ObjectId(createdBy.id),
+      action: "DELETE",
+      entity: "announcement",
+      entityId: newsDoc._id,
+      description: `Announcement titled "${newsDoc.title}" was deleted by ${createdBy.username}.`,
+    };
+    await this.history?.create(historyData);
 
     await this.cache.incr("news:version");
     await this.cache.del(`news:item:${id}`);

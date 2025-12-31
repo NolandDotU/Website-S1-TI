@@ -76,6 +76,7 @@ const Historyschema = new mongoose.Schema(
 
 Historyschema.pre("validate", function (next) {
   this.entityModel = `${this.entity}_collection`;
+  next();
 });
 
 const HistoryModel = mongoose.model<IHistory>(

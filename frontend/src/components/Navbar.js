@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
 import { env } from "../services/utils/env";
+import Toggle from "./Toggle";
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownUser, setIsDropDownUser] = useState(false);
   const dropdownRef = useRef(null);
+  const userDropdownRef = useRef(null);
   const timeoutRef = useRef(null);
+  const userTimeoutRef = useRef(null);
   const user = useAuth().user;
+  const { logout } = useAuth();
 
   const BEurl = env.BACKEND_URL || "http://localhost:5000";
 
@@ -26,10 +30,31 @@ const Navbar = () => {
     }, 1000);
   };
 
+  const handleUserMouseEnter = () => {
+    if (userTimeoutRef.current) {
+      clearTimeout(userTimeoutRef.current);
+    }
+    setIsDropDownUser(true);
+  };
+
+  const handleUserMouseLeave = () => {
+    userTimeoutRef.current = setTimeout(() => {
+      setIsDropDownUser(false);
+    }, 1000);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsDropDownUser(false);
+  };
+
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (userTimeoutRef.current) {
+        clearTimeout(userTimeoutRef.current);
       }
     };
   }, []);
@@ -86,25 +111,48 @@ const Navbar = () => {
                       className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                       Daftar Profil Dosen
                     </Link>
-                    <Link
-                      to="/admin"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition border-t border-gray-200 dark:border-gray-700">
-                      Admin Dashboard
-                    </Link>
                   </div>
                 )}
               </li>
             </ul>
           </div>
           <div className="flex items-center">
+            <div className="p-2">
+              <Toggle theme={theme} toggleTheme={toggleTheme} />
+            </div>
             {user ? (
-              <div className="flex items-center gap-4">
-                <img
-                  src={`${BEurl}${user.photo}`}
-                  alt={user.photo}
-                  srcset=""
-                  className="h-4 w-4 rounded-full"
-                />
+              <div
+                className="relative"
+                ref={userDropdownRef}
+                onMouseEnter={handleUserMouseEnter}
+                onMouseLeave={handleUserMouseLeave}>
+                <button className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                  <img
+                    src={`${BEurl}${user.photo}`}
+                    alt={user.name || "User"}
+                    className="h-8 w-8 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
+                  />
+                </button>
+                {isDropDownUser && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-sm font-semibold">{user.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.email}
+                      </p>
+                    </div>
+                    {/* <Link
+                      to="/profile"
+                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                      Profile
+                    </Link> */}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <Link

@@ -1,14 +1,29 @@
+import { log } from "console";
 import { getRedisClient } from "../config/redis";
 import HistoryModel, { IHistoryInput } from "../model/historyModels";
 import { IHistory, IHistoryResponse } from "../model/historyModels";
 import { CacheManager } from "./cacheManager";
+import { logger } from "./logger";
 
 class HistoryService {
   cache: CacheManager | null = new CacheManager(getRedisClient());
+  model: typeof HistoryModel;
+
+  constructor(model = HistoryModel, cache?: CacheManager) {
+    this.model = model;
+    this.cache = cache || null;
+  }
+
   async create(data: IHistoryInput) {
+    logger.info(
+      "Creating history record for lecturer action in HistoryService",
+      data
+    );
     const history = await HistoryModel.create(data);
+    logger.info("History record created:", history);
     if (this.cache !== null) {
       await this.cache.incr("history:version");
+      await this.cache.incr(`history:${data.user}:version`);
     }
     return history;
   }
@@ -41,16 +56,16 @@ class HistoryService {
     return history;
   }
 
-  async getByUser(userId: string) {
+  async getByUser(user: any) {
     let key = "";
     if (this.cache !== null) {
       const cacheVersion =
-        (await this.cache.get<string>(`history:${userId}:version`)) || "0";
-      if (cacheVersion) key = `history:${userId}:v${cacheVersion}`;
+        (await this.cache.get<string>(`history:${user.id}:version`)) || "0";
+      if (cacheVersion) key = `history:${user.id}:v${cacheVersion}`;
       const cached = await this.cache.get<IHistory[]>(key);
       if (cached) return cached;
     }
-    const history = await HistoryModel.find({ user: userId }).sort({
+    const history = await HistoryModel.find({ user: user.id }).sort({
       createdAt: -1,
     });
     if (key && this.cache !== null) {

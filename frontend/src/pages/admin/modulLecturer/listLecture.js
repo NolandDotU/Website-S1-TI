@@ -35,7 +35,7 @@ const LecturerManagement = () => {
       setLecturers(data.lecturers || data);
       setTotalPages(data.meta.totalPages || 1);
     } catch (error) {
-      toast.error(error.message || "Failed to fetch lecturers");
+      toast.error(error.response?.data?.message || "Failed to fetch lecturers");
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ const LecturerManagement = () => {
       fetchLecturers();
       setIsDeleteModalOpen(false);
     } catch (error) {
-      toast.error(error.message || "Failed to delete lecturer");
+      toast.error(error.response?.data?.message || "Failed to delete lecturer");
     }
   };
 
@@ -99,7 +99,7 @@ const LecturerManagement = () => {
       fetchLecturers();
       setIsModalOpen(false);
     } catch (error) {
-      toast.error(error.message || "Failed to save lecturer");
+      toast.error(error.response?.data?.message || "Failed to save lecturer");
     }
   };
 
@@ -120,7 +120,7 @@ const LecturerManagement = () => {
             Dosen Management
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Kelola data dosen fakultas
+            Kelola data dosen Program Studi S1 Teknik Informatika
           </p>
         </div>
 

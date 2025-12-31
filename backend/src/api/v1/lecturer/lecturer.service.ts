@@ -9,6 +9,7 @@ import { getRedisClient } from "../../../config/redis";
 import { deleteImage } from "../../../middleware/uploads.middleware";
 import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
+import mongoose from "mongoose";
 
 export class LecturerService {
   private model: typeof LecturerModel;
@@ -32,15 +33,15 @@ export class LecturerService {
 
     const lecturerDoc = await this.model.create(data);
     const historyData: IHistoryInput = {
-      action: `Lecturer ${data.username} created by ${
-        currentUser?.username || "unknown"
-      }`,
-      entityId: lecturerDoc.id,
+      action: "POST",
+      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
       entity: "lecturer",
-      user: currentUser?.id || "system",
+      user: currentUser?.id ?? null,
       description: `Lecturer ${data.username} created by ${currentUser?.username}`,
     };
+
     await this.history.create(historyData);
+
     await this.cache.incr("lecturers:version");
 
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
@@ -151,12 +152,10 @@ export class LecturerService {
     }
 
     const historyData: IHistoryInput = {
-      action: `Lecturer ${data.username} updated by ${
-        currentUser?.username || "unknown"
-      }`,
-      entityId: lecturerDoc.id,
+      action: "UPDATE",
+      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
       entity: "lecturer",
-      user: currentUser?.id,
+      user: currentUser?.id ?? null,
       description: `Lecturer ${data.username} updated by ${currentUser?.username}`,
     };
     await this.history.create(historyData);
@@ -182,12 +181,14 @@ export class LecturerService {
     }
     await this.model.deleteOne({ _id: id });
     const historyData: IHistoryInput = {
-      action: `Lecturer ${lecturerDoc.username} deleted`,
-      entityId: lecturerDoc.id,
+      action: "DELETE",
+      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
       entity: "lecturer",
-      user: currentUser?.id,
+      user: currentUser?.id ?? null,
       description: `Lecturer ${lecturerDoc.username} deleted`,
     };
+
+    await this.history.create(historyData);
     await this.cache.incr("lecturers:version");
     await this.cache.del(`lecturers:item:${id}`);
 

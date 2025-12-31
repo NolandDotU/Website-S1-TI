@@ -18,35 +18,35 @@ class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 15 * 60 * 1000,
+      maxAge: 10 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 61 * 60 * 1000,
     });
   };
 
   checkMe = asyncHandler(async (req: Request, res: Response) => {
-    const accessToken = req.cookies["accessToken"] || null;
-    const refreshToken = req.cookies["refreshToken"] || null;
-    console.log("token : ", accessToken);
-    if (!accessToken) {
-      throw ApiError.unauthorized("User not authenticated");
-    }
-    let user = null;
-    if (!accessToken) {
-      user = verifyToken(refreshToken, true);
-    } else {
-      user = verifyToken(accessToken);
-    }
+    // const accessToken = req.cookies["accessToken"] || null;
+    // const refreshToken = req.cookies["refreshToken"] || null;
+    // if (!accessToken) {
+    //   throw ApiError.unauthorized("User not authenticated");
+    // }
+    // let user = null;
+    // if (!accessToken) {
+    //   user = verifyToken(refreshToken, true);
+    // } else {
+    //   user = verifyToken(accessToken);
+    // }
 
-    if (!user) {
-      throw ApiError.unauthorized("User not authenticated");
-    }
+    // if (!user) {
+    //   throw ApiError.unauthorized("User not authenticated");
+    // }
 
+    const user = req.user as JWTPayload;
     const currentUser = await this.service.checkMe(user.id);
     console.log("currentUser : ", currentUser);
 

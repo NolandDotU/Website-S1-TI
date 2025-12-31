@@ -5,7 +5,7 @@ export interface IAnnouncement {
   link?: string;
   photo?: string;
   source?: string;
-  uploadDate?: Date;
+  publishDate?: Date;
   status?: string;
   scheduleDate?: Date;
   eventDate?: Date;

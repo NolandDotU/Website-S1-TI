@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logger, ApiResponse, asyncHandler } from "../../../utils";
+import { logger, ApiResponse, asyncHandler, JWTPayload } from "../../../utils";
 import { AnnouncementService } from "./announcement.service";
 import { IAnnouncementQueryDTO } from "./announcement.dto";
 
@@ -31,8 +31,8 @@ export class NewsController {
   });
 
   create = asyncHandler(async (req: Request, res: Response) => {
-    // const userId = req.user?.id;
-    const news = await this.service.create(req.body);
+    const user = req.user as JWTPayload;
+    const news = await this.service.create(req.body, user);
     return ApiResponse.success(news, "News created successfully", 201);
   });
 
@@ -44,7 +44,8 @@ export class NewsController {
 
   update = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const news = await this.service.update(req.body, id);
+    const user = req.user as JWTPayload;
+    const news = await this.service.update(req.body, id, user);
     return ApiResponse.success(news, "News updated successfully", 200);
   });
 
@@ -62,7 +63,8 @@ export class NewsController {
 
   delete = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.service.delete(id);
+    const user = req.user as JWTPayload;
+    const result = await this.service.delete(id, user);
     return ApiResponse.success(result, "News deleted successfully", 200);
   });
 }

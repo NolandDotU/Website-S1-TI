@@ -100,7 +100,6 @@ const LecturerTable = ({
     }
 
     const photoURL = env.BACKEND_URL + lecturer.photo;
-    console.log("Loading photo from URL:", photoURL);
 
     return (
       <img

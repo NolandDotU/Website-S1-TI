@@ -9,7 +9,6 @@ export class LecturerController {
 
   create = asyncHandler(async (req: Request, res: Response) => {
     const user = req.user;
-    logger.info(`User ${user} is creating a new lecturer`);
     const lecturer = await this.service.create(req.body, user);
     logger.info("Lecturer created successfully");
     res
@@ -40,7 +39,7 @@ export class LecturerController {
   delete = asyncHandler(async (req: Request, res: Response) => {
     const user = req.user;
     const { id } = req.params;
-    const lecturer = await this.service.delete(id);
+    const lecturer = await this.service.delete(id, user);
     return res.json(ApiResponse.success(lecturer));
   });
 }
