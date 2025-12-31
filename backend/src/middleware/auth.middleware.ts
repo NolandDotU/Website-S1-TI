@@ -11,8 +11,7 @@ import {
 
 export const authMiddleware = (roles: string[] | null) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken =
-      req.cookies?.accessToken || req.cookies?.refreshToken || null;
+    const accessToken = req.cookies?.accessToken || null;
     logger.info("Access Token in auth middleware : ", accessToken);
 
     if (!accessToken) {

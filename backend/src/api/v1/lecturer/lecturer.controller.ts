@@ -8,7 +8,9 @@ export class LecturerController {
   constructor(private service: LecturerService = new LecturerService()) {}
 
   create = asyncHandler(async (req: Request, res: Response) => {
-    const lecturer = await this.service.create(req.body);
+    const user = req.user;
+    logger.info(`User ${user} is creating a new lecturer`);
+    const lecturer = await this.service.create(req.body, user);
     logger.info("Lecturer created successfully");
     res
       .status(201)
@@ -29,12 +31,14 @@ export class LecturerController {
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user;
     const { id } = req.params;
-    const lecturer = await this.service.update(req.body, id);
+    const lecturer = await this.service.update(req.body, id, user);
     return res.json(ApiResponse.success(lecturer));
   });
 
   delete = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user;
     const { id } = req.params;
     const lecturer = await this.service.delete(id);
     return res.json(ApiResponse.success(lecturer));

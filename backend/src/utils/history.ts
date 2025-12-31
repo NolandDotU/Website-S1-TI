@@ -13,7 +13,7 @@ class HistoryService {
     return history;
   }
 
-  async getAll(page = 1, limit = 10, search = "") {
+  async getAll(page = 1, limit = 50, search = "") {
     let cacheKey = "";
     if (cacheKey && this.cache !== null) {
       const cacheVersion =
@@ -37,6 +37,24 @@ class HistoryService {
 
     if (cacheKey && this.cache !== null) {
       await this.cache.set(cacheKey, history, 300);
+    }
+    return history;
+  }
+
+  async getByUser(userId: string) {
+    let key = "";
+    if (this.cache !== null) {
+      const cacheVersion =
+        (await this.cache.get<string>(`history:${userId}:version`)) || "0";
+      if (cacheVersion) key = `history:${userId}:v${cacheVersion}`;
+      const cached = await this.cache.get<IHistory[]>(key);
+      if (cached) return cached;
+    }
+    const history = await HistoryModel.find({ user: userId }).sort({
+      createdAt: -1,
+    });
+    if (key && this.cache !== null) {
+      await this.cache.set(key, history, 300);
     }
     return history;
   }

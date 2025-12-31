@@ -32,10 +32,11 @@ router.post(
   optimizeImage,
   (req: any, res: any) => {
     logger.info("Image uploaded successfully", req.file);
+    const filePath = `/uploads/lecturers/${req.file?.filename}`;
 
     const response = ApiResponse.success(
       {
-        path: req.file?.path,
+        path: filePath,
         filename: req.file?.filename,
       },
       "Image uploaded successfully"
@@ -45,11 +46,11 @@ router.post(
   }
 );
 
-router.delete("/uploads", (req, res, next) => {
-  deleteImage(req.body.path).then(() => {
-    ApiResponse.success(null, "Image deleted successfully", 200);
-  });
-});
+// router.delete("/uploads", (req, res, next) => {
+//   deleteImage(req.body.path).then(() => {
+//     ApiResponse.success(null, "Image deleted successfully", 200);
+//   });
+// });
 
 router.post(
   "/",

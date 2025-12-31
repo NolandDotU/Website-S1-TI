@@ -37,6 +37,9 @@ export const validateImage = async (
 // ============================================
 // OPTIMIZE IMAGE
 // ============================================
+// ============================================
+// OPTIMIZE IMAGE
+// ============================================
 export const optimizeImage = async (
   req: Request,
   res: Response,
@@ -48,6 +51,7 @@ export const optimizeImage = async (
     const outputPath = req.file.path.replace(/\.\w+$/, ".webp");
 
     await sharp(req.file.path)
+      .rotate() // ✅ TAMBAHKAN INI - Auto-rotate berdasarkan EXIF orientation
       .resize(800, 800, { fit: "inside", withoutEnlargement: true })
       .webp({ quality: 80 })
       .toFile(outputPath);
@@ -64,27 +68,30 @@ export const optimizeImage = async (
   }
 };
 
-// ============================================
-// DELETE IMAGE
-// ============================================
-export const deleteImage = async (filePath: string) => {
+export const deleteImage = async (photoUrl: string) => {
+  if (!photoUrl.startsWith("/uploads/")) {
+    throw ApiError.badRequest("Invalid file path");
+  }
+
+  const baseDir = path.resolve("uploads");
+
+  // buang prefix "/uploads/"
+  const relativePath = photoUrl.replace("/uploads/", "");
+
+  const targetPath = path.resolve(baseDir, relativePath);
+
+  if (!targetPath.startsWith(baseDir)) {
+    throw ApiError.badRequest("Invalid file path");
+  }
+
   try {
-    const baseDir = path.resolve("uploads");
-    const targetPath = path.resolve(filePath);
-
-    if (!targetPath.startsWith(baseDir)) {
-      throw ApiError.badRequest("Invalid file path");
-    }
-
     await fs.access(targetPath);
     await fs.unlink(targetPath);
-
+    logger.info(`Deleted image at path: ${targetPath}`);
     return true;
-  } catch (error: any) {
-    if (error.code === "ENOENT") {
-      return false;
-    }
-    throw error;
+  } catch (err: any) {
+    if (err.code === "ENOENT") return false;
+    throw err;
   }
 };
 

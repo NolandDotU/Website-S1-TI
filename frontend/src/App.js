@@ -15,6 +15,7 @@ import { GoogleAuthError } from "./pages/middleware/googleAuth_error";
 import { NoAccessPage } from "./pages/middleware/notHaveAccess";
 
 import AdminLayout from "./components/Admin/AdminLayout";
+import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
 
 function App() {
   const [theme, setTheme] = useState("light");
@@ -73,6 +74,8 @@ function App() {
               </ProtectedRoute>
             }>
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="berita/*" element={<Berita />} />
+            <Route path="dosen" element={<LecturerManagement />} />
           </Route>
         </Routes>
       </main>

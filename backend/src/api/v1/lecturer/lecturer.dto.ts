@@ -25,3 +25,13 @@ export interface LecturerQueryDTO {
   sortBy?: "name" | "createdAt";
   sortOrder?: "asc" | "desc";
 }
+
+export interface IPaginatedLecturerResponse {
+  lecturers: ILecturerResponse[];
+  meta: {
+    page: number;
+    limit: number;
+    totalItems: number;
+    totalPages: number;
+  };
+}

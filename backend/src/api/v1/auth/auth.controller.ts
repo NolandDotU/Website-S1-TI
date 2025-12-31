@@ -30,12 +30,18 @@ class AuthController {
   };
 
   checkMe = asyncHandler(async (req: Request, res: Response) => {
-    const token = req.cookies["accessToken"] || null;
-    if (!token) {
+    const accessToken = req.cookies["accessToken"] || null;
+    const refreshToken = req.cookies["refreshToken"] || null;
+    console.log("token : ", accessToken);
+    if (!accessToken) {
       throw ApiError.unauthorized("User not authenticated");
     }
-    const user = verifyToken(token);
-    console.log("user : ", typeof user);
+    let user = null;
+    if (!accessToken) {
+      user = verifyToken(refreshToken, true);
+    } else {
+      user = verifyToken(accessToken);
+    }
 
     if (!user) {
       throw ApiError.unauthorized("User not authenticated");

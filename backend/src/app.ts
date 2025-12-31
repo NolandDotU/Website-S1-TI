@@ -11,16 +11,24 @@ import { configureGoogleOAuth } from "./config/google-oauth";
 import multer from "multer";
 import { handleMulterError } from "./middleware/uploads.middleware";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 const app: Application = express();
 
 // Security middlewares
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // PENTING: Izinkan loading gambar dari origin lain
+    contentSecurityPolicy: false, // Atau konfigurasi CSP sesuai kebutuhan
+  })
+);
+
 app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(compression());
-app.use(handleMulterError);
 app.use(cookieParser());
+
+// Configure Google OAuth
 configureGoogleOAuth();
 
 // Body parsing
@@ -29,6 +37,13 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Logging
 app.use(morganMiddleware);
+
+// Static files untuk uploads - SEBELUM routes
+app.use(
+  "/uploads",
+  cors(corsOptions), // Gunakan corsOptions yang sama, bukan wildcard
+  express.static(path.join(__dirname, "../uploads"))
+);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -44,7 +59,10 @@ app.use("*", (req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });
 });
 
-// Global error handler
+// Multer error handler - SETELAH routes
+app.use(handleMulterError);
+
+// Global error handler - TERAKHIR
 app.use(errorMiddleware);
 
 export default app;
