@@ -4,8 +4,18 @@ import { Megaphone, Plus, Search } from "lucide-react";
 import AnnouncementTable from "../../../components/Admin/announcement/AnnouncementTable";
 import AnnouncementModal from "../../../components/Admin/announcement/AnnouncementModal";
 import ModalConfirmation from "../../../components/Admin/ModalConfirmation";
+import {
+  adminGetAnnouncements,
+  createAnnouncement,
+  changeStatus,
+  delAnnouncement,
+  update,
+  uploadImage,
+} from "../../../services/announcement/announcementAPI";
+import { useToast } from "../../../context/toastProvider";
 
 const ListAnnouncement = () => {
+  const toast = useToast();
   const [announcements, setAnnouncements] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,37 +33,18 @@ const ListAnnouncement = () => {
   const fetchAnnouncements = async () => {
     setLoading(true);
     try {
-      // API call
-      // const response = await fetch(`/api/announcements?search=${search}&page=${page}`);
-      // const data = await response.json();
+      const response = await adminGetAnnouncements(page, 10, search);
+      setAnnouncements(response.announcements);
+      setTotalPages(response.meta.totalPages);
 
-      // Mock data
       setTimeout(() => {
-        setAnnouncements([
-          {
-            _id: "1",
-            title: "Pengumuman Wisuda 2024",
-            description:
-              "Wisuda akan dilaksanakan pada tanggal 20 Januari 2024 di Gedung Auditorium...",
-            photo: "/uploads/wisuda.jpg",
-            status: "published",
-            createdAt: "2024-01-15",
-          },
-          {
-            _id: "2",
-            title: "Libur Semester Genap",
-            description:
-              "Libur semester genap akan dimulai dari tanggal 1-7 Februari 2024...",
-            photo: "/uploads/libur.jpg",
-            status: "draft",
-            createdAt: "2024-01-10",
-          },
-        ]);
         setTotalPages(1);
         setLoading(false);
       }, 500);
     } catch (error) {
       console.error("Error fetching announcements:", error);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
@@ -80,11 +71,10 @@ const ListAnnouncement = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = async () => {
+  const confirmDelete = async (id) => {
     try {
-      // API call to delete
-      // await fetch(`/api/announcements/${selectedAnnouncement._id}`, { method: 'DELETE' });
-
+      const response = await delAnnouncement(id);
+      toast.success("Berhasil menghapus pengumuman secara permanent!");
       setAnnouncements(
         announcements.filter((a) => a._id !== selectedAnnouncement._id)
       );
@@ -92,24 +82,47 @@ const ListAnnouncement = () => {
       setSelectedAnnouncement(null);
     } catch (error) {
       console.error("Error deleting announcement:", error);
+      toast.error(`Terjadi kesalahan ${error.response?.data?.message} `);
     }
   };
 
   const handleSave = async (formData) => {
     try {
+      let payload = { ...formData };
+      if (formData.photo !== null) {
+        try {
+          const uploads = await uploadImage(formData.photo);
+          if (uploads.statusCode !== 200) {
+            toast.error("Gagal menyimpan photo, coba lagi!");
+          }
+          console.log("uploaded image : ", uploads);
+          payload = {
+            ...formData,
+            photo: uploads.data.path,
+          };
+        } catch (error) {
+          console.error(error);
+          toast.error("Terjadi kesalahan saat menyimpan foto!");
+        }
+      }
       if (modalMode === "create") {
-        // API call to create
-        const newAnnouncement = {
-          _id: Date.now().toString(),
-          ...formData,
-          createdAt: new Date().toISOString(),
-        };
+        console.log("SENDING DATA : ", payload);
+
+        const response = await createAnnouncement(payload);
+        console.log("CREATE RESPONSE : X", response);
+        if (response.statusCode !== 200) {
+          toast.error(response.message);
+        }
+        const newAnnouncement = payload;
         setAnnouncements([newAnnouncement, ...announcements]);
       } else {
-        // API call to update
+        const response = await update(payload, payload.id);
+        if (response.statusCode !== 200) {
+          toast.error(response.message);
+        }
         setAnnouncements(
           announcements.map((a) =>
-            a._id === selectedAnnouncement._id ? { ...a, ...formData } : a
+            a.id === selectedAnnouncement.id ? { ...a, ...payload } : a
           )
         );
       }
@@ -118,11 +131,12 @@ const ListAnnouncement = () => {
       fetchAnnouncements();
     } catch (error) {
       console.error("Error saving announcement:", error);
+      toast.error(`Terjadi Kesalahan ${error.response?.data?.message}`);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

@@ -1,10 +1,14 @@
 import AnnouncementModel from "../../../model/AnnouncementModel";
 import { getRedisClient } from "../../../config/redis";
 import { logger, CacheManager, ApiError } from "../../../utils";
-import { IAnnouncementInput, IAnnouncementResponse } from "./announcement.dto";
+import {
+  IAnnouncementGet,
+  IAnnouncementInput,
+  IAnnouncementResponse,
+} from "./announcement.dto";
 import historyService from "../../../utils/history";
 import { IHistoryInput } from "../../../model/historyModels";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
@@ -21,14 +25,14 @@ export class AnnouncementService {
     page = 1,
     limit = 20,
     search = ""
-  ): Promise<IAnnouncementResponse[]> {
+  ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
     const cacheVersion = (await this.cache.get<string>("news:version")) || "0";
     const normalizedSearch = search.trim().toLowerCase();
     const cacheKey = `news:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
-    const cached = await this.cache.get<IAnnouncementResponse[]>(cacheKey);
+    const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
     if (cached) {
       logger.info(`Cache HIT: ${cacheKey}`);
       return cached;
@@ -42,35 +46,47 @@ export class AnnouncementService {
           ],
           status: "published",
         }
-      : {};
+      : { status: "published" };
 
-    const docs = await this.model
-      .find(searchQuery)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    const [docs, totalItems] = await Promise.all([
+      this.model
+        .find(searchQuery)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      this.model.countDocuments(searchQuery),
+    ]);
 
-    const data = docs.map(
-      (doc) => doc.toJSON() as unknown as IAnnouncementResponse
-    );
+    const response: IAnnouncementResponse = {
+      announcements: docs.map(
+        (doc) => doc.toJSON() as unknown as IAnnouncementGet
+      ),
+      meta: {
+        page,
+        limit,
+        total: totalItems,
+        totalPage: Math.ceil(totalItems / limit),
+      },
+    };
 
-    await this.cache.set(cacheKey, data, 3600);
+    await this.cache.set(cacheKey, response, 3600);
 
-    return data;
+    return response;
   }
 
   async getAll(
     page = 1,
     limit = 10,
     search = ""
-  ): Promise<IAnnouncementResponse[]> {
+  ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
     const cacheVersion = (await this.cache.get<string>("news:version")) || "0";
     const normalizedSearch = search.trim().toLowerCase();
     const cacheKey = `news:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
-    const cached = await this.cache.get<IAnnouncementResponse[]>(cacheKey);
+    const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
+    console.log("CACHED", cached);
     if (cached) {
       logger.info(`Cache HIT: ${cacheKey}`);
       return cached;
@@ -82,23 +98,33 @@ export class AnnouncementService {
             { title: { $regex: search, $options: "i" } },
             { description: { $regex: search, $options: "i" } },
           ],
-          status: "published",
         }
       : {};
 
-    const docs = await this.model
-      .find(searchQuery)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    const [docs, totalItems] = await Promise.all([
+      this.model
+        .find(searchQuery)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      this.model.countDocuments(searchQuery),
+    ]);
 
-    const data = docs.map(
-      (doc) => doc.toJSON() as unknown as IAnnouncementResponse
-    );
+    const response: IAnnouncementResponse = {
+      announcements: docs.map(
+        (doc) => doc.toJSON() as unknown as IAnnouncementGet
+      ),
+      meta: {
+        page,
+        limit,
+        total: totalItems,
+        totalPage: Math.ceil(totalItems / limit),
+      },
+    };
 
-    await this.cache.set(cacheKey, data, 3600);
+    await this.cache.set(cacheKey, response, 3600);
 
-    return data;
+    return response;
   }
 
   async getById(id: string): Promise<IAnnouncementResponse> {
@@ -152,11 +178,19 @@ export class AnnouncementService {
     id?: string,
     createdBy?: any
   ): Promise<IAnnouncementResponse> {
-    const exist = await this.model.findOne({
-      _id: { $ne: id },
-      title: data.title,
-    });
+    const [exist, announ] = await Promise.all([
+      this.model.findOne({
+        _id: { $ne: id },
+        title: data.title,
+      }),
+      this.model.findOne({
+        _id: id,
+      }),
+    ]);
     if (exist) throw ApiError.conflict("News already exists");
+    deleteImage(announ?.photo || "").catch((err) => {
+      throw ApiError.internal(`Failed delete announcement image! ${err}`);
+    });
 
     const newsDoc = await this.model.findOneAndUpdate({ _id: id }, data, {
       new: true,

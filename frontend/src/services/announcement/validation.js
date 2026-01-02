@@ -5,7 +5,7 @@ const Status = z
   .default("draft");
 
 const scheduleDate = z.preprocess(
-  (val) => (val ? new Date(val as string) : undefined),
+  (val) => (val ? new Date(val) : undefined),
   z.date().optional()
 );
 
@@ -43,11 +43,11 @@ export const AnnouncementSchema = z
       .max(6000, "Konten maksimal 6000 karakter"),
 
     link: z.preprocess(
-      (val) => (val === "" || val === null ? undefined : val),
+      (val) => (val === "" ? undefined : val),
       z.string().url("Link harus berupa URL valid").optional()
     ),
 
-    photo: z.string().optional().nullable(),
+    photo: z.any().optional(),
 
     source: z
       .enum([
@@ -66,7 +66,7 @@ export const AnnouncementSchema = z
     scheduleDate: scheduleDate,
 
     eventDate: z.preprocess(
-      (val) => (val ? new Date(val as string) : undefined),
+      (val) => (val ? new Date(val) : undefined),
       z.date().optional()
     ),
   })

@@ -22,18 +22,18 @@ export class NewsController {
 
   getAllContent = asyncHandler(async (req: Request, res: Response) => {
     const { page = 1, limit = 10, search } = req.query as IAnnouncementQueryDTO;
-    const result = await this.service.getAllPublished(
+    const result = await this.service.getAll(
       Number(page),
       Number(limit),
       search
     );
-    return ApiResponse.success(result, "Content fetched successfully", 200);
+    res.json(ApiResponse.success(result, "Content fetched successfully", 200));
   });
 
   create = asyncHandler(async (req: Request, res: Response) => {
     const user = req.user as JWTPayload;
     const news = await this.service.create(req.body, user);
-    return ApiResponse.success(news, "News created successfully", 201);
+    res.send(ApiResponse.success(news, "News created successfully", 201)), 201;
   });
 
   getById = asyncHandler(async (req: Request, res: Response) => {
@@ -49,16 +49,14 @@ export class NewsController {
     return ApiResponse.success(news, "News updated successfully", 200);
   });
 
-  publish = asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
+  updateStatus = asyncHandler(async (req: Request, res: Response) => {
+    const { id, status } = req.params;
+    const user = req.user as JWTPayload;
     const result = await this.service.changeStatus(id, "published");
-    return ApiResponse.success(result, "News deactivated successfully", 200);
-  });
-
-  archive = asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await this.service.changeStatus(id, "archived");
-    return ApiResponse.success(result, "News activated successfully", 200);
+    return ApiResponse.success(
+      result,
+      `Status pengumuman berhasil di update menjadi ${status} `
+    );
   });
 
   delete = asyncHandler(async (req: Request, res: Response) => {

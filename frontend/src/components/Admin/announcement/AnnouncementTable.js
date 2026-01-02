@@ -10,6 +10,7 @@ const AnnouncementTable = ({
   onEdit,
   onDelete,
 }) => {
+  console.log("DATA : ", announcements);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -53,7 +54,7 @@ const AnnouncementTable = ({
             ) : (
               announcements.map((announcement, index) => (
                 <tr
-                  key={announcement._id}
+                  key={announcement.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
                     {(page - 1) * 10 + index + 1}

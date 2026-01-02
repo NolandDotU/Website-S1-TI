@@ -11,10 +11,20 @@ export interface IAnnouncement {
   eventDate?: Date;
 }
 
-export interface IAnnouncementResponse extends IAnnouncement {
+export interface IAnnouncementGet extends IAnnouncement {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IAnnouncementResponse {
+  announcements: IAnnouncementGet[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPage: number;
+  };
 }
 
 export interface IAnnouncementInput {

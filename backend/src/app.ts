@@ -8,7 +8,6 @@ import { errorMiddleware } from "./middleware/error.middleware";
 import { logger, morganMiddleware } from "./utils/logger";
 import apiV1Router from "./api/v1";
 import { configureGoogleOAuth } from "./config/google-oauth";
-import multer from "multer";
 import { handleMulterError } from "./middleware/uploads.middleware";
 import cookieParser from "cookie-parser";
 import path from "path";

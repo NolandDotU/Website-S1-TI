@@ -1,5 +1,5 @@
 import express from "express";
-import { AnnouncementSchema } from "./announcement.validation";
+import { AnnouncementSchema, StatusSchema } from "./announcement.validation";
 import { validate } from "../../../middleware/validate.middleware";
 import { NewsController } from "./announcement.controller";
 import { authMiddleware } from "../../../middleware/auth.middleware";
@@ -46,7 +46,7 @@ router.post(
 
 router.delete("/uploads", (req, res, next) => {
   deleteImage(req.body.path).then(() => {
-    ApiResponse.success(null, "Image deleted successfully", 200);
+    res.send(ApiResponse.success(null, "Image deleted successfully", 200));
   });
 });
 
@@ -81,14 +81,15 @@ router.put(
   }
 );
 
-router.put(
-  "/:id/publish",
-  globalLimiter,
+router.patch(
+  "/:id/:status",
   authMiddleware(["admin"]),
+  validate(StatusSchema),
   (req, res, next) => {
-    getController().publish(req, res, next);
+    getController().updateStatus(req, res, next);
   }
 );
+
 router.delete("/permanent/:id", authMiddleware(["admin"]), (req, res, next) => {
   getController().delete(req, res, next);
 });

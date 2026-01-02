@@ -6,7 +6,7 @@ export const getLecturers = async (page = 1, limit = 100, search = "") => {
       `/lecturers?page=${page}&limit=${limit}&search=${search}`
     );
     console.log("API response for getLecturers:", response);
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error("Error fetching lecturers:", error);
   }

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
+import { env } from "../../../services/utils/env";
 
 const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
+    content: "",
+    category: "pengumuman",
     photo: null,
     status: "draft",
     scheduleDate: null,
@@ -16,7 +18,8 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
     if (announcement && mode === "edit") {
       setFormData({
         title: announcement.title,
-        description: announcement.description,
+        content: announcement.content,
+        category: announcement.category,
         photo: announcement.photo,
         status: announcement.status,
         scheduleDate: announcement.scheduleDate,
@@ -24,8 +27,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
     } else {
       setFormData({
         title: "",
-        description: "",
+        content: "",
         photo: null,
+        category: "",
         status: "draft",
         scheduleDate: null,
       });
@@ -37,6 +41,27 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
     if (file) {
       setFormData({ ...formData, photo: file });
     }
+  };
+
+  const getPhotoPreview = () => {
+    if (!formData.photo) return null;
+
+    // If it's a File object (new upload)
+    if (formData.photo instanceof File) {
+      return URL.createObjectURL(formData.photo);
+    }
+
+    // If it's a string (existing photo from backend)
+    if (typeof formData.photo === "string") {
+      // Check if it already has the full URL
+      if (formData.photo.startsWith("http")) {
+        return formData.photo;
+      }
+      // Otherwise, prepend the backend URL
+      return `${env.BACKEND_URL || "http://localhost:5000"}/${formData.photo}`;
+    }
+
+    return null;
   };
 
   const handleSubmit = () => {
@@ -89,6 +114,27 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
               />
             </div>
 
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Kategori
+              </label>
+              <select
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
+                  dark:border-gray-600 bg-white dark:bg-gray-900 
+                  text-gray-900 dark:text-white 
+                  focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
+                  transition-colors">
+                <option value="pengumuman">Pengumuman</option>
+                <option value="event">Event</option>
+                <option value="lowongan">Lowongan</option>
+              </select>
+            </div>
+
             {/* Content */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -96,9 +142,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
               </label>
               <div data-color-mode="light">
                 <MDEditor
-                  value={formData.description}
+                  value={formData.content}
                   onChange={(value) =>
-                    setFormData({ ...formData, description: value || "" })
+                    setFormData({ ...formData, content: value || "" })
                   }
                   preview="edit"
                   height={300}
@@ -112,6 +158,25 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Foto Pengumuman
               </label>
+
+              {/* Photo Preview */}
+              {getPhotoPreview() && (
+                <div className="mb-3 relative">
+                  <img
+                    src={getPhotoPreview()}
+                    alt="Preview"
+                    className="w-full h-64 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, photo: null })}
+                    className="absolute top-2 right-2 p-2 bg-red-600 hover:bg-red-700 
+                      text-white rounded-lg transition shadow-lg">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
               <input
                 type="file"
                 accept="image/*"
@@ -124,6 +189,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                   hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200
                   dark:hover:file:bg-blue-800"
               />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Format: JPG, PNG, GIF (Maksimal 5MB)
+              </p>
             </div>
 
             {/* Status */}

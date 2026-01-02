@@ -8,7 +8,7 @@ import highlightRoutes from "./highlight/highlight.routes";
 const router = express.Router();
 
 router.use("/lecturers", lecturerRoutes);
-router.use("/news", newsRoutes);
+router.use("/announcements", newsRoutes);
 router.use("/auth", authRoutes);
 router.use("/highlight", highlightRoutes);
 

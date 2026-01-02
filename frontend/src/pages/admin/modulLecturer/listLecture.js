@@ -30,10 +30,9 @@ const LecturerManagement = () => {
   const fetchLecturers = async () => {
     setLoading(true);
     try {
-      const data = await getLecturers(page, limit, search);
-      console.log("Fetched lecturers:", data);
-      setLecturers(data.lecturers || data);
-      setTotalPages(data.meta.totalPages || 1);
+      const response = await getLecturers(page, limit, search);
+      setLecturers(response.data);
+      setTotalPages(response.meta.totalPages);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch lecturers");
     } finally {
@@ -109,7 +108,7 @@ const LecturerManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

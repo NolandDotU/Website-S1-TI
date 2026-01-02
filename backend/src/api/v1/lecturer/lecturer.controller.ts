@@ -21,11 +21,16 @@ export class LecturerController {
   getAll = asyncHandler(async (req: Request, res: Response) => {
     const { page, limit, search } = req.query as LecturerQueryDTO;
     logger.info("Query params: ", req.query);
-    const lecturers = await this.service.getAll(page, limit, search);
+    const data = await this.service.getAll(page, limit, search);
     res
       .status(200)
       .json(
-        ApiResponse.success(lecturers, "Lecturers fetched successfully", 200)
+        ApiResponse.success(
+          data.lecturers,
+          "Lecturers fetched successfully",
+          200,
+          data.meta
+        )
       );
   });
 
