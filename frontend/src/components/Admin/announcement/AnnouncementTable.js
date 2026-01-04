@@ -1,5 +1,7 @@
 import React from "react";
-import { Edit, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Edit, Trash2, View } from "lucide-react";
+import PreviewAnnouncement from "../../../pages/admin/modulAnnouncement/previewAnnoucement";
 
 const AnnouncementTable = ({
   announcements,
@@ -10,6 +12,8 @@ const AnnouncementTable = ({
   onEdit,
   onDelete,
 }) => {
+  const navigate = useNavigate();
+
   console.log("DATA : ", announcements);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
@@ -97,6 +101,14 @@ const AnnouncementTable = ({
                         className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 
                           dark:hover:bg-red-900/30 rounded-lg transition">
                         <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        className="p-2 text-yellow-600 hover:bg-yellow-50 dark:text-yellow-400 
+                          dark:hover:bg-yellow-900/30 rounded-lg transition"
+                        onClick={() =>
+                          navigate(`/admin/berita/${announcement.id}`)
+                        }>
+                        <View className="w-4 h-4" />
                       </button>
                     </div>
                   </td>

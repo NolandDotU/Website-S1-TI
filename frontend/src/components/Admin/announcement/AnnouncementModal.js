@@ -17,6 +17,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
   useEffect(() => {
     if (announcement && mode === "edit") {
       setFormData({
+        id: announcement.id,
         title: announcement.title,
         content: announcement.content,
         category: announcement.category,

@@ -27,36 +27,41 @@ export class NewsController {
       Number(limit),
       search
     );
-    res.json(ApiResponse.success(result, "Content fetched successfully", 200));
+    res.json(ApiResponse.success(result, "Content fetched successfully", 200)),
+      200;
   });
 
   create = asyncHandler(async (req: Request, res: Response) => {
     const user = req.user as JWTPayload;
     const news = await this.service.create(req.body, user);
-    res.send(ApiResponse.success(news, "News created successfully", 201)), 201;
+    res.json(ApiResponse.success(news, "News created successfully", 201)), 201;
   });
 
   getById = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const news = await this.service.getById(id);
-    return ApiResponse.success(news, "News fetched successfully", 200);
+    res.json(ApiResponse.success(news, "News fetched successfully", 200)), 200;
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
+    console.log("ID : ", id);
     const user = req.user as JWTPayload;
     const news = await this.service.update(req.body, id, user);
-    return ApiResponse.success(news, "News updated successfully", 200);
+    res.json(ApiResponse.success(news, "News updated successfully", 201)), 201;
   });
 
   updateStatus = asyncHandler(async (req: Request, res: Response) => {
     const { id, status } = req.params;
     const user = req.user as JWTPayload;
     const result = await this.service.changeStatus(id, "published");
-    return ApiResponse.success(
-      result,
-      `Status pengumuman berhasil di update menjadi ${status} `
-    );
+    res.json(
+      ApiResponse.success(
+        result,
+        `Status pengumuman berhasil di update menjadi ${status} `
+      )
+    ),
+      201;
   });
 
   delete = asyncHandler(async (req: Request, res: Response) => {

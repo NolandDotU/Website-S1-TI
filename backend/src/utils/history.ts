@@ -15,10 +15,6 @@ class HistoryService {
   }
 
   async create(data: IHistoryInput) {
-    logger.info(
-      "Creating history record for lecturer action in HistoryService",
-      data
-    );
     const history = await HistoryModel.create(data);
     logger.info("History record created:", history);
     if (this.cache !== null) {

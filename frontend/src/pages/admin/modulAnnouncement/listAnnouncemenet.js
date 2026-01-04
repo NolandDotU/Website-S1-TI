@@ -92,17 +92,24 @@ const ListAnnouncement = () => {
       if (formData.photo !== null) {
         try {
           const uploads = await uploadImage(formData.photo);
+          console.log("uploads result : ", uploads);
           if (uploads.statusCode !== 200) {
             toast.error("Gagal menyimpan photo, coba lagi!");
+            return;
           }
+
           console.log("uploaded image : ", uploads);
           payload = {
             ...formData,
             photo: uploads.data.path,
           };
+          console.log("UPDATED PAYLOAD : ", payload);
         } catch (error) {
           console.error(error);
-          toast.error("Terjadi kesalahan saat menyimpan foto!");
+          toast.error(
+            `Terjadi kesalahan saat menyimpan foto! (${error.response?.data?.message})`
+          );
+          return;
         }
       }
       if (modalMode === "create") {
@@ -136,7 +143,7 @@ const ListAnnouncement = () => {
   };
 
   return (
-    <div className="">
+    <div className="flex flex-col gap-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

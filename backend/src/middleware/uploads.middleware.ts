@@ -69,17 +69,16 @@ export const optimizeImage = async (
 };
 
 export const deleteImage = async (photoUrl: string) => {
-  if (!photoUrl.startsWith("/uploads/")) {
-    throw ApiError.badRequest("Invalid file path");
-  }
+  // 1. Normalisasi ke path OS
+  const normalized = photoUrl
+    .replace(/^\/?uploads[\\/]/, "") // buang uploads/ atau uploads\
+    .replace(/\\/g, path.sep)
+    .replace(/\//g, path.sep);
 
   const baseDir = path.resolve("uploads");
+  const targetPath = path.resolve(baseDir, normalized);
 
-  // buang prefix "/uploads/"
-  const relativePath = photoUrl.replace("/uploads/", "");
-
-  const targetPath = path.resolve(baseDir, relativePath);
-
+  // 2. Security check yang bener
   if (!targetPath.startsWith(baseDir)) {
     throw ApiError.badRequest("Invalid file path");
   }

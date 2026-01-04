@@ -53,16 +53,18 @@ export class LecturerService {
     search = ""
   ): Promise<IPaginatedLecturerResponse> {
     const skip = (page - 1) * limit;
+    let cacheKey;
+    if (this.cache !== null) {
+      const cacheVersion =
+        (await this.cache.get<string>("lecturers:version")) || "0";
+      const normalizedSearch = search.trim().toLowerCase();
+      cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
-    const cacheVersion =
-      (await this.cache.get<string>("lecturers:version")) || "0";
-    const normalizedSearch = search.trim().toLowerCase();
-    const cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
-
-    const cached = await this.cache.get<IPaginatedLecturerResponse>(cacheKey);
-    if (cached) {
-      logger.debug(`Cache HIT: ${cacheKey}`);
-      return cached;
+      const cached = await this.cache.get<IPaginatedLecturerResponse>(cacheKey);
+      if (cached) {
+        logger.debug(`Cache HIT: ${cacheKey}`);
+        return cached;
+      }
     }
 
     const searchQuery = search
@@ -97,7 +99,9 @@ export class LecturerService {
       },
     };
 
-    await this.cache.set(cacheKey, result, 3600); // 1 hour
+    logger.info(`lecturers : `, result.lecturers);
+    if (this.cache !== null && cacheKey)
+      await this.cache.set(cacheKey, result, 360); // 1 hour
 
     return result;
   }

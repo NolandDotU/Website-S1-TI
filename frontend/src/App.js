@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -13,10 +13,10 @@ import Login from "./pages/Login";
 import { AdminDashboard } from "./pages/admin";
 import { GoogleAuthError } from "./pages/middleware/googleAuth_error";
 import { NoAccessPage } from "./pages/middleware/notHaveAccess";
-
 import AdminLayout from "./components/Admin/AdminLayout";
 import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
 import ListAnnouncement from "./pages/admin/modulAnnouncement/listAnnouncemenet";
+import PreviewAnnouncement from "./pages/admin/modulAnnouncement/previewAnnoucement";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -76,7 +76,11 @@ function App() {
               </ProtectedRoute>
             }>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="berita/*" element={<ListAnnouncement />} />
+            <Route path="berita" element={<Outlet />}>
+              <Route index element={<ListAnnouncement />} />
+              <Route path=":id" element={<PreviewAnnouncement />} />
+            </Route>
+
             <Route path="dosen" element={<LecturerManagement />} />
           </Route>
         </Routes>

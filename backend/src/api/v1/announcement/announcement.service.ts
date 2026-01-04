@@ -86,9 +86,7 @@ export class AnnouncementService {
     const cacheKey = `news:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
     const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
-    console.log("CACHED", cached);
     if (cached) {
-      logger.info(`Cache HIT: ${cacheKey}`);
       return cached;
     }
 
@@ -132,7 +130,6 @@ export class AnnouncementService {
 
     const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
     if (cached) {
-      logger.info(`Cache HIT: ${cacheKey}`);
       return cached;
     }
 
@@ -183,13 +180,17 @@ export class AnnouncementService {
         _id: { $ne: id },
         title: data.title,
       }),
-      this.model.findOne({
+      this.model.findById({
         _id: id,
       }),
     ]);
     if (exist) throw ApiError.conflict("News already exists");
+    logger.info(`Announcement image: ${announ?.photo}`);
     deleteImage(announ?.photo || "").catch((err) => {
-      throw ApiError.internal(`Failed delete announcement image! ${err}`);
+      logger.error(
+        `Error deleting announcement image: ${announ?.photo} [ ${err}] `
+      );
+      return ApiError.internal(`Failed delete announcement image! ${err}`);
     });
 
     const newsDoc = await this.model.findOneAndUpdate({ _id: id }, data, {

@@ -21,7 +21,7 @@ export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
 
 export const getById = async (id) => {
   try {
-    const response = await api.get(`/announcement/${id}`);
+    const response = await api.get(`/announcements/${id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -84,7 +84,7 @@ export const createAnnouncement = async (announcementData) => {
 //===========
 export const changeStatus = async (status, id) => {
   try {
-    const response = await api.patch(`/announcements/:id/:status`);
+    const response = await api.patch(`/announcements/${id}/${status}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -96,7 +96,7 @@ export const changeStatus = async (status, id) => {
 //===========
 export const update = async (formData, id) => {
   try {
-    const response = await api.put("/announcements/:id", formData);
+    const response = await api.put(`/announcements/${id}`, formData);
     return response.data;
   } catch (error) {
     throw error;
@@ -108,7 +108,7 @@ export const update = async (formData, id) => {
 //===========
 export const delAnnouncement = async (id) => {
   try {
-    const response = await api.delete(`/announcements/:id`);
+    const response = await api.delete(`/announcements/${id}`);
     return response.data;
   } catch (error) {
     throw error;

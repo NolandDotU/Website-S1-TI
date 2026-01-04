@@ -1053,3 +1053,302 @@
 {"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 112.402 ms","timestamp":"2026-01-02 18:14:18"}
 {"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 18:14:18"}
 {"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 139.732 ms","timestamp":"2026-01-02 18:14:18"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:15:07"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:15:07"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:15:07"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:15:10"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:15:11"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:15:11"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:15:11"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:15:11"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:15:11"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:22:46"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:22:46"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:22:46"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:22:48"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:22:48"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:22:48"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:22:49"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:22:49"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:22:49"}
+{"level":"error","message":"Access token required","method":"GET","stack":"Error: Access token required\n    at Function.unauthorized (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:28:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:18:24\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)","timestamp":"2026-01-02 19:26:51","url":"/api/v1/auth/me"}
+{"level":"http","message":"GET /api/v1/auth/me 401 - - 10.932 ms","timestamp":"2026-01-02 19:26:51"}
+{"level":"error","message":"Access token required","method":"GET","stack":"Error: Access token required\n    at Function.unauthorized (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:28:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:18:24\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)","timestamp":"2026-01-02 19:26:51","url":"/api/v1/auth/me"}
+{"level":"http","message":"GET /api/v1/auth/me 401 - - 3.605 ms","timestamp":"2026-01-02 19:26:51"}
+{"$__":{"activePaths":{"paths":{"__v":"init","_id":"init","authProvider":"init","createdAt":"init","isActive":"init","isEmailVerified":"init","lastLogin":"init","password":"init","photo":"init","role":"init","updatedAt":"init","username":"init"},"states":{"default":{},"init":{"__v":true,"_id":true,"authProvider":true,"createdAt":true,"isActive":true,"isEmailVerified":true,"lastLogin":true,"password":true,"photo":true,"role":true,"updatedAt":true,"username":true},"require":{}}},"skipId":true},"$isNew":false,"_doc":{"__v":0,"_id":"69465fd9b117ed88373742b5","authProvider":"local","createdAt":"2025-12-20T08:35:37.075Z","isActive":true,"isEmailVerified":false,"lastLogin":"2026-01-02T09:13:42.316Z","password":"$2b$10$Bh/F90Y.xA1rpUlLZ8XM6.s/rC47Qm25cLAO6mdkmQFuKw/prYCH6","photo":"","role":"admin","updatedAt":"2026-01-02T09:13:42.325Z","username":"admin"},"level":"info","message":"User","timestamp":"2026-01-02 19:26:58"}
+{"$__":{"$versionError":null,"activePaths":{"paths":{"__v":"init","_id":"init","authProvider":"init","createdAt":"init","isActive":"init","isEmailVerified":"init","password":"init","photo":"init","role":"init","username":"require"},"states":{"default":{},"init":{"__v":true,"_id":true,"authProvider":true,"createdAt":true,"isActive":true,"isEmailVerified":true,"password":true,"photo":true,"role":true},"modify":{},"require":{"username":true}}},"backup":{"activePaths":{"default":{},"modify":{"lastLogin":true,"updatedAt":true}},"validationError":null},"cachedRequired":{},"inserting":false,"modifiedPaths":["lastLogin","updatedAt"],"op":null,"saveOptions":null,"savedState":{},"saving":null,"skipId":true,"validating":null},"$isNew":false,"_doc":{"__v":0,"_id":"69465fd9b117ed88373742b5","authProvider":"local","createdAt":"2025-12-20T08:35:37.075Z","isActive":true,"isEmailVerified":false,"lastLogin":"2026-01-02T12:26:58.998Z","password":"$2b$10$Bh/F90Y.xA1rpUlLZ8XM6.s/rC47Qm25cLAO6mdkmQFuKw/prYCH6","photo":"","role":"admin","updatedAt":"2026-01-02T12:26:59.005Z","username":"admin"},"level":"info","message":"Generating token : ","timestamp":"2026-01-02 19:26:59"}
+{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NDY1ZmQ5YjExN2VkODgzNzM3NDJiNSIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJhdXRoUHJvdmlkZXIiOiJsb2NhbCIsImlhdCI6MTc2NzM1NjgxOSwiZXhwIjoxNzY3MzU2OTM5fQ.FptZ7qDKde9ATrELelTeQkGZwpkRen7AQy35H7-toDA","level":"info","message":"Admin logged in:","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NDY1ZmQ5YjExN2VkODgzNzM3NDJiNSIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJhdXRoUHJvdmlkZXIiOiJsb2NhbCIsImlhdCI6MTc2NzM1NjgxOSwiZXhwIjoxNzY3OTYxNjE5fQ.fZIGin1GQ8tdWtml3wTpR5QnMaui-mQhgtt6OU0IRWI","timestamp":"2026-01-02 19:26:59","user":{"authProvider":"local","id":"69465fd9b117ed88373742b5","photo":"","role":"admin","username":"admin"}}
+{"level":"info","message":"Cookies set for admin login : ","timestamp":"2026-01-02 19:26:59"}
+{"level":"http","message":"POST /api/v1/auth/admin 200 86 - 574.968 ms","timestamp":"2026-01-02 19:26:59"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 55.071 ms","timestamp":"2026-01-02 19:26:59"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 506.572 ms","timestamp":"2026-01-02 19:27:05"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:27:05"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 101.524 ms","timestamp":"2026-01-02 19:27:05"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:01"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 131.768 ms","timestamp":"2026-01-02 19:33:01"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 443.245 ms","timestamp":"2026-01-02 19:33:02"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 66.888 ms","timestamp":"2026-01-02 19:33:02"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:02"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 131.999 ms","timestamp":"2026-01-02 19:33:02"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:02"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 141.763 ms","timestamp":"2026-01-02 19:33:02"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:22"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 103.740 ms","timestamp":"2026-01-02 19:33:22"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:36"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 131.614 ms","timestamp":"2026-01-02 19:33:36"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:43"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 106.647 ms","timestamp":"2026-01-02 19:33:43"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:33:48"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 181.888 ms","timestamp":"2026-01-02 19:33:48"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:34:02"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 154.350 ms","timestamp":"2026-01-02 19:34:02"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:34:02"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 411.547 ms","timestamp":"2026-01-02 19:34:02"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 322.640 ms","timestamp":"2026-01-02 19:35:34"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 44.367 ms","timestamp":"2026-01-02 19:35:34"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:35:36"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 93.613 ms","timestamp":"2026-01-02 19:35:36"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:35:36"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 100.155 ms","timestamp":"2026-01-02 19:35:36"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 274.674 ms","timestamp":"2026-01-02 19:35:57"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 44.762 ms","timestamp":"2026-01-02 19:35:57"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:35:58"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 85.734 ms","timestamp":"2026-01-02 19:35:58"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:35:58"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 79.959 ms","timestamp":"2026-01-02 19:35:58"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 371.878 ms","timestamp":"2026-01-02 19:36:32"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 70.447 ms","timestamp":"2026-01-02 19:36:32"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:36:32"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 115.648 ms","timestamp":"2026-01-02 19:36:32"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:36:33"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 134.375 ms","timestamp":"2026-01-02 19:36:33"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 411.129 ms","timestamp":"2026-01-02 19:38:08"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 65.910 ms","timestamp":"2026-01-02 19:38:08"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 328.440 ms","timestamp":"2026-01-02 19:38:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 54.183 ms","timestamp":"2026-01-02 19:38:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 535.690 ms","timestamp":"2026-01-02 19:38:46"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 69.829 ms","timestamp":"2026-01-02 19:38:46"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 74.294 ms","timestamp":"2026-01-02 19:38:47"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 73.870 ms","timestamp":"2026-01-02 19:38:47"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 63.972 ms","timestamp":"2026-01-02 19:38:50"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 78.352 ms","timestamp":"2026-01-02 19:38:50"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 283.444 ms","timestamp":"2026-01-02 19:39:44"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 47.969 ms","timestamp":"2026-01-02 19:39:44"}
+{"level":"http","message":"GET /api/v1/announcement/69579cd731dc9920a294a1c1 404 45 - 0.408 ms","timestamp":"2026-01-02 19:39:44"}
+{"level":"http","message":"GET /api/v1/announcement/69579cd731dc9920a294a1c1 404 45 - 0.394 ms","timestamp":"2026-01-02 19:39:44"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:40:05"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 114.485 ms","timestamp":"2026-01-02 19:40:05"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:40:06"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 124.167 ms","timestamp":"2026-01-02 19:40:06"}
+{"level":"http","message":"GET /api/v1/announcement/69579cd731dc9920a294a1c1 404 45 - 0.234 ms","timestamp":"2026-01-02 19:40:07"}
+{"level":"http","message":"GET /api/v1/announcement/69579cd731dc9920a294a1c1 404 45 - 0.694 ms","timestamp":"2026-01-02 19:40:07"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 200 464 - 415.068 ms","timestamp":"2026-01-02 19:40:48"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:40:55"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 122.487 ms","timestamp":"2026-01-02 19:40:55"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:40:55"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 107.133 ms","timestamp":"2026-01-02 19:40:55"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 2.263 ms","timestamp":"2026-01-02 19:40:56"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:41:01"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 5.180 ms","timestamp":"2026-01-02 19:41:01"}
+{"level":"error","message":"Cast to ObjectId failed for value \":id\" (type string) at path \"_id\" for model \"announcement_collection\"","method":"PUT","stack":"CastError: Cast to ObjectId failed for value \":id\" (type string) at path \"_id\" for model \"announcement_collection\"\n    at SchemaObjectId.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schema\\objectId.js:251:11)\n    at SchemaObjectId.SchemaType.applySetters (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1262:12)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1698:17)\n    at SchemaObjectId.handleSingle (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1621:15)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1694:20)\n    at cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\cast.js:367:39)\n    at model.Query.Query.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:5060:12)\n    at model.Query.Query._castConditions (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2374:10)\n    at model.Query._findOne (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2697:8)\n    at model.Query.exec (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:4627:80)","timestamp":"2026-01-02 19:41:01","url":"/api/v1/announcements/:id"}
+{"level":"http","message":"PUT /api/v1/announcements/:id 500 - - 14.001 ms","timestamp":"2026-01-02 19:41:01"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:42:18"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:42:18"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:42:18"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:42:20"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:42:21"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:42:21"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:42:21"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:42:21"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:42:21"}
+{"level":"http","message":"GET /api/v1/auth/me - - - - ms","timestamp":"2026-01-02 19:42:21"}
+{"level":"http","message":"GET /api/v1/auth/me - - - - ms","timestamp":"2026-01-02 19:42:21"}
+{"level":"http","message":"GET /api/v1/auth/me 200 182 - 79.106 ms","timestamp":"2026-01-02 19:42:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 53.114 ms","timestamp":"2026-01-02 19:42:22"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:42:23"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 151.169 ms","timestamp":"2026-01-02 19:42:23"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:42:23"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 147.654 ms","timestamp":"2026-01-02 19:42:23"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 3.020 ms","timestamp":"2026-01-02 19:42:26"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:42:37"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 11.415 ms","timestamp":"2026-01-02 19:42:37"}
+{"level":"error","message":"Cast to ObjectId failed for value \":id\" (type string) at path \"_id\" for model \"announcement_collection\"","method":"PUT","stack":"CastError: Cast to ObjectId failed for value \":id\" (type string) at path \"_id\" for model \"announcement_collection\"\n    at SchemaObjectId.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schema\\objectId.js:251:11)\n    at SchemaObjectId.SchemaType.applySetters (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1262:12)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1698:17)\n    at SchemaObjectId.handleSingle (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1621:15)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1694:20)\n    at cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\cast.js:367:39)\n    at model.Query.Query.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:5060:12)\n    at model.Query.Query._castConditions (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2374:10)\n    at model.Query._findOne (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2697:8)\n    at model.Query.exec (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:4627:80)","timestamp":"2026-01-02 19:42:37","url":"/api/v1/announcements/:id"}
+{"level":"http","message":"PUT /api/v1/announcements/:id 500 - - 17.655 ms","timestamp":"2026-01-02 19:42:37"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:44:45"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:44:45"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:44:45"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:44:46"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:45:31"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 123.079 ms","timestamp":"2026-01-02 19:45:31"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:45:37"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 106.590 ms","timestamp":"2026-01-02 19:45:37"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:45:48"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 279.960 ms","timestamp":"2026-01-02 19:45:48"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:45:56"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 203.209 ms","timestamp":"2026-01-02 19:45:56"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:46:06"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 4.755 ms","timestamp":"2026-01-02 19:46:06"}
+{"level":"error","message":"Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"announcement_collection\"","method":"PUT","stack":"CastError: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"announcement_collection\"\n    at SchemaObjectId.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schema\\objectId.js:251:11)\n    at SchemaObjectId.SchemaType.applySetters (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1262:12)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1698:17)\n    at SchemaObjectId.handleSingle (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1621:15)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1694:20)\n    at cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\cast.js:367:39)\n    at model.Query.Query.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:5060:12)\n    at model.Query.Query._castConditions (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2374:10)\n    at model.Query._findOne (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2697:8)\n    at model.Query.exec (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:4627:80)","timestamp":"2026-01-02 19:46:06","url":"/api/v1/announcements/undefined"}
+{"level":"http","message":"PUT /api/v1/announcements/undefined 500 - - 15.825 ms","timestamp":"2026-01-02 19:46:06"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 537.137 ms","timestamp":"2026-01-02 19:46:11"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 49.385 ms","timestamp":"2026-01-02 19:46:11"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:46:11"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 149.383 ms","timestamp":"2026-01-02 19:46:11"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:46:11"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 158.390 ms","timestamp":"2026-01-02 19:46:11"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 2.397 ms","timestamp":"2026-01-02 19:46:17"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:46:22"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.679 ms","timestamp":"2026-01-02 19:46:22"}
+{"level":"error","message":"Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"announcement_collection\"","method":"PUT","stack":"CastError: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"announcement_collection\"\n    at SchemaObjectId.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schema\\objectId.js:251:11)\n    at SchemaObjectId.SchemaType.applySetters (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1262:12)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1698:17)\n    at SchemaObjectId.handleSingle (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1621:15)\n    at SchemaObjectId.SchemaType.castForQuery (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1694:20)\n    at cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\cast.js:367:39)\n    at model.Query.Query.cast (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:5060:12)\n    at model.Query.Query._castConditions (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2374:10)\n    at model.Query._findOne (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:2697:8)\n    at model.Query.exec (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\mongoose\\lib\\query.js:4627:80)","timestamp":"2026-01-02 19:46:22","url":"/api/v1/announcements/undefined"}
+{"level":"http","message":"PUT /api/v1/announcements/undefined 500 - - 6.843 ms","timestamp":"2026-01-02 19:46:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 627.490 ms","timestamp":"2026-01-02 19:49:10"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 100.864 ms","timestamp":"2026-01-02 19:49:10"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:49:10"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 153.427 ms","timestamp":"2026-01-02 19:49:10"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:49:11"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 151.048 ms","timestamp":"2026-01-02 19:49:11"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 0.800 ms","timestamp":"2026-01-02 19:49:12"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:49:15"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 2.888 ms","timestamp":"2026-01-02 19:49:15"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:49:20"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.604 ms","timestamp":"2026-01-02 19:49:20"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:49:29"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.550 ms","timestamp":"2026-01-02 19:49:29"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:51:34"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:51:34"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:51:34"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:51:35"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:51:37"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:51:37"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:51:37"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:51:37"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:51:37"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:51:41"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 5.594 ms","timestamp":"2026-01-02 19:51:41"}
+{"level":"error","message":"Error deleting announcement image: undefined ","timestamp":"2026-01-02 19:51:41"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:52:56"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:52:56"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:52:56"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:52:58"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:52:59"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:52:59"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:52:59"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:52:59"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:52:59"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:53:09"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 9.877 ms","timestamp":"2026-01-02 19:53:09"}
+{"level":"error","message":"Error deleting announcement image: uploads\\news\\5db14f11-625c-471d-a672-81aa85952479.webp ","timestamp":"2026-01-02 19:53:09"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-02 19:55:48"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-02 19:55:48"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-02 19:55:48"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-02 19:55:50"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-02 19:55:50"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-02 19:55:50"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-02 19:55:51"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-02 19:55:51"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-02 19:55:51"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 784.220 ms","timestamp":"2026-01-02 19:57:17"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 84.114 ms","timestamp":"2026-01-02 19:57:17"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:57:19"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 124.145 ms","timestamp":"2026-01-02 19:57:19"}
+{"level":"info","message":"Cache HIT: news:v1:p1:l10:s","timestamp":"2026-01-02 19:57:19"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 110.677 ms","timestamp":"2026-01-02 19:57:19"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 4.076 ms","timestamp":"2026-01-02 19:57:22"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:57:32"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 8.407 ms","timestamp":"2026-01-02 19:57:32"}
+{"level":"error","message":"[\n  {\n    \"path\": [\n      \"eventDate\"\n    ],\n    \"message\": \"eventDate wajib diisi untuk kategori event\",\n    \"code\": \"custom\"\n  }\n]","name":"ZodError","stack":"ZodError: [\n  {\n    \"path\": [\n      \"eventDate\"\n    ],\n    \"message\": \"eventDate wajib diisi untuk kategori event\",\n    \"code\": \"custom\"\n  }\n]\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:9:25\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:28:7\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:825:5","timestamp":"2026-01-02 19:57:32"}
+{"level":"error","message":"eventDate wajib diisi untuk kategori event","method":"PUT","stack":"Error: eventDate wajib diisi untuk kategori event\n    at Function.badRequest (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:24:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:14:24\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:28:7\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-01-02 19:57:32","url":"/api/v1/announcements/69579cd731dc9920a294a1c1"}
+{"level":"http","message":"PUT /api/v1/announcements/69579cd731dc9920a294a1c1 400 - - 14.061 ms","timestamp":"2026-01-02 19:57:32"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 19:57:37"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.760 ms","timestamp":"2026-01-02 19:57:37"}
+{"level":"error","message":"Error deleting announcement image: uploads\\news\\5db14f11-625c-471d-a672-81aa85952479.webp ","timestamp":"2026-01-02 19:57:38"}
+{"action":"UPDATE","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","level":"info","message":"Creating history record for lecturer action in HistoryService","timestamp":"2026-01-02 19:57:38","user":"69465fd9b117ed88373742b5"}
+{"$__":{"$versionError":null,"activePaths":{"paths":{"action":"require","user":"require"},"states":{"default":{},"modify":{},"require":{"action":true,"user":true}}},"backup":{"activePaths":{"default":{"_id":true,"datetime":true,"isArchive":true},"modify":{"action":true,"createdAt":true,"description":true,"entity":true,"entityId":true,"entityModel":true,"updatedAt":true,"user":true}},"validationError":null},"cachedRequired":{},"inserting":true,"op":null,"saveOptions":null,"savedState":{},"saving":null,"validating":null},"$isNew":false,"_doc":{"__v":0,"_id":"6957c0c2901502f81455571c","action":"UPDATE","createdAt":"2026-01-02T12:57:38.443Z","datetime":"2026-01-02T12:57:38.438Z","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","entityModel":"announcement_collection","isArchive":false,"updatedAt":"2026-01-02T12:57:38.443Z","user":"69465fd9b117ed88373742b5"},"level":"info","message":"History record created:","timestamp":"2026-01-02 19:57:38"}
+{"level":"http","message":"PUT /api/v1/announcements/69579cd731dc9920a294a1c1 200 475 - 581.609 ms","timestamp":"2026-01-02 19:57:38"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 200 551 - 182.041 ms","timestamp":"2026-01-02 19:57:38"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 200 475 - 822.895 ms","timestamp":"2026-01-02 19:58:35"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 19:58:35"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 155.548 ms","timestamp":"2026-01-02 19:58:35"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 19:59:34"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 45.868 ms","timestamp":"2026-01-02 19:59:34"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 19:59:34"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 41.624 ms","timestamp":"2026-01-02 19:59:34"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 4564.587 ms","timestamp":"2026-01-02 20:00:23"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:23"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 67.284 ms","timestamp":"2026-01-02 20:00:23"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:23"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 58.996 ms","timestamp":"2026-01-02 20:00:23"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 390.941 ms","timestamp":"2026-01-02 20:00:24"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 57.805 ms","timestamp":"2026-01-02 20:00:33"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 59.566 ms","timestamp":"2026-01-02 20:00:33"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:33"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 40.734 ms","timestamp":"2026-01-02 20:00:33"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:34"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 43.376 ms","timestamp":"2026-01-02 20:00:34"}
+{"level":"info","message":"Cache HIT: news:v2:p1:l10:s","timestamp":"2026-01-02 20:00:41"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 187.401 ms","timestamp":"2026-01-02 20:00:41"}
+{"level":"info","message":"Cache HIT: news:v2:p1:l10:s","timestamp":"2026-01-02 20:00:41"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 132.222 ms","timestamp":"2026-01-02 20:00:41"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 1.240 ms","timestamp":"2026-01-02 20:00:42"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 20:00:45"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.325 ms","timestamp":"2026-01-02 20:00:45"}
+{"level":"error","message":"Error deleting announcement image: uploads\\news\\5db14f11-625c-471d-a672-81aa85952479.webp ","timestamp":"2026-01-02 20:00:46"}
+{"action":"UPDATE","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","level":"info","message":"Creating history record for lecturer action in HistoryService","timestamp":"2026-01-02 20:00:46","user":"69465fd9b117ed88373742b5"}
+{"$__":{"$versionError":null,"activePaths":{"paths":{"action":"require","user":"require"},"states":{"default":{},"modify":{},"require":{"action":true,"user":true}}},"backup":{"activePaths":{"default":{"_id":true,"datetime":true,"isArchive":true},"modify":{"action":true,"createdAt":true,"description":true,"entity":true,"entityId":true,"entityModel":true,"updatedAt":true,"user":true}},"validationError":null},"cachedRequired":{},"inserting":true,"op":null,"saveOptions":null,"savedState":{},"saving":null,"validating":null},"$isNew":false,"_doc":{"__v":0,"_id":"6957c17e901502f814555728","action":"UPDATE","createdAt":"2026-01-02T13:00:46.524Z","datetime":"2026-01-02T13:00:46.523Z","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","entityModel":"announcement_collection","isArchive":false,"updatedAt":"2026-01-02T13:00:46.524Z","user":"69465fd9b117ed88373742b5"},"level":"info","message":"History record created:","timestamp":"2026-01-02 20:00:46"}
+{"level":"http","message":"PUT /api/v1/announcements/69579cd731dc9920a294a1c1 200 479 - 1046.678 ms","timestamp":"2026-01-02 20:00:46"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 200 555 - 263.292 ms","timestamp":"2026-01-02 20:00:46"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 200 479 - 195.959 ms","timestamp":"2026-01-02 20:00:49"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:49"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 57.920 ms","timestamp":"2026-01-02 20:00:49"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 73.176 ms","timestamp":"2026-01-02 20:00:58"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 64.708 ms","timestamp":"2026-01-02 20:00:58"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:58"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 52.979 ms","timestamp":"2026-01-02 20:00:58"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:00:58"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 47.929 ms","timestamp":"2026-01-02 20:00:58"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:01:48"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 57.370 ms","timestamp":"2026-01-02 20:01:48"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 2355.832 ms","timestamp":"2026-01-02 20:02:09"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 68.036 ms","timestamp":"2026-01-02 20:02:09"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:02:10"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 61.803 ms","timestamp":"2026-01-02 20:02:10"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:02:10"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 78.309 ms","timestamp":"2026-01-02 20:02:10"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 524.499 ms","timestamp":"2026-01-02 20:02:25"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 72.135 ms","timestamp":"2026-01-02 20:02:25"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:02:26"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 59.475 ms","timestamp":"2026-01-02 20:02:26"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 0.533 ms","timestamp":"2026-01-02 20:02:26"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:02:26"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 55.100 ms","timestamp":"2026-01-02 20:02:26"}
+{"level":"info","message":"Cache HIT: news:v3:p1:l10:s","timestamp":"2026-01-02 20:03:17"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 137.080 ms","timestamp":"2026-01-02 20:03:17"}
+{"level":"info","message":"Cache HIT: news:v3:p1:l10:s","timestamp":"2026-01-02 20:03:17"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 141.276 ms","timestamp":"2026-01-02 20:03:17"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 1.700 ms","timestamp":"2026-01-02 20:03:21"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-02 20:04:14"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 83 - 1.457 ms","timestamp":"2026-01-02 20:04:14"}
+{"level":"error","message":"Error deleting announcement image: uploads\\news\\5db14f11-625c-471d-a672-81aa85952479.webp ","timestamp":"2026-01-02 20:04:15"}
+{"action":"UPDATE","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","level":"info","message":"Creating history record for lecturer action in HistoryService","timestamp":"2026-01-02 20:04:15","user":"69465fd9b117ed88373742b5"}
+{"$__":{"$versionError":null,"activePaths":{"paths":{"action":"require","user":"require"},"states":{"default":{},"modify":{},"require":{"action":true,"user":true}}},"backup":{"activePaths":{"default":{"_id":true,"datetime":true,"isArchive":true},"modify":{"action":true,"createdAt":true,"description":true,"entity":true,"entityId":true,"entityModel":true,"updatedAt":true,"user":true}},"validationError":null},"cachedRequired":{},"inserting":true,"op":null,"saveOptions":null,"savedState":{},"saving":null,"validating":null},"$isNew":false,"_doc":{"__v":0,"_id":"6957c24f901502f814555736","action":"UPDATE","createdAt":"2026-01-02T13:04:15.380Z","datetime":"2026-01-02T13:04:15.379Z","description":"Announcement titled \"TESTETST\" was updated by admin.","entity":"announcement","entityId":"69579cd731dc9920a294a1c1","entityModel":"announcement_collection","isArchive":false,"updatedAt":"2026-01-02T13:04:15.380Z","user":"69465fd9b117ed88373742b5"},"level":"info","message":"History record created:","timestamp":"2026-01-02 20:04:15"}
+{"level":"http","message":"PUT /api/v1/announcements/69579cd731dc9920a294a1c1 200 - - 1113.065 ms","timestamp":"2026-01-02 20:04:15"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 200 - - 648.946 ms","timestamp":"2026-01-02 20:04:16"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 200 - - 166.683 ms","timestamp":"2026-01-02 20:04:17"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:04:17"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 67.356 ms","timestamp":"2026-01-02 20:04:17"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:05:15"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 45.946 ms","timestamp":"2026-01-02 20:05:15"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:06:06"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 62.518 ms","timestamp":"2026-01-02 20:06:06"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 358.973 ms","timestamp":"2026-01-02 20:06:10"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 44.200 ms","timestamp":"2026-01-02 20:06:10"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:06:10"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 68.728 ms","timestamp":"2026-01-02 20:06:10"}
+{"level":"http","message":"GET /uploads/news/5db14f11-625c-471d-a672-81aa85952479.webp 304 - - 0.643 ms","timestamp":"2026-01-02 20:06:10"}
+{"level":"info","message":"Cache HIT: news:item:69579cd731dc9920a294a1c1","timestamp":"2026-01-02 20:06:10"}
+{"level":"http","message":"GET /api/v1/announcements/69579cd731dc9920a294a1c1 304 - - 50.619 ms","timestamp":"2026-01-02 20:06:10"}
