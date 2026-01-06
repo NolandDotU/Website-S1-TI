@@ -14,7 +14,6 @@ const AnnouncementTable = ({
 }) => {
   const navigate = useNavigate();
 
-  console.log("DATA : ", announcements);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -97,7 +96,10 @@ const AnnouncementTable = ({
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => onDelete(announcement)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onDelete({ id: announcement.id });
+                        }}
                         className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 
                           dark:hover:bg-red-900/30 rounded-lg transition">
                         <Trash2 className="w-4 h-4" />

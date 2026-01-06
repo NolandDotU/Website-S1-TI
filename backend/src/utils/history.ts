@@ -16,7 +16,6 @@ class HistoryService {
 
   async create(data: IHistoryInput) {
     const history = await HistoryModel.create(data);
-    logger.info("History record created:", history);
     if (this.cache !== null) {
       await this.cache.incr("history:version");
       await this.cache.incr(`history:${data.user}:version`);

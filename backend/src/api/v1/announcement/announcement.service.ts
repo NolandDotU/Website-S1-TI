@@ -185,7 +185,6 @@ export class AnnouncementService {
       }),
     ]);
     if (exist) throw ApiError.conflict("News already exists");
-    logger.info(`Announcement image: ${announ?.photo}`);
     deleteImage(announ?.photo || "").catch((err) => {
       logger.error(
         `Error deleting announcement image: ${announ?.photo} [ ${err}] `
@@ -222,6 +221,7 @@ export class AnnouncementService {
     let newsDoc;
     if (status === "published") {
       const publishDate = new Date();
+      logger.info(`REQUEST ID : ${id}`);
       newsDoc = await this.model.findOneAndUpdate(
         { _id: id },
         { status: status, publishDate: publishDate },

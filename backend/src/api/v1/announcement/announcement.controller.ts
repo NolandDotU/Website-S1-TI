@@ -68,6 +68,7 @@ export class NewsController {
     const { id } = req.params;
     const user = req.user as JWTPayload;
     const result = await this.service.delete(id, user);
-    return ApiResponse.success(result, "News deleted successfully", 200);
+    res.json(ApiResponse.success(result, "News deleted successfully", 200)),
+      200;
   });
 }

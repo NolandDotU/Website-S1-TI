@@ -27,9 +27,12 @@ export const authMiddleware = (roles: string[] | null) =>
       req.user = user;
       next();
     } catch (error) {
-      if (error instanceof ApiError && error.message === "Token expired") {
+      if (
+        error instanceof ApiError &&
+        (error.message === "Token expired" ||
+          error.message === "Access token required")
+      ) {
         const refreshToken = req.cookies?.refreshToken;
-        console.log("Refresh Token:", refreshToken);
 
         if (!refreshToken) {
           throw ApiError.unauthorized("Session expired. Please login again");

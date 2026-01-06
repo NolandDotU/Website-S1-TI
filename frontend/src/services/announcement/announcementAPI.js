@@ -1,4 +1,3 @@
-import { Trophy } from "lucide-react";
 import api from "../utils/api";
 
 //===================
@@ -9,7 +8,6 @@ export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
     const response = await api.get("/announcements", {
       params: { page, limit },
     });
-    console.log("RESPONSE GET: ", response);
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},
@@ -40,6 +38,8 @@ export const adminGetAnnouncements = async (
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},
+      status: response.data.statusCode,
+      message: response.data.message,
     };
   } catch (error) {
     throw error;
@@ -108,7 +108,7 @@ export const update = async (formData, id) => {
 //===========
 export const delAnnouncement = async (id) => {
   try {
-    const response = await api.delete(`/announcements/${id}`);
+    const response = await api.delete(`/announcements/permanent/${id}`);
     return response.data;
   } catch (error) {
     throw error;

@@ -68,15 +68,24 @@ const ListAnnouncement = () => {
 
   const handleDelete = (announcement) => {
     setSelectedAnnouncement(announcement);
+    if (selectedAnnouncement === null) {
+      return toast.info("Klik tombol hapus sekali lagi!");
+    }
+
+    console.log("seelcted announcement; ", selectedAnnouncement);
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = async (id) => {
+  const confirmDelete = async () => {
     try {
+      const id = selectedAnnouncement.id;
       const response = await delAnnouncement(id);
+      console.log("response", response);
+      if (response.statusCode !== 200)
+        return toast.error(response.data.message);
       toast.success("Berhasil menghapus pengumuman secara permanent!");
       setAnnouncements(
-        announcements.filter((a) => a._id !== selectedAnnouncement._id)
+        announcements.filter((a) => a.id !== selectedAnnouncement.id)
       );
       setIsDeleteModalOpen(false);
       setSelectedAnnouncement(null);
@@ -92,18 +101,15 @@ const ListAnnouncement = () => {
       if (formData.photo !== null) {
         try {
           const uploads = await uploadImage(formData.photo);
-          console.log("uploads result : ", uploads);
           if (uploads.statusCode !== 200) {
             toast.error("Gagal menyimpan photo, coba lagi!");
             return;
           }
 
-          console.log("uploaded image : ", uploads);
           payload = {
             ...formData,
             photo: uploads.data.path,
           };
-          console.log("UPDATED PAYLOAD : ", payload);
         } catch (error) {
           console.error(error);
           toast.error(
@@ -113,13 +119,11 @@ const ListAnnouncement = () => {
         }
       }
       if (modalMode === "create") {
-        console.log("SENDING DATA : ", payload);
-
         const response = await createAnnouncement(payload);
-        console.log("CREATE RESPONSE : X", response);
-        if (response.statusCode !== 200) {
-          toast.error(response.message);
+        if (response.statusCode !== 201) {
+          return toast.error(response.message);
         }
+        toast.success(response.message);
         const newAnnouncement = payload;
         setAnnouncements([newAnnouncement, ...announcements]);
       } else {

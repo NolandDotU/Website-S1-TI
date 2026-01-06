@@ -130,6 +130,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                   text-gray-900 dark:text-white 
                   focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
                   transition-colors">
+                <option value="" disabled>
+                  Pilih Kategori
+                </option>
                 <option value="pengumuman">Pengumuman</option>
                 <option value="event">Event</option>
                 <option value="lowongan">Lowongan</option>

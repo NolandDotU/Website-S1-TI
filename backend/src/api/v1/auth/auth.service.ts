@@ -76,8 +76,6 @@ class AuthService {
     const { googleId, email, username, photo, emailVerified, fullname } =
       googleUser;
 
-    logger.info("Google User", googleUser);
-
     let user = await userModel.findOne({ email });
     if (user) {
       if (user.isActive === false) {
@@ -88,8 +86,6 @@ class AuthService {
       user.isEmailVerified = emailVerified;
       user.lastLogin = new Date();
       await user.save();
-
-      logger.info("Existing user logged in", user);
     } else {
       const googleImage = await axios.get(photo, {
         responseType: "arraybuffer",
@@ -134,8 +130,6 @@ class AuthService {
     const user = await userModel.findOne({ username });
     if (!user) throw ApiError.unauthorized("Username atau password salah!");
 
-    logger.info("User", user);
-
     if (user?.role !== "admin")
       throw ApiError.unauthorized("User bukan admin!");
     if (!user.isActive) throw ApiError.unauthorized("User tidak aktif!");
@@ -177,7 +171,6 @@ class AuthService {
   }
 
   private generateToken(user: any) {
-    logger.info("Generating token : ", user);
     const payload: JWTPayload = {
       id: user._id,
       email: user.email,

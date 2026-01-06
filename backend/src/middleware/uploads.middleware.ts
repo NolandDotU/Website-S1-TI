@@ -132,6 +132,7 @@ const createUpload = (destination: string, maxSize = 5 * 1024 * 1024) => {
 export const uploadLecturerPhoto = createUpload("lecturers", 5 * 1024 * 1024);
 export const uploadNewsPhoto = createUpload("news", 10 * 1024 * 1024);
 export const uploadUserPhoto = createUpload("users", 2 * 1024 * 1024);
+export const uploadCarouselPhoto = createUpload("carousels", 2 * 1024 * 1024);
 
 export const handleMulterError = (
   err: any,

@@ -17,6 +17,7 @@ import AdminLayout from "./components/Admin/AdminLayout";
 import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
 import ListAnnouncement from "./pages/admin/modulAnnouncement/listAnnouncemenet";
 import PreviewAnnouncement from "./pages/admin/modulAnnouncement/previewAnnoucement";
+import HighlightManage from "./pages/admin/modulHighlight/highlightManage";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -82,6 +83,7 @@ function App() {
             </Route>
 
             <Route path="dosen" element={<LecturerManagement />} />
+            <Route path="highlight" element={<HighlightManage />} />
           </Route>
         </Routes>
       </main>

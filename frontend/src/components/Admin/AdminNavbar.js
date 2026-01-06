@@ -60,7 +60,7 @@ export const AdminNavbar = () => {
     },
     {
       icon: Image,
-      path: "/admin/carousel",
+      path: "/admin/highlight",
       label: "Highlight",
       action: "/admin/carousel/create",
     },

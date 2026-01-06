@@ -11,7 +11,6 @@ const startServer = async () => {
   try {
     await mongoConnect(); //ini connect ke mongodb
     await connectRedis(); //ini connect ke redis
-    const cacheManager = new CacheManager(getRedisClient());
     const server = app.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT}`);
       logger.info(`📝 Environment: ${env.NODE_ENV}`);

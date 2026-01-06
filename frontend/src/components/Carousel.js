@@ -3,25 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import image1 from "../assets/image.png";
 import { env } from "../services/utils/env";
 
-// Your images - add more image imports as needed
+// Default slides for fallback
 const defaultSlides = [
   {
-    id: 1,
-    img: image1,
-    label: "Fakultas Teknologi Informasi",
-    subtitle: "Membangun Masa Depan Digital",
-  },
-  {
-    id: 2,
-    img: image1,
-    label: "Inovasi & Riset",
-    subtitle: "Mendorong Transformasi Teknologi",
-  },
-  {
-    id: 3,
-    img: image1,
-    label: "Berdiri Sejak 2003",
-    subtitle: "Program Studi S1 Teknik Informatika",
+    _id: "1",
+    type: "custom",
+    customContent: {
+      title: "Fakultas Teknologi Informasi",
+      description: "Membangun Masa Depan Digital",
+      imageUrl: image1,
+    },
+    order: 1,
+    isActive: true,
   },
 ];
 
@@ -33,6 +26,72 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const prev = () => setIndex((i) => (i - 1 + count) % count);
   const next = () => setIndex((i) => (i + 1) % count);
   const goTo = (i) => setIndex(i);
+
+  // Helper function to get image URL
+  const getImageUrl = (slide) => {
+    if (slide.type === "custom") {
+      // Check if imageUrl is a full URL or relative path
+      const imageUrl = slide.customContent.imageUrl;
+      return `${BACKEND_URL}/${imageUrl}`;
+    }
+    // ...existing code...
+    // For announcement type
+    if (slide.type === "announcement" && slide.announcementId) {
+      const photo = slide.announcementId.photo;
+      if (photo) {
+        return `${BACKEND_URL}/${photo}`;
+      }
+    }
+    return image1;
+  };
+
+  // Helper function to get title
+  const getTitle = (slide) => {
+    if (slide.type === "custom") {
+      return slide.customContent.title;
+    }
+    if (slide.type === "announcement" && slide.announcementId) {
+      return slide.announcementId.title;
+    }
+    return "";
+  };
+
+  // Helper function to get description
+  const getDescription = (slide) => {
+    if (slide.type === "custom") {
+      return slide.customContent.description;
+    }
+    if (slide.type === "announcement" && slide.announcementId) {
+      // Return first 200 chars of content as description
+      const content = slide.announcementId.content;
+      return content.length > 100 ? content.substring(0, 100) + "..." : content;
+    }
+    return "";
+  };
+
+  // Helper function to get link
+  const getLink = (slide) => {
+    if (slide.type === "custom") {
+      return slide.customContent.link;
+    }
+    if (slide.type === "announcement" && slide.announcementId) {
+      return slide.announcementId.link;
+    }
+    return null;
+  };
+
+  // Helper function to get category badge (for announcement)
+  const getCategoryBadge = (slide) => {
+    if (slide.type === "announcement" && slide.announcementId) {
+      const categoryMap = {
+        event: { label: "Event", color: "bg-purple-500" },
+        lowongan: { label: "Lowongan", color: "bg-green-500" },
+        pengumuman: { label: "Pengumuman", color: "bg-blue-500" },
+      };
+      return categoryMap[slide.announcementId.category] || null;
+    }
+    return null;
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,7 +105,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
       <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden">
         {/* Full Width Viewport */}
         <div className="overflow-hidden h-full">
-          ,
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
@@ -56,8 +114,8 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
               transition={{ duration: 1, ease: "easeInOut" }}
               className="absolute inset-0">
               <img
-                src={slides[index].img}
-                alt={slides[index].label}
+                src={getImageUrl(slides[index])}
+                alt={getTitle(slides[index])}
                 className="w-full h-full object-cover"
               />
               {/* Dark overlay for better text readability */}
@@ -70,19 +128,35 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-20">
                 <div className="max-w-7xl mx-auto">
+                  {/* Category Badge for Announcement */}
+                  {getCategoryBadge(slides[index]) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6, duration: 0.6 }}
+                      className="mb-4">
+                      <span
+                        className={`inline-block px-4 py-2 rounded-full text-white text-sm font-semibold ${
+                          getCategoryBadge(slides[index]).color
+                        }`}>
+                        {getCategoryBadge(slides[index]).label}
+                      </span>
+                    </motion.div>
+                  )}
+
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.6 }}
                     className="text-white text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 drop-shadow-2xl">
-                    {slides[index].label}
+                    {getTitle(slides[index])}
                   </motion.h2>
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9, duration: 0.6 }}
                     className="text-white/90 text-lg md:text-xl lg:text-2xl mb-6 drop-shadow-lg">
-                    {slides[index].subtitle}
+                    {getDescription(slides[index])}
                   </motion.p>
                   <motion.div
                     initial={{ scaleX: 0 }}
@@ -90,6 +164,19 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                     transition={{ delay: 1.1, duration: 0.8 }}
                     className="h-1 w-32 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full origin-left"
                   />
+                  {/* Optional: Add link button if link exists */}
+                  {getLink(slides[index]) && (
+                    <motion.a
+                      href={getLink(slides[index])}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.3, duration: 0.6 }}
+                      className="inline-block mt-6 px-6 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all hover:scale-105">
+                      Selengkapnya →
+                    </motion.a>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

@@ -57,9 +57,7 @@ class AuthController {
 
   adminLogin = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.service.adminLogin(req.body);
-    logger.info("Admin logged in:", user);
     this.setCookies(res, user.accessToken, user.refreshToken);
-    logger.info("Cookies set for admin login : ", res.cookie);
     return res.send(
       ApiResponse.success(null, "Admin logged in successfully", 200)
     );
@@ -68,7 +66,6 @@ class AuthController {
   createAdmin = asyncHandler(async (req: Request, res: Response) => {
     if (process.env.NODE_ENV !== "development") throw ApiError.forbidden();
     const currentUser = req.user as JWTPayload | undefined;
-    logger.info("Current User creating admin:", currentUser);
     const user = await this.service.createAdmin(req.body, currentUser?.id);
     return ApiResponse.success(null, "Admin created successfully", 201);
   });

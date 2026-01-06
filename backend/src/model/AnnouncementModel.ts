@@ -46,7 +46,7 @@ const announcementSchema = new mongoose.Schema(
   }
 );
 
-announcementSchema.index({ title: 1 });
+// announcementSchema.index({ title: 1 });
 
 const AnnouncementModel = mongoose.model(
   "announcement_collection",

@@ -86,8 +86,8 @@ const PreviewAnnouncement = () => {
       minute: "2-digit",
     };
     if (dateString === null) {
-      const Date = new Date();
-      return Date.toLocaleDateString("id-ID", options);
+      const date = new Date();
+      return date.toLocaleDateString("id-ID", options);
     }
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };

@@ -35,7 +35,9 @@ const highlightSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-highlightSchema.index({ announcementId: 1 }, { unique: true, sparse: true });
+// highlightSchema.index({ announcementId: 1 }, { unique: true, sparse: true });
+//
+// highlightSchema.index({ "customContent.title": 1 }, { unique: true });
 
 export const HighlightModel = mongoose.model(
   "highlight_collection",

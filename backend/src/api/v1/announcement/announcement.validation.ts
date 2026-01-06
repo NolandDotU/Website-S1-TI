@@ -33,6 +33,7 @@ export const AnnouncementSchema = z
 
     category: z
       .string()
+      .lowercase()
       .refine((val) => ["event", "lowongan", "pengumuman"].includes(val), {
         message: "Category tidak valid",
       }),

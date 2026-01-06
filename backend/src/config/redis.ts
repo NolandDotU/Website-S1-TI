@@ -26,6 +26,10 @@ export const connectRedis = async (): Promise<RedisClientType | null> => {
       },
     });
 
+    redisClient.on("connect", () => {
+      logger.info("Redis connected and ready");
+    });
+
     redisClient.on("error", (err) => {
       logger.error("Redis error:", err.message);
     });
@@ -46,6 +50,7 @@ export const connectRedis = async (): Promise<RedisClientType | null> => {
 };
 
 export const getRedisClient = (): RedisClientType | null => {
+  console.log("Redis client:", redisClient);
   return redisClient;
 };
 

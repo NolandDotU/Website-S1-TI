@@ -54,8 +54,8 @@ export const LecturerSchema = new Schema(
   }
 );
 
-LecturerSchema.index({ username: 1 }, { unique: true });
-LecturerSchema.index({ email: 1 }, { unique: true });
+// LecturerSchema.index({ username: 1 }, { unique: true });
+// LecturerSchema.index({ email: 1 }, { unique: true });
 
 export const LecturerModel = mongoose.model<ILecturerDoc>(
   "lecturer_collection",

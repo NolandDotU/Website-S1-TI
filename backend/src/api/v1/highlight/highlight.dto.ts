@@ -1,9 +1,10 @@
+import { ObjectId } from "mongoose";
 import z from "zod";
 
 const CustomContentSchema = z.object({
   title: z.string().min(1).max(100),
   description: z.string().min(1).max(500),
-  imageUrl: z.string().url(),
+  imageUrl: z.string(),
   link: z.string().url().optional(),
 });
 
@@ -14,7 +15,7 @@ export const CreateHighlightSchema = z.object({
   order: z.number().int().min(1),
 });
 
-export interface CreateHighlightDTO {
+export interface HighlightDTO {
   type: "announcement" | "custom";
   announcementId?: string;
   customContent?: {
