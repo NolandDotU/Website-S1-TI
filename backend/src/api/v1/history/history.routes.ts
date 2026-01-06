@@ -27,3 +27,5 @@ router.get(
     res.send(ApiResponse.success(data, "History fetched successfully", 200));
   })
 );
+
+export default router;

@@ -4,6 +4,7 @@ import lecturerRoutes from "./lecturer/lecturer.routes";
 import newsRoutes from "./announcement/announcement.routes";
 import authRoutes from "./auth/auth.routes";
 import highlightRoutes from "./highlight/highlight.routes";
+import historyRoutes from "./history/history.routes";
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ router.use("/lecturers", lecturerRoutes);
 router.use("/announcements", newsRoutes);
 router.use("/auth", authRoutes);
 router.use("/highlight", highlightRoutes);
+router.use("/history", historyRoutes);
 
 export default router;

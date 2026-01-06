@@ -7,9 +7,9 @@ import { env } from "../services/utils/env";
 const defaultSlides = [
   {
     _id: "1",
-    type: "custom",
+    type: "default",
     customContent: {
-      title: "Fakultas Teknologi Informasi",
+      title: "S1 Teknik Informatika",
       description: "Membangun Masa Depan Digital",
       imageUrl: image1,
     },
@@ -21,7 +21,12 @@ const defaultSlides = [
 const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const BACKEND_URL = env.BACKEND_URL;
   const [index, setIndex] = useState(0);
-  const count = slides.length;
+
+  // Filter only active slides and use default if empty
+  const activeSlides = slides.filter((slide) => slide.isActive !== false);
+  const finalSlides =
+    !activeSlides || activeSlides.length === 0 ? defaultSlides : activeSlides;
+  const count = finalSlides.length;
 
   const prev = () => setIndex((i) => (i - 1 + count) % count);
   const next = () => setIndex((i) => (i + 1) % count);
@@ -30,12 +35,9 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   // Helper function to get image URL
   const getImageUrl = (slide) => {
     if (slide.type === "custom") {
-      // Check if imageUrl is a full URL or relative path
       const imageUrl = slide.customContent.imageUrl;
       return `${BACKEND_URL}/${imageUrl}`;
     }
-    // ...existing code...
-    // For announcement type
     if (slide.type === "announcement" && slide.announcementId) {
       const photo = slide.announcementId.photo;
       if (photo) {
@@ -47,7 +49,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
 
   // Helper function to get title
   const getTitle = (slide) => {
-    if (slide.type === "custom") {
+    if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.title;
     }
     if (slide.type === "announcement" && slide.announcementId) {
@@ -58,11 +60,10 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
 
   // Helper function to get description
   const getDescription = (slide) => {
-    if (slide.type === "custom") {
+    if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.description;
     }
     if (slide.type === "announcement" && slide.announcementId) {
-      // Return first 200 chars of content as description
       const content = slide.announcementId.content;
       return content.length > 100 ? content.substring(0, 100) + "..." : content;
     }
@@ -71,7 +72,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
 
   // Helper function to get link
   const getLink = (slide) => {
-    if (slide.type === "custom") {
+    if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.link;
     }
     if (slide.type === "announcement" && slide.announcementId) {
@@ -97,8 +98,110 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     const timer = setInterval(() => {
       next();
     }, autoPlayInterval);
+    // Empty state component
+    if (count <= 0) {
+      return (
+        <div className="w-full max-w-full mx-auto py-8 px-4">
+          <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center px-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5, type: "spring" }}
+                  className="mb-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-24 h-24 mx-auto text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </motion.div>
+                <motion.h3
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-2xl md:text-3xl font-bold text-gray-700 mb-3">
+                  Belum Ada Slide
+                </motion.h3>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  className="text-gray-500 text-lg">
+                  Saat ini tidak ada slide yang tersedia untuk ditampilkan
+                </motion.p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return () => clearInterval(timer);
   }, [index, autoPlayInterval]);
+
+  // Empty state component
+  if (count <= 0) {
+    return (
+      <div className="w-full max-w-full mx-auto py-8 px-4">
+        <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center px-6">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5, type: "spring" }}
+                className="mb-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-24 h-24 mx-auto text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </motion.div>
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="text-2xl md:text-3xl font-bold text-gray-700 mb-3">
+                Belum Ada Slide
+              </motion.h3>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="text-gray-500 text-lg">
+                Saat ini tidak ada slide yang tersedia untuk ditampilkan
+              </motion.p>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-full mx-auto py-8 px-4">
@@ -114,8 +217,8 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
               transition={{ duration: 1, ease: "easeInOut" }}
               className="absolute inset-0">
               <img
-                src={getImageUrl(slides[index])}
-                alt={getTitle(slides[index])}
+                src={getImageUrl(finalSlides[index])}
+                alt={getTitle(finalSlides[index])}
                 className="w-full h-full object-cover"
               />
               {/* Dark overlay for better text readability */}
@@ -129,7 +232,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                 className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-20">
                 <div className="max-w-7xl mx-auto">
                   {/* Category Badge for Announcement */}
-                  {getCategoryBadge(slides[index]) && (
+                  {getCategoryBadge(finalSlides[index]) && (
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -137,9 +240,9 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                       className="mb-4">
                       <span
                         className={`inline-block px-4 py-2 rounded-full text-white text-sm font-semibold ${
-                          getCategoryBadge(slides[index]).color
+                          getCategoryBadge(finalSlides[index]).color
                         }`}>
-                        {getCategoryBadge(slides[index]).label}
+                        {getCategoryBadge(finalSlides[index]).label}
                       </span>
                     </motion.div>
                   )}
@@ -149,14 +252,14 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.6 }}
                     className="text-white text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 drop-shadow-2xl">
-                    {getTitle(slides[index])}
+                    {getTitle(finalSlides[index])}
                   </motion.h2>
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9, duration: 0.6 }}
                     className="text-white/90 text-lg md:text-xl lg:text-2xl mb-6 drop-shadow-lg">
-                    {getDescription(slides[index])}
+                    {getDescription(finalSlides[index])}
                   </motion.p>
                   <motion.div
                     initial={{ scaleX: 0 }}
@@ -165,9 +268,9 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                     className="h-1 w-32 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full origin-left"
                   />
                   {/* Optional: Add link button if link exists */}
-                  {getLink(slides[index]) && (
+                  {getLink(finalSlides[index]) && (
                     <motion.a
-                      href={getLink(slides[index])}
+                      href={getLink(finalSlides[index])}
                       target="_blank"
                       rel="noopener noreferrer"
                       initial={{ opacity: 0, y: 20 }}
@@ -183,60 +286,64 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
           </AnimatePresence>
         </div>
 
-        {/* Navigation Controls */}
-        <button
-          type="button"
-          aria-label="Previous slide"
-          onClick={prev}
-          className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white p-4 transition-all hover:scale-110 z-10">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6">
-            <path
-              fillRule="evenodd"
-              d="M15.53 4.47a.75.75 0 0 1 0 1.06L9.06 12l6.47 6.47a.75.75 0 1 1-1.06 1.06l-7-7a.75.75 0 0 1 0-1.06l7-7a.75.75 0 0 1 1.06 0Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Next slide"
-          onClick={next}
-          className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white p-4 transition-all hover:scale-110 z-10">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6">
-            <path
-              fillRule="evenodd"
-              d="M8.47 19.53a.75.75 0 0 1 0-1.06L14.94 12 8.47 5.53a.75.75 0 1 1 1.06-1.06l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 0 1-1.06 0Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-
-        {/* Progress Indicators */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
-          {slides.map((_, i) => (
+        {/* Navigation Controls - Only show if more than 1 slide */}
+        {count > 1 && (
+          <>
             <button
-              key={i}
-              onClick={() => goTo(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              className="group relative">
-              <div
-                className={`h-1 rounded-full transition-all duration-500 ${
-                  i === index
-                    ? "w-12 bg-white"
-                    : "w-8 bg-white/50 hover:bg-white/70"
-                }`}
-              />
+              type="button"
+              aria-label="Previous slide"
+              onClick={prev}
+              className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white p-4 transition-all hover:scale-110 z-10">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6">
+                <path
+                  fillRule="evenodd"
+                  d="M15.53 4.47a.75.75 0 0 1 0 1.06L9.06 12l6.47 6.47a.75.75 0 1 1-1.06 1.06l-7-7a.75.75 0 0 1 0-1.06l7-7a.75.75 0 0 1 1.06 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </button>
-          ))}
-        </div>
+            <button
+              type="button"
+              aria-label="Next slide"
+              onClick={next}
+              className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white p-4 transition-all hover:scale-110 z-10">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6">
+                <path
+                  fillRule="evenodd"
+                  d="M8.47 19.53a.75.75 0 0 1 0-1.06L14.94 12 8.47 5.53a.75.75 0 1 1 1.06-1.06l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 0 1-1.06 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            {/* Progress Indicators */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+              {finalSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className="group relative">
+                  <div
+                    className={`h-1 rounded-full transition-all duration-500 ${
+                      i === index
+                        ? "w-12 bg-white"
+                        : "w-8 bg-white/50 hover:bg-white/70"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

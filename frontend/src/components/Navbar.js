@@ -4,12 +4,14 @@ import Logo from "../assets/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
 import { env } from "../services/utils/env";
 import Toggle from "./Toggle";
+import { User2 } from "lucide-react";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownUser, setIsDropDownUser] = useState(false);
   const dropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
+  const [imgError, setImgError] = useState(false);
   const timeoutRef = useRef(null);
   const userTimeoutRef = useRef(null);
   const user = useAuth().user;
@@ -48,7 +50,15 @@ const Navbar = ({ theme, toggleTheme }) => {
     setIsDropDownUser(false);
   };
 
+  const getAvatarSrc = () => {
+    if (!user.photo || imgError) {
+      return <User2 />;
+    }
+    return `${BEurl}${user.photo}`;
+  };
+
   useEffect(() => {
+    console.log("USER :", user);
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -111,6 +121,11 @@ const Navbar = ({ theme, toggleTheme }) => {
                       className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                       Daftar Profil Dosen
                     </Link>
+                    <Link
+                      to="/tentang-program-studi"
+                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                      Tentang Program Studi
+                    </Link>
                   </div>
                 )}
               </li>
@@ -127,19 +142,32 @@ const Navbar = ({ theme, toggleTheme }) => {
                 onMouseEnter={handleUserMouseEnter}
                 onMouseLeave={handleUserMouseLeave}>
                 <button className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                  <img
-                    src={`${BEurl}${user.photo}`}
-                    alt={user.name || "User"}
-                    className="h-8 w-8 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
-                  />
+                  {imgError ? (
+                    <User2 />
+                  ) : (
+                    <img
+                      src={getAvatarSrc()}
+                      alt="User Avatar"
+                      className="h-8 w-8 rounded-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.style.display = "none";
+                        setImgError(true);
+                      }}
+                    />
+                  )}
                 </button>
                 {isDropDownUser && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email}
+                    {/* <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-sm font-semibold">
+                        {user.name || user.username}
                       </p>
+                      {user.emaill && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </p>
+                      )}
                     </div>
                     {/* <Link
                       to="/profile"

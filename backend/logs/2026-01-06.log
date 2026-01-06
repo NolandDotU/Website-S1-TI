@@ -1568,3 +1568,257 @@
 {"level":"info","limit":"10","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:03:25"}
 {"level":"debug","message":"Cache HIT: lecturers:v0:p1:l10:s","timestamp":"2026-01-06 16:03:26"}
 {"level":"http","message":"GET /api/v1/lecturers?page=1&limit=10&search= 304 - - 117.401 ms","timestamp":"2026-01-06 16:03:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:05:09"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 514.858 ms","timestamp":"2026-01-06 16:05:09"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 538.785 ms","timestamp":"2026-01-06 16:05:09"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:05:09"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 50.056 ms","timestamp":"2026-01-06 16:05:09"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 72.611 ms","timestamp":"2026-01-06 16:05:09"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:07:22"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 494.071 ms","timestamp":"2026-01-06 16:07:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 537.300 ms","timestamp":"2026-01-06 16:07:22"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:07:22"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 58.678 ms","timestamp":"2026-01-06 16:07:22"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 63.572 ms","timestamp":"2026-01-06 16:07:22"}
+{"level":"http","message":"GET / 404 45 - 0.274 ms","timestamp":"2026-01-06 16:07:23"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 70.491 ms","timestamp":"2026-01-06 16:07:28"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:07:28"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 77.353 ms","timestamp":"2026-01-06 16:07:28"}
+{"level":"http","message":"GET / 404 45 - 0.256 ms","timestamp":"2026-01-06 16:07:28"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 48.678 ms","timestamp":"2026-01-06 16:07:28"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:07:28"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 49.502 ms","timestamp":"2026-01-06 16:07:28"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:09:21"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 465.935 ms","timestamp":"2026-01-06 16:09:21"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:09:21"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 34.421 ms","timestamp":"2026-01-06 16:09:21"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 200 156 - 893.369 ms","timestamp":"2026-01-06 16:09:22"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 117.836 ms","timestamp":"2026-01-06 16:09:22"}
+{"level":"info","limit":"100","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:09:51"}
+{"0":{"email":"afiasyer@gmail.com","expertise":["Data Science & Machine Learning (Computer Vision, NLP, Data Mining)","Artificial Intelligence (YOLO, Deep Learning, Neuro-Fuzzy, Expert Systems)"],"externalLink":null,"fullname":"Afiyatar Asyer, S. Kom. ","id":"693177da1ca09be5737e1539","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=10u8pl5Xty6G5pdL9sOPT55EwCb8oH9hH","username":"972023028@student.uksw.edu"},"1":{"email":"adi.nugroho@uksw.edu","expertise":["Database","Programming","Software Engineering","Machine Learning","Data Science"],"externalLink":"https://scholar.google.com/citations?user=SzV1emoAAAAJ&hl=id","fullname":"Dr. Adi Nugroho, ST, MMSI","id":"693177da1ca09be5737e153a","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1903uQvK1Gz6ssUn9F-G9EhewCq_6MBQ8","username":"adi.nugroho@uksw.edu"},"10":{"email":"eryka.ekaliadewi@uksw.edu","expertise":["Matematika Komputer","Computer Manufacturing","Operational Research"],"externalLink":null,"fullname":"Eryka Pandu Ekaliadewi, ST, M.Eng","id":"693177da1ca09be5737e153b","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1sm2vUWKoi6FYnQVyLkYLFQItMWQY7urf","username":"eryka.ekaliadewi@uksw.edu"},"11":{"email":"hilda.momongan@uksw.edu","expertise":["Bahasa Inggris"],"externalLink":null,"fullname":"Hilda Saranita M. Momongan, M.Pd","id":"693177da1ca09be5737e1538","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1BkL2NTPVpnmnRIxlPkTOj7qs-OIuW28L","username":"hilda.momongan@uksw.edu"},"12":{"email":"hindriyanto.purnomo@uksw.edu","expertise":["Metaheuristics","Applied Soft Computing","Machine Learning"],"externalLink":null,"fullname":"Prof. Hindriyanto Dwi Purnomo, S.T., M.IT., Ph.D","id":"693177da1ca09be5737e1532","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1rfbXC4VJW-9KWeeyPMN-boeZbzubViG-","username":"hindriyanto.purnomo@uksw.edu"},"13":{"email":"martza.swastikasari@uksw.edu","expertise":["Teknologi dan Manajemen Pendidikan"],"externalLink":null,"fullname":"Martza Merry Swastikasari, S.Kom., M.Kom.","id":"693177da1ca09be5737e153d","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1eUy9HGHGdtnstoBt-bkSZbpw48UP2b_U","username":"martza.swastikasari@uksw.edu"},"14":{"email":"pratyaksa.ocsa@uksw.edu","expertise":["Web Programming","Mobile Programming","Software Engineering"],"externalLink":null,"fullname":"Pratyaksa Ocsa Nugraha Saian, S.Kom., M.T.","id":"693177da1ca09be5737e1534","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1xTxOf0rJqkNqwZJePPb7-MqQ18psPP7-","username":"pratyaksa.ocsa@uksw.edu"},"15":{"email":"rissal.efendi@uksw.edu","expertise":["Keamanan Jaringan Komputer (Data Siber)","Reviewer Jurnal Internasional Q2 "],"externalLink":null,"fullname":"Rissal Efendi, M.Kom.","id":"693177da1ca09be5737e153e","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1mxrBOx3fwqb55XsCKnHiQ7FeGu24tyXP","username":"rissal.efendi@uksw.edu"},"16":{"email":"teguh.bayu@uksw.edu","expertise":["Computer Networks and Communications ","Vehicular Communications","Computer Networks Security"],"externalLink":null,"fullname":"Teguh Indra Bayu, S.Kom., M.Cs., Ph.D.","id":"693177da1ca09be5737e152d","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1zbZfJ9GiouLfg3jS6u286bZ5iDqJQ6v6","username":"teguh.bayu@uksw.edu"},"17":{"email":"virgelius.taralandu@uksw.edu","expertise":["Data Science"],"externalLink":"https://hendraatara91.github.io/hendratara.github.io/?fbclid=PAdGRjcAMjhApleHRuA2FlbQIxMQABp6ZXRWeKMfwtJ71IqSKiLbOyC17C8Hgq5fj6A4avG2r3xhWDXfTakWZ3CwLr_aem_xuwuH6D7mJ4dwTQ0jDxwQw","fullname":"VIRGELIUS HENDRAWAN TARALANDU, S.Kom","id":"693177da1ca09be5737e153c","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1HBwqoqpOyJy-6mkTYFhSn8Cp2cp2-iEw","username":"virgelius.taralandu@uksw.edu"},"2":{"email":"anglingkusumandhita@gmail.com","expertise":["Web Programming, Desktop Programming","Mobile Programming","Artificial Intelegence"],"externalLink":"https://www.instagram.com/angling_kusumandhita.raden/ ","fullname":"Angling Kusumandhita Raden, S.T., M.M.","id":"693177da1ca09be5737e1536","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1gsE3Wx5iLdtjiI5voZ-aClvKXg9zpGYU","username":"anglingkusumandhita@gmail.com"},"3":{"email":"kristoko@uksw.edu","expertise":["Artificial Intelligence & Machine Learning","Time Series Forecasting & Data Analytics"],"externalLink":null,"fullname":"Prof. Dr. Kristoko Dwi Hartomo, M.Kom","id":"693177da1ca09be5737e152f","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EUNhY9oWYcfifpO7ZCVDBcGEo_VUA0g6","username":"backupham387@gmail.com"},"4":{"email":"charitas.fibriani@uksw.edu","expertise":["Data Analysis"],"externalLink":null,"fullname":"Dr. Charitas Fibriani, S.Kom., M.Eng.","id":"693177da1ca09be5737e1537","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1V37DGeAsJ37FcKbDfyNjNrPdYGZe4xLg","username":"charitasf@gmail.com"},"5":{"email":"chris.rudianto@uksw.edu","expertise":["Sistem Dan Teknologi Informasi","e-Government/Pemerintah Digital"],"externalLink":null,"fullname":"Ir. Christ Rudianto, MT.","id":"693177da1ca09be5737e152e","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1CoXC2H228T4WARHrwc6NrN_fjrYTc-sR","username":"chris.rudianto@uksw.edu"},"6":{"email":"christa.tehusalawany@uksw.edu","expertise":["English as a foreign language teaching","English for Specific Purposes","Indonesian language for foreign speakers"],"externalLink":"LinkedIn https://id.linkedin.com/in/christa-tehusalawany","fullname":"Christa Audrea Yosevana Tehusalawany, M.Pd.","id":"693177da1ca09be5737e1535","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1wKcD71EjroHz0YppVOqfyGQ4_uKQAPtQ","username":"christa.tehusalawany@uksw.edu"},"7":{"email":"danang.widiatmoko@uksw.edu","expertise":["Human and Computer Interaction","Web Design","Web Programming","UI/UX Design","UX Design","Design and Multimedia","Graphic Design","Design Analysis","Media Production"],"externalLink":null,"fullname":"Danang Tri Widiatmoko, S.Ds., M.Kom.","id":"693177da1ca09be5737e1533","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1AdUqrG8ELNPNntIQHFF8LI8dNSVOthBK","username":"danang.widiatmoko@uksw.edu"},"8":{"email":"daniel.kurniawan@uksw.edu","expertise":["Bahasa Inggris"],"externalLink":null,"fullname":"Daniel Kurniawan, M.Pd., M.Pd.","id":"693177da1ca09be5737e1531","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EDwVonP9zflg4hBk5zyCy-kQAJjAEfkx","username":"daniel.kurniawan@uksw.edu"},"9":{"email":"edna.maria@uksw.edu","expertise":["Matematika Komputer","Pemrograman Database"],"externalLink":"-","fullname":"Edna Maria, S. Kom., M. Pd. ","id":"693177da1ca09be5737e1530","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1g8GziYPEZizwCBtQxKc7vx6C6neaJNYF","username":"edna.maria@uksw.edu"},"level":"info","message":"lecturers : ","timestamp":"2026-01-06 16:09:52"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=100&search= 304 - - 668.554 ms","timestamp":"2026-01-06 16:09:52"}
+{"level":"info","limit":"100","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:09:52"}
+{"level":"debug","message":"Cache HIT: lecturers:v0:p1:l100:s","timestamp":"2026-01-06 16:09:52"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=100&search= 304 - - 130.231 ms","timestamp":"2026-01-06 16:09:52"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 483.459 ms","timestamp":"2026-01-06 16:11:56"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 46.865 ms","timestamp":"2026-01-06 16:11:56"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 123.450 ms","timestamp":"2026-01-06 16:11:57"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 118.602 ms","timestamp":"2026-01-06 16:11:57"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:11:57"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 365.508 ms","timestamp":"2026-01-06 16:11:57"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:11:57"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 48.817 ms","timestamp":"2026-01-06 16:11:57"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:12:00"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 52.617 ms","timestamp":"2026-01-06 16:12:00"}
+{"level":"http","message":"GET //static/media/image.56652d556d7bf54e2234.png 404 45 - 0.262 ms","timestamp":"2026-01-06 16:12:00"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:12:00"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 46.247 ms","timestamp":"2026-01-06 16:12:00"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 468.284 ms","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 474.603 ms","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET / 404 45 - 0.155 ms","timestamp":"2026-01-06 16:12:54"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 58.560 ms","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 49.659 ms","timestamp":"2026-01-06 16:12:54"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 115.058 ms","timestamp":"2026-01-06 16:28:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:28:26"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 558.433 ms","timestamp":"2026-01-06 16:28:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:28:26"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 61.045 ms","timestamp":"2026-01-06 16:28:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:29:02"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 347.015 ms","timestamp":"2026-01-06 16:29:02"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:29:02"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 50.038 ms","timestamp":"2026-01-06 16:29:02"}
+{"level":"info","limit":"100","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:30:13"}
+{"0":{"email":"afiasyer@gmail.com","expertise":["Data Science & Machine Learning (Computer Vision, NLP, Data Mining)","Artificial Intelligence (YOLO, Deep Learning, Neuro-Fuzzy, Expert Systems)"],"externalLink":null,"fullname":"Afiyatar Asyer, S. Kom. ","id":"693177da1ca09be5737e1539","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=10u8pl5Xty6G5pdL9sOPT55EwCb8oH9hH","username":"972023028@student.uksw.edu"},"1":{"email":"adi.nugroho@uksw.edu","expertise":["Database","Programming","Software Engineering","Machine Learning","Data Science"],"externalLink":"https://scholar.google.com/citations?user=SzV1emoAAAAJ&hl=id","fullname":"Dr. Adi Nugroho, ST, MMSI","id":"693177da1ca09be5737e153a","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1903uQvK1Gz6ssUn9F-G9EhewCq_6MBQ8","username":"adi.nugroho@uksw.edu"},"10":{"email":"eryka.ekaliadewi@uksw.edu","expertise":["Matematika Komputer","Computer Manufacturing","Operational Research"],"externalLink":null,"fullname":"Eryka Pandu Ekaliadewi, ST, M.Eng","id":"693177da1ca09be5737e153b","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1sm2vUWKoi6FYnQVyLkYLFQItMWQY7urf","username":"eryka.ekaliadewi@uksw.edu"},"11":{"email":"hilda.momongan@uksw.edu","expertise":["Bahasa Inggris"],"externalLink":null,"fullname":"Hilda Saranita M. Momongan, M.Pd","id":"693177da1ca09be5737e1538","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1BkL2NTPVpnmnRIxlPkTOj7qs-OIuW28L","username":"hilda.momongan@uksw.edu"},"12":{"email":"hindriyanto.purnomo@uksw.edu","expertise":["Metaheuristics","Applied Soft Computing","Machine Learning"],"externalLink":null,"fullname":"Prof. Hindriyanto Dwi Purnomo, S.T., M.IT., Ph.D","id":"693177da1ca09be5737e1532","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1rfbXC4VJW-9KWeeyPMN-boeZbzubViG-","username":"hindriyanto.purnomo@uksw.edu"},"13":{"email":"martza.swastikasari@uksw.edu","expertise":["Teknologi dan Manajemen Pendidikan"],"externalLink":null,"fullname":"Martza Merry Swastikasari, S.Kom., M.Kom.","id":"693177da1ca09be5737e153d","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1eUy9HGHGdtnstoBt-bkSZbpw48UP2b_U","username":"martza.swastikasari@uksw.edu"},"14":{"email":"pratyaksa.ocsa@uksw.edu","expertise":["Web Programming","Mobile Programming","Software Engineering"],"externalLink":null,"fullname":"Pratyaksa Ocsa Nugraha Saian, S.Kom., M.T.","id":"693177da1ca09be5737e1534","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1xTxOf0rJqkNqwZJePPb7-MqQ18psPP7-","username":"pratyaksa.ocsa@uksw.edu"},"15":{"email":"rissal.efendi@uksw.edu","expertise":["Keamanan Jaringan Komputer (Data Siber)","Reviewer Jurnal Internasional Q2 "],"externalLink":null,"fullname":"Rissal Efendi, M.Kom.","id":"693177da1ca09be5737e153e","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1mxrBOx3fwqb55XsCKnHiQ7FeGu24tyXP","username":"rissal.efendi@uksw.edu"},"16":{"email":"teguh.bayu@uksw.edu","expertise":["Computer Networks and Communications ","Vehicular Communications","Computer Networks Security"],"externalLink":null,"fullname":"Teguh Indra Bayu, S.Kom., M.Cs., Ph.D.","id":"693177da1ca09be5737e152d","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1zbZfJ9GiouLfg3jS6u286bZ5iDqJQ6v6","username":"teguh.bayu@uksw.edu"},"17":{"email":"virgelius.taralandu@uksw.edu","expertise":["Data Science"],"externalLink":"https://hendraatara91.github.io/hendratara.github.io/?fbclid=PAdGRjcAMjhApleHRuA2FlbQIxMQABp6ZXRWeKMfwtJ71IqSKiLbOyC17C8Hgq5fj6A4avG2r3xhWDXfTakWZ3CwLr_aem_xuwuH6D7mJ4dwTQ0jDxwQw","fullname":"VIRGELIUS HENDRAWAN TARALANDU, S.Kom","id":"693177da1ca09be5737e153c","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1HBwqoqpOyJy-6mkTYFhSn8Cp2cp2-iEw","username":"virgelius.taralandu@uksw.edu"},"2":{"email":"anglingkusumandhita@gmail.com","expertise":["Web Programming, Desktop Programming","Mobile Programming","Artificial Intelegence"],"externalLink":"https://www.instagram.com/angling_kusumandhita.raden/ ","fullname":"Angling Kusumandhita Raden, S.T., M.M.","id":"693177da1ca09be5737e1536","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1gsE3Wx5iLdtjiI5voZ-aClvKXg9zpGYU","username":"anglingkusumandhita@gmail.com"},"3":{"email":"kristoko@uksw.edu","expertise":["Artificial Intelligence & Machine Learning","Time Series Forecasting & Data Analytics"],"externalLink":null,"fullname":"Prof. Dr. Kristoko Dwi Hartomo, M.Kom","id":"693177da1ca09be5737e152f","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EUNhY9oWYcfifpO7ZCVDBcGEo_VUA0g6","username":"backupham387@gmail.com"},"4":{"email":"charitas.fibriani@uksw.edu","expertise":["Data Analysis"],"externalLink":null,"fullname":"Dr. Charitas Fibriani, S.Kom., M.Eng.","id":"693177da1ca09be5737e1537","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1V37DGeAsJ37FcKbDfyNjNrPdYGZe4xLg","username":"charitasf@gmail.com"},"5":{"email":"chris.rudianto@uksw.edu","expertise":["Sistem Dan Teknologi Informasi","e-Government/Pemerintah Digital"],"externalLink":null,"fullname":"Ir. Christ Rudianto, MT.","id":"693177da1ca09be5737e152e","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1CoXC2H228T4WARHrwc6NrN_fjrYTc-sR","username":"chris.rudianto@uksw.edu"},"6":{"email":"christa.tehusalawany@uksw.edu","expertise":["English as a foreign language teaching","English for Specific Purposes","Indonesian language for foreign speakers"],"externalLink":"LinkedIn https://id.linkedin.com/in/christa-tehusalawany","fullname":"Christa Audrea Yosevana Tehusalawany, M.Pd.","id":"693177da1ca09be5737e1535","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1wKcD71EjroHz0YppVOqfyGQ4_uKQAPtQ","username":"christa.tehusalawany@uksw.edu"},"7":{"email":"danang.widiatmoko@uksw.edu","expertise":["Human and Computer Interaction","Web Design","Web Programming","UI/UX Design","UX Design","Design and Multimedia","Graphic Design","Design Analysis","Media Production"],"externalLink":null,"fullname":"Danang Tri Widiatmoko, S.Ds., M.Kom.","id":"693177da1ca09be5737e1533","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1AdUqrG8ELNPNntIQHFF8LI8dNSVOthBK","username":"danang.widiatmoko@uksw.edu"},"8":{"email":"daniel.kurniawan@uksw.edu","expertise":["Bahasa Inggris"],"externalLink":null,"fullname":"Daniel Kurniawan, M.Pd., M.Pd.","id":"693177da1ca09be5737e1531","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EDwVonP9zflg4hBk5zyCy-kQAJjAEfkx","username":"daniel.kurniawan@uksw.edu"},"9":{"email":"edna.maria@uksw.edu","expertise":["Matematika Komputer","Pemrograman Database"],"externalLink":"-","fullname":"Edna Maria, S. Kom., M. Pd. ","id":"693177da1ca09be5737e1530","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1g8GziYPEZizwCBtQxKc7vx6C6neaJNYF","username":"edna.maria@uksw.edu"},"level":"info","message":"lecturers : ","timestamp":"2026-01-06 16:30:13"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=100&search= 304 - - 776.350 ms","timestamp":"2026-01-06 16:30:13"}
+{"level":"info","limit":"100","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:30:13"}
+{"level":"debug","message":"Cache HIT: lecturers:v0:p1:l100:s","timestamp":"2026-01-06 16:30:13"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=100&search= 304 - - 139.072 ms","timestamp":"2026-01-06 16:30:13"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 502.726 ms","timestamp":"2026-01-06 16:31:23"}
+{"level":"http","message":"GET / 404 45 - 0.190 ms","timestamp":"2026-01-06 16:31:23"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 58.617 ms","timestamp":"2026-01-06 16:31:23"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 949.556 ms","timestamp":"2026-01-06 16:32:18"}
+{"level":"http","message":"GET / 404 45 - 0.186 ms","timestamp":"2026-01-06 16:32:18"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 67.148 ms","timestamp":"2026-01-06 16:32:18"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 592.659 ms","timestamp":"2026-01-06 16:33:14"}
+{"level":"http","message":"GET / 404 45 - 0.275 ms","timestamp":"2026-01-06 16:33:14"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 64.257 ms","timestamp":"2026-01-06 16:33:14"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 544.619 ms","timestamp":"2026-01-06 16:35:39"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 55.835 ms","timestamp":"2026-01-06 16:35:39"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 467.220 ms","timestamp":"2026-01-06 16:36:35"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 91.242 ms","timestamp":"2026-01-06 16:36:35"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 50.852 ms","timestamp":"2026-01-06 16:36:43"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 61.780 ms","timestamp":"2026-01-06 16:36:43"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 532.800 ms","timestamp":"2026-01-06 16:37:35"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 67.658 ms","timestamp":"2026-01-06 16:37:35"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 438.235 ms","timestamp":"2026-01-06 16:37:46"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 69.920 ms","timestamp":"2026-01-06 16:37:46"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:40:36"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 573.501 ms","timestamp":"2026-01-06 16:40:36"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:40:36"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 46.220 ms","timestamp":"2026-01-06 16:40:36"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 123.438 ms","timestamp":"2026-01-06 16:41:39"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 118.356 ms","timestamp":"2026-01-06 16:41:39"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:41:40"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 399.686 ms","timestamp":"2026-01-06 16:41:40"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:41:40"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 49.482 ms","timestamp":"2026-01-06 16:41:40"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 486.691 ms","timestamp":"2026-01-06 16:46:30"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 48.504 ms","timestamp":"2026-01-06 16:46:30"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 462.840 ms","timestamp":"2026-01-06 16:48:20"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 46.433 ms","timestamp":"2026-01-06 16:48:20"}
+{"level":"http","message":"GET /api/v1/history/ 404 45 - 0.337 ms","timestamp":"2026-01-06 16:48:44"}
+{"level":"http","message":"GET /api/v1/history/ 404 45 - 0.190 ms","timestamp":"2026-01-06 16:48:44"}
+{"level":"http","message":"GET /api/v1/history/ 404 45 - 0.186 ms","timestamp":"2026-01-06 16:49:08"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 422.594 ms","timestamp":"2026-01-06 16:49:13"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 41.414 ms","timestamp":"2026-01-06 16:49:13"}
+{"level":"http","message":"GET /api/v1/history/ 404 45 - 0.403 ms","timestamp":"2026-01-06 16:49:13"}
+{"level":"http","message":"GET /api/v1/history/ 404 45 - 0.198 ms","timestamp":"2026-01-06 16:49:13"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 16:51:12"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 16:51:12"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 16:51:12"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 16:51:12"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 16:51:15"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 16:51:16"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 16:51:16"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 16:51:16"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 16:51:16"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 16:51:16"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 16:51:16"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 73.766 ms","timestamp":"2026-01-06 16:51:20"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 57.334 ms","timestamp":"2026-01-06 16:51:20"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 159.857 ms","timestamp":"2026-01-06 16:51:23"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 293.436 ms","timestamp":"2026-01-06 16:51:23"}
+{"level":"http","message":"GET /api/v1/history/ 200 84 - 61.289 ms","timestamp":"2026-01-06 16:51:29"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 62.800 ms","timestamp":"2026-01-06 16:51:29"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 542.018 ms","timestamp":"2026-01-06 16:52:25"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 81.108 ms","timestamp":"2026-01-06 16:52:25"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 54.491 ms","timestamp":"2026-01-06 16:52:34"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 78.597 ms","timestamp":"2026-01-06 16:52:40"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 1018.959 ms","timestamp":"2026-01-06 16:55:19"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 578.415 ms","timestamp":"2026-01-06 16:55:19"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:55:20"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 1933.116 ms","timestamp":"2026-01-06 16:55:20"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:55:20"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 174.614 ms","timestamp":"2026-01-06 16:55:20"}
+{"level":"error","message":"[\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"announcement\",\n      \"custom\"\n    ],\n    \"path\": [\n      \"type\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"announcement\\\"|\\\"custom\\\"\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"order\"\n    ],\n    \"message\": \"Invalid input: expected number, received undefined\"\n  }\n]","name":"ZodError","stack":"ZodError: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"announcement\",\n      \"custom\"\n    ],\n    \"path\": [\n      \"type\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"announcement\\\"|\\\"custom\\\"\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"order\"\n    ],\n    \"message\": \"Invalid input: expected number, received undefined\"\n  }\n]\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:9:25\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:28:7\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:825:5","timestamp":"2026-01-06 16:55:29"}
+{"level":"error","message":"Invalid option: expected one of \"announcement\"|\"custom\", Invalid input: expected number, received undefined","method":"POST","stack":"Error: Invalid option: expected one of \"announcement\"|\"custom\", Invalid input: expected number, received undefined\n    at Function.badRequest (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:24:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:14:24\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:28:7\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-01-06 16:55:29","url":"/api/v1/highlight/"}
+{"level":"http","message":"POST /api/v1/highlight/ 400 - - 8.645 ms","timestamp":"2026-01-06 16:55:29"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 472.204 ms","timestamp":"2026-01-06 16:56:28"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 68.504 ms","timestamp":"2026-01-06 16:56:28"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 129.031 ms","timestamp":"2026-01-06 16:56:28"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 123.987 ms","timestamp":"2026-01-06 16:56:28"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:56:29"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 400.867 ms","timestamp":"2026-01-06 16:56:29"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:56:29"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 48.582 ms","timestamp":"2026-01-06 16:56:29"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 55.090 ms","timestamp":"2026-01-06 16:56:29"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 36.369 ms","timestamp":"2026-01-06 16:56:29"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:56:33"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 49.474 ms","timestamp":"2026-01-06 16:56:33"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-06 16:56:33"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 62.019 ms","timestamp":"2026-01-06 16:56:33"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 136.387 ms","timestamp":"2026-01-06 16:56:34"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 141.900 ms","timestamp":"2026-01-06 16:56:34"}
+{"level":"info","limit":"10","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:56:35"}
+{"0":{"email":"afiasyer@gmail.com","expertise":["Data Science & Machine Learning (Computer Vision, NLP, Data Mining)","Artificial Intelligence (YOLO, Deep Learning, Neuro-Fuzzy, Expert Systems)"],"externalLink":null,"fullname":"Afiyatar Asyer, S. Kom. ","id":"693177da1ca09be5737e1539","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=10u8pl5Xty6G5pdL9sOPT55EwCb8oH9hH","username":"972023028@student.uksw.edu"},"1":{"email":"adi.nugroho@uksw.edu","expertise":["Database","Programming","Software Engineering","Machine Learning","Data Science"],"externalLink":"https://scholar.google.com/citations?user=SzV1emoAAAAJ&hl=id","fullname":"Dr. Adi Nugroho, ST, MMSI","id":"693177da1ca09be5737e153a","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1903uQvK1Gz6ssUn9F-G9EhewCq_6MBQ8","username":"adi.nugroho@uksw.edu"},"2":{"email":"anglingkusumandhita@gmail.com","expertise":["Web Programming, Desktop Programming","Mobile Programming","Artificial Intelegence"],"externalLink":"https://www.instagram.com/angling_kusumandhita.raden/ ","fullname":"Angling Kusumandhita Raden, S.T., M.M.","id":"693177da1ca09be5737e1536","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1gsE3Wx5iLdtjiI5voZ-aClvKXg9zpGYU","username":"anglingkusumandhita@gmail.com"},"3":{"email":"kristoko@uksw.edu","expertise":["Artificial Intelligence & Machine Learning","Time Series Forecasting & Data Analytics"],"externalLink":null,"fullname":"Prof. Dr. Kristoko Dwi Hartomo, M.Kom","id":"693177da1ca09be5737e152f","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EUNhY9oWYcfifpO7ZCVDBcGEo_VUA0g6","username":"backupham387@gmail.com"},"4":{"email":"charitas.fibriani@uksw.edu","expertise":["Data Analysis"],"externalLink":null,"fullname":"Dr. Charitas Fibriani, S.Kom., M.Eng.","id":"693177da1ca09be5737e1537","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1V37DGeAsJ37FcKbDfyNjNrPdYGZe4xLg","username":"charitasf@gmail.com"},"5":{"email":"chris.rudianto@uksw.edu","expertise":["Sistem Dan Teknologi Informasi","e-Government/Pemerintah Digital"],"externalLink":null,"fullname":"Ir. Christ Rudianto, MT.","id":"693177da1ca09be5737e152e","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1CoXC2H228T4WARHrwc6NrN_fjrYTc-sR","username":"chris.rudianto@uksw.edu"},"6":{"email":"christa.tehusalawany@uksw.edu","expertise":["English as a foreign language teaching","English for Specific Purposes","Indonesian language for foreign speakers"],"externalLink":"LinkedIn https://id.linkedin.com/in/christa-tehusalawany","fullname":"Christa Audrea Yosevana Tehusalawany, M.Pd.","id":"693177da1ca09be5737e1535","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1wKcD71EjroHz0YppVOqfyGQ4_uKQAPtQ","username":"christa.tehusalawany@uksw.edu"},"7":{"email":"danang.widiatmoko@uksw.edu","expertise":["Human and Computer Interaction","Web Design","Web Programming","UI/UX Design","UX Design","Design and Multimedia","Graphic Design","Design Analysis","Media Production"],"externalLink":null,"fullname":"Danang Tri Widiatmoko, S.Ds., M.Kom.","id":"693177da1ca09be5737e1533","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1AdUqrG8ELNPNntIQHFF8LI8dNSVOthBK","username":"danang.widiatmoko@uksw.edu"},"8":{"email":"daniel.kurniawan@uksw.edu","expertise":["Bahasa Inggris"],"externalLink":null,"fullname":"Daniel Kurniawan, M.Pd., M.Pd.","id":"693177da1ca09be5737e1531","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1EDwVonP9zflg4hBk5zyCy-kQAJjAEfkx","username":"daniel.kurniawan@uksw.edu"},"9":{"email":"edna.maria@uksw.edu","expertise":["Matematika Komputer","Pemrograman Database"],"externalLink":"-","fullname":"Edna Maria, S. Kom., M. Pd. ","id":"693177da1ca09be5737e1530","isActive":true,"photo":"https://drive.google.com/u/0/open?usp=forms_web&id=1g8GziYPEZizwCBtQxKc7vx6C6neaJNYF","username":"edna.maria@uksw.edu"},"level":"info","message":"lecturers : ","timestamp":"2026-01-06 16:56:35"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=10&search= 304 - - 284.136 ms","timestamp":"2026-01-06 16:56:36"}
+{"level":"info","limit":"10","message":"Query params: ","page":"1","search":"","timestamp":"2026-01-06 16:56:36"}
+{"level":"debug","message":"Cache HIT: lecturers:v0:p1:l10:s","timestamp":"2026-01-06 16:56:36"}
+{"level":"http","message":"GET /api/v1/lecturers?page=1&limit=10&search= 304 - - 196.711 ms","timestamp":"2026-01-06 16:56:36"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 115.817 ms","timestamp":"2026-01-06 16:56:38"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 119.287 ms","timestamp":"2026-01-06 16:56:38"}
+{"destination":"uploads\\news","encoding":"7bit","fieldname":"photo","filename":"f59e739f-3cc4-425e-a0a1-5a3eff833982.webp","level":"info","message":"Image uploaded successfully","mimetype":"image/jpeg","originalname":"download.jpg","path":"uploads\\news\\f59e739f-3cc4-425e-a0a1-5a3eff833982.webp","size":11193,"timestamp":"2026-01-06 17:02:24"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 202 - 90.788 ms","timestamp":"2026-01-06 17:02:24"}
+{"level":"info","message":"Image uploaded successfully","timestamp":"2026-01-06 17:02:24"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 115 - 3.523 ms","timestamp":"2026-01-06 17:02:24"}
+{"level":"http","message":"POST /api/v1/announcements 200 - - 738.706 ms","timestamp":"2026-01-06 17:02:25"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 200 - - 590.753 ms","timestamp":"2026-01-06 17:02:25"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 77.999 ms","timestamp":"2026-01-06 17:02:31"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 62.412 ms","timestamp":"2026-01-06 17:02:31"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 77.802 ms","timestamp":"2026-01-06 17:02:34"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:03:07"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:03:07"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:03:07"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:03:07"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:03:08"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:03:09"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:04:29"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:04:29"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:04:29"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:04:29"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:04:30"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:04:31"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:04:45"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:04:45"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:04:45"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:04:45"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:04:46"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:04:46"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:04:46"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:04:47"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:04:47"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:04:47"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:04:47"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:05:13"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:05:13"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:05:13"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:05:13"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:05:14"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:05:14"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:05:14"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:05:15"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:05:15"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:05:15"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:05:15"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:05:53"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:05:53"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:05:53"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:05:53"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:05:54"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:05:55"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:05:55"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:05:55"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:05:55"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:05:55"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:05:55"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 106.479 ms","timestamp":"2026-01-06 17:05:57"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 53.058 ms","timestamp":"2026-01-06 17:05:58"}
+{"level":"http","message":"GET /api/v1/history/ 200 136 - 49.453 ms","timestamp":"2026-01-06 17:05:58"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 75.721 ms","timestamp":"2026-01-06 17:05:58"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-06 17:06:56"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-06 17:06:56"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-06 17:06:56"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-06 17:06:56"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-06 17:06:57"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-06 17:06:58"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-06 17:06:58"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:06:58"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-06 17:06:58"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-06 17:06:58"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-06 17:06:58"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 75.143 ms","timestamp":"2026-01-06 17:07:04"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 57.819 ms","timestamp":"2026-01-06 17:07:04"}
+{"level":"http","message":"GET /api/v1/history/ 200 - - 128.484 ms","timestamp":"2026-01-06 17:07:07"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 143.999 ms","timestamp":"2026-01-06 17:07:07"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 342.840 ms","timestamp":"2026-01-06 17:07:37"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 59.583 ms","timestamp":"2026-01-06 17:07:37"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 435.918 ms","timestamp":"2026-01-06 17:07:37"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 125.173 ms","timestamp":"2026-01-06 17:07:38"}
+{"level":"http","message":"GET /api/v1/history/ 304 - - 600.725 ms","timestamp":"2026-01-06 17:08:18"}
+{"level":"http","message":"POST /api/v1/auth/logout 200 73 - 0.730 ms","timestamp":"2026-01-06 17:08:29"}
+{"level":"error","message":"Session expired. Please login again","method":"GET","stack":"Error: Session expired. Please login again\n    at Function.unauthorized (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:28:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:38:26\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)","timestamp":"2026-01-06 17:08:29","url":"/api/v1/auth/me"}
+{"level":"http","message":"GET /api/v1/auth/me 401 - - 8.974 ms","timestamp":"2026-01-06 17:08:29"}
+{"level":"error","message":"Session expired. Please login again","method":"GET","stack":"Error: Session expired. Please login again\n    at Function.unauthorized (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:28:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:38:26\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)","timestamp":"2026-01-06 17:08:29","url":"/api/v1/auth/me"}
+{"level":"http","message":"GET /api/v1/auth/me 401 - - 2.962 ms","timestamp":"2026-01-06 17:08:29"}

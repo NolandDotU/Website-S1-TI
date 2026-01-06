@@ -6,8 +6,8 @@ import { CacheManager } from "./cacheManager";
 import { logger } from "./logger";
 
 class HistoryService {
-  cache: CacheManager | null = new CacheManager(getRedisClient());
-  model: typeof HistoryModel;
+  private cache: CacheManager | null = new CacheManager(getRedisClient());
+  private model: typeof HistoryModel;
 
   constructor(model = HistoryModel, cache?: CacheManager) {
     this.model = model;
@@ -43,12 +43,26 @@ class HistoryService {
         }
       : {};
 
-    const history = await HistoryModel.find({ query }).sort({ createdAt: -1 });
+    const [history, total] = await Promise.all([
+      this.model
+        .find(query)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
+      this.model.countDocuments(query),
+    ]);
 
     if (cacheKey && this.cache !== null) {
       await this.cache.set(cacheKey, history, 300);
     }
-    return history;
+    return {
+      history: history,
+      meta: {
+        total,
+        page,
+        limit,
+      },
+    };
   }
 
   async getByUser(user: any) {

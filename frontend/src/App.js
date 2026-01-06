@@ -18,6 +18,9 @@ import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
 import ListAnnouncement from "./pages/admin/modulAnnouncement/listAnnouncemenet";
 import PreviewAnnouncement from "./pages/admin/modulAnnouncement/previewAnnoucement";
 import HighlightManage from "./pages/admin/modulHighlight/highlightManage";
+import TentangTISection from "./components/TentangTISection";
+import TentangProdi from "./pages/TentangProdi";
+import History from "./pages/admin/History";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -62,6 +65,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/berita" element={<Berita />} />
           <Route path="/profil-dosen" element={<LecturerProfiles />} />
+          <Route path="/tentang-program-studi" element={<TentangProdi />} />
 
           {/* ========== AUTH ROUTES ========== */}
           <Route path="/login" element={<Login />} />
@@ -84,6 +88,7 @@ function App() {
 
             <Route path="dosen" element={<LecturerManagement />} />
             <Route path="highlight" element={<HighlightManage />} />
+            <Route path="history" element={<History />} />
           </Route>
         </Routes>
       </main>
