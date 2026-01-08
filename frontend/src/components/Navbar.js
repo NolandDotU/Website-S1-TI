@@ -58,7 +58,6 @@ const Navbar = ({ theme, toggleTheme }) => {
   };
 
   useEffect(() => {
-    console.log("USER :", user);
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

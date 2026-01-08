@@ -16,15 +16,11 @@ export const AuthProvider = ({ children }) => {
   // ✅ Check if user is authenticated via /auth/me endpoint
   const checkAuth = async () => {
     try {
-      console.log("🔍 Checking auth via /auth/me...");
       const response = await api.get("/auth/me");
-
-      console.log("📦 Auth check response:", response.data);
 
       // ✅ Handle backend ApiResponse format
       if (response.data.success && response.data.data) {
         setUser(response.data.data);
-        console.log("✅ User authenticated:", response.data.data);
       } else {
         setUser(null);
         console.log("❌ User not authenticated");
@@ -37,27 +33,21 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     } finally {
       setLoading(false);
-      console.log("✔️ Auth check complete");
     }
   };
 
   // ✅ Admin login
   const loginAdmin = async (username, password) => {
     try {
-      console.log("🔐 Attempting admin login for:", username);
-
       const { data } = await api.post("/auth/admin", {
         username,
         password,
       });
 
-      console.log("📦 Login response:", data);
-
       // ✅ Handle backend ApiResponse format
       if (data.success) {
         // Re-check auth to get user data
         await checkAuth();
-        console.log("✅ Login successful");
         return { success: true };
       } else {
         return {
@@ -85,18 +75,15 @@ export const AuthProvider = ({ children }) => {
 
   // ✅ Google OAuth
   const loginWithGoogle = () => {
-    console.log("🔗 Redirecting to Google OAuth...");
     window.location.href = `${env.BACKEND_URL}/api/v1/auth/google`;
   };
 
   // ✅ Logout
   const logout = async () => {
     try {
-      console.log("🚪 Logging out...");
       await api.post("/auth/logout");
       setUser(null);
-      console.log("✅ Logout successful");
-      window.location.href = "/login";
+      window.location.href = "/";
     } catch (error) {
       console.error("❌ Logout error:", error);
       // Force redirect even if API fails

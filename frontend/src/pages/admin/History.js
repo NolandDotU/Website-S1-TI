@@ -13,36 +13,48 @@ import {
   Eye,
   Shield,
   RefreshCw,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useToast } from "../../context/toastProvider";
 import { getAllHistory } from "../../services/historyAPI";
 
 const History = () => {
-  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterAction, setFilterAction] = useState("all");
   const [dateRange, setDateRange] = useState("all");
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 50;
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage, searchQuery]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await getAllHistory();
+      // Simulasi API call - ganti dengan actual API
+      const response = await getAllHistory(
+        itemsPerPage,
+        currentPage,
+        searchQuery
+      );
+
       if (response.statusCode !== 200) {
-        toast.error(response.message);
+        console.error(response.message);
         setLoading(false);
         return;
       }
-      console.log("RESPONSE HISTORY: ", response);
+
       setHistory(response.data.history);
+      setTotalPages(response.data.meta.totalPage);
+      setTotalItems(response.data.meta.total);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch history");
+      console.error(error.response?.data?.message || "Failed to fetch history");
     } finally {
       setLoading(false);
     }
@@ -169,8 +181,64 @@ const History = () => {
     return matchesSearch && matchesType && matchesAction && matchesDate;
   });
 
+  // Pagination handlers
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageClick = (pageNum) => {
+    setCurrentPage(pageNum);
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push("...");
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push("...");
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push("...");
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
+
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -196,7 +264,7 @@ const History = () => {
               <span className="text-sm">Refresh</span>
             </button>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Total: {filteredHistory.length} activities
+              Total: {totalItems} activities
             </span>
           </div>
         </div>
@@ -343,31 +411,20 @@ const History = () => {
                           {item.description || "No description available"}
                         </p>
                       </div>
-
-                      {/* View Details Button */}
-                      {item.entityId && (
-                        <button
-                          className="flex-shrink-0 p-2 rounded-lg text-gray-400 
-                            hover:text-blue-600 dark:hover:text-blue-400 
-                            hover:bg-blue-50 dark:hover:bg-blue-900/30 
-                            transition-colors opacity-0 group-hover:opacity-100">
-                          <Eye className="w-5 h-5" />
-                        </button>
-                      )}
                     </div>
 
                     {/* Meta Info */}
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        <span>{item.userData?.username || "Unknown User"}</span>
+                        <span>{item.user?.username || "Unknown User"}</span>
                       </div>
 
                       {item.userData?.role && (
                         <div className="flex items-center gap-2">
                           <Shield className="w-4 h-4" />
                           <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-xs font-medium text-blue-700 dark:text-blue-300">
-                            {item.userData.role}
+                            {item.user.role}
                           </span>
                         </div>
                       )}
@@ -388,27 +445,60 @@ const History = () => {
       </div>
 
       {/* Pagination */}
-      {filteredHistory.length > 0 && (
+      {!loading && filteredHistory.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing{" "}
-              <span className="font-semibold">1-{filteredHistory.length}</span>{" "}
-              of <span className="font-semibold">{history.length}</span> results
+              <span className="font-semibold">
+                {startItem}-{endItem}
+              </span>{" "}
+              of <span className="font-semibold">{totalItems}</span> results
             </p>
 
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
               <button
-                disabled
-                className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700
-                  text-gray-400 dark:text-gray-600 cursor-not-allowed">
-                Previous
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg border border-gray-200 dark:border-gray-700
+                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700
+                  disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <ChevronLeft className="w-5 h-5" />
               </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((page, index) =>
+                  page === "..." ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="px-3 py-2 text-gray-500 dark:text-gray-400">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => handlePageClick(page)}
+                      className={`min-w-[40px] px-3 py-2 rounded-lg transition-colors ${
+                        currentPage === page
+                          ? "bg-blue-600 text-white font-semibold"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}>
+                      {page}
+                    </button>
+                  )
+                )}
+              </div>
+
+              {/* Next Button */}
               <button
-                disabled
-                className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700
-                  text-gray-400 dark:text-gray-600 cursor-not-allowed">
-                Next
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg border border-gray-200 dark:border-gray-700
+                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700
+                  disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
           </div>

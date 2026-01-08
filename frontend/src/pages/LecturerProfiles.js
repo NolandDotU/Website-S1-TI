@@ -16,10 +16,9 @@ const LecturerProfiles = () => {
     const fetchLecturers = async () => {
       try {
         setLoading(true);
-        const { lecturers: data } = await getLecturers(1, 100); // Fetch all lecturers
-        console.log("Fetched lecturers data:", data);
-        // Ensure data is an array
-        setLecturers(Array.isArray(data) ? data : []);
+        const response = await getLecturers(1, 100); // Fetch all lecturers
+        console.log("Fetched lecturers data:", response);
+        setLecturers(Array.isArray(response.data) ? response.data : []);
         setError(null);
       } catch (err) {
         console.error("Error fetching lecturers:", err);

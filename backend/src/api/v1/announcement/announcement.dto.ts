@@ -8,6 +8,7 @@ export interface IAnnouncement {
   publishDate?: Date;
   status?: string;
   scheduleDate?: Date;
+  views?: number;
   eventDate?: Date;
 }
 

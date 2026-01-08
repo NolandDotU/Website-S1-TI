@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Edit, Trash2, View } from "lucide-react";
-import PreviewAnnouncement from "../../../pages/admin/modulAnnouncement/previewAnnoucement";
+import { ArchiveIcon, Edit, Trash2, Upload, View } from "lucide-react";
 
 const AnnouncementTable = ({
   announcements,
@@ -11,6 +10,8 @@ const AnnouncementTable = ({
   onPageChange,
   onEdit,
   onDelete,
+  onPublish,
+  onArchive,
 }) => {
   const navigate = useNavigate();
 
@@ -89,24 +90,48 @@ const AnnouncementTable = ({
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      {announcement.status !== "published" && (
+                        <button
+                          onClick={() => onPublish(announcement)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 
+                          dark:hover:bg-blue-900/30 rounded-lg transition"
+                          title="Publish">
+                          <Upload className="w-4 h-4" />
+                        </button>
+                      )}
+
+                      {announcement.status !== "archived" && (
+                        <button
+                          onClick={() => onArchive(announcement)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 
+                          dark:hover:bg-blue-900/30 rounded-lg transition"
+                          title="Archive">
+                          <ArchiveIcon className="w-4 h-4" />
+                        </button>
+                      )}
+
                       <button
                         onClick={() => onEdit(announcement)}
                         className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 
-                          dark:hover:bg-blue-900/30 rounded-lg transition">
+                          dark:hover:bg-blue-900/30 rounded-lg transition"
+                        title="Edit">
                         <Edit className="w-4 h-4" />
                       </button>
+
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           onDelete({ id: announcement.id });
                         }}
                         className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 
-                          dark:hover:bg-red-900/30 rounded-lg transition">
+                          dark:hover:bg-red-900/30 rounded-lg transition"
+                        title="Delete">
                         <Trash2 className="w-4 h-4" />
                       </button>
                       <button
                         className="p-2 text-yellow-600 hover:bg-yellow-50 dark:text-yellow-400 
                           dark:hover:bg-yellow-900/30 rounded-lg transition"
+                        title="Preview"
                         onClick={() =>
                           navigate(`/admin/berita/${announcement.id}`)
                         }>

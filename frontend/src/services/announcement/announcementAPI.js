@@ -5,9 +5,11 @@ import api from "../utils/api";
 //===================
 export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
   try {
+    console.log("FE SERVICE");
     const response = await api.get("/announcements", {
       params: { page, limit },
     });
+    console.log("RESPONSE FE SERVICE : ", response);
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},
@@ -84,6 +86,7 @@ export const createAnnouncement = async (announcementData) => {
 //===========
 export const changeStatus = async (status, id) => {
   try {
+    console.log(`CHANGE STATUS : ${status} for ${id}`);
     const response = await api.patch(`/announcements/${id}/${status}`);
     return response.data;
   } catch (error) {

@@ -16,6 +16,7 @@ import {
   X,
   Settings,
   HistoryIcon,
+  UserCog2,
 } from "lucide-react";
 
 export const AdminNavbar = () => {
@@ -70,14 +71,19 @@ export const AdminNavbar = () => {
       label: "Profil Prodi",
     },
     {
-      icon: Settings,
-      path: "/admin/settings",
-      label: "Settings",
-    },
-    {
       icon: HistoryIcon,
       path: "/admin/history",
       label: "History",
+    },
+    {
+      icon: UserCog2,
+      path: "/admin/users",
+      label: "Daftar Pengguna",
+    },
+    {
+      icon: Settings,
+      path: "/admin/settings",
+      label: "Settings",
     },
   ];
 

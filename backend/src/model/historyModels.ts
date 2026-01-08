@@ -5,6 +5,7 @@ export interface IHistoryInput {
   action: string;
   entity: string;
   entityId?: mongoose.Types.ObjectId;
+  entityModel?: string;
   description?: string;
 }
 
@@ -14,14 +15,6 @@ export interface IHistory extends IHistoryInput, mongoose.Document {
 }
 export interface IHistoryResponse extends IHistory {
   id: string | mongoose.Types.ObjectId;
-  userData: {
-    id: string;
-    email: string;
-    username: string;
-    role: string;
-    photo: string | null | undefined;
-    authProvider: string;
-  };
   createdAt: Date;
   updatedAt: Date;
 }

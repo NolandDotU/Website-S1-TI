@@ -21,6 +21,8 @@ const ListAnnouncement = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [modalMode, setModalMode] = useState("create");
   const [page, setPage] = useState(1);
@@ -71,9 +73,43 @@ const ListAnnouncement = () => {
     if (selectedAnnouncement === null) {
       return toast.info("Klik tombol hapus sekali lagi!");
     }
-
-    console.log("seelcted announcement; ", selectedAnnouncement);
     setIsDeleteModalOpen(true);
+  };
+
+  const handlePublish = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    if (selectedAnnouncement === null) {
+      return toast.info("Klik tombol publish sekali lagi!");
+    }
+    setIsPublishModalOpen(true);
+  };
+  const handleArchive = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    setSelectedAnnouncement(announcement);
+    if (selectedAnnouncement === null) {
+      return toast.info("Klik tombol archive sekali lagi!");
+    }
+    setIsArchiveModalOpen(true);
+  };
+
+  const changingStatus = async (reqStatus) => {
+    const status = ["draft", "scheduled", "published", "archived"];
+    if (status.indexOf(reqStatus) === -1) {
+      return toast.error("Status pengumuman tidak valid!");
+    }
+    try {
+      const response = await changeStatus(reqStatus, selectedAnnouncement.id);
+      if (response.statusCode !== 200) {
+        return toast.error(response.data.message);
+      }
+      toast.success("Berhasil mengubah status pengumuman!");
+      setIsPublishModalOpen(false);
+      setIsArchiveModalOpen(false);
+      fetchAnnouncements();
+    } catch (error) {
+      console.error("Error changing status:", error);
+      toast.error(`Terjadi kesalahan ${error.response?.data?.message} `);
+    }
   };
 
   const confirmDelete = async () => {
@@ -131,6 +167,7 @@ const ListAnnouncement = () => {
         if (response.statusCode !== 200) {
           toast.error(response.message);
         }
+        toast.success(response.message);
         setAnnouncements(
           announcements.map((a) =>
             a.id === selectedAnnouncement.id ? { ...a, ...payload } : a
@@ -208,6 +245,8 @@ const ListAnnouncement = () => {
           onPageChange={setPage}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onPublish={handlePublish}
+          onArchive={handleArchive}
         />
       </motion.div>
 
@@ -233,6 +272,30 @@ const ListAnnouncement = () => {
             confirmText="Hapus"
             cancelText="Batal"
             type="danger"
+          />
+        )}
+        {isArchiveModalOpen && (
+          <ModalConfirmation
+            isOpen={isArchiveModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={() => changingStatus("archived")}
+            title="Arsip Pengumuman"
+            message="Apakah Anda yakin ingin mengarsipkan pengumuman ini?"
+            confirmText="Arsipkan"
+            cancelText="Batal"
+            type="warning"
+          />
+        )}
+        {isPublishModalOpen && (
+          <ModalConfirmation
+            isOpen={isPublishModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={() => changingStatus("published")}
+            title="Publish Pengumuman"
+            message="Apakah Anda yakin ingin mengpublikasikan pengumuman ini?"
+            confirmText="Publish"
+            cancelText="Batal"
+            type="success"
           />
         )}
       </AnimatePresence>

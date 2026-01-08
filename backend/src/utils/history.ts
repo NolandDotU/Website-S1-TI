@@ -48,7 +48,8 @@ class HistoryService {
         .find(query)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
-        .limit(limit),
+        .limit(limit)
+        .populate("user"),
       this.model.countDocuments(query),
     ]);
 
@@ -61,6 +62,7 @@ class HistoryService {
         total,
         page,
         limit,
+        totalPage: Math.ceil(total / limit),
       },
     };
   }

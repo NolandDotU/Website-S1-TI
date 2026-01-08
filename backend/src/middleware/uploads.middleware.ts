@@ -52,8 +52,8 @@ export const optimizeImage = async (
 
     await sharp(req.file.path)
       .rotate() // ✅ TAMBAHKAN INI - Auto-rotate berdasarkan EXIF orientation
-      .resize(800, 800, { fit: "inside", withoutEnlargement: true })
-      .webp({ quality: 80 })
+      .resize(1280, 720, { fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 100 })
       .toFile(outputPath);
 
     await fs.unlink(req.file.path);

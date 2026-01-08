@@ -11,7 +11,6 @@ import { logger } from "../../../utils";
 import { hashingPassword } from "../../../utils";
 import historyService from "../../../utils/history";
 import axios from "axios";
-import { uploadNewsPhoto } from "../../../middleware/uploads.middleware";
 import path from "path";
 import fs from "fs";
 class AuthService {

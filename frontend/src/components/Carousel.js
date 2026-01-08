@@ -12,6 +12,7 @@ const defaultSlides = [
       title: "S1 Teknik Informatika",
       description: "Membangun Masa Depan Digital",
       imageUrl: image1,
+      link: "",
     },
     order: 1,
     isActive: true,
@@ -41,7 +42,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     if (slide.type === "announcement" && slide.announcementId) {
       const photo = slide.announcementId.photo;
       if (photo) {
-        return `${BACKEND_URL}/${photo}`;
+        return `${BACKEND_URL}${photo}`;
       }
     }
     return image1;
@@ -251,7 +252,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.6 }}
-                    className="text-white text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 drop-shadow-2xl">
+                    className="text-white text-2xl md:text-4xl lg:text-5xl font-extrabold mb-3 drop-shadow-2xl">
                     {getTitle(finalSlides[index])}
                   </motion.h2>
                   <motion.p

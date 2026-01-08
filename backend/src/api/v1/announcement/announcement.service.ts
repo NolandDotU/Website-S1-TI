@@ -30,7 +30,7 @@ export class AnnouncementService {
 
     const cacheVersion = (await this.cache.get<string>("news:version")) || "0";
     const normalizedSearch = search.trim().toLowerCase();
-    const cacheKey = `news:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
+    const cacheKey = `news:published:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
     const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
     if (cached) {
@@ -185,12 +185,14 @@ export class AnnouncementService {
       }),
     ]);
     if (exist) throw ApiError.conflict("News already exists");
-    deleteImage(announ?.photo || "").catch((err) => {
-      logger.error(
-        `Error deleting announcement image: ${announ?.photo} [ ${err}] `
-      );
-      return ApiError.internal(`Failed delete announcement image! ${err}`);
-    });
+    if (data.photo !== announ?.photo) {
+      deleteImage(announ?.photo || "").catch((err) => {
+        logger.error(
+          `Error deleting announcement image: ${announ?.photo} [ ${err}] `
+        );
+        return ApiError.internal(`Failed delete announcement image! ${err}`);
+      });
+    }
 
     const newsDoc = await this.model.findOneAndUpdate({ _id: id }, data, {
       new: true,
@@ -208,6 +210,8 @@ export class AnnouncementService {
     await this.history?.create(historyData);
 
     await this.cache.incr("news:version");
+    await this.cache.incr("highlights:version");
+    await this.cache.incr("history:version");
     await this.cache.del(`news:item:${id}`);
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
@@ -236,20 +240,33 @@ export class AnnouncementService {
       );
     }
     if (!newsDoc) throw ApiError.notFound("News not found");
+    logger.info(`REQUEST ID : ${id} updated to ${status}`);
 
     const historyData: IHistoryInput = {
       user: new mongoose.Types.ObjectId(createdBy),
       action: "PATCH",
       entity: "announcement",
       entityId: newsDoc._id,
+      entityModel: this.model.modelName,
       description: `Announcement titled "${newsDoc.title}" status changed to "${status}" by ${createdBy.username}.`,
     };
 
     await this.history?.create(historyData);
     await this.cache.incr("news:version");
+    await this.cache.incr("highlights:version");
+    await this.cache.incr("history:version");
     await this.cache.del(`news:item:${id}`);
 
     return true;
+  }
+
+  async publishMany() {
+    const updated = await this.model.updateMany(
+      { status: "scheduled" },
+      { status: "published" }
+    );
+
+    return updated.modifiedCount;
   }
 
   async delete(id?: string, createdBy?: any): Promise<boolean> {
@@ -273,6 +290,8 @@ export class AnnouncementService {
     await this.history?.create(historyData);
 
     await this.cache.incr("news:version");
+    await this.cache.incr("highlights:version");
+    await this.cache.incr("history:version");
     await this.cache.del(`news:item:${id}`);
 
     return true;

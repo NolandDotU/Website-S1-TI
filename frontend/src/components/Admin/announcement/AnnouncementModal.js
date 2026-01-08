@@ -58,8 +58,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
       if (formData.photo.startsWith("http")) {
         return formData.photo;
       }
+      console.log(formData.photo);
       // Otherwise, prepend the backend URL
-      return `${env.BACKEND_URL || "http://localhost:5000"}/${formData.photo}`;
+      return `${env.BACKEND_URL || "http://localhost:5000"}${formData.photo}`;
     }
 
     return null;

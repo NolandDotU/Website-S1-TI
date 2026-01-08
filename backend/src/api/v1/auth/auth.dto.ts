@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import { IUser } from "../users/user.dto";
 // Admin login
 export const AdminLoginSchema = z.object({
   username: z.string().min(3, "Username minimal 3 karakter"),
@@ -16,14 +16,7 @@ export type AdminLoginDTO = z.infer<typeof AdminLoginSchema>;
 export type AdminRegisterDTO = z.infer<typeof AdminRegisterSchema>;
 
 export interface AuthResponseDTO {
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    role: string;
-    photo: string | null | undefined;
-    authProvider: string;
-  };
+  user: IUser;
   accessToken: string;
   refreshToken: string;
 }

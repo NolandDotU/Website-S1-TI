@@ -17,7 +17,9 @@ export class NewsController {
       Number(limit),
       search
     );
-    return ApiResponse.success(result, "News fetched successfully", 200);
+    logger.info("News fetched successfully", result);
+    res.json(ApiResponse.success(result, "News fetched successfully", 200)),
+      200;
   });
 
   getAllContent = asyncHandler(async (req: Request, res: Response) => {
@@ -48,13 +50,13 @@ export class NewsController {
     console.log("ID : ", id);
     const user = req.user as JWTPayload;
     const news = await this.service.update(req.body, id, user);
-    res.json(ApiResponse.success(news, "News updated successfully", 201)), 201;
+    res.json(ApiResponse.success(news, "News updated successfully", 200)), 200;
   });
 
   updateStatus = asyncHandler(async (req: Request, res: Response) => {
     const { id, status } = req.params;
     const user = req.user as JWTPayload;
-    const result = await this.service.changeStatus(id, "published");
+    const result = await this.service.changeStatus(id, status, user);
     res.json(
       ApiResponse.success(
         result,
