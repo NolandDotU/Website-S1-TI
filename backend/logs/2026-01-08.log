@@ -1924,3 +1924,23 @@
 {"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 15:43:53"}
 {"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 15:43:53"}
 {"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 15:43:53"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 16:11:13"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 16:11:13"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 16:11:13"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 16:11:13"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 16:11:15"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 16:11:15"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 16:11:15"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:11:16"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:11:16"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 16:11:16"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 16:11:16"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 77.993 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 57.178 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 72.411 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 54.307 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 108.584 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /api/v1/announcements/695cddb03455c2480a656687 200 - - 197.108 ms","timestamp":"2026-01-08 16:11:20"}
+{"level":"http","message":"GET /uploads/news/undefined 404 45 - 2.326 ms","timestamp":"2026-01-08 16:11:21"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 254.499 ms","timestamp":"2026-01-08 16:11:21"}
+{"level":"http","message":"GET /api/v1/announcements/695cddb03455c2480a656687 304 - - 145.195 ms","timestamp":"2026-01-08 16:11:21"}
