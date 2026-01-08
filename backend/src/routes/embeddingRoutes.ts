@@ -1,6 +1,6 @@
 import express from "express";
 import { EmbeddingServiceInstance } from "../service/embeddingService";
-import NewsModel from "../model/newsModel";
+import NewsModel from "../model/AnnouncementModel";
 
 const router = express.Router();
 
@@ -26,12 +26,12 @@ router.post("/news", async (req, res) => {
 
     // jaga urutan relevansi
     const ordered = idOrder
-      .map(id => newsDocs.find(n => n._id.toString() === id))
+      .map((id) => newsDocs.find((n) => n._id.toString() === id))
       .filter(Boolean);
 
     res.json({
       question,
-      context: ordered.map(n => ({
+      context: ordered.map((n) => ({
         title: n?.title,
         content: n?.content.slice(0, 1_500), //batasi panjang konten
       })),
