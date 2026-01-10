@@ -169,6 +169,32 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                   </p>
                 </div>
 
+                {/* EXTERNAL LINK */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    External Link <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.customContent.link}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        customContent: {
+                          ...formData.customContent,
+                          link: e.target.value,
+                        },
+                      })
+                    }
+                    placeholder="Masukkan link..."
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
+                      dark:border-gray-600 bg-white dark:bg-gray-900 
+                      text-gray-900 dark:text-white placeholder-gray-400 
+                      focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
+                      transition-colors resize-none"
+                  />
+                </div>
+
                 {/* Image URL */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

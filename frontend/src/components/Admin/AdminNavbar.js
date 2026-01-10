@@ -189,19 +189,6 @@ export const AdminNavbar = () => {
                   )}
                 </Link>
 
-                {/* Quick Action Button - Only when sidebar is open */}
-                {link.action && isSidebarOpen && (
-                  <button
-                    onClick={() => navigate(link.action)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 
-                      bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
-                      flex items-center justify-center opacity-0 group-hover:opacity-100 
-                      transition-opacity shadow-md z-10"
-                    title={`Add ${link.label}`}>
-                    <Plus className="w-4 h-4" />
-                  </button>
-                )}
-
                 {/* Tooltip - Only when sidebar is collapsed */}
                 {!isSidebarOpen && (
                   <div

@@ -17,7 +17,6 @@ export class NewsController {
       Number(limit),
       search
     );
-    logger.info("News fetched successfully", result);
     res.json(ApiResponse.success(result, "News fetched successfully", 200)),
       200;
   });
@@ -71,6 +70,14 @@ export class NewsController {
     const user = req.user as JWTPayload;
     const result = await this.service.delete(id, user);
     res.json(ApiResponse.success(result, "News deleted successfully", 200)),
+      200;
+  });
+
+  increamentView = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = req.user as JWTPayload;
+    const result = await this.service.increamentViews(id, user);
+    res.json(ApiResponse.success(result, "News incerament successfully", 200)),
       200;
   });
 }

@@ -29,7 +29,7 @@ const Historyschema = new mongoose.Schema(
     action: {
       type: String,
       required: true,
-      enum: ["POST", "DELETE", "UPDATE", "PATCH", "AUTH"],
+      enum: ["POST", "DELETE", "UPDATE", "PATCH", "AUTH", "VIEW"],
     },
     entity: {
       type: String,

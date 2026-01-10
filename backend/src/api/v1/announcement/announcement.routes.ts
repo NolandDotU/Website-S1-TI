@@ -95,4 +95,8 @@ router.delete("/permanent/:id", authMiddleware(["admin"]), (req, res, next) => {
   getController().delete(req, res, next);
 });
 
+router.patch("/:id", authMiddleware(null), (req, res, next) => {
+  getController().increamentView(req, res, next);
+});
+
 export default router;

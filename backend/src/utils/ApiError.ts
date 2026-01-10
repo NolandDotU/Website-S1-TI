@@ -1,9 +1,12 @@
+import { log } from "console";
+import { logger } from "./logger";
+
 export class ApiError extends Error {
   constructor(
     public statusCode: number,
     public message: string,
     public isOperational: boolean = true,
-    public errors?: any[],
+    public errors?: any,
     public stack = ""
   ) {
     super(message);
@@ -20,7 +23,7 @@ export class ApiError extends Error {
   }
 
   // Static factory methods
-  static badRequest(message: string, errors?: any[]) {
+  static badRequest(message: string, errors?: any) {
     return new ApiError(400, message, true, errors);
   }
 

@@ -5,4 +5,5 @@ export interface IUser {
   role: string;
   photo: string | null | undefined;
   authProvider: string;
+  isActive?: boolean;
 }

@@ -38,14 +38,9 @@ const ListAnnouncement = () => {
       const response = await adminGetAnnouncements(page, 10, search);
       setAnnouncements(response.announcements);
       setTotalPages(response.meta.totalPages);
-
-      setTimeout(() => {
-        setTotalPages(1);
-        setLoading(false);
-      }, 500);
     } catch (error) {
       console.error("Error fetching announcements:", error);
-      setLoading(false);
+      toast.error("Gagal memuat pengumuman");
     } finally {
       setLoading(false);
     }
@@ -70,25 +65,16 @@ const ListAnnouncement = () => {
 
   const handleDelete = (announcement) => {
     setSelectedAnnouncement(announcement);
-    if (selectedAnnouncement === null) {
-      return toast.info("Klik tombol hapus sekali lagi!");
-    }
     setIsDeleteModalOpen(true);
   };
 
   const handlePublish = (announcement) => {
     setSelectedAnnouncement(announcement);
-    if (selectedAnnouncement === null) {
-      return toast.info("Klik tombol publish sekali lagi!");
-    }
     setIsPublishModalOpen(true);
   };
+
   const handleArchive = (announcement) => {
     setSelectedAnnouncement(announcement);
-    setSelectedAnnouncement(announcement);
-    if (selectedAnnouncement === null) {
-      return toast.info("Klik tombol archive sekali lagi!");
-    }
     setIsArchiveModalOpen(true);
   };
 
@@ -100,26 +86,39 @@ const ListAnnouncement = () => {
     try {
       const response = await changeStatus(reqStatus, selectedAnnouncement.id);
       if (response.statusCode !== 200) {
-        return toast.error(response.data.message);
+        return toast.error(response.data?.message || "Gagal mengubah status");
       }
       toast.success("Berhasil mengubah status pengumuman!");
       setIsPublishModalOpen(false);
       setIsArchiveModalOpen(false);
-      fetchAnnouncements();
+      setSelectedAnnouncement(null);
+      await fetchAnnouncements();
     } catch (error) {
       console.error("Error changing status:", error);
-      toast.error(`Terjadi kesalahan ${error.response?.data?.message} `);
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengubah status"
+      );
     }
+  };
+
+  const SavingHandle = async () => {
+    await fetchAnnouncements();
+    setSelectedAnnouncement(null);
+    toast.success("Berhasil menyimpan pengumuman!");
+    setIsModalOpen(false);
   };
 
   const confirmDelete = async () => {
     try {
       const id = selectedAnnouncement.id;
       const response = await delAnnouncement(id);
-      console.log("response", response);
-      if (response.statusCode !== 200)
-        return toast.error(response.data.message);
-      toast.success("Berhasil menghapus pengumuman secara permanent!");
+      if (response.statusCode !== 200) {
+        return toast.error(
+          response.data?.message || "Gagal menghapus pengumuman"
+        );
+      }
+      toast.success("Berhasil menghapus pengumuman secara permanen!");
       setAnnouncements(
         announcements.filter((a) => a.id !== selectedAnnouncement.id)
       );
@@ -127,59 +126,10 @@ const ListAnnouncement = () => {
       setSelectedAnnouncement(null);
     } catch (error) {
       console.error("Error deleting announcement:", error);
-      toast.error(`Terjadi kesalahan ${error.response?.data?.message} `);
-    }
-  };
-
-  const handleSave = async (formData) => {
-    try {
-      let payload = { ...formData };
-      if (formData.photo !== null) {
-        try {
-          const uploads = await uploadImage(formData.photo);
-          if (uploads.statusCode !== 200) {
-            toast.error("Gagal menyimpan photo, coba lagi!");
-            return;
-          }
-
-          payload = {
-            ...formData,
-            photo: uploads.data.path,
-          };
-        } catch (error) {
-          console.error(error);
-          toast.error(
-            `Terjadi kesalahan saat menyimpan foto! (${error.response?.data?.message})`
-          );
-          return;
-        }
-      }
-      if (modalMode === "create") {
-        const response = await createAnnouncement(payload);
-        if (response.statusCode !== 201) {
-          return toast.error(response.message);
-        }
-        toast.success(response.message);
-        const newAnnouncement = payload;
-        setAnnouncements([newAnnouncement, ...announcements]);
-      } else {
-        const response = await update(payload, payload.id);
-        if (response.statusCode !== 200) {
-          toast.error(response.message);
-        }
-        toast.success(response.message);
-        setAnnouncements(
-          announcements.map((a) =>
-            a.id === selectedAnnouncement.id ? { ...a, ...payload } : a
-          )
-        );
-      }
-
-      setIsModalOpen(false);
-      fetchAnnouncements();
-    } catch (error) {
-      console.error("Error saving announcement:", error);
-      toast.error(`Terjadi Kesalahan ${error.response?.data?.message}`);
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat menghapus pengumuman"
+      );
     }
   };
 
@@ -255,17 +205,24 @@ const ListAnnouncement = () => {
         {isModalOpen && (
           <AnnouncementModal
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSave={handleSave}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedAnnouncement(null);
+            }}
             announcement={selectedAnnouncement}
             mode={modalMode}
+            toast={toast}
+            onSuccess={SavingHandle}
           />
         )}
 
         {isDeleteModalOpen && (
           <ModalConfirmation
             isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedAnnouncement(null);
+            }}
             onConfirm={confirmDelete}
             title="Hapus Pengumuman"
             message="Apakah Anda yakin ingin menghapus pengumuman ini?"
@@ -274,10 +231,14 @@ const ListAnnouncement = () => {
             type="danger"
           />
         )}
+
         {isArchiveModalOpen && (
           <ModalConfirmation
             isOpen={isArchiveModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
+            onClose={() => {
+              setIsArchiveModalOpen(false);
+              setSelectedAnnouncement(null);
+            }}
             onConfirm={() => changingStatus("archived")}
             title="Arsip Pengumuman"
             message="Apakah Anda yakin ingin mengarsipkan pengumuman ini?"
@@ -286,13 +247,17 @@ const ListAnnouncement = () => {
             type="warning"
           />
         )}
+
         {isPublishModalOpen && (
           <ModalConfirmation
             isOpen={isPublishModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
+            onClose={() => {
+              setIsPublishModalOpen(false);
+              setSelectedAnnouncement(null);
+            }}
             onConfirm={() => changingStatus("published")}
             title="Publish Pengumuman"
-            message="Apakah Anda yakin ingin mengpublikasikan pengumuman ini?"
+            message="Apakah Anda yakin ingin mempublikasikan pengumuman ini?"
             confirmText="Publish"
             cancelText="Batal"
             type="success"

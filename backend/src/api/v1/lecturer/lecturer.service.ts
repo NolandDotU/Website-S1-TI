@@ -195,4 +195,34 @@ export class LecturerService {
 
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
+
+  getStatistics = async (
+    startOfMonth: Date,
+    endOfMonth: Date,
+    endOfLastMonth: Date
+  ) => {
+    const [totalLecturer, currentMonthLecturer, lastMonthLecturer] =
+      await Promise.all([
+        this.model.countDocuments(),
+        this.model.countDocuments({
+          status: "published",
+          publishDate: {
+            $gte: startOfMonth,
+          },
+        }),
+        this.model.countDocuments({
+          status: "published",
+          publishDate: {
+            $gte: endOfLastMonth,
+            $lte: endOfMonth,
+          },
+        }),
+      ]);
+
+    return {
+      totalLecturer,
+      currentMonthLecturer,
+      lastMonthLecturer,
+    };
+  };
 }

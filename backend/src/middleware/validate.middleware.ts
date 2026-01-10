@@ -11,7 +11,10 @@ export const validate =
     } catch (err) {
       logger.error(err);
       if (err instanceof ZodError) {
-        throw ApiError.badRequest(err.issues.map((e) => e.message).join(", "));
+        throw ApiError.badRequest(
+          "VALIDATION_ERROR",
+          err.flatten().fieldErrors
+        );
       }
       next(err);
     }

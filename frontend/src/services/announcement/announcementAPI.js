@@ -117,3 +117,15 @@ export const delAnnouncement = async (id) => {
     throw error;
   }
 };
+
+//=========
+//UPDATE VIEW COUNT
+//=========
+export const updateViewCount = async (id) => {
+  try {
+    const response = await api.patch(`/announcements/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

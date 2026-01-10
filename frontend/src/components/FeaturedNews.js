@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import NewsCard from "./NewsCard";
-import { getAnnouncements } from "../services/api";
+import { getAnnouncements } from "../services/announcement/announcementAPI";
 import { useToast } from "../context/toastProvider";
+import { getAdapter } from "axios";
+import { env } from "../services/utils/env";
 
 const FeaturedNews = () => {
   const toast = useToast();
@@ -15,6 +17,7 @@ const FeaturedNews = () => {
       setLoading(true);
       setError(false);
       const response = await getAnnouncements();
+      console.log("response announcements", response);
 
       if (!response.announcements || response.announcements.length === 0) {
         setNews([]);
@@ -174,7 +177,7 @@ const FeaturedNews = () => {
                 {item ? (
                   <NewsCard
                     title={item.title}
-                    date={new Date(item.uploadDate).toLocaleDateString(
+                    date={new Date(item.publishDate).toLocaleDateString(
                       "id-ID",
                       {
                         year: "numeric",
@@ -183,7 +186,8 @@ const FeaturedNews = () => {
                       }
                     )}
                     summary={item.content}
-                    image={item.photo}
+                    image={`${env.BACKEND_URL}${item.photo}`}
+                    views={item.views}
                   />
                 ) : (
                   <div className="rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-4 h-full min-h-[180px] flex items-center justify-center text-slate-400 dark:text-slate-500">

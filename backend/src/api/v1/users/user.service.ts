@@ -5,7 +5,7 @@ import historyService from "../../../utils/history";
 import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
 
-class UserService {
+export class UserService {
   private model: typeof UserModel;
   private history = historyService;
   private cache: CacheManager | null = new CacheManager(getRedisClient());
@@ -25,5 +25,54 @@ class UserService {
       const cached = await this.cache.get<IUser[]>(cacheKey);
       if (cached) return cached;
     }
+  };
+
+  getStatistics = async (
+    startOfMonth: Date,
+    endOfMonth: Date,
+    startOfLastMonth: Date,
+    endOfLastMonth: Date
+  ) => {
+    const result = await this.model.aggregate([
+      {
+        $facet: {
+          totalUser: [{ $count: "count" }],
+
+          currentMonthActiveUser: [
+            {
+              $match: {
+                isActive: true,
+                publishDate: {
+                  $gte: startOfMonth,
+                  $lte: endOfMonth,
+                },
+              },
+            },
+            { $count: "count" },
+          ],
+
+          lastMonthActiveUser: [
+            {
+              $match: {
+                isActive: true,
+                publishDate: {
+                  $gte: startOfLastMonth,
+                  $lte: endOfLastMonth,
+                },
+              },
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+
+    const data = result[0];
+
+    return {
+      totalUser: data.totalUser[0]?.count ?? 0,
+      currentMonthActiveUser: data.currentMonthActiveUser[0]?.count ?? 0,
+      lastMonthActiveUser: data.lastMonthActiveUser[0]?.count ?? 0,
+    };
   };
 }

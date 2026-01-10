@@ -3,8 +3,21 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
 import { env } from "../../../services/utils/env";
+import {
+  createAnnouncement,
+  update,
+  uploadImage,
+} from "../../../services/announcement/announcementAPI";
 
-const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
+const AnnouncementModal = ({
+  isOpen,
+  onClose,
+  announcement,
+  mode,
+  toast,
+  onSuccess,
+}) => {
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -15,6 +28,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
   });
 
   useEffect(() => {
+    setErrors({});
     if (announcement && mode === "edit") {
       setFormData({
         id: announcement.id,
@@ -35,7 +49,66 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
         scheduleDate: null,
       });
     }
-  }, [announcement, mode]);
+  }, [announcement, mode, isOpen]);
+
+  const handleSave = async () => {
+    //===================================
+    // MASIHH NGEBUGGG!!!!!!!!!!!!!!!!!
+    //===================================
+    try {
+      let payload = { ...formData };
+
+      if (formData.photo !== null && typeof formData.photo !== "string") {
+        try {
+          const uploads = await uploadImage(formData.photo);
+          if (uploads.statusCode !== 200) {
+            toast.error("Gagal menyimpan foto, coba lagi!");
+            return;
+          }
+
+          payload = {
+            ...formData,
+            photo: uploads.data.path,
+          };
+        } catch (error) {
+          console.error(error);
+          toast.error(
+            error.response?.data?.message ||
+              "Terjadi kesalahan saat menyimpan foto!"
+          );
+          return;
+        }
+      }
+
+      if (mode === "create") {
+        const response = await createAnnouncement(payload);
+        if (response.statusCode !== 201) {
+          return toast.error(response.message || "Gagal membuat pengumuman");
+        }
+      } else {
+        const response = await update(payload, payload.id);
+        if (response.statusCode !== 200) {
+          return toast.error(response.message || "Gagal mengupdate pengumuman");
+        }
+      }
+      onSuccess();
+    } catch (error) {
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.message === "VALIDATION_ERROR"
+      ) {
+        if (error.response?.data?.errors) {
+          setErrors(error.response.data.errors);
+        }
+        toast.error("Terdapat kesalahan validasi pada form");
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            "Terjadi kesalahan saat menyimpan pengumuman"
+        );
+      }
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -58,16 +131,11 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
       if (formData.photo.startsWith("http")) {
         return formData.photo;
       }
-      console.log(formData.photo);
       // Otherwise, prepend the backend URL
       return `${env.BACKEND_URL || "http://localhost:5000"}${formData.photo}`;
     }
 
     return null;
-  };
-
-  const handleSubmit = () => {
-    onSave(formData);
   };
 
   return (
@@ -114,6 +182,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                   focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
                   transition-colors"
               />
+              {errors.title && (
+                <p className="text-red-500 text-xs mt-1">{errors.title[0]}</p>
+              )}
             </div>
 
             {/* Category */}
@@ -138,6 +209,11 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                 <option value="event">Event</option>
                 <option value="lowongan">Lowongan</option>
               </select>
+              {errors.category && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.category[0]}
+                </p>
+              )}
             </div>
 
             {/* Content */}
@@ -156,6 +232,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                   className="rounded-lg"
                 />
               </div>
+              {errors.content && (
+                <p className="text-red-500 text-xs mt-1">{errors.content[0]}</p>
+              )}
             </div>
 
             {/* Photo */}
@@ -194,6 +273,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                   hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200
                   dark:hover:file:bg-blue-800"
               />
+              {errors.photo && (
+                <p className="text-red-500 text-xs mt-1">{errors.photo[0]}</p>
+              )}
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Format: JPG, PNG, GIF (Maksimal 5MB)
               </p>
@@ -218,6 +300,9 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                 <option value="published">Published</option>
                 <option value="scheduled">Scheduled</option>
               </select>
+              {errors.status && (
+                <p className="text-red-500 text-xs mt-1">{errors.status[0]}</p>
+              )}
             </div>
 
             {/* Schedule Date (if scheduled) */}
@@ -238,6 +323,11 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
                     focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
                     transition-colors"
                 />
+                {errors.scheduleDate && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.scheduleDate[0]}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -253,7 +343,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSave, announcement, mode }) => {
             Batal
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={handleSave}
             className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 
               dark:bg-blue-500 dark:hover:bg-blue-600 text-white 
               rounded-lg transition font-medium">

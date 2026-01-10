@@ -20,11 +20,11 @@ export interface IAnnouncementGet extends IAnnouncement {
 
 export interface IAnnouncementResponse {
   announcements: IAnnouncementGet[];
-  meta: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPage: number;
+  meta?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+    totalPage?: number;
   };
 }
 

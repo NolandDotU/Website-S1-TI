@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import image1 from "../assets/image.png";
 import { env } from "../services/utils/env";
 
-// Default slides for fallback
 const defaultSlides = [
   {
     _id: "1",
@@ -23,7 +22,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const BACKEND_URL = env.BACKEND_URL;
   const [index, setIndex] = useState(0);
 
-  // Filter only active slides and use default if empty
   const activeSlides = slides.filter((slide) => slide.isActive !== false);
   const finalSlides =
     !activeSlides || activeSlides.length === 0 ? defaultSlides : activeSlides;
@@ -33,7 +31,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const next = () => setIndex((i) => (i + 1) % count);
   const goTo = (i) => setIndex(i);
 
-  // Helper function to get image URL
   const getImageUrl = (slide) => {
     if (slide.type === "custom") {
       const imageUrl = slide.customContent.imageUrl;
@@ -48,7 +45,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     return image1;
   };
 
-  // Helper function to get title
   const getTitle = (slide) => {
     if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.title;
@@ -59,7 +55,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     return "";
   };
 
-  // Helper function to get description
   const getDescription = (slide) => {
     if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.description;
@@ -71,26 +66,12 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     return "";
   };
 
-  // Helper function to get link
   const getLink = (slide) => {
     if (slide.type === "custom" || slide.type === "default") {
       return slide.customContent.link;
     }
     if (slide.type === "announcement" && slide.announcementId) {
-      return slide.announcementId.link;
-    }
-    return null;
-  };
-
-  // Helper function to get category badge (for announcement)
-  const getCategoryBadge = (slide) => {
-    if (slide.type === "announcement" && slide.announcementId) {
-      const categoryMap = {
-        event: { label: "Event", color: "bg-purple-500" },
-        lowongan: { label: "Lowongan", color: "bg-green-500" },
-        pengumuman: { label: "Pengumuman", color: "bg-blue-500" },
-      };
-      return categoryMap[slide.announcementId.category] || null;
+      return `/berita`;
     }
     return null;
   };
@@ -99,7 +80,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     const timer = setInterval(() => {
       next();
     }, autoPlayInterval);
-    // Empty state component
     if (count <= 0) {
       return (
         <div className="w-full max-w-full mx-auto py-8 px-4">
@@ -232,22 +212,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-20">
                 <div className="max-w-7xl mx-auto">
-                  {/* Category Badge for Announcement */}
-                  {getCategoryBadge(finalSlides[index]) && (
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.6, duration: 0.6 }}
-                      className="mb-4">
-                      <span
-                        className={`inline-block px-4 py-2 rounded-full text-white text-sm font-semibold ${
-                          getCategoryBadge(finalSlides[index]).color
-                        }`}>
-                        {getCategoryBadge(finalSlides[index]).label}
-                      </span>
-                    </motion.div>
-                  )}
-
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -277,7 +241,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.3, duration: 0.6 }}
-                      className="inline-block mt-6 px-6 py-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg transition-all hover:scale-105">
+                      className="inline-block mt-4 px-6 py-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-lg text-sm transition-all hover:scale-105">
                       Selengkapnya →
                     </motion.a>
                   )}

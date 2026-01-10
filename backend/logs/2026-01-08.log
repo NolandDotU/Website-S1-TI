@@ -1944,3 +1944,303 @@
 {"level":"http","message":"GET /uploads/news/undefined 404 45 - 2.326 ms","timestamp":"2026-01-08 16:11:21"}
 {"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 254.499 ms","timestamp":"2026-01-08 16:11:21"}
 {"level":"http","message":"GET /api/v1/announcements/695cddb03455c2480a656687 304 - - 145.195 ms","timestamp":"2026-01-08 16:11:21"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 16:53:42"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 16:53:40"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 16:53:42"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 16:53:43"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 16:53:43"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 16:53:43"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 16:53:43"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 16:53:44"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 16:54:44"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 16:54:44"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 16:54:44"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 16:54:44"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 16:54:46"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 16:54:46"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 16:54:46"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:54:47"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 16:54:47"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 16:54:47"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 16:54:47"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 557.900 ms","timestamp":"2026-01-08 16:54:59"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 82.382 ms","timestamp":"2026-01-08 16:54:59"}
+{"level":"http","message":"GET /api/v1/history/?limit=50&page=1&search= 200 - - 813.756 ms","timestamp":"2026-01-08 16:55:00"}
+{"level":"http","message":"GET /api/v1/history/?limit=50&page=1&search= 304 - - 153.896 ms","timestamp":"2026-01-08 16:55:00"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 16:55:22"}
+{"level":"http","message":"GET /api/v1/highlight/ 200 - - 622.940 ms","timestamp":"2026-01-08 16:55:22"}
+{"level":"http","message":"GET /uploads/news/undefined 404 45 - 3.412 ms","timestamp":"2026-01-08 16:55:22"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 16:55:22"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 115.077 ms","timestamp":"2026-01-08 16:55:22"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 200 - - 1070.569 ms","timestamp":"2026-01-08 16:55:23"}
+{"level":"http","message":"GET /uploads/news/undefined 404 45 - 0.820 ms","timestamp":"2026-01-08 16:55:23"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 120.722 ms","timestamp":"2026-01-08 16:55:23"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 366.920 ms","timestamp":"2026-01-08 16:55:32"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 129.228 ms","timestamp":"2026-01-08 16:55:32"}
+{"level":"http","message":"GET /uploads/news/undefined 404 45 - 0.838 ms","timestamp":"2026-01-08 16:55:33"}
+{"destination":"uploads\\news","encoding":"7bit","fieldname":"photo","filename":"93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","level":"info","message":"Image uploaded successfully","mimetype":"image/jpeg","originalname":"futuristic-technology-concept (1).jpg","path":"uploads\\news\\93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","size":524594,"timestamp":"2026-01-08 16:55:48"}
+{"level":"http","message":"POST /api/v1/announcements/uploads 200 202 - 241.757 ms","timestamp":"2026-01-08 16:55:48"}
+{"level":"http","message":"PUT /api/v1/announcements/695cddb03455c2480a656687 200 - - 1007.483 ms","timestamp":"2026-01-08 16:55:49"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 200 - - 239.706 ms","timestamp":"2026-01-08 16:55:49"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 67.291 ms","timestamp":"2026-01-08 16:55:57"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 75.922 ms","timestamp":"2026-01-08 16:55:57"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 150.961 ms","timestamp":"2026-01-08 16:55:57"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=10&search= 304 - - 129.215 ms","timestamp":"2026-01-08 16:55:57"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 16:56:01"}
+{"level":"http","message":"GET /api/v1/highlight/ 200 - - 123.773 ms","timestamp":"2026-01-08 16:56:01"}
+{"level":"http","message":"GET /uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp 200 153894 - 2.123 ms","timestamp":"2026-01-08 16:56:01"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 16:56:01"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 162.807 ms","timestamp":"2026-01-08 16:56:01"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 200 - - 914.102 ms","timestamp":"2026-01-08 16:56:02"}
+{"level":"http","message":"GET /api/v1/announcements/admin?page=1&limit=100&search= 304 - - 121.662 ms","timestamp":"2026-01-08 16:56:02"}
+{"level":"error","message":"[\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"announcement\",\n      \"custom\"\n    ],\n    \"path\": [\n      \"type\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"announcement\\\"|\\\"custom\\\"\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"order\"\n    ],\n    \"message\": \"Invalid input: expected number, received undefined\"\n  }\n]","name":"ZodError","stack":"ZodError: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"announcement\",\n      \"custom\"\n    ],\n    \"path\": [\n      \"type\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"announcement\\\"|\\\"custom\\\"\"\n  },\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"order\"\n    ],\n    \"message\": \"Invalid input: expected number, received undefined\"\n  }\n]\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:9:25\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:77:11\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:825:5","timestamp":"2026-01-08 16:58:33"}
+{"level":"error","message":"Invalid option: expected one of \"announcement\"|\"custom\", Invalid input: expected number, received undefined","method":"POST","stack":"Error: Invalid option: expected one of \"announcement\"|\"custom\", Invalid input: expected number, received undefined\n    at Function.badRequest (D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\ApiError.ts:24:12)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\validate.middleware.ts:14:24\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\middleware\\auth.middleware.ts:77:11\n    at D:\\PROJECT\\Website-S1-TI\\backend\\src\\utils\\asyncHandler.ts:11:21\n    at Layer.handle [as handle_request] (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at D:\\PROJECT\\Website-S1-TI\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:942:7\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-01-08 16:58:33","url":"/api/v1/highlight/"}
+{"level":"http","message":"POST /api/v1/highlight/ 400 - - 11.225 ms","timestamp":"2026-01-08 16:58:33"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:00:16"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 200 - - 775.862 ms","timestamp":"2026-01-08 17:00:16"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:00:16"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:00:16"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 108.442 ms","timestamp":"2026-01-08 17:00:16"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:01:07"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 441.654 ms","timestamp":"2026-01-08 17:01:07"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:01:07"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 97.555 ms","timestamp":"2026-01-08 17:01:07"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:01:11"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:01:11"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 113.298 ms","timestamp":"2026-01-08 17:01:11"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:01:11"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:01:11"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 134.613 ms","timestamp":"2026-01-08 17:01:11"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:01:14"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 154.221 ms","timestamp":"2026-01-08 17:01:14"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:01:14"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 110.151 ms","timestamp":"2026-01-08 17:01:14"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 614.368 ms","timestamp":"2026-01-08 17:04:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:04:26"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 670.795 ms","timestamp":"2026-01-08 17:04:26"}
+{"level":"http","message":"GET /uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp 304 - - 1.023 ms","timestamp":"2026-01-08 17:04:26"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 73.801 ms","timestamp":"2026-01-08 17:04:26"}
+{"level":"info","message":"Highlight fetched successfully","timestamp":"2026-01-08 17:04:26"}
+{"level":"http","message":"GET /api/v1/highlight/ 304 - - 137.751 ms","timestamp":"2026-01-08 17:04:26"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:05:26"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:05:26"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 134.197 ms","timestamp":"2026-01-08 17:05:26"}
+{"level":"http","message":"GET /uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp 304 - - 0.705 ms","timestamp":"2026-01-08 17:05:26"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:05:26"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:05:26"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 101.137 ms","timestamp":"2026-01-08 17:05:26"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 565.916 ms","timestamp":"2026-01-08 17:05:27"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 57.346 ms","timestamp":"2026-01-08 17:05:27"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:06:32"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:06:32"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 152.674 ms","timestamp":"2026-01-08 17:06:32"}
+{"level":"http","message":"GET /uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp 304 - - 0.525 ms","timestamp":"2026-01-08 17:06:32"}
+{"level":"info","message":"Cache HIT: news:published:v187:p1:l100:s","timestamp":"2026-01-08 17:06:32"}
+{"announcements":[{"category":"lowongan","content":"Program Studi S1 Teknik Informatika membuka pendaftaran Asisten Laboratorium untuk Semester Genap Tahun Akademik 2025/2026.\n\nPendaftaran terbuka bagi mahasiswa aktif yang telah menempuh mata kuliah terkait dan memiliki minat dalam kegiatan praktikum serta pengembangan akademik.\n\nPersyaratan:\n\n- Mahasiswa aktif S1 Teknik Informatika\n- Minimal semester 4 \n- IPK minimal 3,00\n- Mampu bekerja sama dalam tim\n\nPendaftaran dibuka hingga 20 Februari 2026 melalui formulir resmi program studi. Informasi lebih lanjut dapat diperoleh melalui pengumuman lanjutan atau kontak administrasi prodi.\n\n[FORM PENDAFTARAN](https://forms.gle/97JB36Y26uGWeFWAA)","createdAt":"2026-01-06T10:02:24.765Z","id":"695cddb03455c2480a656687","photo":"/uploads/news/93b5811a-5a78-45dd-ae51-86d7dab3b6ee.webp","publishDate":"2026-01-08T08:06:45.797Z","scheduleDate":"2026-01-08T06:07:00.000Z","source":"Program Studi","status":"published","title":"Pembukaan Pendaftaran Asisten Laboratorium Semester Genap 2025/2026","updatedAt":"2026-01-08T09:55:48.929Z","views":0}],"level":"info","message":"News fetched successfully","meta":{"limit":100,"page":1,"total":1,"totalPage":1},"timestamp":"2026-01-08 17:06:32"}
+{"level":"http","message":"GET /api/v1/announcements?page=1&limit=100 304 - - 138.587 ms","timestamp":"2026-01-08 17:06:32"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 546.627 ms","timestamp":"2026-01-08 17:06:33"}
+{"level":"http","message":"GET /api/v1/auth/me 304 - - 63.341 ms","timestamp":"2026-01-08 17:06:33"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:10:42"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:10:42"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:10:42"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:10:42"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:10:43"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:10:44"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:10:44"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:10:44"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:10:45"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:10:45"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:10:45"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:11:37"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:11:37"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:11:37"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:11:37"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:11:38"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:11:39"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:11:57"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:11:57"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:11:57"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:11:57"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:11:59"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:12:00"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:12:40"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:12:40"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:12:40"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:12:40"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:12:42"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:12:42"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:12:42"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:42"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:43"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:12:43"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:12:43"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:12:54"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:12:54"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:12:54"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:12:54"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:12:56"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:12:56"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:12:56"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:57"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:12:57"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:12:57"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:12:57"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:15:45"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:15:45"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:15:45"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:15:45"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:15:46"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:15:47"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:17:32"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:17:32"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:17:32"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:17:32"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:17:34"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:17:37"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:18:22"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:18:22"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:18:22"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:18:22"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:18:23"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:18:24"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:23:30"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:23:30"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:23:30"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:23:30"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:23:31"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:23:32"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:25:25"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:25:25"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:25:25"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:25:25"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:25:26"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:25:27"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:25:27"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:25:28"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:25:28"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:25:28"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:25:28"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:43:01"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:43:01"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:43:01"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:43:01"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:43:02"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:43:03"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:43:03"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:43:04"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:43:04"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:43:04"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:43:04"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:43:16"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:43:16"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:43:16"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:43:16"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:43:18"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:43:29"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:43:29"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:43:29"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:43:29"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:43:30"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:43:31"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:46:32"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:46:32"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:46:32"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:46:32"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:46:33"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:46:34"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:46:47"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:46:47"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:46:47"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:46:47"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:46:48"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:46:49"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:46:49"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:46:50"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:46:50"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:46:50"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:46:50"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:47:43"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:47:43"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:47:43"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:47:43"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:47:45"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:47:46"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:47:58"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:47:58"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:47:58"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:47:58"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:47:59"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:48:00"}
+{"level":"info","message":"Creating upload middleware for lecturers","timestamp":"2026-01-08 17:48:54"}
+{"level":"info","message":"Creating upload middleware for news","timestamp":"2026-01-08 17:48:54"}
+{"level":"info","message":"Creating upload middleware for users","timestamp":"2026-01-08 17:48:54"}
+{"level":"info","message":"Creating upload middleware for carousels","timestamp":"2026-01-08 17:48:54"}
+{"level":"info","message":"Starting Connection Server","timestamp":"2026-01-08 17:48:56"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2026-01-08 17:48:56"}
+{"level":"info","message":"Connecting to Redis...","timestamp":"2026-01-08 17:48:56"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:48:57"}
+{"level":"info","message":"Redis connected and ready","timestamp":"2026-01-08 17:48:57"}
+{"level":"info","message":"🚀 Server running on port 5000","timestamp":"2026-01-08 17:48:57"}
+{"level":"info","message":"📝 Environment: development","timestamp":"2026-01-08 17:48:57"}

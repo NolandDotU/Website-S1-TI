@@ -1,6 +1,6 @@
 import AnnouncementModel from "../../../model/AnnouncementModel";
 import { getRedisClient } from "../../../config/redis";
-import { logger, CacheManager, ApiError } from "../../../utils";
+import { logger, CacheManager, ApiError, JWTPayload } from "../../../utils";
 import {
   IAnnouncementGet,
   IAnnouncementInput,
@@ -28,7 +28,7 @@ export class AnnouncementService {
   ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
-    const cacheVersion = (await this.cache.get<string>("news:version")) || "0";
+    const cacheVersion = (await this.cache.get<number>("news:version")) || 0;
     const normalizedSearch = search.trim().toLowerCase();
     const cacheKey = `news:published:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
@@ -69,7 +69,9 @@ export class AnnouncementService {
       },
     };
 
-    await this.cache.set(cacheKey, response, 3600);
+    setImmediate(() => {
+      this.cache.set(cacheKey, response, 3600);
+    });
 
     return response;
   }
@@ -81,7 +83,7 @@ export class AnnouncementService {
   ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
-    const cacheVersion = (await this.cache.get<string>("news:version")) || "0";
+    const cacheVersion = (await this.cache.get<number>("news:version")) || 0;
     const normalizedSearch = search.trim().toLowerCase();
     const cacheKey = `news:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
@@ -120,7 +122,10 @@ export class AnnouncementService {
       },
     };
 
-    await this.cache.set(cacheKey, response, 3600);
+    setImmediate(() => {
+      if (this.cache !== null && this.cache !== undefined)
+        this.cache.set(cacheKey, response, 3600);
+    });
 
     return response;
   }
@@ -128,17 +133,21 @@ export class AnnouncementService {
   async getById(id: string): Promise<IAnnouncementResponse> {
     const cacheKey = `news:item:${id}`;
 
-    const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
-    if (cached) {
-      return cached;
+    if (this.cache !== null && this.cache !== undefined) {
+      const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
+      if (cached) {
+        return cached;
+      }
     }
 
     const newsDoc = await this.model.findById(id);
     if (!newsDoc) throw ApiError.notFound("News not found");
 
     const data = newsDoc.toJSON() as unknown as IAnnouncementResponse;
-
-    await this.cache.set(cacheKey, data, 3600);
+    setImmediate(() => {
+      if (this.cache !== null && this.cache !== undefined)
+        this.cache.set(cacheKey, data, 3600);
+    });
 
     return data;
   }
@@ -154,18 +163,21 @@ export class AnnouncementService {
 
     const newsDoc = await this.model.create(data);
 
-    await this.cache.incr("news:version");
-    await this.cache.del(`news:item:${newsDoc.id}`);
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        user: new mongoose.Types.ObjectId(createdBy.id),
+        action: "POST",
+        entity: "announcement",
+        entityId: newsDoc._id,
+        description: `Announcement titled "${newsDoc.title}" was created by ${createdBy.username}.`,
+      };
 
-    const historyData: IHistoryInput = {
-      user: new mongoose.Types.ObjectId(createdBy.id),
-      action: "POST",
-      entity: "announcement",
-      entityId: newsDoc._id,
-      description: `Announcement titled "${newsDoc.title}" was created by ${createdBy.username}.`,
-    };
-
-    await this.history?.create(historyData);
+      this.history?.create(historyData).catch((err) => {
+        logger.error("Error creating history: ", err);
+      });
+      this.cache.incr("news:version");
+      this.cache.del(`news:item:${newsDoc.id}`);
+    });
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
   }
@@ -175,23 +187,10 @@ export class AnnouncementService {
     id?: string,
     createdBy?: any
   ): Promise<IAnnouncementResponse> {
-    const [exist, announ] = await Promise.all([
-      this.model.findOne({
-        _id: { $ne: id },
-        title: data.title,
-      }),
-      this.model.findById({
-        _id: id,
-      }),
-    ]);
-    if (exist) throw ApiError.conflict("News already exists");
-    if (data.photo !== announ?.photo) {
-      deleteImage(announ?.photo || "").catch((err) => {
-        logger.error(
-          `Error deleting announcement image: ${announ?.photo} [ ${err}] `
-        );
-        return ApiError.internal(`Failed delete announcement image! ${err}`);
-      });
+    const announ = await this.model.findById(id);
+    if (announ?.title !== data.title) {
+      const exist = await this.model.findOne({ title: data.title });
+      if (exist) throw ApiError.conflict("News already exists");
     }
 
     const newsDoc = await this.model.findOneAndUpdate({ _id: id }, data, {
@@ -199,20 +198,34 @@ export class AnnouncementService {
     });
     if (!newsDoc) throw ApiError.notFound("News not found");
 
-    const historyData: IHistoryInput = {
-      user: new mongoose.Types.ObjectId(createdBy),
-      action: "UPDATE",
-      entity: "announcement",
-      entityId: newsDoc._id,
-      description: `Announcement titled "${newsDoc.title}" was updated by ${createdBy.username}.`,
-    };
+    setImmediate(() => {
+      if (data.photo !== announ?.photo) {
+        logger.info("DELETING IMAGE..", announ?.photo);
+        deleteImage(announ?.photo || "").catch((err) => {
+          logger.error(
+            `Error deleting announcement image: ${announ?.photo} [ ${err}] `
+          );
+          return ApiError.internal(`Failed delete announcement image! ${err}`);
+        });
+      }
+      const historyData: IHistoryInput = {
+        user: new mongoose.Types.ObjectId(createdBy),
+        action: "UPDATE",
+        entity: "announcement",
+        entityId: newsDoc._id,
+        description: `Announcement titled "${newsDoc.title}" was updated by ${createdBy.username}.`,
+      };
 
-    await this.history?.create(historyData);
-
-    await this.cache.incr("news:version");
-    await this.cache.incr("highlights:version");
-    await this.cache.incr("history:version");
-    await this.cache.del(`news:item:${id}`);
+      this.history?.create(historyData).catch((err) => {
+        logger.error("Error creating history: ", err);
+      });
+      if (this.cache !== null && this.cache) {
+        this.cache.incr("news:version");
+        this.cache.incr("highlights:version");
+        this.cache.incr("history:version");
+        this.cache.del(`news:item:${id}`);
+      }
+    });
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
   }
@@ -242,20 +255,26 @@ export class AnnouncementService {
     if (!newsDoc) throw ApiError.notFound("News not found");
     logger.info(`REQUEST ID : ${id} updated to ${status}`);
 
-    const historyData: IHistoryInput = {
-      user: new mongoose.Types.ObjectId(createdBy),
-      action: "PATCH",
-      entity: "announcement",
-      entityId: newsDoc._id,
-      entityModel: this.model.modelName,
-      description: `Announcement titled "${newsDoc.title}" status changed to "${status}" by ${createdBy.username}.`,
-    };
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        user: new mongoose.Types.ObjectId(createdBy),
+        action: "PATCH",
+        entity: "announcement",
+        entityId: newsDoc._id,
+        entityModel: this.model.modelName,
+        description: `Announcement titled "${newsDoc.title}" status changed to "${status}" by ${createdBy.username}.`,
+      };
 
-    await this.history?.create(historyData);
-    await this.cache.incr("news:version");
-    await this.cache.incr("highlights:version");
-    await this.cache.incr("history:version");
-    await this.cache.del(`news:item:${id}`);
+      this.history?.create(historyData).catch((err) => {
+        logger.error(`Error creating history: ${err}`);
+      });
+      if (this.cache !== null && this.cache) {
+        this.cache.incr("news:version");
+        this.cache.incr("highlights:version");
+        this.cache.incr("history:version");
+        this.cache.del(`news:item:${id}`);
+      }
+    });
 
     return true;
   }
@@ -280,20 +299,163 @@ export class AnnouncementService {
       throw ApiError.internal("Failed to delete announcement");
     });
 
-    const historyData: IHistoryInput = {
-      user: new mongoose.Types.ObjectId(createdBy.id),
-      action: "DELETE",
-      entity: "announcement",
-      entityId: newsDoc._id,
-      description: `Announcement titled "${newsDoc.title}" was deleted by ${createdBy.username}.`,
-    };
-    await this.history?.create(historyData);
-
-    await this.cache.incr("news:version");
-    await this.cache.incr("highlights:version");
-    await this.cache.incr("history:version");
-    await this.cache.del(`news:item:${id}`);
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        user: new mongoose.Types.ObjectId(createdBy.id),
+        action: "DELETE",
+        entity: "announcement",
+        entityId: newsDoc._id,
+        description: `Announcement titled "${newsDoc.title}" was deleted by ${createdBy.username}.`,
+      };
+      this.history?.create(historyData).catch((err) => {
+        logger.error("Error creating history: ", err);
+      });
+      if (this.cache !== null && this.cache) {
+        this.cache.incr("news:version");
+        this.cache.incr("highlights:version");
+        this.cache.incr("history:version");
+        this.cache.del(`news:item:${id}`);
+      }
+    });
 
     return true;
   }
+
+  topTierAnnouncements = async (): Promise<IAnnouncementResponse> => {
+    let cacheKey = "";
+    if (this.cache !== null && this.cache) {
+      cacheKey = `topTierAnnouncements:version`;
+      const cached = await this.cache.get<IAnnouncementResponse>(cacheKey);
+      if (cached) return cached;
+    }
+
+    const cursor = await this.model.find().sort({ views: -1 }).limit(4);
+    const data = {
+      announcements: cursor,
+      meta: {
+        total: cursor.length,
+        page: 1,
+        limit: 5,
+      },
+    } as IAnnouncementResponse;
+    if (this.cache !== null && this.cache) {
+      await this.cache.set(cacheKey, data, 3600);
+    }
+    return data;
+  };
+
+  increamentViews = async (id: String, currnetUser: JWTPayload) => {
+    setImmediate(async () => {
+      const newsDoc = await this.model
+        .findByIdAndUpdate({ _id: id }, { $inc: { views: 1 } })
+        .catch((err) => {
+          logger.error("Error updating announcement views: ", err);
+        });
+
+      const historyData: IHistoryInput = {
+        action: "VIEW",
+        entity: "announcement",
+        entityId: newsDoc?._id,
+        user: new mongoose.Types.ObjectId(currnetUser.id),
+        entityModel: this.model.modelName,
+        description: `Announcement was viewed by ${currnetUser.username}.`,
+      };
+
+      this.history?.create(historyData).catch((err) => {
+        logger.error("Error creating history: ", err);
+      });
+
+      if (this.cache !== null && this.cache) {
+        this.cache.incr("news:version");
+        this.cache.incr("highlights:version");
+        this.cache.incr("history:version");
+        this.cache.del(`news:item:${id}`);
+      }
+    });
+  };
+
+  getStatistics = async (
+    startOfMonth: Date,
+    endOfMonth: Date,
+    startOfLastMonth: Date,
+    endOfLastMonth: Date
+  ) => {
+    const result = await this.model.aggregate([
+      {
+        $facet: {
+          totalAnnouncement: [{ $count: "count" }],
+          totalDraftAnnouncement: [
+            {
+              $match: {
+                status: "draft",
+              },
+            },
+            { $count: "count" },
+          ],
+
+          totalPublishedAnnouncement: [
+            {
+              $match: {
+                status: "published",
+              },
+            },
+            { $count: "count" },
+          ],
+
+          currentMonthAnnouncement: [
+            {
+              $match: {
+                status: "published",
+                publishDate: {
+                  $gte: startOfMonth,
+                  $lte: endOfMonth,
+                },
+              },
+            },
+            { $count: "count" },
+          ],
+
+          lastMonthAnnouncement: [
+            {
+              $match: {
+                status: "published",
+                publishDate: {
+                  $gte: startOfLastMonth,
+                  $lte: endOfLastMonth,
+                },
+              },
+            },
+            { $count: "count" },
+          ],
+
+          mostViewedThisMonth: [
+            {
+              $match: {
+                status: "published",
+                publishDate: {
+                  $gte: startOfMonth,
+                  $lte: endOfMonth,
+                },
+              },
+            },
+            { $sort: { views: -1 } },
+            { $limit: 1 },
+            { $project: { title: 1, views: 1, publishDate: 1 } },
+          ],
+        },
+      },
+    ]);
+
+    const data = result[0];
+
+    return {
+      totalAnnouncement: data.totalAnnouncement[0]?.count ?? 0,
+      currentMonthAnnouncement: data.currentMonthAnnouncement[0]?.count ?? 0,
+      lastMonthAnnouncement: data.lastMonthAnnouncement[0]?.count ?? 0,
+      mostViewedThisMonth: data.mostViewedThisMonth[0] ?? null,
+      totalDraftAnnouncement: data.totalDraftAnnouncement[0]?.count ?? 0,
+      totalPublishedAnnouncement:
+        data.totalPublishedAnnouncement[0]?.count ?? 0,
+    };
+  };
 }
