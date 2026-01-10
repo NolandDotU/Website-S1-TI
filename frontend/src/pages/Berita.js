@@ -133,6 +133,7 @@ const Berita = () => {
                     )}
                     summary={ann.content}
                     image={`${env.BACKEND_URL}${ann.photo}`}
+                    views={ann.views}
                     onClick={() => onClickAnnouncement(ann)}
                   />
                 ))
