@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "../../../context/toastProvider";
-import { Calendar, User, Tag, Clock } from "lucide-react";
+import { Calendar, User, Tag, Clock, Eye } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
 import { getById } from "../../../services/announcement/announcementAPI";
 import { useParams } from "react-router-dom";
@@ -137,7 +137,7 @@ const PreviewAnnouncement = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
+                  <Eye className="w-5 h-5" />
                   <span className="text-sm">{announcement.views} views</span>
                 </div>
               </div>
@@ -178,7 +178,7 @@ const PreviewAnnouncement = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
+                  <Eye className="w-5 h-5" />
                   <span className="text-sm">{announcement.views} views</span>
                 </div>
               </div>

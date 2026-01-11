@@ -27,18 +27,12 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     return <Navigate to="/login" replace />;
   }
 
-  console.log("requiredRole:", requiredRole, "user.role:", user.role);
-
   // ✅ Check role if required (e.g., admin only)
   if (requiredRole && user.role !== requiredRole) {
-    console.log(
-      `ProtectedRoute - User role (${user.role}) does not match required role (${requiredRole})`
-    );
     return <Navigate to="/no-access" replace />;
   }
 
   // ✅ User is authenticated and authorized
-  console.log("ProtectedRoute - Access granted");
   return children;
 };
 

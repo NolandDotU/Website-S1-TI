@@ -51,7 +51,7 @@ router.delete("/uploads", (req, res, next) => {
   });
 });
 
-router.get("/", globalLimiter, (req, res, next) => {
+router.get("/", (req, res, next) => {
   getController().getAllPublished(req, res, next);
 });
 

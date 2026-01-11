@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("🔄 AuthProvider mounted, checking authentication...");
     checkAuth();
   }, []);
 

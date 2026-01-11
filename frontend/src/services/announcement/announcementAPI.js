@@ -5,11 +5,9 @@ import api from "../utils/api";
 //===================
 export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
   try {
-    console.log("FE SERVICE");
     const response = await api.get("/announcements", {
       params: { page, limit },
     });
-    console.log("RESPONSE FE SERVICE : ", response);
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},

@@ -1,22 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import NewsCard from "./NewsCard";
+import NewsCard from "./announcement/NewsCard";
 import { getAnnouncements } from "../services/announcement/announcementAPI";
 import { useToast } from "../context/toastProvider";
-import { getAdapter } from "axios";
 import { env } from "../services/utils/env";
+import { updateViewCount } from "../services/announcement/announcementAPI";
+import AnnouncementDetail from "./announcement/AnnouncementDetail";
 
 const FeaturedNews = () => {
-  const toast = useToast();
-  const [news, setNews] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(false);
+  // const toast = useToast();
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
   const fetchData = async () => {
     try {
+      setSelectedAnnouncement(null);
       setLoading(true);
       setError(false);
-      const response = await getAnnouncements();
+      const response = await getAnnouncements(1, 4);
       console.log("response announcements", response);
 
       if (!response.announcements || response.announcements.length === 0) {
@@ -27,7 +30,7 @@ const FeaturedNews = () => {
     } catch (error) {
       console.error("Error fetching announcements:", error);
       setError(true);
-      toast.error("Terjadi kesalahan saat mengambil pengumuman!");
+      // toast.error("Terjadi kesalahan saat mengambil pengumuman!");
     } finally {
       setLoading(false);
     }
@@ -42,6 +45,20 @@ const FeaturedNews = () => {
   if (displayNews.length < 4) {
     displayNews = [...displayNews, ...Array(4 - displayNews.length).fill(null)];
   }
+
+  const increamentView = async (id) => {
+    try {
+      const response = await updateViewCount(id);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onClickAnnouncement = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    increamentView(announcement.id);
+  };
 
   return (
     <motion.section
@@ -176,6 +193,7 @@ const FeaturedNews = () => {
                 }}>
                 {item ? (
                   <NewsCard
+                    onClick={() => onClickAnnouncement(item)}
                     title={item.title}
                     date={new Date(item.publishDate).toLocaleDateString(
                       "id-ID",
@@ -197,6 +215,13 @@ const FeaturedNews = () => {
               </motion.div>
             ))}
           </div>
+        )}
+
+        {selectedAnnouncement && (
+          <AnnouncementDetail
+            data={selectedAnnouncement}
+            onClose={() => setSelectedAnnouncement(null)}
+          />
         )}
       </div>
     </motion.section>
