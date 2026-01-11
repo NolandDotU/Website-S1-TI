@@ -139,12 +139,6 @@ const HighlightManage = () => {
       if (modalMode === "create") {
         const response = await createHighlight(payload);
         if (response.statusCode !== 201) return toast.error(response.message);
-        const newItem = {
-          _id: Date.now().toString(),
-          ...payload,
-          createdAt: new Date().toISOString(),
-        };
-        setCarousel([...carousel, newItem]);
         fetchCarousel();
         toast.success(response.message);
       } else {
@@ -170,9 +164,9 @@ const HighlightManage = () => {
         selectedItem._id || selectedItem.id
       );
       if (response.statusCode !== 200) return toast.error(response.message);
-      fetchCarousel();
       setIsDeleteModalOpen(false);
       setSelectedItem(null);
+      fetchCarousel();
     } catch (error) {
       console.error("Error deleting item:", error);
       toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);

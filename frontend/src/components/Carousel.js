@@ -34,7 +34,7 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const getImageUrl = (slide) => {
     if (slide.type === "custom") {
       const imageUrl = slide.customContent.imageUrl;
-      return `${BACKEND_URL}/${imageUrl}`;
+      return `${BACKEND_URL}${imageUrl}`;
     }
     if (slide.type === "announcement" && slide.announcementId) {
       const photo = slide.announcementId.photo;

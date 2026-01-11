@@ -54,6 +54,7 @@ export const uploadPhoto = async (photoFile) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log("response upload highlight photo:", response);
     return response.data;
   } catch (error) {
     console.error("Error uploading photo:", error);

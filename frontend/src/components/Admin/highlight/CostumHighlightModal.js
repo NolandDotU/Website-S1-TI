@@ -127,7 +127,7 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                       })
                     }
                     placeholder="Masukkan judul (max 20 karakter)..."
-                    maxLength={20}
+                    maxLength={50}
                     className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
                       dark:border-gray-600 bg-white dark:bg-gray-900 
                       text-gray-900 dark:text-white placeholder-gray-400 
@@ -135,7 +135,7 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                       transition-colors"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {formData.customContent.title.length}/20 karakter
+                    {formData.customContent.title.length}/50 karakter
                   </p>
                 </div>
 

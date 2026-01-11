@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getLecturers } from "../services/lecturerAPI";
-import LecturerCard from "../components/LecturerCard";
+import LecturerCard from "../components/lecturers/LecturerCard";
 
 const LecturerProfiles = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,6 +9,7 @@ const LecturerProfiles = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedLecturer, setSelectedLecturer] = useState(null);
   const itemsPerPage = 9;
 
   // Fetch lecturers from backend
@@ -43,6 +44,10 @@ const LecturerProfiles = () => {
     "UI/UX Design",
   ];
 
+  const handleCardOpen = (data) => {
+    setSelectedLecturer(data);
+  };
+
   // Filter lecturers based on search and expertise
   const filteredLecturers = Array.isArray(lecturers)
     ? lecturers.filter((lecturer) => {
@@ -74,6 +79,7 @@ const LecturerProfiles = () => {
 
   // Reset to page 1 when filters change
   useEffect(() => {
+    setSelectedLecturer(null);
     setCurrentPage(1);
   }, [searchTerm, selectedExpertise]);
 
@@ -165,7 +171,11 @@ const LecturerProfiles = () => {
         <>
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {paginatedLecturers.map((lecturer) => (
-              <LecturerCard key={lecturer._id} lecturer={lecturer} />
+              <LecturerCard
+                key={lecturer._id || lecturer.id}
+                lecturer={lecturer}
+                onClick={() => handleCardOpen(lecturer)}
+              />
             ))}
           </div>
 
