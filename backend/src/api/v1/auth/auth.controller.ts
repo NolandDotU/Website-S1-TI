@@ -1,18 +1,17 @@
 import authService from "./auth.service";
-import { request, Request, Response } from "express";
+import { Request, Response } from "express";
 import passport from "passport";
 import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
-import { ApiResponse, JWTPayload, logger, verifyToken } from "../../../utils";
+import { ApiResponse, JWTPayload } from "../../../utils";
 import { env } from "../../../config/env";
-import { JWTAlgorithm } from "zod/v4/core/util.cjs";
 class AuthController {
   service = authService;
 
   private setCookies = (
     res: Response,
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
   ) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -30,28 +29,11 @@ class AuthController {
   };
 
   checkMe = asyncHandler(async (req: Request, res: Response) => {
-    // const accessToken = req.cookies["accessToken"] || null;
-    // const refreshToken = req.cookies["refreshToken"] || null;
-    // if (!accessToken) {
-    //   throw ApiError.unauthorized("User not authenticated");
-    // }
-    // let user = null;
-    // if (!accessToken) {
-    //   user = verifyToken(refreshToken, true);
-    // } else {
-    //   user = verifyToken(accessToken);
-    // }
-
-    // if (!user) {
-    //   throw ApiError.unauthorized("User not authenticated");
-    // }
-
     const user = req.user as JWTPayload;
     const currentUser = await this.service.checkMe(user.id);
-    console.log("currentUser : ", currentUser);
 
-    return res.send(
-      ApiResponse.success(currentUser, "User retrieved successfully", 200)
+    return res.json(
+      ApiResponse.success(currentUser, "User retrieved successfully", 200),
     );
   });
 
@@ -59,15 +41,16 @@ class AuthController {
     const user = await this.service.adminLogin(req.body);
     this.setCookies(res, user.accessToken, user.refreshToken);
     return res.send(
-      ApiResponse.success(null, "Admin logged in successfully", 200)
+      ApiResponse.success(null, "Admin logged in successfully", 200),
     );
   });
 
   createAdmin = asyncHandler(async (req: Request, res: Response) => {
     if (process.env.NODE_ENV !== "development") throw ApiError.forbidden();
-    const currentUser = req.user as JWTPayload | undefined;
-    const user = await this.service.createAdmin(req.body, currentUser?.id);
-    return ApiResponse.success(null, "Admin created successfully", 201);
+    const currentUser = req.user as JWTPayload;
+    const user = await this.service.createAdmin(req.body, currentUser);
+    (res.json(ApiResponse.success(null, "Admin created successfully", 201)),
+      201);
   });
 
   googleAuth = passport.authenticate("google", {
@@ -78,7 +61,7 @@ class AuthController {
   googleAuthCallback = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
       return res.redirect(
-        `${env.FRONTEND_ORIGIN}/login?error=google_auth_failed`
+        `${env.FRONTEND_ORIGIN}/login?error=google_auth_failed`,
       );
     }
 

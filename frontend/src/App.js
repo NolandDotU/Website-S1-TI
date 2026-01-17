@@ -21,6 +21,7 @@ import HighlightManage from "./pages/admin/modulHighlight/highlightManage";
 import TentangTISection from "./components/TentangTISection";
 import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
+import { UserManagement } from "./pages/admin/modulUser/ListUsers";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -89,6 +90,7 @@ function App() {
             <Route path="dosen" element={<LecturerManagement />} />
             <Route path="highlight" element={<HighlightManage />} />
             <Route path="history" element={<History />} />
+            <Route path="users" element={<UserManagement />} />
           </Route>
         </Routes>
       </main>

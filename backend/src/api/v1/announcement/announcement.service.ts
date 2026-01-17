@@ -24,7 +24,7 @@ export class AnnouncementService {
   async getAllPublished(
     page = 1,
     limit = 20,
-    search = ""
+    search = "",
   ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
@@ -59,7 +59,7 @@ export class AnnouncementService {
 
     const response: IAnnouncementResponse = {
       announcements: docs.map(
-        (doc) => doc.toJSON() as unknown as IAnnouncementGet
+        (doc) => doc.toJSON() as unknown as IAnnouncementGet,
       ),
       meta: {
         page,
@@ -79,7 +79,7 @@ export class AnnouncementService {
   async getAll(
     page = 1,
     limit = 10,
-    search = ""
+    search = "",
   ): Promise<IAnnouncementResponse> {
     const skip = (page - 1) * limit;
 
@@ -112,7 +112,7 @@ export class AnnouncementService {
 
     const response: IAnnouncementResponse = {
       announcements: docs.map(
-        (doc) => doc.toJSON() as unknown as IAnnouncementGet
+        (doc) => doc.toJSON() as unknown as IAnnouncementGet,
       ),
       meta: {
         page,
@@ -154,7 +154,7 @@ export class AnnouncementService {
 
   async create(
     data: IAnnouncementInput,
-    createdBy: any
+    createdBy: any,
   ): Promise<IAnnouncementResponse> {
     const exist = await this.model.findOne({ title: data.title });
     if (exist) throw ApiError.conflict("News already exists");
@@ -185,7 +185,7 @@ export class AnnouncementService {
   async update(
     data: IAnnouncementInput,
     id?: string,
-    createdBy?: any
+    createdBy?: any,
   ): Promise<IAnnouncementResponse> {
     const announ = await this.model.findById(id);
     if (announ?.title !== data.title) {
@@ -203,7 +203,7 @@ export class AnnouncementService {
         logger.info("DELETING IMAGE..", announ?.photo);
         deleteImage(announ?.photo || "").catch((err) => {
           logger.error(
-            `Error deleting announcement image: ${announ?.photo} [ ${err}] `
+            `Error deleting announcement image: ${announ?.photo} [ ${err}] `,
           );
           return ApiError.internal(`Failed delete announcement image! ${err}`);
         });
@@ -233,7 +233,7 @@ export class AnnouncementService {
   async changeStatus(
     id?: string,
     status?: string,
-    createdBy?: any
+    createdBy?: any,
   ): Promise<boolean> {
     let newsDoc;
     if (status === "published") {
@@ -242,14 +242,14 @@ export class AnnouncementService {
       newsDoc = await this.model.findOneAndUpdate(
         { _id: id },
         { status: status, publishDate: publishDate },
-        { new: true }
+        { new: true },
       );
     }
     if (status === "archived") {
       newsDoc = await this.model.findOneAndUpdate(
         { _id: id },
         { status: status },
-        { new: true }
+        { new: true },
       );
     }
     if (!newsDoc) throw ApiError.notFound("News not found");
@@ -282,7 +282,7 @@ export class AnnouncementService {
   async publishMany() {
     const updated = await this.model.updateMany(
       { status: "scheduled" },
-      { status: "published" }
+      { status: "published" },
     );
 
     return updated.modifiedCount;
@@ -358,7 +358,7 @@ export class AnnouncementService {
         entityId: newsDoc?._id,
         user: new mongoose.Types.ObjectId(currnetUser.id),
         entityModel: this.model.modelName,
-        description: `Announcement was viewed by ${currnetUser.username}.`,
+        description: `Announcement titled "${newsDoc?.title}" was viewed by ${currnetUser.username}.`,
       };
 
       this.history?.create(historyData).catch((err) => {
@@ -378,7 +378,7 @@ export class AnnouncementService {
     startOfMonth: Date,
     endOfMonth: Date,
     startOfLastMonth: Date,
-    endOfLastMonth: Date
+    endOfLastMonth: Date,
   ) => {
     const result = await this.model.aggregate([
       {

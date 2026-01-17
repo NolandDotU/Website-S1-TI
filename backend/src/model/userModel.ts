@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["lecturer", "student", "admin"],
+      enum: ["user", "admin"],
     },
     isActive: {
       type: Boolean,
@@ -75,7 +75,7 @@ const userSchema = new mongoose.Schema<IUser>(
         return ret;
       },
     },
-  }
+  },
 );
 
 // userSchema.index({ email: 1 }, { unique: true });
@@ -95,7 +95,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.comparePassword = async function (
-  password: string
+  password: string,
 ): Promise<boolean> {
   return await comparePassword(password, this.password);
 };

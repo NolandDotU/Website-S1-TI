@@ -13,6 +13,7 @@ import historyService from "../../../utils/history";
 import axios from "axios";
 import path from "path";
 import fs from "fs";
+import mongoose from "mongoose";
 class AuthService {
   history: typeof historyService | null = historyService || null;
 
@@ -20,7 +21,7 @@ class AuthService {
     action: string,
     userId: any,
     entity: string,
-    description?: string
+    description?: string,
   ) {
     if (this.history !== null) {
       await this.history.create({ user: userId, action, entity, description });
@@ -39,19 +40,23 @@ class AuthService {
     };
   }
 
-  async createAdmin(data: AdminRegisterDTO, userId?: any) {
+  async createAdmin(data: AdminRegisterDTO, currentUser: JWTPayload) {
     const existing = await userModel.findOne({ email: data.email });
     if (existing) {
-      await this.madeHistory("POST", existing.id, "auth");
       throw ApiError.conflict("Admin account already exists");
     }
     const user = await userModel.create(data);
-    await this.madeHistory("POST", user.id, "auth");
+    await this.madeHistory(
+      "POST",
+      new mongoose.Types.ObjectId(currentUser.id),
+      "auth",
+      `Admin account ${data.username} created by ${currentUser.username}`,
+    );
     return user;
   }
 
-  async assignRole(username: string, role: string) {
-    const user = await userModel.findOne({ username });
+  async assignRole(id: string, role: string) {
+    const user = await userModel.findById({ id: id });
     if (!user) throw ApiError.notFound("User not found");
     user.role = role;
     await user.save();
@@ -93,7 +98,7 @@ class AuthService {
       const fileName =
         (await this.saveImage(
           Buffer.from(googleImage.data, "binary"),
-          username
+          username,
         )) || "";
 
       user = await userModel.create({
@@ -104,11 +109,19 @@ class AuthService {
         authProvider: "google",
         username,
         fullname,
-        role: "student",
+        role: "user",
       });
     }
 
     const { accessToken, refreshToken } = this.generateToken(user);
+    setImmediate(() => {
+      this.madeHistory(
+        "POST",
+        user.id,
+        "auth",
+        `${user.username} login dengan ${user.authProvider}`,
+      );
+    });
 
     return {
       user: {

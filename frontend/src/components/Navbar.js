@@ -139,7 +139,8 @@ const Navbar = ({ theme, toggleTheme }) => {
                 className="relative"
                 ref={userDropdownRef}
                 onMouseEnter={handleUserMouseEnter}
-                onMouseLeave={handleUserMouseLeave}>
+                onMouseLeave={handleUserMouseLeave}
+                onClick={() => setIsDropDownUser(!isDropDownUser)}>
                 <button className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                   {imgError ? (
                     <User2 />
@@ -158,24 +159,16 @@ const Navbar = ({ theme, toggleTheme }) => {
                 </button>
                 {isDropDownUser && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
-                    {/* <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-semibold">
-                        {user.name || user.username}
-                      </p>
-                      {user.emaill && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {user.email}
-                        </p>
-                      )}
-                    </div>
-                    {/* <Link
-                      to="/profile"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                      Profile
-                    </Link> */}
+                    {user.role === "admin" && (
+                      <Link to="/admin/dashboard">
+                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                          Dashboard
+                        </button>
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 text-sm dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">
                       Logout
                     </button>
                   </div>

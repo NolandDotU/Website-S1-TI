@@ -1,0 +1,33 @@
+import { ApiResponse, asyncHandler, JWTPayload } from "../../../utils";
+import { Request, Response } from "express";
+import { UserService } from "./user.service";
+
+class UserController {
+  service: UserService = new UserService();
+  constructor(service: UserService = new UserService()) {
+    if (this.service === null) this.service = service;
+  }
+
+  newUser = asyncHandler(async (req: Request, res: Response) => {
+    const currentUser = req.user as JWTPayload;
+    const user = await this.service.newUser(req.body, currentUser);
+
+    return (
+      res.json(ApiResponse.success(user, "User created successfully", 201)),
+      201
+    );
+  });
+
+  getAllUser = asyncHandler(async (req: Request, res: Response) => {
+    const { limit, page, search } = req.query as {
+      limit?: number;
+      page?: number;
+      search?: string;
+    };
+    const users = await this.service.getAllUser(page, limit, search);
+    return (
+      res.json(ApiResponse.success(users, "Users fetched successfully", 200)),
+      200
+    );
+  });
+}
