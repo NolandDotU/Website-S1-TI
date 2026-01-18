@@ -11,15 +11,12 @@ import {
   adminGetAnnouncements,
   getAnnouncements,
   update,
-} from "../../../services/announcement/announcementAPI";
-import { getHighlights } from "../../../services/api";
-import {
   createHighlight,
   deleteHighlight,
   getAllHighlight,
   updateHighlight,
-  uploadPhoto,
-} from "../../../services/highlightAPI";
+  uploadPhotoHighlight,
+} from "../../../services/api";
 import { useToast } from "../../../context/toastProvider";
 
 const HighlightManage = () => {
@@ -43,7 +40,6 @@ const HighlightManage = () => {
   const [carouselPage, setCarouselPage] = useState(1);
   const [announcementPage, setAnnouncementPage] = useState(1);
   const [carouselTotalPages, setCarouselTotalPages] = useState(1);
-  const [announcementTotalPages, setAnnouncementTotalPages] = useState(1);
 
   useEffect(() => {
     fetchCarousel();
@@ -112,7 +108,7 @@ const HighlightManage = () => {
       const response = await createHighlight(payload);
       if (response.statusCode !== 201) return toast.error(response.message);
       setIsAnnouncementModalOpen(false);
-      fetchCarousel();
+      await fetchCarousel();
     } catch (error) {
       console.error("Error saving announcement to carousel:", error);
       toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
@@ -123,7 +119,7 @@ const HighlightManage = () => {
     try {
       let payload = {};
       if (formData.customContent.imageUrl) {
-        const photoResponse = await uploadPhoto(
+        const photoResponse = await uploadPhotoHighlight(
           formData.customContent.imageUrl
         );
         if (photoResponse.statusCode !== 200)
@@ -143,6 +139,7 @@ const HighlightManage = () => {
         toast.success(response.message);
       } else {
         const response = await updateHighlight(selectedItem._id, formData);
+        if (response.statusCode !== 200) return toast.error(response.message);
         setCarousel(
           carousel.map((item) =>
             item._id === selectedItem._id ? { ...item, ...formData } : item
@@ -163,10 +160,10 @@ const HighlightManage = () => {
       const response = await deleteHighlight(
         selectedItem._id || selectedItem.id
       );
+      await fetchCarousel();
       if (response.statusCode !== 200) return toast.error(response.message);
       setIsDeleteModalOpen(false);
       setSelectedItem(null);
-      fetchCarousel();
     } catch (error) {
       console.error("Error deleting item:", error);
       toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);

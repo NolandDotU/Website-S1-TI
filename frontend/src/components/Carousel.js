@@ -32,11 +32,12 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const goTo = (i) => setIndex(i);
 
   const getImageUrl = (slide) => {
-    if (slide.type === "custom") {
+    console.log("GET IMAGE URL : ", slide);
+    if (slide?.type === "custom") {
       const imageUrl = slide.customContent.imageUrl;
       return `${BACKEND_URL}${imageUrl}`;
     }
-    if (slide.type === "announcement" && slide.announcementId) {
+    if (slide?.type === "announcement" && slide.announcementId) {
       const photo = slide.announcementId.photo;
       if (photo) {
         return `${BACKEND_URL}${photo}`;

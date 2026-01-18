@@ -10,6 +10,7 @@ import historyService from "../../../utils/history";
 import { IHistoryInput } from "../../../model/historyModels";
 import mongoose, { mongo } from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
+import { title } from "process";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
   private cache: CacheManager;
@@ -41,8 +42,9 @@ export class AnnouncementService {
     const searchQuery = search
       ? {
           $or: [
-            { title: { $regex: search, $options: "i" } },
-            { description: { $regex: search, $options: "i" } },
+            { title: { $regex: normalizedSearch, $options: "i" } },
+            { content: { $regex: normalizedSearch, $options: "i" } },
+            { category: normalizedSearch },
           ],
           status: "published",
         }
@@ -56,6 +58,8 @@ export class AnnouncementService {
         .limit(limit),
       this.model.countDocuments(searchQuery),
     ]);
+
+    logger.info(`DATA DOCS : ${docs}`);
 
     const response: IAnnouncementResponse = {
       announcements: docs.map(

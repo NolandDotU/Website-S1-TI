@@ -45,7 +45,7 @@ export const clearHighlight = async () => {
   }
 };
 
-export const uploadPhoto = async (photoFile) => {
+export const uploadPhotoHighlight = async (photoFile) => {
   try {
     const formData = new FormData();
     formData.append("photo", photoFile);

@@ -6,8 +6,8 @@ import { env } from "../../../services/utils/env";
 import {
   createAnnouncement,
   update,
-  uploadImage,
-} from "../../../services/announcement/announcementAPI";
+  uploadImageAnnouncement,
+} from "../../../services/api";
 
 const AnnouncementModal = ({
   isOpen,
@@ -60,7 +60,7 @@ const AnnouncementModal = ({
 
       if (formData.photo !== null && typeof formData.photo !== "string") {
         try {
-          const uploads = await uploadImage(formData.photo);
+          const uploads = await uploadImageAnnouncement(formData.photo);
           if (uploads.statusCode !== 200) {
             toast.error("Gagal menyimpan foto, coba lagi!");
             return;
@@ -208,6 +208,7 @@ const AnnouncementModal = ({
                 <option value="pengumuman">Pengumuman</option>
                 <option value="event">Event</option>
                 <option value="lowongan">Lowongan</option>
+                <option value="alumni">Berita Alumni</option>
               </select>
               {errors.category && (
                 <p className="text-red-500 text-xs mt-1">

@@ -88,8 +88,8 @@ const FeaturedNews = () => {
             Featured News
           </h2>
           <p className="font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-            Stay up-to-date with the latest research, student achievements, and
-            campus events.
+            Temukan informasi terbaru tentang riset, prestasi mahasiswa,
+            kegiatan kampus, dan peluang menjadi asisten dosen.
           </p>
         </motion.div>
 

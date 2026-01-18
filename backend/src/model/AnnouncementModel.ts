@@ -10,7 +10,7 @@ const announcementSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["event", "lowongan", "pengumuman"],
+      enum: ["event", "lowongan", "pengumuman", "alumni"],
     },
     content: {
       type: String,
@@ -50,7 +50,7 @@ const announcementSchema = new mongoose.Schema(
   }
 );
 
-announcementSchema.index({ title: 1, status: 1 });
+announcementSchema.index({ title: "text", status: 1, content: "text" });
 
 const AnnouncementModel = mongoose.model(
   "announcement_collection",

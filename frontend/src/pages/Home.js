@@ -48,7 +48,7 @@ const HomePage = () => {
       <HeroBanner />
       <AdmissionsHighlights />
       <FeaturedNews />
-      <TentangTISection />
+      {/* <TentangTISection /> */}
       <KerjaSamaSection />
       <LayananKampusSection />
     </>

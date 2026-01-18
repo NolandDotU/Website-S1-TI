@@ -56,16 +56,20 @@ class HighlightService {
     }
 
     const highlights = await this.model.create(payload);
-    const historyData: IHistoryInput = {
-      user: new mongoose.Types.ObjectId(currentUser.id),
-      action: "POST",
-      entity: "highlight",
-      entityId: highlights._id,
-      description: `Highlight was created by ${currentUser.username}.`,
-    };
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        user: new mongoose.Types.ObjectId(currentUser.id),
+        action: "POST",
+        entity: "highlight",
+        entityId: highlights._id,
+        description: `Highlight ${
+          data.customContent?.title || data.announcementId
+        } was created by ${currentUser.username}.`,
+      };
 
-    await this.history?.create(historyData);
-    await this.cache.incr("highlights:version");
+      this.history?.create(historyData);
+      if (this.cache !== null) this.cache.incr("highlights:version");
+    });
 
     return highlights;
   }

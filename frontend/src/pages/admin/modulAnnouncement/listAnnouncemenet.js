@@ -10,8 +10,8 @@ import {
   changeStatus,
   delAnnouncement,
   update,
-  uploadImage,
-} from "../../../services/announcement/announcementAPI";
+  uploadImageAnnouncement,
+} from "../../../services/api";
 import { useToast } from "../../../context/toastProvider";
 
 const ListAnnouncement = () => {

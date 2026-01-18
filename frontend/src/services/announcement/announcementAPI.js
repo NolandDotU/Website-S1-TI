@@ -6,8 +6,9 @@ import api from "../utils/api";
 export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
   try {
     const response = await api.get("/announcements", {
-      params: { page, limit },
+      params: { page, limit, search },
     });
+    console.log("response", response);
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},
@@ -49,7 +50,7 @@ export const adminGetAnnouncements = async (
 //==============
 //UPLOAD IMAGE
 //==============
-export const uploadImage = async (photo) => {
+export const uploadImageAnnouncement = async (photo) => {
   try {
     const formData = new FormData();
     formData.append("photo", photo);
@@ -70,7 +71,7 @@ export const uploadImage = async (photo) => {
 export const createAnnouncement = async (announcementData) => {
   try {
     if (announcementData.photo !== null) {
-      uploadImage(announcementData.photo);
+      uploadImageAnnouncement(announcementData.photo);
     }
     const response = await api.post("/announcements", announcementData);
     return response.data;

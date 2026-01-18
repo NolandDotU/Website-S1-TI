@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ftiLogo from "../assets/logoFTI-CNN7ms1i.png";
+import ftiLogo from "../assets/logo/logoFTI-CNN7ms1i.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/Context";

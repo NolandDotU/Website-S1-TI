@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../assets/Logo-DMl9ckBx.png";
+import Logo from "../assets/logo/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
 import { env } from "../services/utils/env";
 import Toggle from "./Toggle";

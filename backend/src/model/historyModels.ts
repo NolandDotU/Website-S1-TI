@@ -67,6 +67,8 @@ const Historyschema = new mongoose.Schema(
   { timestamps: true }
 );
 
+Historyschema.index({ user: 1, datetime: -1 });
+
 Historyschema.pre("validate", function (next) {
   this.entityModel = `${this.entity}_collection`;
   next();

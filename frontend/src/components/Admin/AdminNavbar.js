@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/Context";
-import ftiLogo from "../../assets/logoFTI-CNN7ms1i.png";
+import ftiLogo from "../../assets/logo/logoFTI-CNN7ms1i.png";
 import ModalConfirmation from "./ModalConfirmation";
 import {
   LayoutDashboard,
@@ -17,6 +17,7 @@ import {
   Settings,
   HistoryIcon,
   UserCog2,
+  Building2Icon,
 } from "lucide-react";
 
 export const AdminNavbar = () => {
@@ -65,11 +66,11 @@ export const AdminNavbar = () => {
       label: "Highlight",
       action: "/admin/carousel/create",
     },
-    {
-      icon: FileText,
-      path: "/admin/profil",
-      label: "Profil Prodi",
-    },
+    // {
+    //   icon: FileText,
+    //   path: "/admin/profil",
+    //   label: "Profil Prodi",
+    // },
     {
       icon: HistoryIcon,
       path: "/admin/history",
@@ -81,10 +82,15 @@ export const AdminNavbar = () => {
       label: "Daftar Pengguna",
     },
     {
-      icon: Settings,
-      path: "/admin/settings",
-      label: "Settings",
+      icon: Building2Icon,
+      path: "/admin/partners",
+      label: "Company Partners",
     },
+    // {
+    //   icon: Settings,
+    //   path: "/admin/settings",
+    //   label: "Settings",
+    // },
   ];
 
   return (

@@ -6,8 +6,8 @@ import {
   createLecturer,
   deleteLecturer,
   updateLecturer,
-  uploadPhoto,
-} from "../../../services/lecturerAPI";
+  uploadPhotoDosen,
+} from "../../../services/api";
 import LecturerTable from "../../../components/Admin/lecturer/LecturerTable";
 import LecturerModal from "../../../components/Admin/lecturer/LecturerModel";
 import { Search, Plus, Users } from "lucide-react";
@@ -78,7 +78,7 @@ const LecturerManagement = () => {
     const { photoFile, ...lecturerData } = data;
     if (photoFile) {
       try {
-        const uploadResult = await uploadPhoto(photoFile);
+        const uploadResult = await uploadPhotoDosen(photoFile);
         console.log("Photo uploaded successfully:", uploadResult);
         lecturerData.photo = uploadResult.data.path;
         console.log("Updated lecturer data:", lecturerData);

@@ -1,167 +1,548 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Users,
+  Megaphone,
+  TrendingUp,
+  TrendingDown,
+  Eye,
+  FileText,
+  Calendar,
+  Loader2,
+  BarChart3,
+} from "lucide-react";
+import { getdashboardData } from "../../services/api";
 
-const AdminDashboard = () => {
-  const stats = [
-    {
-      title: "Total Berita",
-      value: "248",
-      icon: (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-          <path
-            fillRule="evenodd"
-            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-      bgColor: "bg-blue-100",
-      iconColor: "text-blue-600",
-      label: "Total",
-    },
-    {
-      title: "Total Dosen",
-      value: "52",
-      icon: (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-        </svg>
-      ),
-      bgColor: "bg-green-100",
-      iconColor: "text-green-600",
-      label: "Total",
-    },
-    {
-      title: "Total Carousel",
-      value: "8",
-      icon: (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fillRule="evenodd"
-            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
-      label: "Total",
-    },
-    {
-      title: "Profil Prodi",
-      value: "Active",
-      icon: (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fillRule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-      bgColor: "bg-orange-100",
-      iconColor: "text-orange-600",
-      label: "Status",
-    },
-  ];
-
-  const activities = [
-    {
-      action: "Tambah",
-      actionColor: "bg-green-100 text-green-800",
-      item: "Berita: Workshop AI 2025",
-      user: "Admin User",
-      time: "2 jam lalu",
-    },
-    {
-      action: "Edit",
-      actionColor: "bg-blue-100 text-blue-800",
-      item: "Dosen: Dr. Ahmad Wijaya",
-      user: "Admin User",
-      time: "5 jam lalu",
-    },
-    {
-      action: "Hapus",
-      actionColor: "bg-red-100 text-red-800",
-      item: "Carousel: Banner Lama",
-      user: "Admin User",
-      time: "1 hari lalu",
-    },
-  ];
+const MostViewedCard = ({ announcement }) => {
+  if (!announcement || typeof announcement !== "object") {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col w-full h-full justify-center">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`${stat.bgColor} p-3 rounded-lg`}>
-                <div className={stat.iconColor}>{stat.icon}</div>
-              </div>
-              <span className="text-sm font-medium text-gray-500">
-                {stat.label}
-              </span>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 
+          rounded-xl shadow-lg p-6 text-white">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
+          <Eye className="w-6 h-6" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-medium text-blue-100 mb-1">
+            Pengumuman Terpopuler Bulan Ini
+          </p>
+          <h3 className="text-lg font-bold leading-tight">
+            {announcement.title || "Tidak ada judul"}
+          </h3>
+        </div>
+      </div>
+      <div className="flex items-center justify-between pt-4 border-t border-white/20">
+        <div className="flex items-center gap-2">
+          <Eye className="w-4 h-4" />
+          <span className="text-sm font-semibold">
+            {(announcement.views || 0).toLocaleString()} views
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4" />
+          <span className="text-sm">
+            {announcement.publishDate
+              ? new Date(announcement.publishDate).toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "-"}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Mock dashboard data
+const mockDashboardData = {
+  users: {
+    totalUser: 1250,
+    currentMonthActiveUser: 856,
+    lastMonthActiveUser: 742,
+  },
+  announcements: {
+    totalAnnouncement: 145,
+    currentMonthActiveAnnouncement: 23,
+    lastMonthActiveAnnouncement: 18,
+    mostViewedThisMonth: {
+      _id: "1",
+      title: "Pendaftaran Kuliah Kerja Nyata (KKN) Periode 2025",
+      views: 1450,
+      publishDate: "2025-01-15",
+    },
+    totalPublishedAnnouncement: 132,
+  },
+  userPercentage: "15.36",
+  announcementPercentage: "27.78",
+  topFiveAnn: [
+    {
+      _id: "1",
+      title: "Pendaftaran Kuliah Kerja Nyata (KKN) Periode 2025",
+      views: 1450,
+      publishDate: "2025-01-15",
+    },
+    {
+      _id: "2",
+      title: "Pengumuman Jadwal Ujian Akhir Semester Genap 2024/2025",
+      views: 1203,
+      publishDate: "2025-01-12",
+    },
+    {
+      _id: "3",
+      title: "Pembukaan Beasiswa Prestasi Akademik Tahun 2025",
+      views: 987,
+      publishDate: "2025-01-10",
+    },
+    {
+      _id: "4",
+      title: "Workshop: Pengenalan Machine Learning untuk Pemula",
+      views: 856,
+      publishDate: "2025-01-08",
+    },
+    {
+      _id: "5",
+      title: "Lomba Karya Tulis Ilmiah Nasional 2025",
+      views: 745,
+      publishDate: "2025-01-05",
+    },
+  ],
+};
+
+const Dashboard = () => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await getdashboardData();
+      setDashboardData(response.data);
+      console.log("Dashboard data:", response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const StatCard = ({
+    title,
+    value,
+    subtitle,
+    icon: Icon,
+    trend,
+    trendValue,
+    bgColor,
+    iconColor,
+  }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+            {title}
+          </p>
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            {value.toLocaleString()}
+          </h3>
+          {subtitle && (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {subtitle}
+            </p>
+          )}
+          {trend && (
+            <div
+              className={`flex items-center gap-1 mt-2 text-sm font-medium ${
+                trend === "up"
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}>
+              {trend === "up" ? (
+                <TrendingUp className="w-4 h-4" />
+              ) : (
+                <TrendingDown className="w-4 h-4" />
+              )}
+              <span>{trendValue}% dari bulan lalu</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">
-              {stat.value}
-            </h3>
-            <p className="text-sm text-gray-600">{stat.title}</p>
-          </div>
-        ))}
+          )}
+        </div>
+        <div
+          className={`w-14 h-14 rounded-xl ${bgColor} flex items-center justify-center`}>
+          <Icon className={`w-7 h-7 ${iconColor}`} />
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const MostViewedCard = ({ announcement }) => (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 
+        rounded-xl shadow-lg p-6 text-white">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
+          <Eye className="w-6 h-6" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-medium text-blue-100 mb-1">
+            Pengumuman Terpopuler Bulan Ini
+          </p>
+          <h3 className="text-lg font-bold leading-tight">
+            {announcement.title}
+          </h3>
+        </div>
+      </div>
+      <div className="flex items-center justify-between pt-4 border-t border-white/20">
+        <div className="flex items-center gap-2">
+          <Eye className="w-4 h-4" />
+          <span className="text-sm font-semibold">
+            {announcement.views.toLocaleString()} views
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4" />
+          <span className="text-sm">
+            {new Date(announcement.date).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
+          <Loader2 className="w-12 h-12 text-blue-600 dark:text-blue-400 animate-spin mb-4" />
+          <p className="text-gray-600 dark:text-gray-400 font-medium">
+            Memuat data dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    users,
+    announcements,
+    userPercentage,
+    announcementPercentage,
+    topFiveAnn,
+  } = dashboardData;
+  const userTrend = parseFloat(userPercentage) > 0 ? "up" : "down";
+  const announcementTrend =
+    parseFloat(announcementPercentage) > 0 ? "up" : "down";
+
+  // Handle totalPublishedAnnouncement yang bisa berupa object atau number
+  const totalPublished =
+    typeof announcements.totalPublishedAnnouncement === "object"
+      ? announcements.totalPublishedAnnouncement?.views ||
+        announcements.totalAnnouncement
+      : announcements.totalPublishedAnnouncement;
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Dashboard
+          </h1>
+        </div>
+        <p className="text-gray-600 dark:text-gray-400">
+          Overview statistik dan aktivitas sistem
+        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          title="Total Users"
+          value={users.totalUser}
+          subtitle={`${users.currentMonthActiveUser} active bulan ini`}
+          icon={Users}
+          trend={userTrend}
+          trendValue={Math.abs(parseFloat(userPercentage)).toFixed(2)}
+          bgColor="bg-blue-100 dark:bg-blue-900/30"
+          iconColor="text-blue-600 dark:text-blue-400"
+        />
+        <StatCard
+          title="Total Pengumuman"
+          value={announcements.totalAnnouncement}
+          subtitle={`${totalPublished} dipublikasikan`}
+          icon={Megaphone}
+          bgColor="bg-purple-100 dark:bg-purple-900/30"
+          iconColor="text-purple-600 dark:text-purple-400"
+        />
+        <StatCard
+          title="Pengumuman Aktif"
+          value={announcements.currentMonthActiveAnnouncement}
+          subtitle="Bulan ini"
+          icon={FileText}
+          trend={announcementTrend}
+          trendValue={Math.abs(parseFloat(announcementPercentage)).toFixed(2)}
+          bgColor="bg-green-100 dark:bg-green-900/30"
+          iconColor="text-green-600 dark:text-green-400"
+        />
+        <StatCard
+          title="Active Users"
+          value={users.currentMonthActiveUser}
+          subtitle="Bulan ini"
+          icon={TrendingUp}
+          bgColor="bg-orange-100 dark:bg-orange-900/30"
+          iconColor="text-orange-600 dark:text-orange-400"
+        />
       </div>
 
-      {/* Recent Activity Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">Aktivitas Terbaru</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Aksi
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Item
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Pengguna
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Waktu
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {activities.map((activity, index) => (
-                <tr key={index} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${activity.actionColor}`}>
-                      {activity.action}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {activity.item}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {activity.user}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {activity.time}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}>
+          <MostViewedCard announcement={announcements.mostViewedThisMonth} />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              Top 5 Pengumuman Populer
+            </h2>
+            <Eye className="w-5 h-5 text-gray-400" />
+          </div>
+
+          <div className="space-y-4">
+            {topFiveAnn && topFiveAnn.length > 0 ? (
+              topFiveAnn.map((announcement, index) => (
+                <motion.div
+                  key={announcement._id || announcement.id || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 
+                    dark:hover:bg-gray-700/50 transition-colors group">
+                  <div
+                    className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center 
+                    justify-center font-bold text-lg ${
+                      index === 0
+                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                        : index === 1
+                          ? "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                          : index === 2
+                            ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
+                            : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                    }`}>
+                    {index + 1}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <h3
+                      className="font-semibold text-gray-900 dark:text-white mb-1 
+                      group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {announcement.title || "Tidak ada judul"}
+                    </h3>
+                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-1">
+                        <Eye className="w-4 h-4" />
+                        <span className="font-medium">
+                          {(announcement.views || 0).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>
+                          {announcement.publishDate
+                            ? new Date(
+                                announcement.publishDate,
+                              ).toLocaleDateString("id-ID", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })
+                            : "-"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                Belum ada data pengumuman
+              </div>
+            )}
+          </div>
+        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+              Perbandingan User Aktif
+            </h3>
+            <Users className="w-5 h-5 text-gray-400" />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Bulan Ini
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {users.currentMonthActiveUser}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(users.currentMonthActiveUser / users.totalUser) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Bulan Lalu
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {users.lastMonthActiveUser}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-gray-400 dark:bg-gray-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(users.lastMonthActiveUser / users.totalUser) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+              Perbandingan Pengumuman
+            </h3>
+            <Megaphone className="w-5 h-5 text-gray-400" />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Bulan Ini
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {announcements.currentMonthActiveAnnouncement}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-purple-600 dark:bg-purple-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(announcements.currentMonthActiveAnnouncement / announcements.totalAnnouncement) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Bulan Lalu
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {announcements.lastMonthActiveAnnouncement}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-gray-400 dark:bg-gray-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(announcements.lastMonthActiveAnnouncement / announcements.totalAnnouncement) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+              Status Publikasi
+            </h3>
+            <FileText className="w-5 h-5 text-gray-400" />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Dipublikasikan
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {totalPublished}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-green-600 dark:bg-green-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(totalPublished / announcements.totalAnnouncement) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 dark:text-gray-400">Draft</span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {announcements.totalAnnouncement - totalPublished}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-gray-400 dark:bg-gray-500 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${((announcements.totalAnnouncement - totalPublished) / announcements.totalAnnouncement) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;

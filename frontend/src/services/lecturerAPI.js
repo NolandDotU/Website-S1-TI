@@ -42,7 +42,7 @@ export const deleteLecturer = async (lecturerId, url) => {
   }
 };
 
-export const uploadPhoto = async (photoFile) => {
+export const uploadPhotoDosen = async (photoFile) => {
   try {
     const formData = new FormData();
     formData.append("photo", photoFile);
