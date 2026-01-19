@@ -15,7 +15,7 @@ const router = express.Router();
 //chat routes
 router.use("/chat", ragRoutes);
 
-router.use(globalLimiter);
+// router.use(globalLimiter);
 router.use("/lecturers", lecturerRoutes);
 router.use("/announcements", announcementRoutes);
 router.use("/auth", authRoutes);

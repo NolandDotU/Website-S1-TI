@@ -39,11 +39,11 @@ router.post(
         path: filePath,
         filename: req.file?.filename,
       },
-      "Image uploaded successfully"
+      "Image uploaded successfully",
     );
 
     return res.status(response.statusCode).json(response);
-  }
+  },
 );
 
 // router.delete("/uploads", (req, res, next) => {
@@ -58,12 +58,16 @@ router.post(
   validate(LecturerValidation),
   (req, res, next) => {
     getController().create(req, res, next);
-  }
+  },
 );
 
-router.get("/", globalLimiter, (req, res, next) => {
-  getController().getAll(req, res, next);
-});
+router.get(
+  "/",
+  //  globalLimiter,
+  (req, res, next) => {
+    getController().getAll(req, res, next);
+  },
+);
 
 router.put("/:id", authMiddleware(["admin"]), (req, res, next) => {
   getController().update(req, res, next);

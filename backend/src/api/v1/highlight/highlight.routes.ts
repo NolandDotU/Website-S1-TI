@@ -40,11 +40,11 @@ router.post(
         path: filePath,
         filename: req.file?.filename,
       },
-      "Image uploaded successfully"
+      "Image uploaded successfully",
     );
 
     return res.status(response.statusCode).json(response);
-  }
+  },
 );
 
 router.delete("/uploads", (req, res, next) => {
@@ -53,25 +53,29 @@ router.delete("/uploads", (req, res, next) => {
   });
 });
 
-router.get("/", globalLimiter, getController().getAll);
+router.get(
+  "/",
+  // globalLimiter,
+  getController().getAll,
+);
 router.post(
   "/",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   validate(CreateHighlightSchema),
-  getController().create
+  getController().create,
 );
 router.delete(
   "/:id",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
-  getController().delete
+  getController().delete,
 );
 router.delete(
   "/clear",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
-  getController().clear
+  getController().clear,
 );
 
 export default router;

@@ -59,8 +59,6 @@ export class AnnouncementService {
       this.model.countDocuments(searchQuery),
     ]);
 
-    logger.info(`DATA DOCS : ${docs}`);
-
     const response: IAnnouncementResponse = {
       announcements: docs.map(
         (doc) => doc.toJSON() as unknown as IAnnouncementGet,

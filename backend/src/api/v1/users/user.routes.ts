@@ -17,13 +17,13 @@ const router = Router();
 
 router.get(
   "/",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   getController().getAllUser,
 );
 router.post(
   "/",
-  globalLimiter,
+  // globalLimiter,
   validate(UserValidation),
   authMiddleware(["admin"]),
   getController().newUser,
@@ -31,27 +31,27 @@ router.post(
 
 router.delete(
   "/:id",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   getController().deleteUser,
 );
 
 router.patch(
   "/nonactivate/:id",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   getController().nonactivate,
 );
 router.patch(
   "/activate/:id",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   getController().activate,
 );
 
 router.put(
   "/:id",
-  globalLimiter,
+  // globalLimiter,
   authMiddleware(["admin"]),
   getController().update,
 );
