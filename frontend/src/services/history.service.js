@@ -3,7 +3,7 @@ import api from "./utils/api";
 export const getAllHistory = async (limit = 50, page = 1, search = "") => {
   try {
     const response = await api.get(
-      `/history/?limit=${limit}&page=${page}&search=${search}`
+      `/history/?limit=${limit}&page=${page}&search=${search}`,
     );
     return response.data;
   } catch (error) {

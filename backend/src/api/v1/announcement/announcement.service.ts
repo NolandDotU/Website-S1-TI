@@ -458,8 +458,7 @@ export class AnnouncementService {
       lastMonthAnnouncement: data.lastMonthAnnouncement[0]?.count ?? 0,
       mostViewedThisMonth: data.mostViewedThisMonth[0] ?? null,
       totalDraftAnnouncement: data.totalDraftAnnouncement[0]?.count ?? 0,
-      totalPublishedAnnouncement:
-        data.totalPublishedAnnouncement[0]?.count ?? 0,
+      totalPublishedAnnouncement: data.totalPublishedAnnouncement[0].count ?? 0,
     };
   };
 }

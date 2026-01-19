@@ -37,13 +37,13 @@ export default class DashboardService {
         startOfMonth,
         now,
         startOfLastMonth,
-        endOfLastMonth
+        endOfLastMonth,
       ),
       this.annService.getStatistics(
         startOfMonth,
         now,
         startOfLastMonth,
-        endOfLastMonth
+        endOfLastMonth,
       ),
       this.annService.topTierAnnouncements(),
     ]);
@@ -51,11 +51,11 @@ export default class DashboardService {
     const [userPercentage, announcementPercentage] = await Promise.all([
       this.calcPercentage(
         users.currentMonthActiveUser,
-        users.lastMonthActiveUser
+        users.lastMonthActiveUser,
       ),
       this.calcPercentage(
         announcements.currentMonthAnnouncement,
-        announcements.lastMonthAnnouncement
+        announcements.lastMonthAnnouncement,
       ),
     ]);
 
@@ -70,7 +70,7 @@ export default class DashboardService {
         currentMonthActiveAnnouncement: announcements.currentMonthAnnouncement,
         lastMonthActiveAnnouncement: announcements.lastMonthAnnouncement,
         mostViewedThisMonth: announcements.mostViewedThisMonth,
-        totalPublishedAnnouncement: announcements.mostViewedThisMonth,
+        totalPublishedAnnouncement: announcements.totalPublishedAnnouncement,
       },
       userPercentage,
       announcementPercentage,

@@ -7,7 +7,7 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
     fullname: user?.fullname || "",
     email: user?.email || "",
     password: "",
-    role: user?.role || "student",
+    role: user?.role || "user",
   });
 
   const handleSubmit = () => {
@@ -117,8 +117,8 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500">
-                <option value="student">Student</option>
-                <option value="lecturer">Lecturer</option>
+                <option value="user">User</option>
+                {/* <option value="lecturer">Lecturer</option> */}
                 <option value="admin">Admin</option>
               </select>
             </div>

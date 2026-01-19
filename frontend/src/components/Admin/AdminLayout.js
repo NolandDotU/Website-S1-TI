@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
-import { logout } from "../../services/authAPI";
 import { AdminNavbar } from "./AdminNavbar";
 import AdminTopBar from "./AdminTopBar";
 

@@ -1,130 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Users,
   Megaphone,
-  TrendingUp,
-  TrendingDown,
   Eye,
   FileText,
   Calendar,
   Loader2,
   BarChart3,
+  History,
+  ArrowRight,
+  ListRestart,
 } from "lucide-react";
-import { getdashboardData } from "../../services/api";
-
-const MostViewedCard = ({ announcement }) => {
-  if (!announcement || typeof announcement !== "object") {
-    return null;
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 
-          rounded-xl shadow-lg p-6 text-white">
-      <div className="flex items-start gap-3 mb-4">
-        <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
-          <Eye className="w-6 h-6" />
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-medium text-blue-100 mb-1">
-            Pengumuman Terpopuler Bulan Ini
-          </p>
-          <h3 className="text-lg font-bold leading-tight">
-            {announcement.title || "Tidak ada judul"}
-          </h3>
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-4 border-t border-white/20">
-        <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4" />
-          <span className="text-sm font-semibold">
-            {(announcement.views || 0).toLocaleString()} views
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4" />
-          <span className="text-sm">
-            {announcement.publishDate
-              ? new Date(announcement.publishDate).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })
-              : "-"}
-          </span>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-// Mock dashboard data
-const mockDashboardData = {
-  users: {
-    totalUser: 1250,
-    currentMonthActiveUser: 856,
-    lastMonthActiveUser: 742,
-  },
-  announcements: {
-    totalAnnouncement: 145,
-    currentMonthActiveAnnouncement: 23,
-    lastMonthActiveAnnouncement: 18,
-    mostViewedThisMonth: {
-      _id: "1",
-      title: "Pendaftaran Kuliah Kerja Nyata (KKN) Periode 2025",
-      views: 1450,
-      publishDate: "2025-01-15",
-    },
-    totalPublishedAnnouncement: 132,
-  },
-  userPercentage: "15.36",
-  announcementPercentage: "27.78",
-  topFiveAnn: [
-    {
-      _id: "1",
-      title: "Pendaftaran Kuliah Kerja Nyata (KKN) Periode 2025",
-      views: 1450,
-      publishDate: "2025-01-15",
-    },
-    {
-      _id: "2",
-      title: "Pengumuman Jadwal Ujian Akhir Semester Genap 2024/2025",
-      views: 1203,
-      publishDate: "2025-01-12",
-    },
-    {
-      _id: "3",
-      title: "Pembukaan Beasiswa Prestasi Akademik Tahun 2025",
-      views: 987,
-      publishDate: "2025-01-10",
-    },
-    {
-      _id: "4",
-      title: "Workshop: Pengenalan Machine Learning untuk Pemula",
-      views: 856,
-      publishDate: "2025-01-08",
-    },
-    {
-      _id: "5",
-      title: "Lomba Karya Tulis Ilmiah Nasional 2025",
-      views: 745,
-      publishDate: "2025-01-05",
-    },
-  ],
-};
+import { getAllHistory, getdashboardData } from "../../services/api";
+import { StatCard } from "../../components/Admin/dashboard/StatCard";
+import { MostViewedCard } from "../../components/Admin/dashboard/MostViewedCard";
+import { ActivityCard } from "../../components/Admin/dashboard/ActivityCard";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
+  const [newestActivities, setNewestActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchDashboardData = async () => {
+    setLoading(true);
     try {
-      const response = await getdashboardData();
-      setDashboardData(response.data);
-      console.log("Dashboard data:", response.data);
+      const [responseDashboard, responseHistory] = await Promise.all([
+        getdashboardData(),
+        getAllHistory(5, 1),
+      ]);
+      setDashboardData(responseDashboard.data);
+
+      setNewestActivities(responseHistory.data.history);
+      console.log("history data", responseHistory.data.history);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -134,97 +43,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
-
-  const StatCard = ({
-    title,
-    value,
-    subtitle,
-    icon: Icon,
-    trend,
-    trendValue,
-    bgColor,
-    iconColor,
-  }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
-            {title}
-          </p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            {value.toLocaleString()}
-          </h3>
-          {subtitle && (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {subtitle}
-            </p>
-          )}
-          {trend && (
-            <div
-              className={`flex items-center gap-1 mt-2 text-sm font-medium ${
-                trend === "up"
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
-              }`}>
-              {trend === "up" ? (
-                <TrendingUp className="w-4 h-4" />
-              ) : (
-                <TrendingDown className="w-4 h-4" />
-              )}
-              <span>{trendValue}% dari bulan lalu</span>
-            </div>
-          )}
-        </div>
-        <div
-          className={`w-14 h-14 rounded-xl ${bgColor} flex items-center justify-center`}>
-          <Icon className={`w-7 h-7 ${iconColor}`} />
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  const MostViewedCard = ({ announcement }) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 
-        rounded-xl shadow-lg p-6 text-white">
-      <div className="flex items-start gap-3 mb-4">
-        <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
-          <Eye className="w-6 h-6" />
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-medium text-blue-100 mb-1">
-            Pengumuman Terpopuler Bulan Ini
-          </p>
-          <h3 className="text-lg font-bold leading-tight">
-            {announcement.title}
-          </h3>
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-4 border-t border-white/20">
-        <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4" />
-          <span className="text-sm font-semibold">
-            {announcement.views.toLocaleString()} views
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4" />
-          <span className="text-sm">
-            {new Date(announcement.date).toLocaleDateString("id-ID", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
-          </span>
-        </div>
-      </div>
-    </motion.div>
-  );
 
   if (loading) {
     return (
@@ -250,7 +68,6 @@ const Dashboard = () => {
   const announcementTrend =
     parseFloat(announcementPercentage) > 0 ? "up" : "down";
 
-  // Handle totalPublishedAnnouncement yang bisa berupa object atau number
   const totalPublished =
     typeof announcements.totalPublishedAnnouncement === "object"
       ? announcements.totalPublishedAnnouncement?.views ||
@@ -262,19 +79,28 @@ const Dashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Dashboard
-          </h1>
+        className="mb-8 flex items-center justify-between">
+        <div className="">
+          <div className="flex items-center gap-3 mb-2">
+            <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Dashboard
+            </h1>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400">
+            Overview statistik dan aktivitas sistem
+          </p>
         </div>
-        <p className="text-gray-600 dark:text-gray-400">
-          Overview statistik dan aktivitas sistem
-        </p>
+        <button
+          onClick={() => fetchDashboardData()}
+          className="flex items-center justify-center p-2 rounded-lg bg-blue-700 text-xs gap-x-2 "
+          title="Reload data dashboard">
+          <ListRestart className="w-5 h-5" />
+          Reload
+        </button>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <StatCard
           title="Total Users"
           value={users.totalUser}
@@ -286,14 +112,6 @@ const Dashboard = () => {
           iconColor="text-blue-600 dark:text-blue-400"
         />
         <StatCard
-          title="Total Pengumuman"
-          value={announcements.totalAnnouncement}
-          subtitle={`${totalPublished} dipublikasikan`}
-          icon={Megaphone}
-          bgColor="bg-purple-100 dark:bg-purple-900/30"
-          iconColor="text-purple-600 dark:text-purple-400"
-        />
-        <StatCard
           title="Pengumuman Aktif"
           value={announcements.currentMonthActiveAnnouncement}
           subtitle="Bulan ini"
@@ -303,24 +121,52 @@ const Dashboard = () => {
           bgColor="bg-green-100 dark:bg-green-900/30"
           iconColor="text-green-600 dark:text-green-400"
         />
-        <StatCard
-          title="Active Users"
-          value={users.currentMonthActiveUser}
-          subtitle="Bulan ini"
-          icon={TrendingUp}
-          bgColor="bg-orange-100 dark:bg-orange-900/30"
-          iconColor="text-orange-600 dark:text-orange-400"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}>
           <MostViewedCard announcement={announcements.mostViewedThisMonth} />
         </motion.div>
+      </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-x-2">
+              Aktivitas Terbaru
+              <History className="w-5 h-5 text-gray-400" />
+            </h2>
+            <div className="flex items-center gap-x-2">
+              <Link to="/admin/history">
+                <button className="flex items-center text-xs gap-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">
+                  lihat semua <ArrowRight className="w-3 h-3" />
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="space-y-4">
+            {newestActivities && newestActivities.length > 0 ? (
+              (console.log("newestActivities : ", newestActivities),
+              newestActivities.map((activity, index) => (
+                <motion.div
+                  key={activity._id || activity.id || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}>
+                  <ActivityCard history={activity} />
+                </motion.div>
+              )))
+            ) : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                Belum ada aktivitas terbaru
+              </div>
+            )}
+          </div>
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}

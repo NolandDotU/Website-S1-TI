@@ -44,11 +44,31 @@ export class UserController {
   nonactivate = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const currentUser = req.user as JWTPayload;
-    const user = await this.service.nonactivate(id, currentUser);
+    const user = await this.service.changeStatus(id, false, currentUser);
     return (
       res.json(
         ApiResponse.success(user, "User nonactivated successfully", 200),
       ),
+      200
+    );
+  });
+  activate = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const currentUser = req.user as JWTPayload;
+    const user = await this.service.changeStatus(id, true, currentUser);
+    return (
+      res.json(ApiResponse.success(user, "User activated successfully", 200)),
+      200
+    );
+  });
+
+  update = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const data = req.body;
+    const currentUser = req.user as JWTPayload;
+    const user = await this.service.updateUser(id, data, currentUser);
+    return (
+      res.json(ApiResponse.success(user, "User berhasil di update", 200)),
       200
     );
   });

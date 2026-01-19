@@ -1,6 +1,6 @@
 import { IUser } from "./user.dto";
 import UserModel from "../../../model/userModel";
-import { ApiError, JWTPayload } from "../../../utils";
+import { ApiError, JWTPayload, logger } from "../../../utils";
 import historyService from "../../../utils/history";
 import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
@@ -55,19 +55,48 @@ export class UserService {
   };
 
   newUser = async (data: IUser, curentUser: JWTPayload) => {
-    const user = await this.model.create(data);
-    if (!user) throw ApiError.conflict("Gagal membuat user baru!");
-    if (this.cache !== null) this.cache.incr("users:version");
-    setImmediate(() => {
-      this.history.create({
-        action: "POST",
-        entityId: new mongoose.Types.ObjectId(user.id),
-        entity: "user",
-        user: new mongoose.Types.ObjectId(curentUser.id),
-        description: `User ${data.username} created by ${curentUser.username}`,
+    try {
+      const user = await this.model.create(data);
+      if (!user) throw ApiError.conflict("Gagal membuat user baru!");
+      if (this.cache !== null) this.cache.incr("users:version");
+      setImmediate(() => {
+        this.history.create({
+          action: "POST",
+          entityId: new mongoose.Types.ObjectId(user.id),
+          entity: "user",
+          user: new mongoose.Types.ObjectId(curentUser.id),
+          description: `User ${data.username} created by ${curentUser.username}`,
+        });
       });
-    });
-    return user;
+      return user;
+    } catch (error: any) {
+      if (error.code === 11000)
+        throw ApiError.conflict("Username atau email sudah digunakan!");
+      throw error;
+    }
+  };
+
+  updateUser = async (id: string, data: IUser, currentUser: JWTPayload) => {
+    try {
+      const _id = new mongoose.Types.ObjectId(id);
+      const update = await this.model.findByIdAndUpdate(_id, data);
+      if (!update) throw ApiError.conflict("Gagal mengupdate user!");
+      if (this.cache !== null) this.cache.incr("users:version");
+      setImmediate(() => {
+        this.history.create({
+          action: "UPDATE",
+          entityId: new mongoose.Types.ObjectId(data.id),
+          entity: "user",
+          user: new mongoose.Types.ObjectId(currentUser.id),
+          description: `User ${data.username} updated by ${currentUser.username}`,
+        });
+      });
+      return update;
+    } catch (error: any) {
+      if (error.code === 11000)
+        throw ApiError.conflict("Username atau email sudah digunakan!");
+      throw error;
+    }
   };
 
   deleteUser = async (id: string, currentUser: JWTPayload) => {
@@ -86,13 +115,17 @@ export class UserService {
     return deleted;
   };
 
-  nonactivate = async (id: string, currentUser: JWTPayload) => {
+  changeStatus = async (
+    id: string,
+    isActive: boolean,
+    currentUser: JWTPayload,
+  ) => {
     const update = await this.model
-      .findOneAndUpdate({ _id: id }, { isActive: false }, { new: true })
+      .findOneAndUpdate({ _id: id }, { isActive: isActive }, { new: true })
       .lean()
       .exec();
 
-    if (!update) throw ApiError.conflict("Gagal menghapus user!");
+    if (!update) throw ApiError.conflict("Gagal mengubah status user!");
     setImmediate(() => {
       if (this.cache !== null) this.cache.incr("users:version");
       this.history.create({
@@ -100,7 +133,7 @@ export class UserService {
         entityId: new mongoose.Types.ObjectId(id),
         entity: "user",
         user: new mongoose.Types.ObjectId(currentUser.id),
-        description: `User ${update.username} non-activate by ${currentUser.username}`,
+        description: `User ${update.username} updated by ${currentUser.username}`,
       });
     });
     return update;
@@ -121,8 +154,8 @@ export class UserService {
             {
               $match: {
                 isActive: true,
-                publishDate: {
-                  $gte: startOfMonth,
+                lastLogin: {
+                  // $gte: startOfMonth,
                   $lte: endOfMonth,
                 },
               },
@@ -134,8 +167,8 @@ export class UserService {
             {
               $match: {
                 isActive: true,
-                publishDate: {
-                  $gte: startOfLastMonth,
+                lastLogin: {
+                  // $gte: startOfLastMonth,
                   $lte: endOfLastMonth,
                 },
               },
@@ -147,7 +180,7 @@ export class UserService {
     ]);
 
     const data = result[0];
-
+    logger.info(`USER STATISTICS DATA :`, data);
     return {
       totalUser: data.totalUser[0]?.count ?? 0,
       currentMonthActiveUser: data.currentMonthActiveUser[0]?.count ?? 0,

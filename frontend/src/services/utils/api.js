@@ -1,9 +1,6 @@
 import axios from "axios";
 import { env } from "../utils/env";
-import { useToast } from "../../context/toastProvider";
 
-// ✅ Base Axios Instance
-// ✅ Axios instance dengan withCredentials
 const api = axios.create({
   baseURL: `${env.BACKEND_URL}/api/v1`,
   withCredentials: true,
@@ -12,14 +9,12 @@ const api = axios.create({
   },
 });
 
-// ✅ Axios interceptor untuk error handling
 api.interceptors.response.use(
   (response) => {
     console.log("✅ API Success:", response.config.url, response.status);
     return response;
   },
   (error) => {
-    // ✅ Extract error message dari ApiError format
     const errorData = error.response?.data;
     const statusCode = error.response?.status;
     const errorMessage =
@@ -33,9 +28,7 @@ api.interceptors.response.use(
       isOperational: errorData?.isOperational,
     });
 
-    // Handle specific error codes
     if (statusCode === 401) {
-      // Jangan redirect kalau endpoint login/auth
       const isAuthEndpoint =
         error.config?.url?.includes("/auth/admin") ||
         error.config?.url?.includes("/auth/google") ||
@@ -43,7 +36,7 @@ api.interceptors.response.use(
 
       if (!isAuthEndpoint) {
         console.log(
-          "🔐 Unauthorized - Session expired, redirecting to login..."
+          "🔐 Unauthorized - Session expired, redirecting to login...",
         );
         // setTimeout(() => {
         //   window.location.href = "/login";
@@ -71,7 +64,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

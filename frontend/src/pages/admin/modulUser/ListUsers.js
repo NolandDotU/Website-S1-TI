@@ -9,28 +9,53 @@ import {
   CheckCircle,
   XCircle,
   Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import ModalConfirmation from "../../../components/Admin/ModalConfirmation";
 import { UserModal } from "../../../components/Admin/users/UserModal";
+import {
+  getAllUser,
+  newUser,
+  nonActivateUser,
+  updateUser,
+  activateUser,
+} from "../../../services/api";
+import { useToast } from "../../../context/toastProvider";
 
 export const UserManagement = () => {
+  const toast = useToast();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNonActivateModal, setIsNonActivateModal] = useState(false);
+  const [isActivateModal, setIsActivateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalMode, setModalMode] = useState("create");
 
-  // Simulate initial data loading
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllUser(page, limit, search);
+      setUsers(response.data.users);
+      setTotalPages(response.data.meta.totalPage);
+
+      if (response.statusCode !== 200)
+        console.log("response data user", response);
+    } catch (error) {
+      console.log(error);
+      toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
+    } finally {
       setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   // Filter users based on search
@@ -58,27 +83,79 @@ export const UserManagement = () => {
     setIsDeleteModalOpen(true);
   };
 
+  const handleNonActivate = (user) => {
+    setSelectedUser(user);
+    setIsNonActivateModal(true);
+  };
+
+  const handleActivate = (user) => {
+    setSelectedUser(user);
+    setIsActivateModal(true);
+  };
+
   const confirmDelete = () => {
     setUsers(users.filter((u) => u.id !== selectedUser.id));
     setIsDeleteModalOpen(false);
   };
 
-  const handleSave = (userData) => {
-    if (modalMode === "create") {
-      setUsers([...users, { ...userData, id: Date.now().toString() }]);
-    } else {
-      setUsers(
-        users.map((u) =>
-          u.id === selectedUser.id ? { ...u, ...userData } : u,
-        ),
-      );
+  const handleSave = async (userData) => {
+    try {
+      let response;
+      if (modalMode === "create") {
+        response = await newUser(userData);
+        console.log("create response : ", response);
+        if (response.data.meta.statusCode !== 201)
+          return toast.error(
+            `Gagal menambah user baru! (${response.data.message})`,
+          );
+        setUsers([...users, { ...userData, id: Date.now().toString() }]);
+        fetchData();
+      } else {
+        console.log("selected user : ", selectedUser);
+
+        response = await updateUser(selectedUser._id, userData);
+        console.log("response update : ", response);
+        if (response.statusCode !== 200)
+          toast.error(`Gagal memperbarui user ${response.data.message}`);
+        setUsers(
+          users.map((u) =>
+            u._id === selectedUser._id ? { ...u, ...userData } : u,
+          ),
+        );
+        fetchData();
+      }
+      toast.success(`${response.message}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message || "Terjadi kesalahan server!");
     }
+
     setIsModalOpen(false);
+  };
+
+  const changeStatus = async (isActive) => {
+    try {
+      const response = isActive
+        ? await activateUser(selectedUser.id || selectedUser._id)
+        : await nonActivateUser(selectedUser.id || selectedUser._id);
+      if (response.statusCode !== 200)
+        return toast.error("Gagal mengubah status user!");
+      toast.success("Berhasil mengubah status user");
+      users.map((u) =>
+        u._id === selectedUser._id ? { ...u, isActive: isActive } : u,
+      );
+
+      setSelectedUser(null);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Terjadi kesalahan server!");
+    }
   };
 
   const toggleUserStatus = (userId) => {
     setUsers(
-      users.map((u) => (u.id === userId ? { ...u, isActive: !u.isActive } : u)),
+      users.map((u) => (u.id === userId ? { ...u, isActive: u.isActive } : u)),
     );
   };
 
@@ -206,7 +283,7 @@ export const UserManagement = () => {
               ) : (
                 filteredUsers.map((user) => (
                   <tr
-                    key={user.id}
+                    key={user.id || user._id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -241,7 +318,7 @@ export const UserManagement = () => {
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
                           user.role === "admin"
                             ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
-                            : user.role === "lecturer"
+                            : user.role === "user"
                               ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
                               : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                         }`}>
@@ -255,7 +332,7 @@ export const UserManagement = () => {
                     </td>
                     <td className="px-6 py-4">
                       <button
-                        onClick={() => toggleUserStatus(user.id)}
+                        onClick={() => toggleUserStatus(user.id || user._id)}
                         className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                           user.isActive
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200"
@@ -267,12 +344,32 @@ export const UserManagement = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <button
+                          title="Edit User"
                           onClick={() => handleEdit(user)}
                           className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 
                             dark:hover:bg-blue-900/30 rounded-lg transition-colors">
                           <Edit2 className="w-4 h-4" />
                         </button>
+                        {user.isActive ? (
+                          <button
+                            title="Non-Activate User"
+                            onClick={() => handleNonActivate(user)}
+                            className="p-2 text-orange-600 hover:bg-red-50 dark:text-orange-400 
+                            dark:hover:bg-orange-900/30 rounded-lg transition-colors">
+                            <XCircle className="w-4 h-4" />
+                          </button>
+                        ) : (
+                          <button
+                            title="Activate User"
+                            onClick={() => handleActivate(user)}
+                            className="p-2 text-green-600 hover:bg-red-50 dark:text-green-400 
+                            dark:hover:bg-green-900/30 rounded-lg transition-colors">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </button>
+                        )}
+
                         <button
+                          title="Permanent Delete User"
                           onClick={() => handleDelete(user)}
                           className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 
                             dark:hover:bg-red-900/30 rounded-lg transition-colors">
@@ -307,6 +404,25 @@ export const UserManagement = () => {
             onConfirm={confirmDelete}
             title="Konfirmasi Penghapusan!"
             message={`Anda yakin ingin menghapus user ${selectedUser?.fullname || selectedUser?.username}?`}
+          />
+        )}
+
+        {isNonActivateModal && (
+          <ModalConfirmation
+            isOpen={isNonActivateModal}
+            onClose={() => setIsNonActivateModal(false)}
+            onConfirm={() => changeStatus(false)}
+            title="Korfirmasi Non-Aktivasi User!"
+            message={`Anda yakin ingin menonaktifkan user ${selectedUser?.fullname || selectedUser?.username}`}
+          />
+        )}
+        {isActivateModal && (
+          <ModalConfirmation
+            isOpen={isActivateModal}
+            onClose={() => setIsActivateModal(false)}
+            onConfirm={() => changeStatus(true)}
+            title="Korfirmasi Aktivasi User!"
+            message={`Anda yakin ingin mengaktifkan user ${selectedUser?.fullname || selectedUser?.username}`}
           />
         )}
       </AnimatePresence>

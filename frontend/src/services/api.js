@@ -2,7 +2,7 @@
 import { partners } from "../data/partners";
 import { services } from "../data/services";
 import { highlights } from "../data/highlights";
-import { checkAuth, loginAdmin, logout } from "./authAPI";
+import { checkAuth, loginAdmin, logout } from "./auth.service";
 import {
   getAllHighlight,
   clearHighlight,
@@ -10,15 +10,15 @@ import {
   deleteHighlight,
   updateHighlight,
   uploadPhotoHighlight,
-} from "./highlightAPI";
-import { getAllHistory, getHistoryByUser } from "./historyAPI";
+} from "./highlight.service";
+import { getAllHistory, getHistoryByUser } from "./history.service";
 import {
   getLecturers,
   createLecturer,
   deleteLecturer,
   updateLecturer,
   uploadPhotoDosen,
-} from "./lecturerAPI";
+} from "./lecturer.service";
 
 import {
   adminGetAnnouncements,
@@ -31,6 +31,15 @@ import {
   updateViewCount,
   uploadImageAnnouncement,
 } from "./announcement/announcementAPI";
+
+import {
+  deleteUser,
+  getAllUser,
+  newUser,
+  nonActivateUser,
+  updateUser,
+  activateUser,
+} from "./user.service";
 import api from "./utils/api";
 
 const simulateLatency = (ms = 300) => new Promise((r) => setTimeout(r, ms));
@@ -87,4 +96,10 @@ export {
   getById,
   updateViewCount,
   uploadImageAnnouncement,
+  deleteUser,
+  getAllUser,
+  newUser,
+  nonActivateUser,
+  updateUser,
+  activateUser,
 };

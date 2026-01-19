@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLecturers } from "../services/lecturerAPI";
+import { getLecturers } from "../services/api";
 import LecturerCard from "../components/lecturers/LecturerCard";
 
 const LecturerProfiles = () => {
@@ -64,7 +64,7 @@ const LecturerProfiles = () => {
           selectedExpertise === "All" ||
           (Array.isArray(lecturer.expertise) &&
             lecturer.expertise.some((exp) =>
-              exp.toLowerCase().includes(selectedExpertise.toLowerCase())
+              exp.toLowerCase().includes(selectedExpertise.toLowerCase()),
             ));
 
         return matchesSearch && matchesExpertise;
@@ -215,7 +215,7 @@ const LecturerProfiles = () => {
                       }}>
                       {page}
                     </button>
-                  )
+                  ),
                 )}
               </div>
 

@@ -9,7 +9,7 @@ import FeaturedNews from "../components/FeaturedNews";
 import TentangTISection from "../components/TentangTISection";
 import KerjaSamaSection from "../components/KerjaSamaSection";
 import LayananKampusSection from "../components/LayananKampusSection";
-import { getAllHighlight } from "../services/highlightAPI";
+import { getAllHighlight } from "../services/api";
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
