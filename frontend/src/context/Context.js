@@ -28,11 +28,11 @@ export const AuthProvider = ({ children }) => {
         console.log("❌ User not authenticated");
       }
     } catch (error) {
-      console.error(
-        "❌ Auth check failed:",
-        error.response?.data?.message || error.message,
-      );
-      toast.error(`${error.response?.data?.message || error.message}`);
+      // console.error(
+      // "❌ Auth check failed:",
+      // error.response?.data?.message || error.message,
+      // );
+      // toast.error(`${error.response?.data?.message || error.message}`);
       setUser(null);
     } finally {
       setLoading(false);

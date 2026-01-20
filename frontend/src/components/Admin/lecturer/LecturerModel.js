@@ -517,8 +517,8 @@ const LecturerModal = ({ isOpen, onClose, onSave, lecturer, mode }) => {
               {loading
                 ? "Menyimpan..."
                 : mode === "create"
-                ? "Tambah"
-                : "Simpan"}
+                  ? "Tambah"
+                  : "Simpan"}
             </button>
           </div>
         </form>

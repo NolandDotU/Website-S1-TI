@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Building,
   Plus,
@@ -11,54 +11,20 @@ import {
   Search,
 } from "lucide-react";
 
-// Mock data for preview
-const mockPartners = [
-  {
-    id: 1,
-    company: "CTI Group",
-    logo: "https://via.placeholder.com/200x80?text=CTI+Group",
-    link: "https://ctigroup.com",
-    scale: 1,
-  },
-  {
-    id: 2,
-    company: "Colorful",
-    logo: "https://via.placeholder.com/200x80?text=Colorful",
-    link: "https://colorful.com",
-    scale: 1,
-  },
-  {
-    id: 3,
-    company: "Sinarmas",
-    logo: "https://via.placeholder.com/200x80?text=Sinarmas",
-    link: "https://sinarmas.com",
-    scale: 1,
-  },
-  {
-    id: 4,
-    company: "BCA",
-    logo: "https://via.placeholder.com/200x80?text=BCA",
-    link: "https://bca.co.id",
-    scale: 1,
-  },
-  {
-    id: 5,
-    company: "Alfamart",
-    logo: "https://via.placeholder.com/200x80?text=Alfamart",
-    link: "https://alfamart.com",
-    scale: 1,
-  },
-  {
-    id: 6,
-    company: "Indomaret",
-    logo: "https://via.placeholder.com/200x80?text=Indomaret",
-    link: "https://indomaret.co.id",
-    scale: 1,
-  },
-];
+import { KerjaSamaPreview } from "../../../components/Admin/partner/KerjaSamaPreview";
+import {
+  createPartner,
+  editPartner,
+  deletePartner,
+  getAllPartner,
+  uploadPartnerImage,
+} from "../../../services/partner.service";
+import { useToast } from "../../../context/toastProvider";
+import { env } from "../../../services/utils/env";
 
 const ListPartners = () => {
-  const [partners, setPartners] = useState(mockPartners);
+  const toast = useToast();
+  const [partners, setPartners] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState(null);
@@ -67,13 +33,32 @@ const ListPartners = () => {
     link: "",
     logo: "",
   });
+  const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Filter partners
   const filteredPartners = partners.filter((partner) =>
     partner.company.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  // Fetch data
+  const fetchData = async () => {
+    try {
+      const response = await getAllPartner();
+      setPartners(response.data || []);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      toast.error("Gagal memuat data partner");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Open modal
   const handleOpenModal = (partner = null) => {
     if (partner) {
       setEditingPartner(partner);
@@ -81,62 +66,175 @@ const ListPartners = () => {
         company: partner.company,
         link: partner.link || "",
         logo: partner.logo,
-        scale: partner.scale || 1,
       });
       setImagePreview(partner.logo);
     } else {
       setEditingPartner(null);
-      setFormData({ company: "", link: "", logo: "", scale: 1 });
+      setFormData({ company: "", link: "", logo: "" });
       setImagePreview("");
+      setImageFile(null);
     }
     setIsModalOpen(true);
   };
 
+  // Close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingPartner(null);
-    setFormData({ company: "", link: "", logo: "", scale: 1 });
+    setFormData({ company: "", link: "", logo: "" });
     setImagePreview("");
+    setImageFile(null);
+    setIsSubmitting(false);
   };
 
+  // Handle image upload with validation
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setFormData({ ...formData, logo: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    if (!file) return;
 
-  const handleSubmit = () => {
-    if (!formData.company.trim()) {
-      alert("Company name is required");
+    // Validasi tipe file
+    if (!file.type.startsWith("image/")) {
+      toast.error("File harus berupa gambar (JPG, PNG, atau WEBP)!");
+      e.target.value = "";
       return;
     }
 
-    if (editingPartner) {
-      setPartners(
-        partners.map((p) =>
-          p.id === editingPartner.id ? { ...p, ...formData } : p,
-        ),
-      );
-    } else {
-      const newPartner = {
-        id: Date.now(),
-        ...formData,
-      };
-      setPartners([...partners, newPartner]);
+    // Validasi ukuran file (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran file maksimal 5MB!");
+      e.target.value = "";
+      return;
     }
 
-    handleCloseModal();
+    // Buat preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+      setImageFile(file);
+    };
+    reader.onerror = () => {
+      toast.error("Gagal membaca file!");
+      e.target.value = "";
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleDelete = (id) => {
-    setPartners(partners.filter((p) => p.id !== id));
-    setDeleteConfirm(null);
+  // Handle submit
+  const handleSubmit = async () => {
+    // Prevent double submit
+    if (isSubmitting) return;
+
+    // Validasi nama perusahaan
+    if (!formData.company.trim()) {
+      toast.error("Nama perusahaan wajib diisi!");
+      return;
+    }
+
+    // Validasi gambar untuk partner baru
+    if (!editingPartner && !imageFile && !formData.logo) {
+      toast.error("Logo partner wajib diupload!");
+      return;
+    }
+
+    setIsSubmitting(true);
+    let logoPath = formData.logo;
+
+    try {
+      // Upload gambar jika ada file baru
+      if (imageFile) {
+        const formDataUpload = new FormData();
+        formDataUpload.append("photo", imageFile);
+
+        const uploadResponse = await uploadPartnerImage(formDataUpload);
+        console.log("Upload response:", uploadResponse);
+
+        if (
+          uploadResponse.statusCode === 200 ||
+          uploadResponse.statusCode === 201
+        ) {
+          logoPath = uploadResponse.data.path;
+        } else {
+          toast.error(uploadResponse.message || "Gagal upload logo!");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Prepare data untuk save
+      const dataToSave = {
+        company: formData.company.trim(),
+        link: formData.link.trim(),
+        image: logoPath,
+      };
+
+      // Save data
+      if (editingPartner) {
+        // UPDATE
+        console.log("DATA TO SAVE:", dataToSave);
+        const response = await editPartner(editingPartner.id, dataToSave);
+
+        if (response.statusCode === 200) {
+          toast.success("Partner berhasil diupdate!");
+          fetchData();
+          handleCloseModal();
+        } else {
+          toast.error(response.message || "Gagal mengupdate partner!");
+        }
+      } else {
+        // CREATE
+        const response = await createPartner(dataToSave);
+
+        if (response.statusCode === 201) {
+          toast.success("Partner berhasil ditambahkan!");
+          fetchData();
+          handleCloseModal();
+        } else {
+          toast.error(response.message || "Gagal menambahkan partner!");
+        }
+      }
+      fetchData();
+      return;
+    } catch (error) {
+      console.error("Save error:", error);
+
+      // Handle validation errors
+      if (error.response?.data?.message === "VALIDATION_ERROR") {
+        const validationErrors = error.response.data.errors || {};
+        Object.entries(validationErrors).forEach(([field, message]) => {
+          toast.error(`${field}: ${message}`);
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            "Terjadi kesalahan saat menyimpan data!",
+        );
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle delete
+  const handleDelete = async (id) => {
+    try {
+      const response = await deletePartner(id);
+
+      if (response.statusCode === 200) {
+        toast.success("Partner berhasil dihapus!");
+        fetchData();
+      } else {
+        toast.error(response.message || "Gagal menghapus partner!");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat menghapus partner!",
+      );
+    } finally {
+      setDeleteConfirm(null);
+      fetchData();
+    }
   };
 
   return (
@@ -184,7 +282,7 @@ const ListPartners = () => {
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Preview Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 p-4">
             <h2 className="text-xl text-white font-semibold">Live Preview</h2>
             <p className="text-blue-100 text-sm mt-1">
@@ -195,22 +293,23 @@ const ListPartners = () => {
         </div>
 
         {/* Partners List */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-          <div className="bg-gradient-to-r from-purple-600 to-purple-700 dark:from-purple-500 dark:to-purple-600 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 p-4">
             <h2 className="text-xl text-white font-semibold">Daftar Partner</h2>
-            <p className="text-purple-100 text-sm mt-1">
+            <p className="text-blue-100 text-sm mt-1">
               Total: {filteredPartners.length} partner
             </p>
           </div>
 
           <div className="p-4">
-            {/* Partners List */}
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {filteredPartners.length === 0 ? (
                 <div className="text-center py-12">
                   <Building className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-500 dark:text-gray-400">
-                    Tidak ada partner ditemukan
+                    {searchTerm
+                      ? "Tidak ada partner yang cocok dengan pencarian"
+                      : "Belum ada partner yang ditambahkan"}
                   </p>
                 </div>
               ) : (
@@ -221,9 +320,13 @@ const ListPartners = () => {
                       rounded-lg p-4 flex items-center gap-4 hover:border-blue-500 
                       dark:hover:border-blue-400 transition-colors">
                     <img
-                      src={partner.logo}
+                      src={env.BACKEND_URL + partner.image}
                       alt={partner.company}
                       className="w-20 h-16 rounded-lg object-contain border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2"
+                      onError={(e) => {
+                        e.target.src =
+                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
+                      }}
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="text-gray-900 dark:text-white font-semibold truncate">
@@ -239,9 +342,6 @@ const ListPartners = () => {
                           <ExternalLink className="w-3 h-3 flex-shrink-0" />
                         </a>
                       )}
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Scale: {partner.scale}x
-                      </p>
                     </div>
                     <div className="flex gap-2 flex-shrink-0">
                       <button
@@ -277,7 +377,8 @@ const ListPartners = () => {
               </h3>
               <button
                 onClick={handleCloseModal}
-                className="text-white hover:text-gray-200 transition-colors">
+                disabled={isSubmitting}
+                className="text-white hover:text-gray-200 transition-colors disabled:opacity-50">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -286,13 +387,16 @@ const ListPartners = () => {
               {/* Image Upload */}
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-                  Logo Partner
+                  Logo Partner{" "}
+                  {!editingPartner && <span className="text-red-500">*</span>}
                 </label>
                 <div className="flex items-center gap-4">
-                  {imagePreview && (
+                  {(imagePreview || editingPartner?.image) && (
                     <div className="w-24 h-20 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 flex items-center justify-center">
                       <img
-                        src={imagePreview}
+                        src={
+                          imagePreview || env.BACKEND_URL + editingPartner.image
+                        }
                         alt="Preview"
                         className="max-w-full max-h-full object-contain"
                       />
@@ -305,14 +409,18 @@ const ListPartners = () => {
                       transition-colors bg-gray-50 dark:bg-gray-900">
                       <Upload className="w-6 h-6 mx-auto mb-2 text-gray-400" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        Klik untuk upload
+                        {imagePreview ? "Ganti logo" : "Klik untuk upload"}
                       </span>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        Max 5MB (JPG, PNG)
+                      </p>
                     </div>
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/jpg, image/png, image/jpeg"
                       onChange={handleImageUpload}
                       className="hidden"
+                      disabled={isSubmitting}
                     />
                   </label>
                 </div>
@@ -321,7 +429,7 @@ const ListPartners = () => {
               {/* Company Name */}
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-                  Nama Perusahaan *
+                  Nama Perusahaan <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -329,11 +437,12 @@ const ListPartners = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
                   }
+                  disabled={isSubmitting}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-200 
                     dark:border-gray-700 bg-white dark:bg-gray-900 
                     text-gray-900 dark:text-white placeholder-gray-400 
                     focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                    transition-colors"
+                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Masukkan nama perusahaan"
                 />
               </div>
@@ -349,11 +458,12 @@ const ListPartners = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, link: e.target.value })
                   }
+                  disabled={isSubmitting}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-200 
                     dark:border-gray-700 bg-white dark:bg-gray-900 
                     text-gray-900 dark:text-white placeholder-gray-400 
                     focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                    transition-colors"
+                    transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="https://example.com"
                 />
               </div>
@@ -362,19 +472,26 @@ const ListPartners = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={handleCloseModal}
+                  disabled={isSubmitting}
                   className="flex-1 px-4 py-2.5 bg-gray-200 dark:bg-gray-700 
                     text-gray-700 dark:text-gray-300 rounded-lg 
                     hover:bg-gray-300 dark:hover:bg-gray-600 
-                    transition-colors font-medium">
+                    transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
                   Batal
                 </button>
                 <button
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
                   className="flex-1 px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg 
                     hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-medium 
-                    flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                    flex items-center justify-center gap-2 shadow-md hover:shadow-lg
+                    disabled:opacity-50 disabled:cursor-not-allowed">
                   <Save className="w-4 h-4" />
-                  {editingPartner ? "Update" : "Simpan"}
+                  {isSubmitting
+                    ? "Menyimpan..."
+                    : editingPartner
+                      ? "Update"
+                      : "Simpan"}
                 </button>
               </div>
             </div>

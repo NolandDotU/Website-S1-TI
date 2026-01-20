@@ -13,6 +13,7 @@ import {
   uploadPartnerPhoto,
   validateImage,
 } from "../../../middleware/uploads.middleware";
+import e from "express";
 
 const router = express.Router();
 let controller: PartnerController | null = null;
@@ -37,6 +38,7 @@ router.post(
   (req: any, res: any) => {
     logger.info("Image uploaded successfully", req.file);
     const filePath = `/uploads/partners/${req.file?.filename}`;
+    logger.info(`Image uploaded path : ${filePath}`);
 
     const response = ApiResponse.success(
       {
@@ -50,4 +52,15 @@ router.post(
   },
 );
 
-router.delete("/:id", authMiddleware(["admin"]), async (req, res, next) => {});
+router.post("/", authMiddleware(["admin"]), async (req, res, next) => {
+  getController().cretaee(req, res, next);
+});
+router.put("/:id", authMiddleware(["admin"]), async (req, res, next) => {
+  getController().edit(req, res, next);
+});
+
+router.delete("/:id", authMiddleware(["admin"]), async (req, res, next) => {
+  getController().delete(req, res, next);
+});
+
+export default router;

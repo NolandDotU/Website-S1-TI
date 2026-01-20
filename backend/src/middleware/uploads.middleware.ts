@@ -20,7 +20,7 @@ export const validateImage = async (
 
     const buffer = await fs.readFile(req.file.path);
     const type = await fileType.fromBuffer(buffer); // ✅ fileType.fromBuffer (bukan fileTypeFromBuffer)
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    const allowed = ["image/jpeg", "image/png"];
 
     if (!type || !allowed.includes(type.mime)) {
       await fs.unlink(req.file.path);
@@ -86,7 +86,7 @@ export const deleteImage = async (photoUrl: string) => {
   try {
     await fs.access(targetPath);
     await fs.unlink(targetPath);
-    logger.info(`Deleted image at path: ${targetPath}`);
+    logger.info(`DELETED IMAGE: ${targetPath}`);
     return true;
   } catch (err: any) {
     if (err.code === "ENOENT") return false;

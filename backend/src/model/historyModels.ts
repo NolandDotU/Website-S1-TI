@@ -40,6 +40,7 @@ const Historyschema = new mongoose.Schema(
         "auth",
         "settings",
         "highlight",
+        "partner",
       ],
     },
     entityId: {
@@ -64,7 +65,7 @@ const Historyschema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 Historyschema.index({ user: 1, datetime: -1 });
@@ -76,6 +77,6 @@ Historyschema.pre("validate", function (next) {
 
 const HistoryModel = mongoose.model<IHistory>(
   "history_collection",
-  Historyschema
+  Historyschema,
 );
 export default HistoryModel;

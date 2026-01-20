@@ -8,7 +8,7 @@ const PartnersSchema = new mongoose.Schema(
     },
     link: {
       type: String,
-      required: true,
+      required: false,
     },
     image: {
       type: String,

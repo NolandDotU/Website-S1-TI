@@ -5,6 +5,8 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { getAllPartner } from "../services/partner.service";
+import { env } from "../services/utils/env";
 
 const KerjaSamaSection = ({ isAdmin = false }) => {
   const [items, setItems] = useState([]);
@@ -15,8 +17,8 @@ const KerjaSamaSection = ({ isAdmin = false }) => {
     let active = true;
     (async () => {
       try {
-        const data = await getPartners();
-        if (active) setItems(data);
+        const data = await getAllPartner();
+        if (active) setItems(data.data || []);
       } catch (e) {
         setError("Gagal memuat data kerjasama");
       } finally {
@@ -27,6 +29,18 @@ const KerjaSamaSection = ({ isAdmin = false }) => {
       active = false;
     };
   }, []);
+
+  // Duplikasi data jika kurang dari 6 untuk smooth looping
+  const displayItems = React.useMemo(() => {
+    if (items.length === 0) return [];
+    if (items.length >= 6) return items;
+
+    const duplicated = [...items];
+    while (duplicated.length < 6) {
+      duplicated.push(...items);
+    }
+    return duplicated;
+  }, [items]);
 
   return (
     <section className="py-12 px-4" aria-labelledby="kerjasama-heading">
@@ -65,14 +79,14 @@ const KerjaSamaSection = ({ isAdmin = false }) => {
               loop
               aria-label="Carousel mitra kerja sama"
               className="py-4">
-              {items.map((p) => (
+              {displayItems.map((p, index) => (
                 <SwiperSlide
-                  key={p.id}
+                  key={`${p.id}-${index}`}
                   className="flex items-center justify-center">
                   <div className="h-24 sm:h-28 md:h-32 w-56 md:w-64 flex items-center justify-center">
                     <img
-                      src={p.logo}
-                      alt={p.name}
+                      src={env.BACKEND_URL + p.image}
+                      alt={p.company}
                       className="max-h-full max-w-full object-contain origin-center transition-all duration-500"
                       style={{ transform: `scale(${p.scale || 1})` }}
                     />

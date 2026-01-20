@@ -8,7 +8,6 @@ export const getAnnouncements = async (page = 1, limit = 100, search = "") => {
     const response = await api.get("/announcements", {
       params: { page, limit, search },
     });
-    console.log("response", response);
     return {
       announcements: response.data.data.announcements || [],
       meta: response.data.data.meta || {},
@@ -30,7 +29,7 @@ export const getById = async (id) => {
 export const adminGetAnnouncements = async (
   page = 1,
   limit = 100,
-  search = ""
+  search = "",
 ) => {
   try {
     const response = await api.get("/announcements/admin", {
@@ -85,7 +84,6 @@ export const createAnnouncement = async (announcementData) => {
 //===========
 export const changeStatus = async (status, id) => {
   try {
-    console.log(`CHANGE STATUS : ${status} for ${id}`);
     const response = await api.patch(`/announcements/${id}/${status}`);
     return response.data;
   } catch (error) {

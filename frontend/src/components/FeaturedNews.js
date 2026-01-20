@@ -20,7 +20,6 @@ const FeaturedNews = () => {
       setLoading(true);
       setError(false);
       const response = await getAnnouncements(1, 4);
-      console.log("response announcements", response);
 
       if (!response.announcements || response.announcements.length === 0) {
         setNews([]);
@@ -28,7 +27,6 @@ const FeaturedNews = () => {
         setNews(response.announcements);
       }
     } catch (error) {
-      console.error("Error fetching announcements:", error);
       setError(true);
       // toast.error("Terjadi kesalahan saat mengambil pengumuman!");
     } finally {
@@ -49,10 +47,7 @@ const FeaturedNews = () => {
   const increamentView = async (id) => {
     try {
       const response = await updateViewCount(id);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const onClickAnnouncement = (announcement) => {
@@ -201,7 +196,7 @@ const FeaturedNews = () => {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                      }
+                      },
                     )}
                     summary={item.content}
                     image={`${env.BACKEND_URL}${item.photo}`}

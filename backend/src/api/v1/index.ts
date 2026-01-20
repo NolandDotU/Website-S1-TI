@@ -7,6 +7,7 @@ import highlightRoutes from "./highlight/highlight.routes";
 import historyRoutes from "./history/history.routes";
 import dashboardRoutes from "./dashboard/dashboard.routes";
 import userRoutes from "./users/user.routes";
+import partnerRoutes from "./partner/partner.routes";
 
 import ragRoutes from "../../routes/ragRoutes";
 
@@ -23,5 +24,6 @@ router.use("/highlight", highlightRoutes);
 router.use("/history", historyRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/user", userRoutes);
+router.use("/partners", partnerRoutes);
 
 export default router;

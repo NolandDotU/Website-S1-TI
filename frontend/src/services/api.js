@@ -62,7 +62,6 @@ export async function getHighlights() {
 const getdashboardData = async () => {
   try {
     const response = await api.get("/dashboard");
-    console.log(response);
     return response.data;
   } catch (error) {
     if (error.status === 401) {

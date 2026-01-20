@@ -11,7 +11,7 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => {
-    console.log("✅ API Success:", response.config.url, response.status);
+    // console.log("✅ API Success:", response.config.url, response.status);
     return response;
   },
   (error) => {
@@ -20,13 +20,13 @@ api.interceptors.response.use(
     const errorMessage =
       errorData?.message || error.message || "Something went wrong";
 
-    console.error("❌ API Error:", {
-      url: error.config?.url,
-      status: statusCode,
-      message: errorMessage,
-      errors: errorData?.errors,
-      isOperational: errorData?.isOperational,
-    });
+    // console.error("❌ API Error:", {
+    //   url: error.config?.url,
+    //   status: statusCode,
+    //   message: errorMessage,
+    //   errors: errorData?.errors,
+    //   isOperational: errorData?.isOperational,
+    // });
 
     if (statusCode === 401) {
       const isAuthEndpoint =
