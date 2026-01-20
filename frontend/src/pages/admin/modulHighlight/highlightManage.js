@@ -108,7 +108,7 @@ const HighlightManage = () => {
       const response = await createHighlight(payload);
       if (response.statusCode !== 201) return toast.error(response.message);
       setIsAnnouncementModalOpen(false);
-      await fetchCarousel();
+      fetchCarousel();
     } catch (error) {
       console.error("Error saving announcement to carousel:", error);
       toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
@@ -161,6 +161,7 @@ const HighlightManage = () => {
         selectedItem._id || selectedItem.id,
       );
       await fetchCarousel();
+      // window.location.reload();
       if (response.statusCode !== 200) return toast.error(response.message);
       setIsDeleteModalOpen(false);
       setSelectedItem(null);

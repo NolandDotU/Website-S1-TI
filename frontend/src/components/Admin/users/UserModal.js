@@ -122,56 +122,6 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 <option value="admin">Admin</option>
               </select>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Auth Provider
-              </label>
-              <select
-                value={formData.authProvider}
-                onChange={(e) =>
-                  setFormData({ ...formData, authProvider: e.target.value })
-                }
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
-                  bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                  focus:outline-none focus:border-blue-500">
-                <option value="local">Local</option>
-                <option value="google">Google</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.isActive}
-                onChange={(e) =>
-                  setFormData({ ...formData, isActive: e.target.checked })
-                }
-                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Active
-              </span>
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.isEmailVerified}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    isEmailVerified: e.target.checked,
-                  })
-                }
-                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email Verified
-              </span>
-            </label>
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">

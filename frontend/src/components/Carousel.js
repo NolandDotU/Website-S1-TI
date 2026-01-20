@@ -32,9 +32,14 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const goTo = (i) => setIndex(i);
 
   const getImageUrl = (slide) => {
+    console.log("slide", slide);
+
+    // Safe check untuk slide
+    if (!slide) return image1;
+
     if (slide?.type === "custom") {
-      const imageUrl = slide.customContent.imageUrl;
-      return `${BACKEND_URL}${imageUrl}`;
+      const imageUrl = slide.customContent?.imageUrl;
+      return imageUrl ? `${BACKEND_URL}${imageUrl}` : image1;
     }
     if (slide?.type === "announcement" && slide.announcementId) {
       const photo = slide.announcementId.photo;
@@ -46,29 +51,38 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   };
 
   const getTitle = (slide) => {
+    // Safe check untuk slide
+    if (!slide) return "";
+
     if (slide.type === "custom" || slide.type === "default") {
-      return slide.customContent.title;
+      return slide.customContent?.title || "";
     }
     if (slide.type === "announcement" && slide.announcementId) {
-      return slide.announcementId.title;
+      return slide.announcementId.title || "";
     }
     return "";
   };
 
   const getDescription = (slide) => {
+    // Safe check untuk slide
+    if (!slide) return "";
+
     if (slide.type === "custom" || slide.type === "default") {
-      return slide.customContent.description;
+      return slide.customContent?.description || "";
     }
     if (slide.type === "announcement" && slide.announcementId) {
-      const content = slide.announcementId.content;
+      const content = slide.announcementId.content || "";
       return content.length > 100 ? content.substring(0, 100) + "..." : content;
     }
     return "";
   };
 
   const getLink = (slide) => {
+    // Safe check untuk slide
+    if (!slide) return null;
+
     if (slide.type === "custom" || slide.type === "default") {
-      return slide.customContent.link;
+      return slide.customContent?.link || null;
     }
     if (slide.type === "announcement" && slide.announcementId) {
       return `/berita`;
