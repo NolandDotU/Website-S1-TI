@@ -13,7 +13,7 @@ import { ApiError, logger } from "../utils";
 export const validateImage = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     if (!req.file) return next();
@@ -43,7 +43,7 @@ export const validateImage = async (
 export const optimizeImage = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     if (!req.file) return next();
@@ -132,13 +132,14 @@ const createUpload = (destination: string, maxSize = 5 * 1024 * 1024) => {
 export const uploadLecturerPhoto = createUpload("lecturers", 5 * 1024 * 1024);
 export const uploadNewsPhoto = createUpload("news", 10 * 1024 * 1024);
 export const uploadUserPhoto = createUpload("users", 2 * 1024 * 1024);
-export const uploadCarouselPhoto = createUpload("highlights", 2 * 1024 * 1024);
+export const uploadCarouselPhoto = createUpload("highlights", 5 * 1024 * 1024);
+export const uploadPartnerPhoto = createUpload("partners", 5 * 1024 * 1024);
 
 export const handleMulterError = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_SIZE") {

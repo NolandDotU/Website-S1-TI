@@ -28,7 +28,7 @@ const Dashboard = () => {
     try {
       const [responseDashboard, responseHistory] = await Promise.all([
         getdashboardData(),
-        getAllHistory(5, 1),
+        getAllHistory(3, 1),
       ]);
       setDashboardData(responseDashboard.data);
 

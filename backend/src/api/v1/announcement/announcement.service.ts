@@ -346,7 +346,7 @@ export class AnnouncementService {
     return data;
   };
 
-  increamentViews = async (id: String, currnetUser: JWTPayload) => {
+  increamentViews = async (id: String, currnetUser: JWTPayload | null) => {
     setImmediate(async () => {
       const newsDoc = await this.model
         .findByIdAndUpdate({ _id: id }, { $inc: { views: 1 } })
@@ -358,9 +358,9 @@ export class AnnouncementService {
         action: "VIEW",
         entity: "announcement",
         entityId: newsDoc?._id,
-        user: new mongoose.Types.ObjectId(currnetUser.id),
+        user: new mongoose.Types.ObjectId(currnetUser?.id) || "Guest",
         entityModel: this.model.modelName,
-        description: `Announcement titled "${newsDoc?.title}" was viewed by ${currnetUser.username}.`,
+        description: `Announcement titled "${newsDoc?.title}" was viewed by ${currnetUser?.username || "Guest"}.`,
       };
 
       this.history?.create(historyData).catch((err) => {

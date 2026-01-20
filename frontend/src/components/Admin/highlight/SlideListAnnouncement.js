@@ -86,7 +86,7 @@ const SlideListAnnouncement = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-full">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
           Tambah pengumuman ke highlight
@@ -126,7 +126,7 @@ const SlideListAnnouncement = ({
               <div className="absolute top-3 left-3">
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(
-                    item.category
+                    item.category,
                   )}`}>
                   {getCategoryLabel(item.category)}
                 </span>
@@ -134,7 +134,7 @@ const SlideListAnnouncement = ({
 
               {/* Add to Carousel Button */}
               {!onCarousel.some(
-                (c) => c.announcementId?.id === (item._id || item.id)
+                (c) => c.announcementId?.id === (item._id || item.id),
               ) ? (
                 <button
                   onClick={() => onAddToCarousel(item)}
@@ -176,8 +176,8 @@ const SlideListAnnouncement = ({
                     item.status === "published"
                       ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
                       : item.status === "scheduled"
-                      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
-                      : "bg-gray-100 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
+                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                        : "bg-gray-100 text-gray-700 dark:bg-gray-600 dark:text-gray-300"
                   }`}>
                   {item.status}
                 </span>

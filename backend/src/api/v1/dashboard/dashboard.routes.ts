@@ -17,7 +17,9 @@ router.get(
   "/",
   // globalLimiter,
   authMiddleware(["admin"]),
-  getController().getDashboard,
+  (req, res, next) => {
+    getController().getDashboard(req, res, next);
+  },
 );
 
 export default router;

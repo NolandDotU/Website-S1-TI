@@ -56,26 +56,34 @@ router.delete("/uploads", (req, res, next) => {
 router.get(
   "/",
   // globalLimiter,
-  getController().getAll,
+  (req, res, next) => {
+    getController().getAll(req, res, next);
+  },
 );
 router.post(
   "/",
   // globalLimiter,
   authMiddleware(["admin"]),
   validate(CreateHighlightSchema),
-  getController().create,
+  (req, res, next) => {
+    getController().create(req, res, next);
+  },
 );
 router.delete(
   "/:id",
   // globalLimiter,
   authMiddleware(["admin"]),
-  getController().delete,
+  (req, res, next) => {
+    getController().delete(req, res, next);
+  },
 );
 router.delete(
   "/clear",
   // globalLimiter,
   authMiddleware(["admin"]),
-  getController().clear,
+  (req, res, next) => {
+    getController().clear(req, res, next);
+  },
 );
 
 export default router;

@@ -65,6 +65,9 @@ const getdashboardData = async () => {
     console.log(response);
     return response.data;
   } catch (error) {
+    if (error.status === 401) {
+      window.location.href = "/no-access";
+    }
     throw error;
   }
 };

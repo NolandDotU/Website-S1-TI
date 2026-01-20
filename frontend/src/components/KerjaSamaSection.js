@@ -1,13 +1,12 @@
+import React, { useEffect, useState } from "react";
+import { getPartners } from "../services/api";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-import React, { useEffect, useState } from 'react';
-import { getPartners } from '../services/api';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
-const KerjaSamaSection = () => {
+const KerjaSamaSection = ({ isAdmin = false }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,19 +18,32 @@ const KerjaSamaSection = () => {
         const data = await getPartners();
         if (active) setItems(data);
       } catch (e) {
-        setError('Gagal memuat data kerjasama');
+        setError("Gagal memuat data kerjasama");
       } finally {
         if (active) setLoading(false);
       }
     })();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
     <section className="py-12 px-4" aria-labelledby="kerjasama-heading">
-      <h2 id="kerjasama-heading" className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">Kerja Sama</h2>
-      {loading && <p className="text-sm text-gray-500 dark:text-gray-400">Memuat...</p>}
-      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      {!isAdmin && (
+        <h2
+          id="kerjasama-heading"
+          className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
+          Kerja Sama
+        </h2>
+      )}
+
+      {loading && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">Memuat...</p>
+      )}
+      {error && (
+        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      )}
       {!loading && !error && (
         <>
           <div className="mx-auto max-w-7xl px-2">
@@ -43,14 +55,20 @@ const KerjaSamaSection = () => {
                 640: { slidesPerView: 3 },
                 1024: { slidesPerView: 5 },
               }}
-              pagination={{ clickable: true, bulletClass: 'swiper-pagination-bullet custom-bullet', bulletActiveClass: 'swiper-pagination-bullet-active custom-bullet-active' }}
+              pagination={{
+                clickable: true,
+                bulletClass: "swiper-pagination-bullet custom-bullet",
+                bulletActiveClass:
+                  "swiper-pagination-bullet-active custom-bullet-active",
+              }}
               autoplay={{ delay: 2500, disableOnInteraction: false }}
               loop
               aria-label="Carousel mitra kerja sama"
-              className="py-4"
-            >
+              className="py-4">
               {items.map((p) => (
-                <SwiperSlide key={p.id} className="flex items-center justify-center">
+                <SwiperSlide
+                  key={p.id}
+                  className="flex items-center justify-center">
                   <div className="h-24 sm:h-28 md:h-32 w-56 md:w-64 flex items-center justify-center">
                     <img
                       src={p.logo}

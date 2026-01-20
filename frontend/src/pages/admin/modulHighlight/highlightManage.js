@@ -120,7 +120,7 @@ const HighlightManage = () => {
       let payload = {};
       if (formData.customContent.imageUrl) {
         const photoResponse = await uploadPhotoHighlight(
-          formData.customContent.imageUrl
+          formData.customContent.imageUrl,
         );
         if (photoResponse.statusCode !== 200)
           return toast.error(photoResponse.message);
@@ -142,8 +142,8 @@ const HighlightManage = () => {
         if (response.statusCode !== 200) return toast.error(response.message);
         setCarousel(
           carousel.map((item) =>
-            item._id === selectedItem._id ? { ...item, ...formData } : item
-          )
+            item._id === selectedItem._id ? { ...item, ...formData } : item,
+          ),
         );
       }
       setIsCarouselModalOpen(false);
@@ -158,7 +158,7 @@ const HighlightManage = () => {
   const confirmDelete = async () => {
     try {
       const response = await deleteHighlight(
-        selectedItem._id || selectedItem.id
+        selectedItem._id || selectedItem.id,
       );
       await fetchCarousel();
       if (response.statusCode !== 200) return toast.error(response.message);
@@ -171,7 +171,7 @@ const HighlightManage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 w-auto">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -199,7 +199,7 @@ const HighlightManage = () => {
         </h2>
 
         {/* Carousel Preview */}
-        <div className="mb-6">
+        <div className="mb-6 w-auto h-auto ">
           <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
             Carousel Banner
           </h3>

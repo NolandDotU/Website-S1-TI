@@ -2,9 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { env } from "../services/utils/env";
 import api from "../services/utils/api";
+import { useToast } from "./toastProvider";
 
 const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
+  const toast = useToast();
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,8 +30,9 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error(
         "❌ Auth check failed:",
-        error.response?.data?.message || error.message
+        error.response?.data?.message || error.message,
       );
+      toast.error(`${error.response?.data?.message || error.message}`);
       setUser(null);
     } finally {
       setLoading(false);
