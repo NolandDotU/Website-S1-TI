@@ -74,7 +74,7 @@ const AnnouncementModal = ({
           console.error(error);
           toast.error(
             error.response?.data?.message ||
-              "Terjadi kesalahan saat menyimpan foto!"
+              "Terjadi kesalahan saat menyimpan foto!",
           );
           return;
         }
@@ -104,7 +104,7 @@ const AnnouncementModal = ({
       } else {
         toast.error(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat menyimpan pengumuman"
+            "Terjadi kesalahan saat menyimpan pengumuman",
         );
       }
     }
@@ -176,11 +176,12 @@ const AnnouncementModal = ({
                   setFormData({ ...formData, title: e.target.value })
                 }
                 placeholder="Masukkan judul pengumuman..."
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
-                  dark:border-gray-600 bg-white dark:bg-gray-900 
+                className={`w-full px-4 py-2.5 rounded-lg border  bg-white dark:bg-gray-900 
+                  ${errors.title ? "border-red-500" : "border-gray-300 dark:border-gray-600"}
+                  dark:border-gray-600"
                   text-gray-900 dark:text-white placeholder-gray-400 
                   focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                  transition-colors"
+                  transition-colors`}
               />
               {errors.title && (
                 <p className="text-red-500 text-xs mt-1">{errors.title[0]}</p>
@@ -197,11 +198,12 @@ const AnnouncementModal = ({
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
-                  dark:border-gray-600 bg-white dark:bg-gray-900 
-                  text-gray-900 dark:text-white 
+                className={`w-full px-4 py-2.5 rounded-lg border  bg-white dark:bg-gray-900 
+                  ${errors.category ? "border-red-500" : "border-gray-300 dark:border-gray-600"}
+                  dark:border-gray-600"
+                  text-gray-900 dark:text-white placeholder-gray-400 
                   focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                  transition-colors">
+                  transition-colors`}>
                 <option value="" disabled>
                   Pilih Kategori
                 </option>
@@ -219,10 +221,14 @@ const AnnouncementModal = ({
 
             {/* Content */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                className={`block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 
+              ${errors.content ? "border-red-500" : ""}`}>
                 Konten Pengumuman
               </label>
-              <div data-color-mode="light">
+              <div
+                data-color-mode="light"
+                className={`border-2 shadow-sm ${errors.content ? "border-red-500 shadow-red-500" : ""}`}>
                 <MDEditor
                   value={formData.content}
                   onChange={(value) =>

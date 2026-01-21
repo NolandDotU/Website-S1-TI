@@ -38,7 +38,6 @@ const FeaturedNews = () => {
     fetchData();
   }, []);
 
-  // Prepare news items for display
   let displayNews = news.slice(0, 4);
   if (displayNews.length < 4) {
     displayNews = [...displayNews, ...Array(4 - displayNews.length).fill(null)];
@@ -47,7 +46,9 @@ const FeaturedNews = () => {
   const increamentView = async (id) => {
     try {
       const response = await updateViewCount(id);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
   };
 
   const onClickAnnouncement = (announcement) => {
