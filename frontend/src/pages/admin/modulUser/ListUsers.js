@@ -19,6 +19,7 @@ import {
   nonActivateUser,
   updateUser,
   activateUser,
+  deleteUser,
 } from "../../../services/api";
 import { useToast } from "../../../context/toastProvider";
 
@@ -93,8 +94,19 @@ export const UserManagement = () => {
     setIsActivateModal(true);
   };
 
-  const confirmDelete = () => {
-    setUsers(users.filter((u) => u.id !== selectedUser.id));
+  const confirmDelete = async () => {
+    try {
+      const response = await deleteUser(selectedUser.id || selectedUser._id);
+      if (response.statusCode !== 200) {
+        console.error("Error deleting user:", response);
+        toast.error("Gagal menghapus user!");
+      }
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Terjadi kesalahan saat menghapus user!");
+    }
+    // setUsers(users.filter((u) => u.id !== selectedUser.id));
     setIsDeleteModalOpen(false);
   };
 

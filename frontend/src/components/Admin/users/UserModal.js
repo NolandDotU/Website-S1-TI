@@ -117,9 +117,14 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500">
-                <option value="user">User</option>
                 {/* <option value="lecturer">Lecturer</option> */}
+                <option value="dosen">Dosen</option>
+                <option value="mahasiswa">Mahasiswa</option>
+                <option value="hmp">
+                  HMP ( Himpunan Mahasiswa Program Studi )
+                </option>
                 <option value="admin">Admin</option>
+                <option value="user">User</option>
               </select>
             </div>
           </div>

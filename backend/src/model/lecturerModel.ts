@@ -18,6 +18,9 @@ export const LecturerSchema = new Schema(
     expertise: {
       type: [String],
     },
+    matakuliah: {
+      type: [String],
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -28,6 +31,9 @@ export const LecturerSchema = new Schema(
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email",
       ],
+    },
+    kontak: {
+      type: String,
     },
     externalLink: {
       type: String,

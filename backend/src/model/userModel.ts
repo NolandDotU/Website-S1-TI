@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { comparePassword, hashingPassword } from "../utils";
+import { comparePassword, hashingPassword, logger } from "../utils";
 
 export interface IUser extends mongoose.Document {
   username: string;
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["mahasiswa", "dosen", "hmp", "admin", "user"],
     },
     isActive: {
       type: Boolean,

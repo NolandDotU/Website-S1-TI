@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Mail, Link2, User, Award } from "lucide-react";
 import { env } from "../../services/utils/env";
+import { getLinkPreview } from "link-preview-js";
+
+const getLink = async (link) => {
+  try {
+    console.log("LINK :", link);
+    const shorter = await getLinkPreview(link || "", {
+      imagesPropertyType: "og",
+    });
+    console.log("SHORTER LINK :", shorter);
+    return shorter.url || shorter.favicons?.[0] || link;
+  } catch (error) {
+    console.error("Error getting link preview:", error);
+    return link;
+  }
+};
+
 const LecturerCard = ({ lecturer }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shortLink, setShortLink] = useState("");
 
   const defaultPhoto =
     "http://localhost:3845/assets/b54b1a4408966511b4cec9353d765b04c33f2fcb.png";
@@ -11,12 +28,19 @@ const LecturerCard = ({ lecturer }) => {
   console.log("image path", imagePath);
   const expertise = Array.isArray(lecturer.expertise) ? lecturer.expertise : [];
 
+  // Fetch short link when component mounts if external link exists
+  useEffect(() => {
+    if (lecturer.externalLink) {
+      getLink(lecturer.externalLink).then(setShortLink);
+    }
+  }, [lecturer.externalLink]);
+
   return (
     <>
       {/* Card */}
       <div
         onClick={() => setIsModalOpen(true)}
-        className="flex flex-col items-center justify-start p-4 rounded-lg shadow-lg max-h-64 bg-white dark:bg-gray-800 transition-all max-w-[25.5rem] mx-auto cursor-pointer hover:shadow-xl hover:scale-[1.02]">
+        className="flex flex-col items-center justify-start p-4 rounded-lg shadow-lg max-h-64 bg-white dark:bg-gray-800 transition-all w-fit max-w-[26rem] mx-auto cursor-pointer hover:shadow-xl hover:scale-[1.02]">
         <div className="flex items-center justify-center gap-4 w-full mb-6">
           <div className="flex-shrink-0 w-24 h-24 rounded-full overflow-hidden bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-md">
             <img
@@ -56,7 +80,9 @@ const LecturerCard = ({ lecturer }) => {
             {lecturer.externalLink && (
               <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
                 <Link2 className="w-4 h-4" />
-                <span className="truncate">{lecturer.externalLink}</span>
+                <span className="truncate">
+                  {shortLink || lecturer.externalLink}
+                </span>
               </div>
             )}
           </div>
@@ -69,7 +95,7 @@ const LecturerCard = ({ lecturer }) => {
 
           <div className="grid grid-cols-4 gap-2">
             {expertise.length > 0 ? (
-              expertise.slice(0, 8).map((item, i) => {
+              expertise.slice(0, 4).map((item, i) => {
                 const displayText =
                   item && item.length > 12 ? item.slice(0, 12) + "…" : item;
                 return (
@@ -152,14 +178,16 @@ const LecturerCard = ({ lecturer }) => {
 
                     {/* External Link */}
                     {lecturer.externalLink && (
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 max-w-96">
                         <Link2 className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                         <a
-                          href={lecturer.externalLink}
+                          onClick={() =>
+                            window.open(shortLink || lecturer.externalLink)
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate">
-                          {lecturer.externalLink}
+                          {shortLink || lecturer.externalLink}
                         </a>
                       </div>
                     )}

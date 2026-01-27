@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logger, ApiResponse, asyncHandler } from "../../../utils";
+import { logger, ApiResponse, asyncHandler, JWTPayload } from "../../../utils";
 import { LecturerService } from "./lecturer.service";
 import { LecturerQueryDTO } from "./lecturer.dto";
 import { validate } from "../../../middleware/validate.middleware";
@@ -14,7 +14,7 @@ export class LecturerController {
     res
       .status(201)
       .json(
-        ApiResponse.success(lecturer, "Lecturer created successfully", 201)
+        ApiResponse.success(lecturer, "Lecturer created successfully", 201),
       );
   });
 
@@ -29,9 +29,31 @@ export class LecturerController {
           data.lecturers,
           "Lecturers fetched successfully",
           200,
-          data.meta
-        )
+          data.meta,
+        ),
       );
+  });
+
+  getAllActive = asyncHandler(async (req: Request, res: Response) => {
+    const { page, limit, search } = req.query as LecturerQueryDTO;
+    logger.info("Query params: ", req.query);
+    const data = await this.service.getAllActive(page, limit, search);
+    res
+      .status(200)
+      .json(
+        ApiResponse.success(
+          data.lecturers,
+          "Lecturers fetched successfully",
+          200,
+          data.meta,
+        ),
+      );
+  });
+
+  getByEmail = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user as JWTPayload;
+    const lecturer = await this.service.getByEmail(user.email);
+    return res.status(200).json(ApiResponse.success(lecturer));
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {

@@ -23,6 +23,7 @@ import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
 import { UserManagement } from "./pages/admin/modulUser/ListUsers";
 import ListPartners from "./pages/admin/modulPartners/listPartners";
+import DashboardDosen from "./pages/dosen/dashboard.dosen";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -93,6 +94,21 @@ function App() {
             <Route path="history" element={<History />} />
             <Route path="users" element={<UserManagement />} />
             <Route path="partners" element={<ListPartners />} />
+          </Route>
+
+          <Route
+            path="/dosen"
+            element={
+              <ProtectedRoute requiredRole="dosen">
+                <Outlet />
+              </ProtectedRoute>
+            }>
+            <Route path="profile" element={<DashboardDosen />} />
+          </Route>
+
+          {/* ============= PROTECTED DOSEN ROUTES ================*/}
+          <Route path="/hmp" element={<ProtectedRoute requiredRole="hmp" />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </main>

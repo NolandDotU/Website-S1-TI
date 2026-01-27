@@ -10,6 +10,7 @@ import { deleteImage } from "../../../middleware/uploads.middleware";
 import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
+import { isCancel } from "axios";
 
 export class LecturerService {
   private model: typeof LecturerModel;
@@ -24,7 +25,7 @@ export class LecturerService {
 
   async create(
     data: ILecturerInput,
-    currentUser: any
+    currentUser: any,
   ): Promise<ILecturerResponse> {
     const existing = await this.model.findOne({ email: data.email });
     if (existing) {
@@ -50,19 +51,21 @@ export class LecturerService {
   async getAll(
     page = 1,
     limit = 10,
-    search = ""
+    search = "",
   ): Promise<IPaginatedLecturerResponse> {
     const skip = (page - 1) * limit;
-    let cacheKey;
-    const cacheVersion =
-      (await this.cache.get<string>("lecturers:version")) || "0";
-    const normalizedSearch = search.trim().toLowerCase();
-    cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
+    let cacheKey = "";
+    if (this.cache !== null) {
+      const cacheVersion =
+        (await this.cache.get<string>("lecturers:version")) || "0";
+      const normalizedSearch = search.trim().toLowerCase();
+      cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
-    const cached = await this.cache.get<IPaginatedLecturerResponse>(cacheKey);
-    if (cached) {
-      logger.debug(`Cache HIT: ${cacheKey}`);
-      return cached;
+      const cached = await this.cache.get<IPaginatedLecturerResponse>(cacheKey);
+      if (cached) {
+        logger.debug(`Cache HIT: ${cacheKey}`);
+        return cached;
+      }
     }
 
     const searchQuery = search
@@ -84,7 +87,7 @@ export class LecturerService {
     ]);
 
     const data = docs.map(
-      (doc) => doc.toJSON() as unknown as ILecturerResponse
+      (doc) => doc.toJSON() as unknown as ILecturerResponse,
     );
 
     const result: IPaginatedLecturerResponse = {
@@ -97,29 +100,97 @@ export class LecturerService {
       },
     };
 
-    logger.info(`lecturers : `, result.lecturers);
-    await this.cache.set(cacheKey, result, 360); // 1 hour
+    if (this.cache !== null) {
+      await this.cache.set(cacheKey, result, 360); // 1 hour
+    }
 
     return result;
   }
 
-  async getById(id: string): Promise<ILecturerResponse> {
-    const cacheKey = `lecturers:item:${id}`;
+  async getAllActive(
+    page = 1,
+    limit = 10,
+    search = "",
+  ): Promise<IPaginatedLecturerResponse> {
+    const skip = (page - 1) * limit;
+    let cacheKey = "";
+    if (this.cache !== null) {
+      const cacheVersion =
+        (await this.cache.get<string>("lecturers:active:version")) || "0";
+      const normalizedSearch = search.trim().toLowerCase();
+      cacheKey = `lecturers:active:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
-    const cached = await this.cache.get<ILecturerResponse>(cacheKey);
-    if (cached) {
-      logger.debug(`Cache HIT: ${cacheKey}`);
-      return cached;
+      const cached = await this.cache.get<IPaginatedLecturerResponse>(cacheKey);
+      if (cached) {
+        logger.debug(`Cache HIT: ${cacheKey}`);
+        return cached;
+      }
     }
 
-    const lecturerDoc = await this.model.findById(id);
+    const searchQuery = search
+      ? {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+          ],
+          isActive: true,
+        }
+      : {
+          isActive: true,
+        };
+
+    const [docs, totalItems] = await Promise.all([
+      this.model
+        .find(searchQuery)
+        .sort({ username: 1, _id: 1 })
+        .skip(skip)
+        .limit(limit),
+      this.model.countDocuments(searchQuery),
+    ]);
+
+    const data = docs.map(
+      (doc) => doc.toJSON() as unknown as ILecturerResponse,
+    );
+
+    const result: IPaginatedLecturerResponse = {
+      lecturers: data,
+      meta: {
+        page,
+        limit,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+      },
+    };
+
+    if (this.cache !== null) {
+      await this.cache.set(cacheKey, result, 360); // 1 hour
+    }
+
+    return result;
+  }
+
+  async getByEmail(email: string): Promise<ILecturerResponse> {
+    let cacheKey = "";
+    if (this.cache !== null) {
+      cacheKey = `lecturers:item:${email}`;
+
+      const cached = await this.cache.get<ILecturerResponse>(cacheKey);
+      if (cached) {
+        logger.debug(`Cache HIT: ${cacheKey}`);
+        return cached;
+      }
+    }
+
+    const lecturerDoc = await this.model.findOne({ email: email });
     if (!lecturerDoc) {
       throw ApiError.notFound("Lecturer not found");
     }
 
     const data = lecturerDoc.toJSON() as unknown as ILecturerResponse;
 
-    await this.cache.set(cacheKey, data, 3600);
+    if (this.cache !== null) {
+      await this.cache.set(cacheKey, data, 3600);
+    }
 
     return data;
   }
@@ -127,13 +198,13 @@ export class LecturerService {
   async update(
     data: ILecturerInput,
     id?: string,
-    currentUser?: any
+    currentUser?: any,
   ): Promise<ILecturerResponse> {
     if (!id) {
       throw ApiError.badRequest("Lecturer ID is required");
     }
     const lecturer = await this.model.findOne({
-      $or: [{ _id: id }, { email: id }],
+      _id: id,
     });
 
     if (!lecturer) {
@@ -152,24 +223,25 @@ export class LecturerService {
       throw ApiError.notFound("Lecturer not found");
     }
 
-    const historyData: IHistoryInput = {
-      action: "UPDATE",
-      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
-      entity: "lecturer",
-      user: currentUser?.id ?? null,
-      description: `Lecturer ${data.username} updated by ${currentUser?.username}`,
-    };
-    await this.history.create(historyData);
-
-    await this.cache.incr("lecturers:version");
-    await this.cache.del(`lecturers:item:${id}`);
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        action: "UPDATE",
+        entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
+        entity: "lecturer",
+        user: currentUser?.id ?? null,
+        description: `Lecturer ${data.username} updated by ${currentUser?.username}`,
+      };
+      this.history.create(historyData);
+      this.cache.incr("lecturers:version");
+      this.cache.del(`lecturers:item:${id}`);
+    });
 
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
 
   async delete(id: string, currentUser?: any): Promise<ILecturerResponse> {
     const lecturerDoc = await this.model.findOne({
-      $or: [{ _id: id }, { email: id }],
+      _id: id,
     });
 
     logger.debug("photo lecturer", lecturerDoc?.photo);
@@ -199,20 +271,21 @@ export class LecturerService {
   getStatistics = async (
     startOfMonth: Date,
     endOfMonth: Date,
-    endOfLastMonth: Date
+    endOfLastMonth: Date,
   ) => {
     const [totalLecturer, currentMonthLecturer, lastMonthLecturer] =
       await Promise.all([
         this.model.countDocuments(),
         this.model.countDocuments({
-          status: "published",
-          publishDate: {
+          isActive: true,
+
+          createdAt: {
             $gte: startOfMonth,
           },
         }),
         this.model.countDocuments({
-          status: "published",
-          publishDate: {
+          isActive: true,
+          createdAt: {
             $gte: endOfLastMonth,
             $lte: endOfMonth,
           },

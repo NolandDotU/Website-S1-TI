@@ -166,6 +166,20 @@ const Navbar = ({ theme, toggleTheme }) => {
                         </button>
                       </Link>
                     )}
+                    {user.role === "dosen" && (
+                      <Link to="/dosen/profile">
+                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                          Profile
+                        </button>
+                      </Link>
+                    )}
+                    {user.role === "hmp" && (
+                      <Link to="/hmp/dashboard">
+                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                          Dashboard
+                        </button>
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-3 hover:bg-gray-100 text-sm dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLecturers } from "../services/api";
+import { getActiveLecturers } from "../services/api";
 import LecturerCard from "../components/lecturers/LecturerCard";
 
 const LecturerProfiles = () => {
@@ -17,7 +17,7 @@ const LecturerProfiles = () => {
     const fetchLecturers = async () => {
       try {
         setLoading(true);
-        const response = await getLecturers(1, 100); // Fetch all lecturers
+        const response = await getActiveLecturers(1, 100); // Fetch all lecturers
         console.log("Fetched lecturers data:", response);
         setLecturers(Array.isArray(response.data) ? response.data : []);
         setError(null);

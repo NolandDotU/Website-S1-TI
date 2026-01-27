@@ -18,6 +18,7 @@ import {
   deleteLecturer,
   updateLecturer,
   uploadPhotoDosen,
+  getActiveLecturers,
 } from "./lecturer.service";
 
 import {
@@ -104,4 +105,5 @@ export {
   nonActivateUser,
   updateUser,
   activateUser,
+  getActiveLecturers,
 };

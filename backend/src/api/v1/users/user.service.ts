@@ -5,6 +5,7 @@ import historyService from "../../../utils/history";
 import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
 import mongoose from "mongoose";
+import { deleteImage } from "../../../middleware/uploads.middleware";
 
 export class UserService {
   private model: typeof UserModel;
@@ -80,6 +81,14 @@ export class UserService {
     try {
       const _id = new mongoose.Types.ObjectId(id);
       const update = await this.model.findByIdAndUpdate(_id, data);
+      if (data.photo) {
+        deleteImage(data.photo || "").catch((err) => {
+          logger.error(
+            `Error deleting announcement image: ${data.photo} [ ${err}] `,
+          );
+          return ApiError.internal(`Failed delete announcement image! ${err}`);
+        });
+      }
       if (!update) throw ApiError.conflict("Gagal mengupdate user!");
       if (this.cache !== null) this.cache.incr("users:version");
       setImmediate(() => {
@@ -102,6 +111,15 @@ export class UserService {
   deleteUser = async (id: string, currentUser: JWTPayload) => {
     const deleted = await this.model.findByIdAndDelete(id).lean().exec();
     if (!deleted) throw ApiError.conflict("Gagal menghapus user!");
+    if (deleted.photo) {
+      deleteImage(deleted.photo || "").catch((err) => {
+        logger.error(
+          `Error deleting announcement image: ${deleted.photo} [ ${err}] `,
+        );
+        return ApiError.internal(`Failed delete announcement image! ${err}`);
+      });
+    }
+
     setImmediate(() => {
       if (this.cache !== null) this.cache.incr("users:version");
       this.history.create({

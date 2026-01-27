@@ -10,12 +10,14 @@ import { generateToken, generateRefreshToken } from "../../../utils";
 import { logger } from "../../../utils";
 import { hashingPassword } from "../../../utils";
 import historyService from "../../../utils/history";
+import { LecturerModel } from "../../../model/lecturerModel";
 import axios from "axios";
 import path from "path";
 import fs from "fs";
 import mongoose from "mongoose";
 class AuthService {
   history: typeof historyService | null = historyService || null;
+  private lecturerModel: typeof LecturerModel = LecturerModel;
 
   async madeHistory(
     action: string,
@@ -76,21 +78,37 @@ class AuthService {
     return `/uploads/user/${fileName}`;
   };
 
-  async handleGoogleAuth(googleUser: any): Promise<AuthResponseDTO> {
-    const { googleId, email, username, photo, emailVerified, fullname } =
-      googleUser;
+  // ===== GOOGLE AUTH SECTION =====
 
-    let user = await userModel.findOne({ email });
-    if (user) {
-      if (user.isActive === false) {
-        throw ApiError.unauthorized("User tidak aktif!");
+  private newLectureAcc = async (user: any) => {
+    try {
+      const payload = {
+        username: user.username,
+        email: user.email,
+        photo: user.photo,
+        fullname: user.fullname,
+      };
+      const newLecture = await this.lecturerModel.create(payload);
+      return newLecture;
+    } catch (error: any) {
+      if (error.code === 11000) {
+        return ApiError.conflict("Lecture account already exists");
       }
+    }
+  };
 
-      user.googleId = googleId;
-      user.isEmailVerified = emailVerified;
-      user.lastLogin = new Date();
-      await user.save();
-    } else {
+  private roleMaker = (email: string) => {
+    const domain = email.split("@")[1];
+    if (email === "fti.hmp.s1.ti@uksw.edu") return "hmp";
+    if (domain === "uksw.edu") return "dosen";
+    if (domain === "student.uksw.edu") return "mahasiswa";
+    return "user";
+  };
+
+  private handleGoogleNewUser = async (googleUser: any) => {
+    try {
+      const { googleId, email, username, photo, emailVerified, fullname } =
+        googleUser;
       const googleImage = await axios.get(photo, {
         responseType: "arraybuffer",
       });
@@ -101,7 +119,9 @@ class AuthService {
           username,
         )) || "";
 
-      user = await userModel.create({
+      const role = await this.roleMaker(email);
+
+      const user = await userModel.create({
         googleId,
         email,
         photo: fileName,
@@ -109,8 +129,36 @@ class AuthService {
         authProvider: "google",
         username,
         fullname,
-        role: "user",
+        role: role,
       });
+
+      if (role === "dosen") await this.newLectureAcc(user);
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  async handleGoogleAuth(googleUser: any): Promise<AuthResponseDTO> {
+    const { googleId, email, emailVerified, fullname } = googleUser;
+
+    let user = await userModel.findOne({ email });
+    if (user) {
+      if (user.isActive === false) {
+        throw ApiError.unauthorized("User tidak aktif!");
+      }
+
+      if (user && user.authProvider !== "google") {
+        throw ApiError.unauthorized("Login menggunakan metode lain!");
+      }
+
+      user.googleId = googleId;
+      user.isEmailVerified = emailVerified;
+      user.lastLogin = new Date();
+      await user.save();
+    } else {
+      user = await this.handleGoogleNewUser(googleUser);
     }
 
     const { accessToken, refreshToken } = this.generateToken(user);

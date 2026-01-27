@@ -64,12 +64,29 @@ router.post(
 router.get(
   "/",
   //  globalLimiter,
+  authMiddleware(["admin"]),
   (req, res, next) => {
     getController().getAll(req, res, next);
   },
 );
+router.get(
+  "/active",
+  //  globalLimiter,
+  (req, res, next) => {
+    getController().getAllActive(req, res, next);
+  },
+);
 
-router.put("/:id", authMiddleware(["admin"]), (req, res, next) => {
+router.get(
+  "/detail",
+  //  globalLimiter,
+  authMiddleware(null),
+  (req, res, next) => {
+    getController().getByEmail(req, res, next);
+  },
+);
+
+router.put("/:id", authMiddleware(["dosen", "admin"]), (req, res, next) => {
   getController().update(req, res, next);
 });
 
