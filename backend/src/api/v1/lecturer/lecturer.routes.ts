@@ -86,8 +86,12 @@ router.get(
   },
 );
 
-router.put("/:id", authMiddleware(["dosen", "admin"]), (req, res, next) => {
+router.put("/:id", authMiddleware(["admin"]), (req, res, next) => {
   getController().update(req, res, next);
+});
+
+router.put("/profile/:email", authMiddleware(["dosen"]), (req, res, next) => {
+  getController().updateByEmail(req, res, next);
 });
 
 router.delete("/:id", authMiddleware(["admin"]), (req, res, next) => {

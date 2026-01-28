@@ -56,10 +56,23 @@ export class LecturerController {
     return res.status(200).json(ApiResponse.success(lecturer));
   });
 
+  updateByEmail = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user as JWTPayload;
+    const { email } = req.params;
+    console.log("Updating lecturer with email:", email);
+    const lecturer = await this.service.update(
+      req.body,
+      undefined,
+      email,
+      user,
+    );
+    return res.status(200).json(ApiResponse.success(lecturer));
+  });
+
   update = asyncHandler(async (req: Request, res: Response) => {
     const user = req.user;
     const { id } = req.params;
-    const lecturer = await this.service.update(req.body, id, user);
+    const lecturer = await this.service.update(req.body, id, undefined, user);
     return res.json(ApiResponse.success(lecturer));
   });
 

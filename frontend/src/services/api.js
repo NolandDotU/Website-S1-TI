@@ -19,6 +19,8 @@ import {
   updateLecturer,
   uploadPhotoDosen,
   getActiveLecturers,
+  getLecturersDetail,
+  updateLecturerByEmail,
 } from "./lecturer.service";
 
 import {
@@ -106,4 +108,6 @@ export {
   updateUser,
   activateUser,
   getActiveLecturers,
+  getLecturersDetail,
+  updateLecturerByEmail,
 };

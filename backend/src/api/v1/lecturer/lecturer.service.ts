@@ -198,45 +198,59 @@ export class LecturerService {
   async update(
     data: ILecturerInput,
     id?: string,
+    email?: string,
     currentUser?: any,
   ): Promise<ILecturerResponse> {
-    if (!id) {
-      throw ApiError.badRequest("Lecturer ID is required");
-    }
-    const lecturer = await this.model.findOne({
-      _id: id,
-    });
+    try {
+      if (!id && !email) {
+        logger.error(
+          `Missing parameters for updating lecturer ${id} || ${email}`,
+        );
+        throw ApiError.badRequest("Missing parameters");
+      }
+      const params = id ? { _id: id } : { email: email };
+      const lecturer = await this.model.findOne(params);
+      logger.info(`Updating lecturer with params: ${JSON.stringify(params)}`);
+      logger.info(`LECTURER : ${lecturer}`);
 
-    if (!lecturer) {
-      throw ApiError.notFound("Lecturer not found");
-    }
-    if (lecturer.photo) {
-      deleteImage(lecturer.photo).catch((err) => {
-        logger.error("Error deleting lecturer image: ", err);
+      if (lecturer === null || lecturer === undefined) {
+        throw ApiError.notFound("Lecturer not found");
+      }
+      if (data.photo) {
+        deleteImage(lecturer.photo).catch((err) => {
+          logger.error("Error deleting lecturer image: ", err);
+        });
+      }
+      const lecturerDoc = await this.model.findOneAndUpdate(params, data, {
+        new: true,
       });
+
+      logger.info(`Updated lecturer: ${lecturerDoc}`);
+
+      // if (!lecturerDoc) {
+      //   logger.error(`Failed to update lecturer with ${lecturerDoc}`);
+      //   throw ApiError.notFound("Failed to update lecturer");
+      // }
+
+      setImmediate(() => {
+        const historyData: IHistoryInput = {
+          action: "UPDATE",
+          entityId: new mongoose.Types.ObjectId(lecturerDoc?.id),
+          entity: "lecturer",
+          user: currentUser?.id ?? null,
+          description: `Lecturer ${data.username} updated by ${currentUser?.username}`,
+        };
+        this.history.create(historyData);
+        this.cache.incr("lecturers:version");
+        this.cache.del(`lecturers:item:${id}`);
+        this.cache.del(`lecturers:item:${email}`);
+      });
+
+      return lecturerDoc?.toJSON() as unknown as ILecturerResponse;
+    } catch (error) {
+      logger.error("Error updating lecturer: ", error);
+      throw error;
     }
-    const lecturerDoc = await this.model.findOneAndUpdate({ _id: id }, data, {
-      new: true,
-    });
-
-    if (!lecturerDoc) {
-      throw ApiError.notFound("Lecturer not found");
-    }
-
-    setImmediate(() => {
-      const historyData: IHistoryInput = {
-        action: "UPDATE",
-        entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
-        entity: "lecturer",
-        user: currentUser?.id ?? null,
-        description: `Lecturer ${data.username} updated by ${currentUser?.username}`,
-      };
-      this.history.create(historyData);
-      this.cache.incr("lecturers:version");
-      this.cache.del(`lecturers:item:${id}`);
-    });
-
-    return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
 
   async delete(id: string, currentUser?: any): Promise<ILecturerResponse> {

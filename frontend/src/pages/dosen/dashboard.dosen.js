@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/Context";
-import { getLecturersDetail } from "../../services/lecturer.service";
+import { getLecturersDetail, updateLecturerByEmail } from "../../services/api";
 import { useToast } from "../../context/toastProvider";
 import { env } from "../../services/utils/env";
 
@@ -107,22 +107,26 @@ const DashboardDosen = () => {
   };
 
   const handleSubmit = async (e) => {
+    try {
+      const email = user.email;
+      const response = await updateLecturerByEmail(email, formData);
+      console.log("response", response);
+      toast.success("Profil dosen berhasil diperbarui.");
+      setIsEditing(false);
+      setIsSaving(false);
+      fetchData();
+      setPreviewImage(null);
+    } catch (error) {
+      toast.error("Gagal memperbarui profil dosen.");
+      console.error("Error updating lecturer profile:", error);
+    }
     e.preventDefault();
     setIsSaving(true);
-
-    // Simulasi API call
-    setTimeout(() => {
-      console.log("Data yang akan disimpan:", formData);
-      setIsSaving(false);
-      setIsEditing(false);
-      alert("Profil berhasil diperbarui!");
-    }, 1500);
   };
 
   const handleCancel = () => {
     setIsEditing(false);
     setPreviewImage(null);
-    // Reset form data jika diperlukan
   };
 
   return (
@@ -343,22 +347,11 @@ const DashboardDosen = () => {
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Email <span className="text-red-500">*</span>
+                      Email
                     </label>
-                    {isEditing ? (
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      />
-                    ) : (
-                      <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                        {formData.email}
-                      </p>
-                    )}
+                    <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
+                      {formData.email}
+                    </p>
                   </div>
 
                   {/* Kontak */}

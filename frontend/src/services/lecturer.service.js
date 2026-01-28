@@ -54,6 +54,15 @@ export const updateLecturer = async (lecturerId, lecturerData) => {
   }
 };
 
+export const updateLecturerByEmail = async (email, lecturerData) => {
+  try {
+    const response = await api.put(`/lecturers/profile/${email}`, lecturerData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deleteLecturer = async (lecturerId, url) => {
   try {
     console.log("Deleting lecturer with ID:", lecturerId);
