@@ -11,11 +11,15 @@ import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
 import { isCancel } from "axios";
+import EmbeddingInsertService from "../embeddings/embeddingInsert.service";
+import e from "express";
 
 export class LecturerService {
   private model: typeof LecturerModel;
   private cache: CacheManager;
   private history: typeof historyService;
+
+  private embedding = EmbeddingInsertService;
 
   constructor(model = LecturerModel, cache?: CacheManager) {
     this.model = model;
@@ -45,6 +49,14 @@ export class LecturerService {
 
     await this.cache.incr("lecturers:version");
 
+    this.embedding.upsertOne(
+      "lecturer",
+      lecturerDoc._id.toString(),
+      `${lecturerDoc.fullname}\n${lecturerDoc.email}\n${lecturerDoc.expertise}\n${lecturerDoc.externalLink}`,
+    ).catch(err =>
+      logger.error("Embedding Failed", lecturerDoc._id.toString(), err.massage)
+    );
+
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
 
@@ -70,11 +82,11 @@ export class LecturerService {
 
     const searchQuery = search
       ? {
-          $or: [
-            { name: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-          ],
-        }
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+      }
       : {};
 
     const [docs, totalItems] = await Promise.all([
@@ -129,15 +141,15 @@ export class LecturerService {
 
     const searchQuery = search
       ? {
-          $or: [
-            { name: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-          ],
-          isActive: true,
-        }
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+        isActive: true,
+      }
       : {
-          isActive: true,
-        };
+        isActive: true,
+      };
 
     const [docs, totalItems] = await Promise.all([
       this.model
@@ -244,6 +256,18 @@ export class LecturerService {
         this.cache.incr("lecturers:version");
         this.cache.del(`lecturers:item:${id}`);
         this.cache.del(`lecturers:item:${email}`);
+
+        if (!lecturerDoc?._id) {
+          logger.error("Missing lecturer _id for embedding");
+          return;
+        }
+        this.embedding.upsertOne(
+          "lecturer",
+          lecturerDoc?._id.toString(),
+          `${lecturerDoc?.fullname}\n${lecturerDoc?.email}\n${lecturerDoc?.expertise}\n${lecturerDoc?.externalLink}`,
+        ).catch(err =>
+          logger.error("Embedding update Failed", id, err.massage)
+        );
       });
 
       return lecturerDoc?.toJSON() as unknown as ILecturerResponse;
@@ -267,6 +291,14 @@ export class LecturerService {
       throw ApiError.notFound("Lecturer not found");
     }
     await this.model.deleteOne({ _id: id });
+
+    this.embedding.deleteOne(
+      "lecturer",
+      id
+    ).catch (err => 
+      logger.error("Embedding delete Failed", id, err.message)
+    );
+
     const historyData: IHistoryInput = {
       action: "DELETE",
       entityId: new mongoose.Types.ObjectId(lecturerDoc.id),

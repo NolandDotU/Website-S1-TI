@@ -9,7 +9,7 @@ import dashboardRoutes from "./dashboard/dashboard.routes";
 import userRoutes from "./users/user.routes";
 import partnerRoutes from "./partner/partner.routes";
 
-import ragRoutes from "../../routes/ragRoutes";
+import ragRoutes from "./chatbot/rag.routes";
 
 const router = express.Router();
 

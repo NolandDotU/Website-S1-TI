@@ -24,7 +24,7 @@ export const configureGoogleOAuth = () => {
       {
         clientID: env.GOOGLE_CLIENT_ID,
         clientSecret: env.GOOGLE_CLIENT_SECRET,
-        callbackURL: env.GOOGLE_CALLBACK_URL,
+        // callbackURL: env.GOOGLE_CALLBACK_URL,
         scope: ["email", "profile"],
       },
       async (_accessToken, _refreshToken, profile: Profile, done) => {

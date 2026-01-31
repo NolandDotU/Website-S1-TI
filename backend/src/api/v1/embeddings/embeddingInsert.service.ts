@@ -1,6 +1,6 @@
-import EmbeddingModel from "../model/embeddingModel";
-import {EmbeddingServiceInstance } from "./embeddingService";
-import { env } from "../config/env";
+import EmbeddingModel from "../../../model/embeddingModel";
+import { EmbeddingServiceInstance } from "./embedding.service";
+import { env } from "../../../config/env";
 
 export class EmbeddingInsertService {
   static async upsertOne(
@@ -32,7 +32,7 @@ export class EmbeddingInsertService {
     );
   }
 
-  static async deleteOne (tableName: string, rowId: string): Promise<void> {
+  static async deleteOne(tableName: string, rowId: string): Promise<void> {
     await EmbeddingModel.deleteOne({ tableName, rowId });
   }
 }

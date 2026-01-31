@@ -1,5 +1,5 @@
 import express from "express";
-import { ragServiceInstance } from "../service/ragService";
+import { ragServiceInstance } from "./rag.service";
 
 const router = express.Router();
 

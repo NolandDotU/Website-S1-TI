@@ -1,5 +1,5 @@
 import axios from "axios";
-import { env } from "../config/env";
+import { env } from "../../../config/env";
 
 export class ModelService {
   private apiKey = env.OPENROUTER_API_KEY;
