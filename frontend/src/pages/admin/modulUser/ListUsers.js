@@ -106,43 +106,7 @@ export const UserManagement = () => {
       console.error("Error deleting user:", error);
       toast.error("Terjadi kesalahan saat menghapus user!");
     }
-    // setUsers(users.filter((u) => u.id !== selectedUser.id));
     setIsDeleteModalOpen(false);
-  };
-
-  const handleSave = async (userData) => {
-    try {
-      let response;
-      if (modalMode === "create") {
-        response = await newUser(userData);
-        console.log("create response : ", response);
-        if (response.data.meta.statusCode !== 201)
-          return toast.error(
-            `Gagal menambah user baru! (${response.data.message})`,
-          );
-        setUsers([...users, { ...userData, id: Date.now().toString() }]);
-        fetchData();
-      } else {
-        console.log("selected user : ", selectedUser);
-
-        response = await updateUser(selectedUser._id, userData);
-        console.log("response update : ", response);
-        if (response.statusCode !== 200)
-          toast.error(`Gagal memperbarui user ${response.data.message}`);
-        setUsers(
-          users.map((u) =>
-            u._id === selectedUser._id ? { ...u, ...userData } : u,
-          ),
-        );
-        fetchData();
-      }
-      toast.success(`${response.message}`);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message || "Terjadi kesalahan server!");
-    }
-
-    setIsModalOpen(false);
   };
 
   const changeStatus = async (isActive) => {
@@ -403,7 +367,10 @@ export const UserManagement = () => {
           <UserModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onSave={handleSave}
+            onSave={() => {
+              fetchData();
+              setIsModalOpen(false);
+            }}
             user={selectedUser}
             mode={modalMode}
           />

@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useToast } from "../../../context/toastProvider";
+import {
+  uploadPhotoHighlight,
+  createHighlight,
+  updateHighlight,
+} from "../../../services/api";
 
-const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
+const HighlightModal = ({ isOpen, onClose, isSave, item, mode }) => {
+  const toast = useToast();
+  const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     type: "custom",
     announcementId: "",
@@ -75,7 +83,62 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
       };
     }
 
-    onSave(submitData);
+    handleSaveCarousel(submitData);
+  };
+
+  const handleSaveCarousel = async (formData) => {
+    try {
+      let payload = { ...formData };
+      if (
+        mode === "create" &&
+        (formData.customContent.imageUrl === null ||
+          formData.customContent.imageUrl === "")
+      ) {
+        setError((prev) => ({
+          ...prev,
+          photo: "Gambar tidak boleh kosong",
+        }));
+        toast.error("Gambar tidak boleh kosong");
+        return;
+      }
+      const photoResponse = await uploadPhotoHighlight(
+        formData.customContent.imageUrl,
+      );
+      if (photoResponse.statusCode !== 200)
+        return toast.error(photoResponse.message);
+      payload = {
+        ...payload,
+        customContent: {
+          ...formData.customContent,
+          imageUrl: photoResponse.data.path,
+        },
+      };
+
+      console.log("SUBMITED PAYLOAD :", payload);
+      if (mode === "create") {
+        const response = await createHighlight(payload);
+        if (response.statusCode !== 201) return toast.error(response.message);
+        isSave();
+        toast.success(response.message);
+      } else {
+        const response = await updateHighlight(item._id, formData);
+        if (response.statusCode !== 200) return toast.error(response.message);
+      }
+      isSave();
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        console.log("ERRORS VALIDAITION :", error.response?.data?.errors);
+
+        Object.keys(error.response?.data?.errors).forEach((key) => {
+          setError((prev) => ({
+            ...prev,
+            [key]: error.response?.data?.errors[key],
+          }));
+        });
+      }
+      console.error("Error saving carousel:", error);
+      toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
+    }
   };
 
   if (!isOpen) return null;
@@ -112,7 +175,7 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Judul <span className="text-red-500">*</span>
+                    Judul
                   </label>
                   <input
                     type="text"
@@ -126,13 +189,14 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                         },
                       })
                     }
-                    placeholder="Masukkan judul (max 20 karakter)..."
+                    placeholder="Masukkan judul (max 50 karakter)..."
                     maxLength={50}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
-                      dark:border-gray-600 bg-white dark:bg-gray-900 
+                    className={`w-full px-4 py-2.5 rounded-lg border  bg-white dark:bg-gray-900 
                       text-gray-900 dark:text-white placeholder-gray-400 
                       focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                      transition-colors"
+                      transition-colors
+                      ${error.customContent?.title ? "border-red-500" : "border-gray-300  dark:border-gray-600"}
+                      `}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {formData.customContent.title.length}/50 karakter
@@ -142,7 +206,7 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Deskripsi <span className="text-red-500">*</span>
+                    Deskripsi
                   </label>
                   <input
                     type="text"
@@ -172,7 +236,7 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                 {/* EXTERNAL LINK */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    External Link <span className="text-red-500">*</span>
+                    External Link
                   </label>
                   <input
                     type="text"
@@ -198,23 +262,26 @@ const HighlightModal = ({ isOpen, onClose, onSave, item, mode }) => {
                 {/* Image URL */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    URL Gambar <span className="text-red-500">*</span>
+                    Gambar <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
-                  dark:border-gray-600 bg-white dark:bg-gray-900 
+                    className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-gray-900 
                   text-gray-900 dark:text-white 
                   file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
                   file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 
                   hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200
-                  dark:hover:file:bg-blue-800"
+                  dark:hover:file:bg-blue-800
+                  ${error.photo ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Format: JPG, PNG (Maksimal 5MB)
                   </p>
+                  {error.photo && (
+                    <p className="text-xs text-red-500 mt-1">{error.photo}</p>
+                  )}
                   {previewImage && (
                     <div className="mt-3">
                       <img

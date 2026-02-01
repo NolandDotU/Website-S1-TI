@@ -47,10 +47,10 @@ import api from "./utils/api";
 
 const simulateLatency = (ms = 300) => new Promise((r) => setTimeout(r, ms));
 
-export async function getPartners() {
-  await simulateLatency();
-  return partners;
-}
+// export async function getPartners() {
+//   await simulateLatency();
+//   return partners;
+// }
 
 export async function getServices() {
   await simulateLatency();

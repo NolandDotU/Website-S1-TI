@@ -49,10 +49,17 @@ router.patch(
   getController().activate,
 );
 
+router.patch(
+  "/password",
+  // globalLimiter,
+  authMiddleware(null),
+  getController().updatePassword,
+);
+
 router.put(
   "/:id",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(null),
   getController().update,
 );
 

@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
       // ✅ Handle backend ApiResponse format
       if (response.data.success && response.data.data) {
         setUser(response.data.data);
+        return response.data.data;
       } else {
         setUser(null);
         console.log("❌ User not authenticated");
@@ -40,9 +41,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ✅ Admin login
-  const loginAdmin = async (username, password) => {
+  const localLogin = async (username, password) => {
     try {
-      const { data } = await api.post("/auth/admin", {
+      const { data } = await api.post("/auth/login", {
         username,
         password,
       });
@@ -76,6 +77,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (id, data) => {
+    try {
+      const response = await api.put(`/user/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // ✅ Google OAuth
   const loginWithGoogle = () => {
     window.location.href = `${env.BACKEND_URL}/api/v1/auth/google`;
@@ -99,9 +109,10 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     checkAuth,
-    loginAdmin,
+    localLogin,
     loginWithGoogle,
     logout,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

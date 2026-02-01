@@ -1,6 +1,15 @@
 import z from "zod";
 
-export interface IUser {
+export interface IUser extends IUserResponse {
+  password: string;
+}
+
+export interface IchangePassword {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export interface IUserResponse {
   id: string;
   email: string;
   username: string;
@@ -17,8 +26,12 @@ export const UserValidation = z.object({
     .max(100, "Username must be at most 100 characters long"),
   email: z.string().email("Please enter a valid email").toLowerCase(),
   fullname: z.string().optional(),
-  role: z.enum(["admin", "user"]),
+  role: z
+    .enum(["admin", "user", "hmp", "dosen", "mahasiswa"])
+    .optional()
+    .default("user"),
   photo: z.string().optional(),
-  authProvider: z.enum(["local", "google"]).optional(),
+  authProvider: z.enum(["local", "google"]).optional().default("local"),
   isActive: z.boolean().optional(),
+  password: z.string().min(8, "Password minimal 8 karakter"),
 });

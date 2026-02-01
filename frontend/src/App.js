@@ -19,6 +19,7 @@ import ListAnnouncement from "./pages/admin/modulAnnouncement/listAnnouncemenet"
 import PreviewAnnouncement from "./pages/admin/modulAnnouncement/previewAnnoucement";
 import HighlightManage from "./pages/admin/modulHighlight/highlightManage";
 import TentangTISection from "./components/TentangTISection";
+import AccountSettings from "./pages/AccountSettings";
 import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
 import { UserManagement } from "./pages/admin/modulUser/ListUsers";
@@ -50,7 +51,7 @@ function App() {
 
   // Routes yang ga perlu navbar/footer
   const noLayoutRoutes = ["/login", "/auth/google/error", "/no-access"];
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAdminRoute = location.pathname.startsWith("/cms");
 
   const shouldShowLayout =
     !noLayoutRoutes.includes(location.pathname) && !isAdminRoute;
@@ -70,32 +71,44 @@ function App() {
           <Route path="/profil-dosen" element={<LecturerProfiles />} />
           <Route path="/tentang-program-studi" element={<TentangProdi />} />
 
+          <Route path="/user/profile" element={<AccountSettings />} />
+
           {/* ========== AUTH ROUTES ========== */}
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/error" element={<GoogleAuthError />} />
           <Route path="/no-access" element={<NoAccessPage />} />
 
-          {/* ========== PROTECTED ADMIN ROUTES ========== */}
+          {/* ========== PROTECTED ADMIN & HMP ROUTES ========== */}
           <Route
-            path="/admin/*"
+            path="/cms/*"
             element={
-              <ProtectedRoute requiredRole="admin">
+              <ProtectedRoute requiredRole={["admin", "hmp"]}>
                 <AdminLayout theme={theme} toggleTheme={toggleTheme} />
               </ProtectedRoute>
             }>
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="highlight" element={<HighlightManage />} />
+            <Route path="history" element={<History />} />
+            <Route path="partners" element={<ListPartners />} />
             <Route path="berita" element={<Outlet />}>
               <Route index element={<ListAnnouncement />} />
               <Route path=":id" element={<PreviewAnnouncement />} />
             </Route>
 
-            <Route path="dosen" element={<LecturerManagement />} />
-            <Route path="highlight" element={<HighlightManage />} />
-            <Route path="history" element={<History />} />
-            <Route path="users" element={<UserManagement />} />
-            <Route path="partners" element={<ListPartners />} />
+            {/* ========== PROTECTED ADMIN ONLY ROUTES ========== */}
+            <Route
+              path="admin"
+              element={
+                <ProtectedRoute requiredRole={["admin"]}>
+                  <Outlet />
+                </ProtectedRoute>
+              }>
+              <Route path="users" element={<UserManagement />} />
+              <Route path="dosen" element={<LecturerManagement />} />
+            </Route>
           </Route>
 
+          {/* ========== PROTECTEDDOSEN ONLY ROUTES ========== */}
           <Route
             path="/dosen"
             element={
@@ -104,11 +117,6 @@ function App() {
               </ProtectedRoute>
             }>
             <Route path="profile" element={<DashboardDosen />} />
-          </Route>
-
-          {/* ============= PROTECTED DOSEN ROUTES ================*/}
-          <Route path="/hmp" element={<ProtectedRoute requiredRole="hmp" />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </main>

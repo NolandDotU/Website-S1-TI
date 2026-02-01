@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       required: false,
+      // select: false,
     },
     photo: {
       type: String,

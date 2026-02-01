@@ -24,8 +24,10 @@ import {
   getActionLabel,
   getEntityLabel,
 } from "../../components/Admin/history/utils";
+import { useAuth } from "../../context/Context";
 
 const History = () => {
+  const user = useAuth().user;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterAction, setFilterAction] = useState("all");
@@ -48,6 +50,7 @@ const History = () => {
         itemsPerPage,
         currentPage,
         searchQuery,
+        user,
       );
 
       if (response.statusCode !== 200) {
@@ -71,13 +74,21 @@ const History = () => {
 
     const itemDate = new Date(item.datetime || item.createdAt);
     const now = new Date();
-    const startOfDay = new Date(now.setHours(0, 0, 0, 0));
-    const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+
+    // Create proper date boundaries
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    startOfMonth.setHours(0, 0, 0, 0);
 
     switch (dateRange) {
       case "today":
-        return itemDate >= startOfDay;
+        return itemDate >= today;
       case "week":
         return itemDate >= startOfWeek;
       case "month":
@@ -88,21 +99,35 @@ const History = () => {
   };
 
   const filteredHistory = history.filter((item) => {
+    // Search filter - check if any of these fields match
     const matchesSearch =
+      searchQuery === "" ||
       item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.entity?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.userData?.username
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      item.user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.user?.fullname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.user?.email?.toLowerCase().includes(searchQuery.toLowerCase());
 
+    // Type/Entity filter
     const matchesType = filterType === "all" || item.entity === filterType;
+
+    // Action filter
     const matchesAction =
       filterAction === "all" ||
-      item.action.toUpperCase() === filterAction.toUpperCase();
+      item.action?.toUpperCase() === filterAction.toUpperCase();
+
+    // Date filter
     const matchesDate = filterByDateRange(item);
 
     return matchesSearch && matchesType && matchesAction && matchesDate;
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [filterType, filterAction, dateRange]);
 
   // Pagination handlers
   const handlePreviousPage = () => {
@@ -160,6 +185,23 @@ const History = () => {
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
+  // Count active filters
+  const activeFiltersCount = [
+    filterType !== "all",
+    filterAction !== "all",
+    dateRange !== "all",
+    searchQuery !== "",
+  ].filter(Boolean).length;
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setFilterType("all");
+    setFilterAction("all");
+    setDateRange("all");
+    setCurrentPage(1);
+  };
+
   return (
     <div className="space-y-6 min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
@@ -195,13 +237,31 @@ const History = () => {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="ml-2 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-xs text-blue-700 dark:text-blue-300">
+                {activeFiltersCount} active
+              </span>
+            )}
+          </h3>
+          {activeFiltersCount > 0 && (
+            <button
+              onClick={handleClearFilters}
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              Clear all filters
+            </button>
+          )}
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Search */}
           <div className="lg:col-span-2 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search activities..."
+              placeholder="Search by description, entity, or user..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 
@@ -296,9 +356,17 @@ const History = () => {
               No activities found
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center max-w-md">
-              There are no activities matching your search criteria. Try
-              adjusting your filters.
+              {activeFiltersCount > 0
+                ? "There are no activities matching your search criteria. Try adjusting your filters."
+                : "No activities recorded yet. Activities will appear here once actions are performed."}
             </p>
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={handleClearFilters}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Clear all filters
+              </button>
+            )}
           </div>
         ) : (
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -319,7 +387,7 @@ const History = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4 mb-2">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <span
                             className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getActionColor(
                               item.action,
@@ -343,7 +411,7 @@ const History = () => {
                         <span>{item.user?.username || "Unknown User"}</span>
                       </div>
 
-                      {item.userData?.role && (
+                      {item.user?.role && (
                         <div className="flex items-center gap-2">
                           <Shield className="w-4 h-4" />
                           <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-xs font-medium text-blue-700 dark:text-blue-300">

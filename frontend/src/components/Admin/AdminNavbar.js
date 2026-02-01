@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 export const AdminNavbar = () => {
+  const user = useAuth().user;
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuth();
@@ -42,29 +43,34 @@ export const AdminNavbar = () => {
     );
   };
 
+  const adminLinks = [
+    {
+      icon: Users,
+      path: "/cms/admin/dosen",
+      label: "Dosen",
+    },
+    {
+      icon: UserCog2,
+      path: "/cms/admin/users",
+      label: "Daftar Pengguna",
+    },
+  ];
+
   const navLinks = [
     {
       icon: LayoutDashboard,
-      path: "/admin/dashboard",
+      path: "/cms/dashboard",
       label: "Dashboard",
     },
     {
       icon: Newspaper,
-      path: "/admin/berita",
+      path: "/cms/berita",
       label: "Berita",
-      action: "/admin/berita/create",
-    },
-    {
-      icon: Users,
-      path: "/admin/dosen",
-      label: "Dosen",
-      action: "/admin/dosen/create",
     },
     {
       icon: Image,
-      path: "/admin/highlight",
+      path: "/cms/highlight",
       label: "Highlight",
-      action: "/admin/carousel/create",
     },
     // {
     //   icon: FileText,
@@ -73,17 +79,12 @@ export const AdminNavbar = () => {
     // },
     {
       icon: HistoryIcon,
-      path: "/admin/history",
+      path: "/cms/history",
       label: "History",
     },
     {
-      icon: UserCog2,
-      path: "/admin/users",
-      label: "Daftar Pengguna",
-    },
-    {
       icon: Building2Icon,
-      path: "/admin/partners",
+      path: "/cms/partners",
       label: "Company Partners",
     },
     // {
@@ -93,6 +94,10 @@ export const AdminNavbar = () => {
     // },
   ];
 
+  // Fixed: Use spread operator to concatenate arrays properly
+  const getNavLink =
+    user.role === "admin" ? [...navLinks, ...adminLinks] : navLinks;
+
   return (
     <>
       {/* Mobile Toggle Button */}
@@ -101,7 +106,7 @@ export const AdminNavbar = () => {
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 
           rounded-lg shadow-lg text-gray-800 dark:text-white">
-          {!isSidebarOpen && <Menu className="w-6 h-6" />}
+          <Menu className="w-6 h-6" />
         </button>
       )}
 
@@ -127,7 +132,7 @@ export const AdminNavbar = () => {
               </div>
               <div className="overflow-hidden">
                 <h2 className="text-lg font-bold text-gray-800 dark:text-white truncate">
-                  Admin Panel
+                  CMS Panel
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   S1 Teknik Informatika
@@ -163,7 +168,7 @@ export const AdminNavbar = () => {
 
         {/* Navigation Links */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-2 overflow-x-hidden">
-          {navLinks.map((link) => {
+          {getNavLink.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.path);
 
@@ -201,8 +206,7 @@ export const AdminNavbar = () => {
                     className="absolute left-full ml-2 top-1/2 -translate-y-1/2
                       px-3 py-2 bg-gray-900 dark:bg-gray-700 
                       text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 
-                      pointer-events-none transition-opacity whitespace-nowrap z-50
-                      before:content-[''] ">
+                      pointer-events-none transition-opacity whitespace-nowrap z-50">
                     {link.label}
                   </div>
                 )}
@@ -223,8 +227,20 @@ export const AdminNavbar = () => {
               <LogOut className="w-5 h-5 flex-shrink-0" />
               {isSidebarOpen && <span className="text-sm">Logout</span>}
             </button>
+
+            {/* Tooltip for logout when collapsed */}
+            {!isSidebarOpen && (
+              <div
+                className="absolute left-full ml-2 top-1/2 -translate-y-1/2
+                  px-3 py-2 bg-gray-900 dark:bg-gray-700 
+                  text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 
+                  pointer-events-none transition-opacity whitespace-nowrap z-50">
+                Logout
+              </div>
+            )}
           </div>
         </div>
+
         {/* Logout Confirmation Modal */}
         <ModalConfirmation
           isOpen={isModalOpen}

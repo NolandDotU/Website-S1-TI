@@ -13,13 +13,13 @@ const DashboardDosen = () => {
 
   // State untuk form data
   const [formData, setFormData] = useState({
-    username: "johndoe",
-    fullname: "Dr. John Doe, M.Kom",
-    expertise: ["Machine Learning", "Data Mining", "Artificial Intelligence"],
-    matakuliah: ["Kecerdasan Buatan", "Data Mining", "Machine Learning"],
-    email: "john.doe@uksw.edu",
-    kontak: "+62 812-3456-7890",
-    externalLink: "https://scholar.google.com/johndoe",
+    username: "",
+    fullname: "",
+    expertise: [],
+    matakuliah: [],
+    email: "",
+    kontak: "",
+    externalLink: "",
     photo: "",
     isActive: true,
   });

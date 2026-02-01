@@ -17,8 +17,10 @@ import { getAllHistory, getdashboardData } from "../../services/api";
 import { StatCard } from "../../components/Admin/dashboard/StatCard";
 import { MostViewedCard } from "../../components/Admin/dashboard/MostViewedCard";
 import { ActivityCard } from "../../components/Admin/dashboard/ActivityCard";
+import { useAuth } from "../../context/Context";
 
 const Dashboard = () => {
+  const user = useAuth().user;
   const [dashboardData, setDashboardData] = useState(null);
   const [newestActivities, setNewestActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ const Dashboard = () => {
     try {
       const [responseDashboard, responseHistory] = await Promise.all([
         getdashboardData(),
-        getAllHistory(3, 1),
+        getAllHistory(3, 1, "", user),
       ]);
       setDashboardData(responseDashboard.data);
 
@@ -141,7 +143,7 @@ const Dashboard = () => {
               <History className="w-5 h-5 text-gray-400" />
             </h2>
             <div className="flex items-center gap-x-2">
-              <Link to="/admin/history">
+              <Link to="/cms/history">
                 <button className="flex items-center text-xs gap-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">
                   lihat semua <ArrowRight className="w-3 h-3" />
                 </button>

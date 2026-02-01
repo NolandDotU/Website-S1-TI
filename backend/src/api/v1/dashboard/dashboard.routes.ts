@@ -16,7 +16,7 @@ const getController = () => {
 router.get(
   "/",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   (req, res, next) => {
     getController().getDashboard(req, res, next);
   },

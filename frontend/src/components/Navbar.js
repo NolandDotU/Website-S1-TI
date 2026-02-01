@@ -159,8 +159,8 @@ const Navbar = ({ theme, toggleTheme }) => {
                 </button>
                 {isDropDownUser && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
-                    {user.role === "admin" && (
-                      <Link to="/admin/dashboard">
+                    {(user.role === "admin" || user.role === "hmp") && (
+                      <Link to="/cms/dashboard">
                         <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                           Dashboard
                         </button>
@@ -169,17 +169,15 @@ const Navbar = ({ theme, toggleTheme }) => {
                     {user.role === "dosen" && (
                       <Link to="/dosen/profile">
                         <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                          Profile
+                          Public Profile
                         </button>
                       </Link>
                     )}
-                    {user.role === "hmp" && (
-                      <Link to="/hmp/dashboard">
-                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                          Dashboard
-                        </button>
-                      </Link>
-                    )}
+                    <Link to="/user/profile">
+                      <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        Pengaturan Akun
+                      </button>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-3 hover:bg-gray-100 text-sm dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">

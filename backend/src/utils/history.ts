@@ -4,6 +4,7 @@ import HistoryModel, { IHistoryInput } from "../model/historyModels";
 import { IHistory, IHistoryResponse } from "../model/historyModels";
 import { CacheManager } from "./cacheManager";
 import { logger } from "./logger";
+import { JWTPayload } from "./jwt";
 
 class HistoryService {
   private cache: CacheManager | null = new CacheManager(getRedisClient());
@@ -23,25 +24,50 @@ class HistoryService {
     return history;
   }
 
-  async getAll(page = 1, limit = 50, search = "") {
+  async getAll(page = 1, limit = 50, search = "", user?: JWTPayload) {
     let cacheKey = "";
-    if (cacheKey && this.cache !== null) {
-      const cacheVersion =
-        (await this.cache.get<string>("history:version")) || "0";
-      if (cacheVersion)
-        cacheKey = `history:v${cacheVersion}:p${page}:l${limit}:s${search}`;
-      const cached = await this.cache.get<IHistoryResponse[]>(cacheKey);
-      if (cached) return cached;
+    let cacheVersion = "";
+
+    if (this.cache !== null) {
+      if (user && user?.role !== "admin") {
+        cacheVersion =
+          (await this.cache.get<string>(`history:${user.id}:version`)) || "0";
+        if (cacheVersion) {
+          cacheKey = `history:${user.id}:v${cacheVersion}:p${page}:l${limit}:s${search}`;
+        }
+      } else {
+        cacheVersion = (await this.cache.get<string>("history:version")) || "0";
+        if (cacheVersion) {
+          cacheKey = `history:v${cacheVersion}:p${page}:l${limit}:s${search}`;
+        }
+      }
+
+      if (cacheKey) {
+        const cached = await this.cache.get<{
+          history: IHistoryResponse[];
+          meta: {
+            total: number;
+            page: number;
+            limit: number;
+            totalPage: number;
+          };
+        }>(cacheKey);
+        if (cached) return cached;
+      }
     }
 
+    const userFilter = user ? { user: user.id } : {};
     const query = search
       ? {
           $or: [
             { title: { $regex: search, $options: "i" } },
             { description: { $regex: search, $options: "i" } },
           ],
+          ...userFilter,
         }
-      : {};
+      : {
+          ...userFilter,
+        };
 
     const [history, total] = await Promise.all([
       this.model
@@ -53,10 +79,7 @@ class HistoryService {
       this.model.countDocuments(query),
     ]);
 
-    if (cacheKey && this.cache !== null) {
-      await this.cache.set(cacheKey, history, 300);
-    }
-    return {
+    const result = {
       history: history,
       meta: {
         total,
@@ -65,24 +88,12 @@ class HistoryService {
         totalPage: Math.ceil(total / limit),
       },
     };
-  }
 
-  async getByUser(user: any) {
-    let key = "";
-    if (this.cache !== null) {
-      const cacheVersion =
-        (await this.cache.get<string>(`history:${user.id}:version`)) || "0";
-      if (cacheVersion) key = `history:${user.id}:v${cacheVersion}`;
-      const cached = await this.cache.get<IHistory[]>(key);
-      if (cached) return cached;
+    if (cacheKey && this.cache !== null) {
+      await this.cache.set(cacheKey, result, 300);
     }
-    const history = await HistoryModel.find({ user: user.id }).sort({
-      createdAt: -1,
-    });
-    if (key && this.cache !== null) {
-      await this.cache.set(key, history, 300);
-    }
-    return history;
+
+    return result;
   }
 }
 

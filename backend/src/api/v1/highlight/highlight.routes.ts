@@ -63,7 +63,7 @@ router.get(
 router.post(
   "/",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   validate(CreateHighlightSchema),
   (req, res, next) => {
     getController().create(req, res, next);
@@ -72,7 +72,7 @@ router.post(
 router.delete(
   "/:id",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   (req, res, next) => {
     getController().delete(req, res, next);
   },
@@ -80,7 +80,7 @@ router.delete(
 router.delete(
   "/clear",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   (req, res, next) => {
     getController().clear(req, res, next);
   },

@@ -3,6 +3,7 @@ import { UserService } from "../users/user.service";
 import { AnnouncementService } from "../announcement/announcement.service";
 import { start } from "repl";
 import { IDashboard } from "./dashboard.dto";
+import { logger } from "../../../utils";
 
 export default class DashboardService {
   private highlightService: typeof highlightService;
@@ -59,6 +60,7 @@ export default class DashboardService {
       ),
     ]);
 
+    logger.info(`ANNOUCEMENT : ${JSON.stringify(announcements)}`);
     return {
       users: {
         totalUser: users.totalUser,

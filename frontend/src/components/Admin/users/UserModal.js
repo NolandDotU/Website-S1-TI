@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useToast } from "../../../context/toastProvider";
+import { newUser, updateUser } from "../../../services/user.service";
 
 export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
+  const toast = useToast();
+  const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     username: user?.username || "",
     fullname: user?.fullname || "",
@@ -10,8 +14,38 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
     role: user?.role || "user",
   });
 
-  const handleSubmit = () => {
-    onSave(formData);
+  const handleSave = async () => {
+    try {
+      let response;
+      if (mode === "create") {
+        response = await newUser(formData);
+        console.log("create response : ", response);
+        if (response.statusCode !== 201)
+          return toast.error(
+            `Gagal menambah user baru! (${response.data.message})`,
+          );
+      } else {
+        console.log("selected user : ", user);
+
+        response = await updateUser(user._id, formData);
+        console.log("response update : ", response);
+        if (response.statusCode !== 200)
+          toast.error(`Gagal memperbarui user ${response.data.message}`);
+      }
+      toast.success(`${response.message}`);
+      onSave();
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.errors) {
+        Object.keys(error.response.data.errors).forEach((key) => {
+          setError((prev) => ({
+            ...prev,
+            [key]: error.response.data.errors[key],
+          }));
+        });
+      }
+      toast.error(error.response?.data?.message || "Terjadi kesalahan server!");
+    }
   };
 
   return (
@@ -37,7 +71,7 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Username *
+                Username <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -46,15 +80,15 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, username: e.target.value })
                 }
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                className={`w-full px-4 py-2 rounded-lg border ${error.username ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                  focus:outline-none focus:border-blue-500"
+                  focus:outline-none focus:border-blue-500`}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Full Name
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -62,15 +96,15 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, fullname: e.target.value })
                 }
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                className={`w-full px-4 py-2 rounded-lg border ${error.fullname ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                  focus:outline-none focus:border-blue-500"
+                  focus:outline-none focus:border-blue-500`}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email *
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -79,16 +113,16 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                className={`w-full px-4 py-2 rounded-lg border ${error.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                  focus:outline-none focus:border-blue-500"
+                  focus:outline-none focus:border-blue-500`}
               />
             </div>
 
             {mode === "create" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Password *
+                  Password <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="password"
@@ -97,16 +131,16 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
-                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                    focus:outline-none focus:border-blue-500"
+                  className={`w-full px-4 py-2 rounded-lg border ${error.password ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
+                  bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                  focus:outline-none focus:border-blue-500`}
                 />
               </div>
             )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Role *
+                Role <span className="text-red-500">*</span>
               </label>
               <select
                 required
@@ -114,9 +148,9 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, role: e.target.value })
                 }
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                className={`w-full px-4 py-2 rounded-lg border ${error.role ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                  focus:outline-none focus:border-blue-500">
+                  focus:outline-none focus:border-blue-500`}>
                 {/* <option value="lecturer">Lecturer</option> */}
                 <option value="dosen">Dosen</option>
                 <option value="mahasiswa">Mahasiswa</option>
@@ -139,7 +173,7 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
             </button>
             <button
               type="button"
-              onClick={handleSubmit}
+              onClick={handleSave}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
                 transition-colors font-medium">
               {mode === "create" ? "Tambah" : "Simpan"}

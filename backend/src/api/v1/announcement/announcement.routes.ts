@@ -55,13 +55,13 @@ router.get("/", (req, res, next) => {
   getController().getAllPublished(req, res, next);
 });
 
-router.get("/admin", authMiddleware(["admin"]), (req, res, next) => {
+router.get("/admin", authMiddleware(["admin", "hmp"]), (req, res, next) => {
   getController().getAllContent(req, res, next);
 });
 
 router.post(
   "/",
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   validate(AnnouncementSchema),
   (req, res, next) => {
     getController().create(req, res, next);
@@ -75,7 +75,7 @@ router.get("/:id", (req, res, next) => {
 router.put(
   "/:id",
   // globalLimiter,
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   validate(AnnouncementSchema),
   (req, res, next) => {
     getController().update(req, res, next);
@@ -84,16 +84,20 @@ router.put(
 
 router.patch(
   "/:id/:status",
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   validate(StatusSchema),
   (req, res, next) => {
     getController().updateStatus(req, res, next);
   },
 );
 
-router.delete("/permanent/:id", authMiddleware(["admin"]), (req, res, next) => {
-  getController().delete(req, res, next);
-});
+router.delete(
+  "/permanent/:id",
+  authMiddleware(["admin", "hmp"]),
+  (req, res, next) => {
+    getController().delete(req, res, next);
+  },
+);
 
 router.patch("/:id", authMiddleware(null), (req, res, next) => {
   getController().increamentView(req, res, next);

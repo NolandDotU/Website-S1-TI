@@ -1,6 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../../../middleware/auth.middleware";
-import { AdminLoginDTO, AdminRegisterSchema } from "./auth.dto";
+import { LocalLoginSchema, AdminRegisterSchema } from "./auth.dto";
 import { validate } from "../../../middleware/validate.middleware";
 import { ApiResponse, logger } from "../../../utils";
 import { globalLimiter } from "../../../middleware/rateLimiter.middleware";
@@ -33,11 +33,11 @@ router.post(
         path: req.file?.path,
         filename: req.file?.filename,
       },
-      "Image uploaded successfully"
+      "Image uploaded successfully",
     );
 
     return res.status(response.statusCode).json(response);
-  }
+  },
 );
 
 router.delete("/uploads", (req, res, next) => {
@@ -52,11 +52,11 @@ router.post(
   "/new/admin",
   validate(AdminRegisterSchema),
   authMiddleware(["admin"]),
-  authController.createAdmin
+  authController.createAdmin,
 );
 
 // Google
-router.post("/admin", authController.adminLogin);
+router.post("/login", validate(LocalLoginSchema), authController.localLogin);
 router.get("/google", authController.googleAuth);
 router.get(
   "/google/callback",
@@ -64,7 +64,7 @@ router.get(
     failureRedirect: `${env.FRONTEND_ORIGIN}/auth/google/error`,
     session: false,
   }),
-  authController.googleAuthCallback
+  authController.googleAuthCallback,
 );
 router.get("/google/failure", (req, res) => {
   res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`);

@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
 
 router.post(
   "/uploads",
-  authMiddleware(["admin"]),
+  authMiddleware(["admin", "hmp"]),
   uploadPartnerPhoto,
   handleMulterError,
   validateImage,
@@ -52,15 +52,19 @@ router.post(
   },
 );
 
-router.post("/", authMiddleware(["admin"]), async (req, res, next) => {
+router.post("/", authMiddleware(["admin", "hmp"]), async (req, res, next) => {
   getController().cretaee(req, res, next);
 });
-router.put("/:id", authMiddleware(["admin"]), async (req, res, next) => {
+router.put("/:id", authMiddleware(["admin", "hmp"]), async (req, res, next) => {
   getController().edit(req, res, next);
 });
 
-router.delete("/:id", authMiddleware(["admin"]), async (req, res, next) => {
-  getController().delete(req, res, next);
-});
+router.delete(
+  "/:id",
+  authMiddleware(["admin", "hmp"]),
+  async (req, res, next) => {
+    getController().delete(req, res, next);
+  },
+);
 
 export default router;

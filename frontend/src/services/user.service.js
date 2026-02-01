@@ -30,6 +30,15 @@ const updateUser = async (id, data) => {
   }
 };
 
+const updatePassword = async (data) => {
+  try {
+    const response = await api.patch(`/user/password`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const deleteUser = async (id) => {
   try {
     const response = await api.delete(`/user/${id}`);
@@ -64,4 +73,5 @@ export {
   deleteUser,
   nonActivateUser,
   activateUser,
+  updatePassword,
 };

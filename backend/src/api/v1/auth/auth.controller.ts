@@ -37,8 +37,8 @@ class AuthController {
     );
   });
 
-  adminLogin = asyncHandler(async (req: Request, res: Response) => {
-    const user = await this.service.adminLogin(req.body);
+  localLogin = asyncHandler(async (req: Request, res: Response) => {
+    const user = await this.service.localLogin(req.body);
     this.setCookies(res, user.accessToken, user.refreshToken);
     return res.send(
       ApiResponse.success(null, "Admin logged in successfully", 200),

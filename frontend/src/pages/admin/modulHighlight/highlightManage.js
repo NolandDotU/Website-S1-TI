@@ -115,45 +115,6 @@ const HighlightManage = () => {
     }
   };
 
-  const handleSaveCarousel = async (formData) => {
-    try {
-      let payload = {};
-      if (formData.customContent.imageUrl) {
-        const photoResponse = await uploadPhotoHighlight(
-          formData.customContent.imageUrl,
-        );
-        if (photoResponse.statusCode !== 200)
-          return toast.error(photoResponse.message);
-        payload = {
-          ...formData,
-          customContent: {
-            ...formData.customContent,
-            imageUrl: photoResponse.data.path,
-          },
-        };
-      }
-      if (modalMode === "create") {
-        const response = await createHighlight(payload);
-        if (response.statusCode !== 201) return toast.error(response.message);
-        fetchCarousel();
-        toast.success(response.message);
-      } else {
-        const response = await updateHighlight(selectedItem._id, formData);
-        if (response.statusCode !== 200) return toast.error(response.message);
-        setCarousel(
-          carousel.map((item) =>
-            item._id === selectedItem._id ? { ...item, ...formData } : item,
-          ),
-        );
-      }
-      setIsCarouselModalOpen(false);
-      fetchCarousel();
-    } catch (error) {
-      console.error("Error saving carousel:", error);
-      toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
-    }
-  };
-
   // Delete handler
   const confirmDelete = async () => {
     try {
@@ -262,7 +223,10 @@ const HighlightManage = () => {
           <HighlightModal
             isOpen={isCarouselModalOpen}
             onClose={() => setIsCarouselModalOpen(false)}
-            onSave={handleSaveCarousel}
+            isSave={() => {
+              setIsCarouselModalOpen(false);
+              fetchCarousel();
+            }}
             item={selectedItem}
             mode={modalMode}
             type="carousel"

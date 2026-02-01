@@ -8,7 +8,7 @@ import loginIllustration from "../assets/illustration/login.svg";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, loginAdmin, loginWithGoogle } = useAuth();
+  const { user, localLogin, loginWithGoogle } = useAuth();
   const toast = useToast();
 
   const [credentials, setCredentials] = useState({
@@ -19,8 +19,8 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
+      if (user.role === "admin" || user.role === "hmp") {
+        navigate("/cms/dashboard");
       } else {
         navigate("/");
       }
@@ -32,20 +32,19 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const result = await loginAdmin(
+      const result = await localLogin(
         credentials.username,
-        credentials.password
+        credentials.password,
       );
+      console.log("login result ", result);
 
       if (result.success) {
         toast.success("Login successful! Redirecting...");
-        setTimeout(() => {
-          navigate("/admin/dashboard");
-        }, 200);
       } else {
         toast.error(result.error || "Login failed");
       }
     } catch (error) {
+      console.log(error);
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);

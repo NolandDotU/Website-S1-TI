@@ -13,7 +13,6 @@ const HighlightCarouselTable = ({
   onEdit,
   onDelete,
 }) => {
-  console.log("items", items);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -31,9 +30,6 @@ const HighlightCarouselTable = ({
               </th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 JUDUL
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                URUTAN
               </th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 STATUS
@@ -67,7 +63,6 @@ const HighlightCarouselTable = ({
                   (item.type === "custom"
                     ? item.customContent.imageUrl
                     : `${item.announcementId.photo}`);
-                console.log("img", img);
                 const title =
                   item.type === "custom"
                     ? item.customContent.title
@@ -94,7 +89,7 @@ const HighlightCarouselTable = ({
                                         : ""
                                     }
                                   `}>
-                        {item.type}
+                        <p className="text-xs lowercase">{item.type}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -108,11 +103,6 @@ const HighlightCarouselTable = ({
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {title}
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                        #{item.order}
-                      </span>
                     </td>
                     <td className="px-6 py-4">
                       <span

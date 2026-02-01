@@ -32,8 +32,6 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   const goTo = (i) => setIndex(i);
 
   const getImageUrl = (slide) => {
-    console.log("slide", slide);
-
     // Safe check untuk slide
     if (!slide) return image1;
 

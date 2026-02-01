@@ -1,11 +1,12 @@
-import { IUser } from "./user.dto";
+import { IchangePassword, IUser } from "./user.dto";
 import UserModel from "../../../model/userModel";
-import { ApiError, JWTPayload, logger } from "../../../utils";
+import { ApiError, comparePassword, JWTPayload, logger } from "../../../utils";
 import historyService from "../../../utils/history";
 import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
 import mongoose from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
+import { compare } from "bcrypt";
 
 export class UserService {
   private model: typeof UserModel;
@@ -58,6 +59,7 @@ export class UserService {
   newUser = async (data: IUser, curentUser: JWTPayload) => {
     try {
       const user = await this.model.create(data);
+      logger.info("created user ", user);
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
       if (this.cache !== null) this.cache.incr("users:version");
       setImmediate(() => {
@@ -78,6 +80,7 @@ export class UserService {
   };
 
   updateUser = async (id: string, data: IUser, currentUser: JWTPayload) => {
+    logger.info(`Updating user with id: ${id}`);
     try {
       const _id = new mongoose.Types.ObjectId(id);
       const update = await this.model.findByIdAndUpdate(_id, data);
@@ -106,6 +109,46 @@ export class UserService {
         throw ApiError.conflict("Username atau email sudah digunakan!");
       throw error;
     }
+  };
+
+  updatePassword = async (data: IchangePassword, currentUser: JWTPayload) => {
+    if (currentUser.authProvider !== "local") {
+      throw ApiError.forbidden("Password change not allowed");
+    }
+
+    const user = await this.model
+      .findById(currentUser.id)
+      .select("password")
+      .exec();
+
+    if (!user) {
+      throw ApiError.notFound("User not found");
+    }
+
+    const isMatch = await comparePassword(data.oldPassword, user.password);
+
+    if (!isMatch) {
+      throw ApiError.unauthorized("Old password is incorrect");
+    }
+
+    user.password = await hashPassword(data.newPassword);
+    await user.save();
+
+    if (this.cache) {
+      this.cache.incr("users:version");
+    }
+
+    setImmediate(() => {
+      this.history.create({
+        action: "PATCH",
+        entityId: user.id,
+        entity: "user",
+        user: new mongoose.Types.ObjectId(currentUser.id),
+        description: `User ${currentUser.username} updated password`,
+      });
+    });
+
+    return { success: true };
   };
 
   deleteUser = async (id: string, currentUser: JWTPayload) => {
@@ -205,4 +248,7 @@ export class UserService {
       lastMonthActiveUser: data.lastMonthActiveUser[0]?.count ?? 0,
     };
   };
+}
+function hashPassword(newPassword: string): string | PromiseLike<string> {
+  throw new Error("Function not implemented.");
 }

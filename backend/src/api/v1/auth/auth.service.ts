@@ -2,8 +2,8 @@ import userModel from "../../../model/userModel";
 import { ApiError, JWTPayload } from "../../../utils";
 import {
   AuthResponseDTO,
-  AdminLoginDTO,
-  AdminLoginSchema,
+  LocalLoginSchema,
+  LocalLoginDTO,
   AdminRegisterDTO,
 } from "./auth.dto";
 import { generateToken, generateRefreshToken } from "../../../utils";
@@ -39,6 +39,7 @@ class AuthService {
       role: user.role,
       photo: user.photo,
       authProvider: user.authProvider,
+      fullname: user.fullname,
     };
   }
 
@@ -119,6 +120,8 @@ class AuthService {
           username,
         )) || "";
 
+      logger.info("photo saved", fileName);
+
       const role = await this.roleMaker(email);
 
       const user = await userModel.create({
@@ -185,18 +188,18 @@ class AuthService {
     };
   }
 
-  async adminLogin(data: AdminLoginDTO): Promise<AuthResponseDTO> {
+  async localLogin(data: LocalLoginDTO): Promise<AuthResponseDTO> {
     const { username, password } = data;
     const user = await userModel.findOne({ username });
     if (!user) throw ApiError.unauthorized("Username atau password salah!");
 
-    if (user?.role !== "admin")
-      throw ApiError.unauthorized("User bukan admin!");
     if (!user.isActive) throw ApiError.unauthorized("User tidak aktif!");
     if (!user.password && user.googleId)
       throw ApiError.unauthorized("Login menggunakan Google!");
 
+    logger.info("user", user);
     const isPasswordValid = await user.comparePassword(password);
+    logger.info("isPasswordValid", isPasswordValid);
     if (!isPasswordValid)
       throw ApiError.unauthorized("Email atau password salah!");
 
@@ -219,7 +222,7 @@ class AuthService {
     };
   }
 
-  async updateAdminPassword(data: AdminLoginDTO) {
+  async updateAdminPassword(data: LocalLoginDTO): Promise<boolean> {
     const { username, password } = data;
     const user = await userModel.findOne({ username });
 

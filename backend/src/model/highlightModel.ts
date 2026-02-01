@@ -24,7 +24,6 @@ const highlightSchema = new mongoose.Schema(
 
     order: {
       type: Number,
-      required: true,
     },
 
     isActive: {
@@ -32,7 +31,7 @@ const highlightSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // highlightSchema.index({ announcementId: 1 }, { unique: true, sparse: true });
@@ -41,5 +40,5 @@ const highlightSchema = new mongoose.Schema(
 
 export const HighlightModel = mongoose.model(
   "highlight_collection",
-  highlightSchema
+  highlightSchema,
 );

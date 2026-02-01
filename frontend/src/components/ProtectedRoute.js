@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/Context";
 
-const ProtectedRoute = ({ children, requiredRole = null }) => {
+const ProtectedRoute = ({ children, requiredRole = [] }) => {
   const { user, loading } = useAuth();
   try {
     // ✅ Show loading state while checking auth
@@ -29,7 +29,7 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     }
 
     // ✅ Check role if required (e.g., admin only)
-    if (requiredRole && user.role !== requiredRole) {
+    if (requiredRole.length > 0 && !requiredRole.includes(user.role)) {
       return <Navigate to="/no-access" replace />;
     }
 

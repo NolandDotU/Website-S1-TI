@@ -1,4 +1,10 @@
-import { ApiResponse, asyncHandler, JWTPayload } from "../../../utils";
+import {
+  ApiError,
+  ApiResponse,
+  asyncHandler,
+  JWTPayload,
+  logger,
+} from "../../../utils";
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 
@@ -66,9 +72,27 @@ export class UserController {
     const { id } = req.params;
     const data = req.body;
     const currentUser = req.user as JWTPayload;
+    logger.info(`1. id params : ${id}, currentUser id : ${currentUser.id}`);
+
+    if (id !== currentUser.id && currentUser.role !== "admin") {
+      logger.info(`id params : ${id}, currentUser id : ${currentUser.id}`);
+      logger.info("You can't update this user");
+      throw ApiError.forbidden("You can't update this user");
+    }
+
     const user = await this.service.updateUser(id, data, currentUser);
     return (
       res.json(ApiResponse.success(user, "User berhasil di update", 200)),
+      200
+    );
+  });
+
+  updatePassword = asyncHandler(async (req: Request, res: Response) => {
+    const data = req.body;
+    const currentUser = req.user as JWTPayload;
+    const user = await this.service.updatePassword(data, currentUser);
+    return (
+      res.json(ApiResponse.success(user, "Password berhasil di update", 200)),
       200
     );
   });
