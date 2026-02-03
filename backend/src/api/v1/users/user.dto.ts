@@ -5,7 +5,7 @@ export interface IUser extends IUserResponse {
 }
 
 export interface IchangePassword {
-  oldPassword: string;
+  currentPassword: string;
   newPassword: string;
 }
 

@@ -22,8 +22,8 @@ export const configureGoogleOAuth = () => {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
+        clientID: env.GOOGLE_CLIENT_ID || "",
+        clientSecret: env.GOOGLE_CLIENT_SECRET || "",
         callbackURL: env.GOOGLE_CALLBACK_URL,
         scope: ["email", "profile"],
       },
@@ -34,7 +34,7 @@ export const configureGoogleOAuth = () => {
             logger.error("Invalid email address");
             return done(
               ApiError.unauthorized("Invalid email address"),
-              undefined
+              undefined,
             );
           }
 
@@ -55,7 +55,7 @@ export const configureGoogleOAuth = () => {
         } catch (error) {
           return done(error, undefined);
         }
-      }
-    )
+      },
+    ),
   );
 };

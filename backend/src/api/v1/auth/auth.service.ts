@@ -120,8 +120,6 @@ class AuthService {
           username,
         )) || "";
 
-      logger.info("photo saved", fileName);
-
       const role = await this.roleMaker(email);
 
       const user = await userModel.create({

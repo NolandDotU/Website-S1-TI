@@ -83,12 +83,21 @@ const userSchema = new mongoose.Schema<IUser>(
 // userSchema.index({ googleId: 1 }, { unique: true });
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password") || !this.password) {
+  if (
+    !this.isModified("password") ||
+    !this.password ||
+    typeof this.password !== "string"
+  ) {
+    logger.info(`isModified: ${this.isModified("password")}`);
+    logger.info(`password: ${this.password}`);
+    logger.info(`type password: ${typeof this.password}`);
+    logger.info("Password not modified");
     return next();
   }
 
   try {
     this.password = await hashingPassword(this.password);
+    logger.info(`Password hashed ${this.password}`);
     next();
   } catch (error) {
     next(error as Error);

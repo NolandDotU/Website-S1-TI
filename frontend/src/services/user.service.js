@@ -35,6 +35,7 @@ const updatePassword = async (data) => {
     const response = await api.patch(`/user/password`, data);
     return response.data;
   } catch (error) {
+    console.error("error response : ", error);
     throw error;
   }
 };

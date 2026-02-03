@@ -446,17 +446,48 @@ export class AnnouncementService {
           ],
         },
       },
+      {
+        $project: {
+          totalAnnouncement: {
+            $ifNull: [{ $arrayElemAt: ["$totalAnnouncement.count", 0] }, 0],
+          },
+          totalDraftAnnouncement: {
+            $ifNull: [
+              { $arrayElemAt: ["$totalDraftAnnouncement.count", 0] },
+              0,
+            ],
+          },
+          totalPublishedAnnouncement: {
+            $ifNull: [
+              { $arrayElemAt: ["$totalPublishedAnnouncement.count", 0] },
+              0,
+            ],
+          },
+          currentMonthAnnouncement: {
+            $ifNull: [
+              { $arrayElemAt: ["$currentMonthAnnouncement.count", 0] },
+              0,
+            ],
+          },
+          lastMonthAnnouncement: {
+            $ifNull: [{ $arrayElemAt: ["$lastMonthAnnouncement.count", 0] }, 0],
+          },
+          mostViewedThisMonth: {
+            $ifNull: [{ $arrayElemAt: ["$mostViewedThisMonth", 0] }, null],
+          },
+        },
+      },
     ]);
 
-    const data = result[0];
-
-    return {
-      totalAnnouncement: data.totalAnnouncement[0]?.count ?? 0,
-      currentMonthAnnouncement: data.currentMonthAnnouncement[0]?.count ?? 0,
-      lastMonthAnnouncement: data.lastMonthAnnouncement[0]?.count ?? 0,
-      mostViewedThisMonth: data.mostViewedThisMonth[0] ?? null,
-      totalDraftAnnouncement: data.totalDraftAnnouncement[0]?.count ?? 0,
-      totalPublishedAnnouncement: data.totalPublishedAnnouncement[0].count ?? 0,
+    const data = result[0] ?? {
+      totalAnnouncement: 0,
+      totalDraftAnnouncement: 0,
+      totalPublishedAnnouncement: 0,
+      currentMonthAnnouncement: 0,
+      lastMonthAnnouncement: 0,
+      mostViewedThisMonth: null,
     };
+
+    return data;
   };
 }

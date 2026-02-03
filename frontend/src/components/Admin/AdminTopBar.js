@@ -41,29 +41,32 @@ const AdminTopBar = ({ theme, toggleTheme }) => {
         <div
           className="flex items-center gap-3 p-2 rounded-full
              hover:bg-gray-200 dark:hover:bg-gray-700
-             transition-colors duration-200 cursor-pointer"
-          onClick={() => setOpen(!open)}>
-          {photoUrl ? (
-            <img
-              src={photoUrl}
-              alt="User Avatar"
-              className="h-8 w-8 rounded-full object-cover"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          ) : (
-            <div
-              className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600
+             transition-colors duration-200 cursor-pointer">
+          <div
+            className="flex items-center justify-start gap-x-3"
+            onClick={() => setOpen(!open)}>
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt="User Avatar"
+                className="h-8 w-8 rounded-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            ) : (
+              <div
+                className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600
                     flex items-center justify-center">
-              <User2 className="h-4 w-4 text-gray-500 dark:text-gray-300" />
-            </div>
-          )}
+                <User2 className="h-4 w-4 text-gray-500 dark:text-gray-300" />
+              </div>
+            )}
 
-          <span className="text-gray-900 dark:text-white font-medium">
-            {user?.username || "Admin"}
-          </span>
+            <span className="text-gray-900 dark:text-white font-medium">
+              {user?.username || "Admin"}
+            </span>
+          </div>
 
           <Toggle theme={theme} toggleTheme={toggleTheme} />
         </div>

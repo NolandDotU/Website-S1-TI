@@ -29,13 +29,13 @@ export const mongoConnect = async (retries = 5): Promise<void> => {
 };
 const setupEventListener = () => {
   mongoose.connection.on("connected", () =>
-    logger.info("Connected to MongoDB")
+    logger.info("Connected to MongoDB"),
   );
   mongoose.connection.on("disconnected", () =>
-    logger.info("Disconnected from MongoDB")
+    logger.info("Disconnected from MongoDB"),
   );
   mongoose.connection.on("error", (err) =>
-    logger.error("MongoDB error: " + err.message)
+    logger.error("MongoDB error: " + err.message),
   );
 
   process.on("SIGINT", async () => {

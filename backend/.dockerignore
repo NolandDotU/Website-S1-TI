@@ -13,3 +13,5 @@ tests
 .vscode
 .idea
 coverage
+uploads
+BACKEND_DOCUMENTATION.md

@@ -22,22 +22,25 @@ export interface DecodedJWT extends JWTPayload {
 
 const ACCESS_TOKEN_SECRET = env.JWT_SECRET;
 const REFRESH_TOKEN_SECRET = env.JWT_SECRET + "_refresh";
+const EXPIRES_IN = (env.JWT_EXPIRE as jwt.SignOptions["expiresIn"]) || "1d";
+const EXPIRES_RESFRESH_IN =
+  (env.JWT_EXPIRE as jwt.SignOptions["expiresIn"]) || "3d";
 
 export const generateToken = (payload: JWTPayload): string => {
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
-    expiresIn: "2m",
+    expiresIn: EXPIRES_IN,
   });
 };
 
 export const generateRefreshToken = (payload: JWTPayload): string => {
   return jwt.sign(payload, REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: EXPIRES_RESFRESH_IN,
   });
 };
 
 export const verifyToken = (
   token: string,
-  isRefreshToken = false
+  isRefreshToken = false,
 ): DecodedJWT => {
   try {
     const secret = isRefreshToken ? REFRESH_TOKEN_SECRET : ACCESS_TOKEN_SECRET;

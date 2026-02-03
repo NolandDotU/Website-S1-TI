@@ -125,13 +125,15 @@ export class UserService {
       throw ApiError.notFound("User not found");
     }
 
-    const isMatch = await comparePassword(data.oldPassword, user.password);
+    logger.info(`compare password: ${data.currentPassword}, ${user.password}`);
+    const isMatch = await comparePassword(data.currentPassword, user.password);
+    logger.info(`isMatch: ${isMatch}`);
 
     if (!isMatch) {
       throw ApiError.unauthorized("Old password is incorrect");
     }
 
-    user.password = await hashPassword(data.newPassword);
+    user.password = data.newPassword;
     await user.save();
 
     if (this.cache) {

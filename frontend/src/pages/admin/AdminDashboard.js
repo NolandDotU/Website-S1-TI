@@ -95,7 +95,7 @@ const Dashboard = () => {
         </div>
         <button
           onClick={() => fetchDashboardData()}
-          className="flex items-center justify-center p-2 rounded-lg bg-blue-700 text-xs gap-x-2 "
+          className="flex items-center justify-center p-2 rounded-lg bg-blue-700 text-xs gap-x-2 text-white "
           title="Reload data dashboard">
           <ListRestart className="w-5 h-5" />
           Reload

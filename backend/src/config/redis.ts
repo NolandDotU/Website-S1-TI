@@ -6,7 +6,7 @@ let redisClient: RedisClientType | null = null;
 
 export const connectRedis = async (): Promise<RedisClientType | null> => {
   try {
-    logger.info("Connecting to Redis...");
+    logger.info(`Connecting to Redis... URL : ${env.REDIS_URL}`);
 
     redisClient = createClient({
       url: env.REDIS_URL,
@@ -19,7 +19,7 @@ export const connectRedis = async (): Promise<RedisClientType | null> => {
           }
           const delay = Math.min(retries * 100, 3000);
           logger.info(
-            `Reconnecting to Redis in ${delay}ms (attempt ${retries})`
+            `Reconnecting to Redis in ${delay}ms (attempt ${retries})`,
           );
           return delay;
         },

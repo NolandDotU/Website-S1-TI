@@ -14,12 +14,14 @@ import path from "path";
 
 const app: Application = express();
 
+app.set("trust proxy", 1);
+
 // Security middlewares
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }, // PENTING: Izinkan loading gambar dari origin lain
     contentSecurityPolicy: false, // Atau konfigurasi CSP sesuai kebutuhan
-  })
+  }),
 );
 
 app.use(cors(corsOptions));
@@ -41,7 +43,7 @@ app.use(morganMiddleware);
 app.use(
   "/uploads",
   cors(corsOptions), // Gunakan corsOptions yang sama, bukan wildcard
-  express.static(path.join(__dirname, "../uploads"))
+  express.static(path.join(__dirname, "../uploads")),
 );
 
 // Health check
