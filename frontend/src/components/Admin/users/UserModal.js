@@ -17,25 +17,24 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
   const handleSave = async () => {
     try {
       let response;
+      setError({});
       if (mode === "create") {
         response = await newUser(formData);
-        console.log("create response : ", response);
         if (response.statusCode !== 201)
           return toast.error(
             `Gagal menambah user baru! (${response.data.message})`,
           );
       } else {
-        console.log("selected user : ", user);
-
         response = await updateUser(user._id, formData);
-        console.log("response update : ", response);
         if (response.statusCode !== 200)
           toast.error(`Gagal memperbarui user ${response.data.message}`);
       }
       toast.success(`${response.message}`);
       onSave();
     } catch (error) {
-      console.log(error);
+      if (error.status === 409) {
+        return toast.error(error.response.data.message);
+      }
       if (error?.response?.data?.errors) {
         Object.keys(error.response.data.errors).forEach((key) => {
           setError((prev) => ({
@@ -43,8 +42,10 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
             [key]: error.response.data.errors[key],
           }));
         });
+        return toast.error("Harap isi semua data dengan benar!");
       }
-      toast.error(error.response?.data?.message || "Terjadi kesalahan server!");
+
+      toast.error("Terjadi kesalahan server!");
     }
   };
 
@@ -84,11 +85,14 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500`}
               />
+              {error.username && (
+                <p className="text-red-500 text-xs mt-1">{error.username}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Full Name <span className="text-red-500">*</span>
+                Full Name
               </label>
               <input
                 type="text"
@@ -100,6 +104,9 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500`}
               />
+              {error.fullname && (
+                <p className="text-red-500 text-xs mt-1">{error.fullname}</p>
+              )}
             </div>
 
             <div>
@@ -117,6 +124,9 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500`}
               />
+              {error.email && (
+                <p className="text-red-500 text-xs mt-1">{error.email}</p>
+              )}
             </div>
 
             {mode === "create" && (
@@ -135,6 +145,9 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500`}
                 />
+                {error.password && (
+                  <p className="text-red-500 text-xs mt-1">{error.password}</p>
+                )}
               </div>
             )}
 
@@ -151,7 +164,6 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 className={`w-full px-4 py-2 rounded-lg border ${error.role ? "border-red-500" : "border-gray-300 dark:border-gray-600"} 
                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                   focus:outline-none focus:border-blue-500`}>
-                {/* <option value="lecturer">Lecturer</option> */}
                 <option value="dosen">Dosen</option>
                 <option value="mahasiswa">Mahasiswa</option>
                 <option value="hmp">
@@ -160,6 +172,9 @@ export const UserModal = ({ isOpen, onClose, onSave, user, mode }) => {
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
               </select>
+              {error.role && (
+                <p className="text-red-500 text-xs mt-1">{error.role}</p>
+              )}
             </div>
           </div>
 

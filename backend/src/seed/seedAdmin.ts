@@ -9,12 +9,10 @@ export const seedAdmin = async () => {
       password: "admin123",
       role: "admin",
     };
-
     const exist = await UserModel.findOne({ username: data.username });
     if (exist) return;
 
     const seed = await UserModel.create(data);
-    logger.info(`seed admin: ${seed}`);
     logger.info("Admin account created");
     return;
   } catch (error) {

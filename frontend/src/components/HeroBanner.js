@@ -63,7 +63,7 @@ const HeroBanner = () => {
               window.open(
                 "https://www.uksw.edu/informasi-pendaftaran/",
                 "_blank",
-                "noopener,noreferrer"
+                "noopener,noreferrer",
               );
             }}>
             Daftar Sekarang

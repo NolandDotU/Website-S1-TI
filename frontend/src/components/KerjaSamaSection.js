@@ -58,6 +58,11 @@ const KerjaSamaSection = ({ isAdmin = false }) => {
       {error && (
         <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
       )}
+
+      {items.length === 0 && !loading && !error && (
+        <div className="w-full p-4 rounded-lg bg-gray-100 dark:bg-gray-800 "></div>
+      )}
+
       {!loading && !error && (
         <>
           <div className="mx-auto max-w-7xl px-2">

@@ -46,7 +46,7 @@ const HomePage = () => {
     <>
       <Carousel slides={carousel} />
       <HeroBanner />
-      <AdmissionsHighlights />
+      {/* <AdmissionsHighlights /> */}
       <FeaturedNews />
       {/* <TentangTISection /> */}
       <KerjaSamaSection />

@@ -16,6 +16,7 @@ export class UserService {
     this.model = model;
     this.history = historyService;
     this.cache = new CacheManager(getRedisClient());
+    this.model.syncIndexes();
   }
 
   getAllUser = async (page = 1, limit = 10, search = "") => {

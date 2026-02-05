@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "../context/Context";
 import { useToast } from "../context/toastProvider";
 import loginIllustration from "../assets/illustration/login.svg";
+import googleIcon from "../assets/icon/google-icon.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -174,11 +175,7 @@ const Login = () => {
                 border-gray-200 dark:border-gray-700 rounded-xl 
                 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all 
                 disabled:opacity-50 bg-white dark:bg-gray-800">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                alt="Google"
-                className="w-6 h-6"
-              />
+              <img src={googleIcon} alt="Google" className="w-6 h-6" />
             </button>
           </form>
         </div>

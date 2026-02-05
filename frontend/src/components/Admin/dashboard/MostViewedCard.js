@@ -8,7 +8,7 @@ export const MostViewedCard = ({ announcement }) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 
+        className="bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 
           rounded-xl shadow-lg p-6 border-2 border-dashed border-gray-300 dark:border-gray-700">
         <div className="flex flex-col items-center justify-center  text-center">
           <div className="w-16 h-16 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center mb-4">

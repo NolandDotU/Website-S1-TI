@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     email: {
       type: String,
-      unique: true,
       lowercase: true,
     },
     password: {
@@ -51,8 +50,8 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     googleId: {
       type: String,
-      unique: true,
       sparse: true, // Allow null but unique if exists
+      default: "",
     },
     authProvider: {
       type: String,
@@ -79,8 +78,15 @@ const userSchema = new mongoose.Schema<IUser>(
   },
 );
 
-// userSchema.index({ email: 1 }, { unique: true });
-// userSchema.index({ googleId: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true, name: "email_index_unique" });
+userSchema.index(
+  { googleId: 1 },
+  { unique: true, sparse: true, name: "googleId_index_unique_sparse" },
+);
+userSchema.index(
+  { username: 1 },
+  { unique: true, name: "username_index_unique" },
+);
 
 userSchema.pre("save", async function (next) {
   if (
@@ -88,16 +94,11 @@ userSchema.pre("save", async function (next) {
     !this.password ||
     typeof this.password !== "string"
   ) {
-    logger.info(`isModified: ${this.isModified("password")}`);
-    logger.info(`password: ${this.password}`);
-    logger.info(`type password: ${typeof this.password}`);
-    logger.info("Password not modified");
     return next();
   }
 
   try {
     this.password = await hashingPassword(this.password);
-    logger.info(`Password hashed ${this.password}`);
     next();
   } catch (error) {
     next(error as Error);
