@@ -13,6 +13,7 @@ export interface IUserResponse {
   id: string;
   email: string;
   username: string;
+  fullname: string;
   role: string;
   photo: string | null | undefined;
   authProvider: string;

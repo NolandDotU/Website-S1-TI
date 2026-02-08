@@ -6,17 +6,19 @@ import { CacheManager } from "../../../utils";
 import { getRedisClient } from "../../../config/redis";
 import mongoose from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
-import { compare } from "bcrypt";
+import { LecturerService } from "../lecturer/lecturer.service";
+import { ILecturerInput } from "../lecturer/lecturer.dto";
 
 export class UserService {
   private model: typeof UserModel;
-  private history = historyService;
-  private cache: CacheManager | null = new CacheManager(getRedisClient());
+  private history: typeof historyService;
+  private cache: CacheManager | null;
+  private lecturerService: LecturerService;
   constructor(model = UserModel) {
     this.model = model;
     this.history = historyService;
     this.cache = new CacheManager(getRedisClient());
-    this.model.syncIndexes();
+    this.lecturerService = new LecturerService();
   }
 
   getAllUser = async (page = 1, limit = 10, search = "") => {
@@ -60,6 +62,17 @@ export class UserService {
   newUser = async (data: IUser, curentUser: JWTPayload) => {
     try {
       const user = await this.model.create(data);
+      if (data.role === "dosen") {
+        const lecturerData: ILecturerInput = {
+          username: data.username,
+          email: data.email,
+          fullname: data.fullname,
+          expertise: [],
+          externalLink: "",
+          photo: "",
+        };
+        await this.lecturerService.create(lecturerData, curentUser);
+      }
       logger.info("created user ", user);
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
       if (this.cache !== null) this.cache.incr("users:version");
@@ -93,9 +106,21 @@ export class UserService {
           return ApiError.internal(`Failed delete announcement image! ${err}`);
         });
       }
+
       if (!update) throw ApiError.conflict("Gagal mengupdate user!");
       if (this.cache !== null) this.cache.incr("users:version");
       setImmediate(() => {
+        if (data.role === "dosen") {
+          const lecturerData: ILecturerInput = {
+            username: data.username,
+            email: data.email,
+            fullname: data.fullname,
+            expertise: [],
+            externalLink: "",
+            photo: "",
+          };
+          this.lecturerService.create(lecturerData, currentUser);
+        }
         this.history.create({
           action: "UPDATE",
           entityId: new mongoose.Types.ObjectId(data.id),

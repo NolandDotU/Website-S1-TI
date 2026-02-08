@@ -2,17 +2,18 @@ version: "3.8"
 
 services:
   #NGINX
-  image: nginx:alpine
-  container_name: website-s1ti-nginx
-  ports:
-    - "80:80"
-  volumes:
-    - ./nginx/conf.d:/etc/nginx/conf.d
-  depends_on:
-    - frontend
-    - backend
-  networks:
-    - website-s1ti-network
+  nginx:
+    image: nginx:alpine
+    container_name: website-s1ti-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - website-s1ti-network
   # MongoDB Database
   mongodb:
     image: mongo:latest
@@ -22,8 +23,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: fti
       MONGO_INITDB_ROOT_PASSWORD: ftiuksw
       MONGO_INITDB_DATABASE: db_website_TI
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
+    expose:
+      - "27017"
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
@@ -40,8 +43,10 @@ services:
     image: redis:7-alpine
     container_name: website-s1ti-redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
+    expose:
+      - "6379"
     volumes:
       - redis_data:/data
     networks:
@@ -85,7 +90,10 @@ services:
       API_TIMEOUT: ${API_TIMEOUT:-30000}
       CORS_ORIGIN: http://localhost
       LOG_LEVEL: info
-    ports: 5000:5000
+    # ports:
+    #   - "5000:5000"
+    expose:
+      - "5000"
     volumes:
       - backend_uploads:/app/uploads
       - backend_logs:/app/logs
@@ -112,16 +120,18 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NODE_ENV: development
-        REACT_APP_BACKEND_URL: http://localhost:5000
-        PORT: 3000
+        NODE_ENV: ${NODE_ENV}
+        REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL}
+        PORT: ${PORT}
     container_name: website-s1ti-frontend
     restart: unless-stopped
     depends_on:
       backend:
         condition: service_healthy
-    ports:
-      - "${FRONTEND_PORT:-80}:80"
+    # ports:
+    #   - "${FRONTEND_PORT:-80}:80"
+    expose:
+      - "3000"
     networks:
       - website-s1ti-network
     healthcheck:
@@ -140,8 +150,8 @@ volumes:
     driver: local
   backend_logs:
     driver: local
-  # redis_data:
-  #   driver: local
+  redis_data:
+    driver: local
 
 networks:
   website-s1ti-network:

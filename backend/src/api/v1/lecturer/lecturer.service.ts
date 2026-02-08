@@ -10,7 +10,6 @@ import { deleteImage } from "../../../middleware/uploads.middleware";
 import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
-import { isCancel } from "axios";
 
 export class LecturerService {
   private model: typeof LecturerModel;
