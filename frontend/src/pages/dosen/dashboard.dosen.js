@@ -237,7 +237,9 @@ const DashboardDosen = () => {
                     <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 border-4 border-gray-300 dark:border-gray-600">
                       {previewImage || formData.photo ? (
                         <img
-                          src={previewImage || env.BACKEND_URL + formData.photo}
+                          src={
+                            previewImage || env.IMAGE_BASE_URL + formData.photo
+                          }
                           alt="Profile"
                           className="w-full h-full object-cover"
                         />

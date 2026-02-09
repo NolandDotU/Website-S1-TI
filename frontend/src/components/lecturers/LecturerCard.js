@@ -24,7 +24,7 @@ const LecturerCard = ({ lecturer }) => {
   const defaultPhoto =
     "http://localhost:3845/assets/b54b1a4408966511b4cec9353d765b04c33f2fcb.png";
 
-  const imagePath = env.BACKEND_URL + lecturer.photo;
+  const imagePath = env.IMAGE_BASE_URL + lecturer.photo;
   console.log("image path", imagePath);
   const expertise = Array.isArray(lecturer.expertise) ? lecturer.expertise : [];
 

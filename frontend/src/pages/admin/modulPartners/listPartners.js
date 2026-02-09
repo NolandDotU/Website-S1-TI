@@ -300,7 +300,7 @@ const ListPartners = () => {
                       dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 
                       transition-colors">
                     <img
-                      src={env.BACKEND_URL + partner.image}
+                      src={env.IMAGE_BASE_URL + partner.image}
                       alt={partner.company}
                       className="w-16 h-12 rounded object-contain bg-gray-50 dark:bg-gray-900 p-1"
                       onError={(e) => {
@@ -376,7 +376,8 @@ const ListPartners = () => {
                     <div className="w-20 h-16 rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 flex items-center justify-center flex-shrink-0">
                       <img
                         src={
-                          imagePreview || env.BACKEND_URL + editingPartner.image
+                          imagePreview ||
+                          env.IMAGE_BASE_URL + editingPartner.image
                         }
                         alt="Preview"
                         className="max-w-full max-h-full object-contain"

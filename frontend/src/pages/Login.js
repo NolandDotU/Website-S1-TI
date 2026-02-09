@@ -6,6 +6,7 @@ import { useAuth } from "../context/Context";
 import { useToast } from "../context/toastProvider";
 import loginIllustration from "../assets/illustration/login.svg";
 import googleIcon from "../assets/icon/google-icon.svg";
+import { env } from "../services/utils/env";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     toast.info("Redirecting to Google...");
+    console.log("Redirecting to Google...", env.URL_LOGIN_GOOGLE);
     setTimeout(() => {
       loginWithGoogle();
     }, 500);

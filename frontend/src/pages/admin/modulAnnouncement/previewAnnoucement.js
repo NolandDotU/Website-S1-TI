@@ -50,7 +50,7 @@ const PreviewAnnouncement = () => {
         toast.error(response.message);
       }
       setAnnouncement(response.data);
-      setPhotoUrl(env.BACKEND_URL + response.data.photo);
+      setPhotoUrl(env.IMAGE_BASE_URL + response.data.photo);
     } catch (error) {
       console.error("Error fetching announcement:", error);
       toast.error("Failed to fetch announcement");
@@ -108,7 +108,7 @@ const PreviewAnnouncement = () => {
           <div className="absolute top-6 left-6">
             <span
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ${getCategoryColor(
-                announcement.category
+                announcement.category,
               )}`}>
               <Tag className="w-4 h-4" />
               {getCategoryLabel(announcement.category)}
@@ -155,7 +155,7 @@ const PreviewAnnouncement = () => {
               <div className="flex items-center gap-3 mb-4">
                 <span
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ${getCategoryColor(
-                    announcement.category
+                    announcement.category,
                   )}`}>
                   <Tag className="w-4 h-4" />
                   {getCategoryLabel(announcement.category)}

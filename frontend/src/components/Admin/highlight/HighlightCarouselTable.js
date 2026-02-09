@@ -59,7 +59,7 @@ const HighlightCarouselTable = ({
             ) : (
               items.map((item, index) => {
                 const img =
-                  env.BACKEND_URL +
+                  env.IMAGE_BASE_URL +
                   (item.type === "custom"
                     ? item.customContent.imageUrl
                     : `${item.announcementId.photo}`);

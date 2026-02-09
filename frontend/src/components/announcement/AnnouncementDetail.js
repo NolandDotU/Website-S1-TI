@@ -44,7 +44,7 @@ const AnnouncementDetail = ({ onClose, data }) => {
         {data.photo && (
           <div className="relative h-64 w-full overflow-hidden rounded-t-2xl">
             <img
-              src={env.BACKEND_URL + data.photo}
+              src={env.IMAGE_BASE_URL + data.photo}
               alt={data.title}
               className="w-full h-full object-cover"
             />
@@ -52,7 +52,7 @@ const AnnouncementDetail = ({ onClose, data }) => {
             <div className="absolute bottom-4 left-4">
               <span
                 className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${getCategoryColor(
-                  data.category
+                  data.category,
                 )}`}>
                 <Tag className="w-4 h-4" />
                 {getCategoryLabel(data.category)}

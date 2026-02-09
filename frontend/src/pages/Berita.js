@@ -86,7 +86,7 @@ const Berita = () => {
       filtered = filtered.filter(
         (ann) =>
           ann.title.toLowerCase().includes(lowerQuery) ||
-          ann.content.toLowerCase().includes(lowerQuery)
+          ann.content.toLowerCase().includes(lowerQuery),
       );
     }
 
@@ -231,10 +231,10 @@ const Berita = () => {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                      }
+                      },
                     )}
                     summary={ann.content}
-                    image={`${env.BACKEND_URL}${ann.photo}`}
+                    image={`${env.IMAGE_BASE_URL}${ann.photo}`}
                     views={ann.views}
                     onClick={() => onClickAnnouncement(ann)}
                   />

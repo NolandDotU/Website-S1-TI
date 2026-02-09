@@ -24,14 +24,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# Install dumb-init and wget for proper signal handling and healthcheck
+RUN apk add --no-cache dumb-init wget
 
 # Set environment to production
-ENV NODE_ENV=development
-
-# Create non-root user first (before copying files)
-RUN addgroup -S app && adduser -S app -G app
+ENV NODE_ENV=production
 
 # Copy package files
 COPY package*.json ./
@@ -43,22 +40,20 @@ RUN npm ci --omit=dev && \
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Copy any other necessary files (env templates, config, etc.)
-# COPY --from=builder /app/.env.example ./.env.example
-# COPY --from=builder /app/public ./public
+# Create necessary directories dengan ownership yang benar
+RUN mkdir -p logs uploads && \
+    chown -R node:node /app && \
+    chmod -R 755 /app
 
-# Change ownership to app user
-RUN chown -R app:app /app
-
-# Switch to non-root user
-USER app
+# Switch to node user (sudah ada di base image)
+USER node
 
 # Expose port
 EXPOSE 5000
 
-# Health check (optional but recommended)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:5000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:5000/health || exit 1
 
 # Use dumb-init as entrypoint
 ENTRYPOINT ["dumb-init", "--"]

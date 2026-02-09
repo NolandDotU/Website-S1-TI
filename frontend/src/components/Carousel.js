@@ -19,7 +19,7 @@ const defaultSlides = [
 ];
 
 const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
-  const BACKEND_URL = env.BACKEND_URL;
+  const BACKEND_URL = env.IMAGE_BASE_URL;
   const [index, setIndex] = useState(0);
 
   const activeSlides = slides.filter((slide) => slide.isActive !== false);

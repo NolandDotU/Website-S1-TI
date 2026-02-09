@@ -5,6 +5,7 @@ export const getAllHighlight = async () => {
     const response = await api.get("/highlight/");
     return response.data;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

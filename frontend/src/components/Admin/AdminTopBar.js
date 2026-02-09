@@ -8,7 +8,7 @@ const AdminTopBar = ({ theme, toggleTheme }) => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const BEurl = env.BACKEND_URL || "http://localhost:5000";
+  const BEurl = env.IMAGE_BASE_URL;
 
   const photoUrl = user?.photo ? `${BEurl}${user.photo}` : null;
 

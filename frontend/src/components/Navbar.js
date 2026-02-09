@@ -17,7 +17,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const user = useAuth().user;
   const { logout } = useAuth();
 
-  const BEurl = env.BACKEND_URL || "http://localhost:5000";
+  const BEurl = env.IMAGE_BASE_URL || "http://localhost:5000";
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {

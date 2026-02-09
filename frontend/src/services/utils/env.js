@@ -1,5 +1,11 @@
 export const env = {
-  NODE_ENV: process.env.NODE_ENV || "development",
-  PORT: process.env.PORT || 3000,
-  BACKEND_URL: process.env.REACT_APP_BACKEND_URL || "http://localhost:5000",
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  BACKEND_URL: process.env.REACT_APP_BACKEND_URL,
+  URL_LOGIN_GOOGLE: process.env.REACT_APP_URL_LOGIN_GOOGLE,
+  BACKEND_VERSION: process.env.REACT_APP_BACKEND_URL_VERSION,
+  IMAGE_BASE_URL:
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_BACKEND_URL
+      : "",
 };

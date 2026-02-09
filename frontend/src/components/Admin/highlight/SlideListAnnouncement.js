@@ -9,7 +9,7 @@ const SlideListAnnouncement = ({
   onAddToCarousel,
   loading = false,
 }) => {
-  const BACKEND_URL = env.BACKEND_URL;
+  const BACKEND_URL = env.IMAGE_BASE_URL;
 
   const getCategoryColor = (category) => {
     const colors = {

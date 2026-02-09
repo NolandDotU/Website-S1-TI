@@ -105,7 +105,7 @@ export const KerjaSamaPreview = ({ partners }) => {
                 style={{ transitionDelay: `${idx * 50}ms` }}>
                 <div className="h-24 sm:h-28 md:h-32 w-40 md:w-48 flex items-center justify-center">
                   <img
-                    src={env.BACKEND_URL + partner.image}
+                    src={env.IMAGE_BASE_URL + partner.image}
                     alt={partner.company}
                     className="max-h-full max-w-full object-contain transition-transform duration-500 hover:scale-110"
                     style={{ transform: `scale(${partner.scale || 1})` }}

@@ -88,7 +88,8 @@ export const AuthProvider = ({ children }) => {
 
   // ✅ Google OAuth
   const loginWithGoogle = () => {
-    window.location.href = `${env.BACKEND_URL}/api/v1/auth/google`;
+    // console.log("loginWithGoogle :", env.URL_LOGIN_GOOGLE);
+    window.location.href = `${env.URL_LOGIN_GOOGLE}`;
   };
 
   // ✅ Logout

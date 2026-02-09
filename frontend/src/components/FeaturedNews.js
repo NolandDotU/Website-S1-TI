@@ -200,7 +200,7 @@ const FeaturedNews = () => {
                       },
                     )}
                     summary={item.content}
-                    image={`${env.BACKEND_URL}${item.photo}`}
+                    image={`${env.IMAGE_BASE_URL}${item.photo}`}
                     views={item.views}
                   />
                 ) : (

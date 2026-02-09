@@ -99,7 +99,7 @@ const LecturerTable = ({
       return <FallbackAvatar />;
     }
 
-    const photoURL = env.BACKEND_URL + lecturer.photo;
+    const photoURL = env.IMAGE_BASE_URL + lecturer.photo;
 
     return (
       <img

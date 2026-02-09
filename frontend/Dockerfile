@@ -25,8 +25,18 @@ COPY nginx-default.conf /etc/nginx/conf.d/default.conf
 # Copy built app from builder
 COPY --from=builder /app/build /usr/share/nginx/html
 
+# ✅ Nginx config untuk React SPA
+RUN echo 'server { \
+    listen 3000; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
+
 # Expose port
-EXPOSE 80
+EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

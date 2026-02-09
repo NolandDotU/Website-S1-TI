@@ -2,7 +2,7 @@ import axios from "axios";
 import { env } from "../utils/env";
 
 const api = axios.create({
-  baseURL: `${env.BACKEND_URL}/api/v1`,
+  baseURL: `${env.BACKEND_URL}/${env.BACKEND_VERSION}`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

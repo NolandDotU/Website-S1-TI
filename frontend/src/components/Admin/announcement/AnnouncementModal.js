@@ -132,7 +132,7 @@ const AnnouncementModal = ({
         return formData.photo;
       }
       // Otherwise, prepend the backend URL
-      return `${env.BACKEND_URL || "http://localhost:5000"}${formData.photo}`;
+      return `${env.IMAGE_BASE_URL}${formData.photo}`;
     }
 
     return null;
