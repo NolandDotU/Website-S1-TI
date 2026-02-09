@@ -58,6 +58,7 @@ services:
 
   # Backend API
   backend:
+    image: josephsbtn/website-s1ti-backend:1.0.0
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -113,6 +114,7 @@ services:
 
   # Frontend Web App
   frontend:
+    image: josephsbtn/website-s1ti-frontend:1.0.0
     build:
       context: ./frontend
       dockerfile: Dockerfile
