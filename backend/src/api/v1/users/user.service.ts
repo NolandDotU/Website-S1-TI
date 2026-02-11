@@ -1,9 +1,8 @@
-import { IchangePassword, IUser } from "./user.dto";
+import { IchangePassword, IUser, IUserUpdate } from "./user.dto";
 import UserModel from "../../../model/userModel";
 import { ApiError, comparePassword, JWTPayload, logger } from "../../../utils";
 import historyService from "../../../utils/history";
 import { CacheManager } from "../../../utils";
-import { getRedisClient } from "../../../config/redis";
 import mongoose from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
 import { LecturerService } from "../lecturer/lecturer.service";
@@ -17,7 +16,7 @@ export class UserService {
   constructor(model = UserModel) {
     this.model = model;
     this.history = historyService;
-    this.cache = new CacheManager(getRedisClient());
+    this.cache = CacheManager.getInstance();
     this.lecturerService = new LecturerService();
   }
 
@@ -26,6 +25,7 @@ export class UserService {
     if (this.cache !== null && this.cache) {
       const cacheVersion =
         (await this.cache.get<string>("users:version")) || "0";
+
       if (cacheVersion)
         cacheKey = `users:v${cacheVersion}:p${page}:l${limit}:s${search}`;
       const cached = await this.cache.get<IUser[]>(cacheKey);
@@ -45,9 +45,7 @@ export class UserService {
       this.model.find(query).sort({ username: 1 }).lean().exec(),
       this.model.countDocuments(query).lean().exec(),
     ]);
-    setImmediate(() => {
-      if (this.cache !== null) this.cache.set(cacheKey, users, 1 * 60 * 30);
-    });
+    if (this.cache !== null) await this.cache.set(cacheKey, users, 1 * 60 * 30);
     return {
       users: users,
       meta: {
@@ -73,9 +71,8 @@ export class UserService {
         };
         await this.lecturerService.create(lecturerData, curentUser);
       }
-      logger.info("created user ", user);
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
-      if (this.cache !== null) this.cache.incr("users:version");
+      await this.cache?.incr("users:version");
       setImmediate(() => {
         this.history.create({
           action: "POST",
@@ -87,17 +84,59 @@ export class UserService {
       });
       return user;
     } catch (error: any) {
-      if (error.code === 11000)
+      if (error.code === 11000) {
+        logger.error("Username atau email sudah digunakan!", error);
         throw ApiError.conflict("Username atau email sudah digunakan!");
+      }
+
       throw error;
     }
   };
 
-  updateUser = async (id: string, data: IUser, currentUser: JWTPayload) => {
-    logger.info(`Updating user with id: ${id}`);
+  updateUser = async (
+    id: string | mongoose.Types.ObjectId,
+    data: IUserUpdate,
+    currentUser: JWTPayload,
+  ) => {
+    logger.info(`Updating user with data: `, data);
     try {
-      const _id = new mongoose.Types.ObjectId(id);
-      const update = await this.model.findByIdAndUpdate(_id, data);
+      const params =
+        typeof id === "string" ? { email: data.email } : { _id: id };
+      const user = await this.model.findOne(params);
+      if (!user) throw ApiError.notFound("User not found");
+
+      if (user?.role === "dosen" && data.role !== "dosen") {
+        const lecturer = await this.lecturerService.deleteByEmail(
+          user.email,
+          currentUser,
+        );
+        await this.cache?.incr("lecturers:version");
+        await this.cache?.incr("lecturers:version:active");
+        logger.info("deleted lecturer ", lecturer);
+      }
+
+      const update = await this.model
+        .findOneAndUpdate(params, { $set: data }, { new: true }) //(, data)
+        .lean()
+        .exec();
+
+      if (data.role === "dosen" && user.role !== "dosen") {
+        const lecturerData: ILecturerInput = {
+          username: data.username || "",
+          email: data.email || "",
+          fullname: data.fullname || "",
+          expertise: [],
+          externalLink: "",
+          photo: "",
+        };
+        const lecturer = await this.lecturerService.create(
+          lecturerData,
+          user.email,
+        );
+        logger.info("updated lecturer ", lecturer);
+        await this.cache?.incr("lecturers:version");
+        await this.cache?.incr("lecturers:version:active");
+      }
       if (data.photo) {
         deleteImage(data.photo || "").catch((err) => {
           logger.error(
@@ -108,22 +147,11 @@ export class UserService {
       }
 
       if (!update) throw ApiError.conflict("Gagal mengupdate user!");
-      if (this.cache !== null) this.cache.incr("users:version");
+      if (this.cache !== null) await this.cache.incr("users:version");
       setImmediate(() => {
-        if (data.role === "dosen") {
-          const lecturerData: ILecturerInput = {
-            username: data.username,
-            email: data.email,
-            fullname: data.fullname,
-            expertise: [],
-            externalLink: "",
-            photo: "",
-          };
-          this.lecturerService.create(lecturerData, currentUser);
-        }
         this.history.create({
           action: "UPDATE",
-          entityId: new mongoose.Types.ObjectId(data.id),
+          entityId: new mongoose.Types.ObjectId(user.id),
           entity: "user",
           user: new mongoose.Types.ObjectId(currentUser.id),
           description: `User ${data.username} updated by ${currentUser.username}`,
@@ -180,6 +208,10 @@ export class UserService {
   };
 
   deleteUser = async (id: string, currentUser: JWTPayload) => {
+    const user = await this.model.findById(id).lean().exec();
+    if (user?.role === "dosen") {
+      await this.lecturerService.deleteByEmail(user.email, currentUser);
+    }
     const deleted = await this.model.findByIdAndDelete(id).lean().exec();
     if (!deleted) throw ApiError.conflict("Gagal menghapus user!");
     if (deleted.photo) {

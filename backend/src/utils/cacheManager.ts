@@ -1,23 +1,30 @@
 import { RedisClientType } from "redis";
-import { isRedisReady } from "../config/redis";
+import { getRedisClient, isRedisReady } from "../config/redis";
 import { logger } from "./logger";
 
 export class CacheManager {
-  private client: RedisClientType | null;
+  private static instance: CacheManager | null = null;
 
-  constructor(client: RedisClientType | null) {
-    this.client = client;
+  private constructor() {}
+
+  static getInstance(): CacheManager {
+    if (!CacheManager.instance) {
+      CacheManager.instance = new CacheManager();
+    }
+    return CacheManager.instance;
   }
 
-  private isAvailable(): boolean {
-    return this.client !== null && isRedisReady();
-  }
+  // private isAvailable(): boolean {
+  //   const client = getRedisClient(); // ← Fetch fresh setiap kali
+  //   return client !== null && isRedisReady();
+  // }
 
   async get<T>(key: string): Promise<T | null> {
-    if (!this.isAvailable()) return null;
+    const client = getRedisClient(); // ← Fetch fresh
+    if (!client || !isRedisReady()) return null;
 
     try {
-      const data = await this.client!.get(key);
+      const data = await client.get(key);
       return data ? JSON.parse(data) : null;
     } catch (err) {
       logger.debug(`Cache get failed for key: ${key}`);
@@ -26,33 +33,41 @@ export class CacheManager {
   }
 
   async set<T>(key: string, value: T, ttl = 3600): Promise<void> {
-    if (!this.isAvailable()) return;
+    const client = getRedisClient(); // ← Fetch fresh
+    if (!client || !isRedisReady()) return;
 
     try {
       const serialized = JSON.stringify(value);
-      await this.client!.setEx(key, ttl, serialized);
+      await client.setEx(key, ttl, serialized);
     } catch (err) {
       logger.debug(`Cache set failed for key: ${key}`);
     }
   }
 
   async del(key: string): Promise<void> {
-    if (!this.isAvailable()) return;
+    const client = getRedisClient(); // ← Fetch fresh
+    if (!client || !isRedisReady()) return;
 
     try {
-      await this.client!.del(key);
+      await client.del(key);
     } catch (err) {
       logger.debug(`Cache delete failed for key: ${key}`);
     }
   }
 
   async incr(key: string): Promise<number> {
-    if (!this.isAvailable()) return 0;
+    const client = getRedisClient(); // ← Fetch fresh
+    if (!client || !isRedisReady()) return 0;
 
     try {
-      return await this.client!.incr(key);
+      const keyExists = await client.exists(key);
+      if (!keyExists) {
+        await client.set(key, "1");
+        return 1;
+      }
+      return await client.incr(key);
     } catch (err) {
-      logger.debug(`Cache incr failed for key: ${key}`);
+      logger.error(`Cache incr failed for key: ${key}`, err);
       return 0;
     }
   }

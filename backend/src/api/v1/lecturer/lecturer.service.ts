@@ -5,21 +5,25 @@ import {
   IPaginatedLecturerResponse,
 } from "./lecturer.dto";
 import { CacheManager, logger, ApiError } from "../../../utils/index";
-import { getRedisClient } from "../../../config/redis";
+import { getRedisClient, connectRedis } from "../../../config/redis";
 import { deleteImage } from "../../../middleware/uploads.middleware";
 import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
+import { UserService } from "../users/user.service";
 
 export class LecturerService {
   private model: typeof LecturerModel;
   private cache: CacheManager;
   private history: typeof historyService;
+  private userService: UserService;
 
   constructor(model = LecturerModel, cache?: CacheManager) {
     this.model = model;
-    this.cache = cache || new CacheManager(getRedisClient());
+    this.cache = cache || CacheManager.getInstance();
     this.history = historyService;
+    this.userService = new UserService();
+    logger.info("this.cache lecture service : ", this.cache);
   }
 
   async create(
@@ -32,17 +36,21 @@ export class LecturerService {
     }
 
     const lecturerDoc = await this.model.create(data);
-    const historyData: IHistoryInput = {
-      action: "POST",
-      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
-      entity: "lecturer",
-      user: currentUser?.id ?? null,
-      description: `Lecturer ${data.username} created by ${currentUser?.username}`,
-    };
+    if (this.cache !== null) {
+      await this.cache.incr("lecturers:version");
+      await this.cache.incr("lecturers:active:version");
+    }
+    setImmediate(() => {
+      const historyData: IHistoryInput = {
+        action: "POST",
+        entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
+        entity: "lecturer",
+        user: currentUser?.id ?? null,
+        description: `Lecturer ${data.username} created by ${currentUser?.username}`,
+      };
 
-    await this.history.create(historyData);
-
-    await this.cache.incr("lecturers:version");
+      this.history.create(historyData);
+    });
 
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
@@ -57,6 +65,7 @@ export class LecturerService {
     if (this.cache !== null) {
       const cacheVersion =
         (await this.cache.get<string>("lecturers:version")) || "0";
+      logger.info(`lecturers:version: ${cacheVersion}`);
       const normalizedSearch = search.trim().toLowerCase();
       cacheKey = `lecturers:v${cacheVersion}:p${page}:l${limit}:s${normalizedSearch}`;
 
@@ -241,6 +250,7 @@ export class LecturerService {
         };
         this.history.create(historyData);
         this.cache.incr("lecturers:version");
+        this.cache.incr("lecturers:active:version");
         this.cache.del(`lecturers:item:${id}`);
         this.cache.del(`lecturers:item:${email}`);
       });
@@ -252,33 +262,91 @@ export class LecturerService {
     }
   }
 
-  async delete(id: string, currentUser?: any): Promise<ILecturerResponse> {
-    const lecturerDoc = await this.model.findOne({
-      _id: id,
-    });
+  async deleteByEmail(email: string, currentUser?: any): Promise<Boolean> {
+    try {
+      const lecturer = await this.model.findOne({ email: email }).lean().exec();
+      if (!lecturer) {
+        throw ApiError.notFound("Lecturer not found");
+      }
+      const deleted = await this.model.deleteMany({
+        email: email,
+      });
 
-    logger.debug("photo lecturer", lecturerDoc?.photo);
-    deleteImage(lecturerDoc?.photo || "").catch((err) => {
-      logger.error("Error deleting lecturer image: ", err);
-    });
-
-    if (!lecturerDoc) {
-      throw ApiError.notFound("Lecturer not found");
+      setImmediate(() => {
+        const historyData: IHistoryInput = {
+          action: "DELETE",
+          entityId: new mongoose.Types.ObjectId(lecturer?._id),
+          entity: "lecturer",
+          user: new mongoose.Types.ObjectId(currentUser?.id),
+          description: `Lecturer ${email} deleted by ${currentUser?.username}`,
+        };
+        this.history.create(historyData);
+        this.cache.incr("lecturers:version");
+        this.cache.incr("lecturers:active:version");
+        this.cache.del(`lecturers:item:${email}`);
+      });
+      return deleted.acknowledged;
+    } catch (error) {
+      logger.error("Error deleting lecturer by email: ", error);
+      throw error;
     }
-    await this.model.deleteOne({ _id: id });
-    const historyData: IHistoryInput = {
-      action: "DELETE",
-      entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
-      entity: "lecturer",
-      user: currentUser?.id ?? null,
-      description: `Lecturer ${lecturerDoc.username} deleted`,
-    };
+  }
 
-    await this.history.create(historyData);
-    await this.cache.incr("lecturers:version");
-    await this.cache.del(`lecturers:item:${id}`);
+  async delete(id: string, currentUser?: any): Promise<ILecturerResponse> {
+    try {
+      const lecturerDoc = await this.model
+        .findOne({
+          _id: id,
+        })
+        .exec();
+      await this.userService.updateUser(
+        lecturerDoc?.email as string,
+        { role: "user" },
+        currentUser,
+      );
+      logger.info(`Deleting lecturer ${lecturerDoc}`);
+      if (!lecturerDoc) {
+        throw ApiError.notFound("Lecturer not found");
+      }
 
-    return lecturerDoc.toJSON() as unknown as ILecturerResponse;
+      logger.debug("photo lecturer", lecturerDoc?.photo);
+      if (lecturerDoc?.photo && lecturerDoc?.photo !== "") {
+        deleteImage(lecturerDoc?.photo || "").catch((err) => {
+          logger.error("Error deleting lecturer image: ", err);
+        });
+      }
+
+      await this.model
+        .deleteOne({
+          _id: id,
+        })
+        .lean()
+        .exec();
+      logger.info("this.cache lecture service DELETE : ", this.cache);
+
+      if (this.cache !== null) {
+        await this.cache.incr("lecturers:version");
+        await this.cache.incr("lecturers:active:version");
+        await this.cache.del(`lecturers:item:${id}`);
+      }
+
+      setImmediate(() => {
+        const historyData: IHistoryInput = {
+          action: "DELETE",
+          entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
+          entity: "lecturer",
+          user: currentUser?.id ?? null,
+          description: `Lecturer ${lecturerDoc.username} deleted`,
+        };
+
+        this.history.create(historyData);
+      });
+
+      return lecturerDoc.toJSON() as unknown as ILecturerResponse;
+    } catch (error) {
+      logger.error("Error deleting lecturer: ", error);
+      throw error;
+    }
   }
 
   getStatistics = async (

@@ -9,6 +9,15 @@ export interface IchangePassword {
   newPassword: string;
 }
 
+export interface IUserUpdate {
+  username?: string;
+  email?: string;
+  fullname?: string;
+  role?: string;
+  photo?: string;
+  isActive?: boolean;
+}
+
 export interface IUserResponse {
   id: string;
   email: string;

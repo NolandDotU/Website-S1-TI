@@ -7,6 +7,7 @@ import {
 } from "../../../utils";
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
+import mongoose from "mongoose";
 
 export class UserController {
   service: UserService = new UserService();
@@ -31,6 +32,7 @@ export class UserController {
       search?: string;
     };
     const users = await this.service.getAllUser(page, limit, search);
+    logger.debug(`Users fetched successfully`, users);
     return (
       res.json(ApiResponse.success(users, "Users fetched successfully", 200)),
       200
@@ -80,7 +82,8 @@ export class UserController {
       throw ApiError.forbidden("You can't update this user");
     }
 
-    const user = await this.service.updateUser(id, data, currentUser);
+    const _id = new mongoose.Types.ObjectId(id);
+    const user = await this.service.updateUser(_id, data, currentUser);
     return (
       res.json(ApiResponse.success(user, "User berhasil di update", 200)),
       200

@@ -10,7 +10,6 @@ import historyService from "../../../utils/history";
 import { IHistoryInput } from "../../../model/historyModels";
 import mongoose, { mongo } from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
-import { title } from "process";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
   private cache: CacheManager;
@@ -18,7 +17,7 @@ export class AnnouncementService {
 
   constructor(model = AnnouncementModel, cache?: CacheManager) {
     this.model = model;
-    this.cache = cache || new CacheManager(getRedisClient());
+    this.cache = cache || CacheManager.getInstance();
     this.history = historyService || null;
   }
 

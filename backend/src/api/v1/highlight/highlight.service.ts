@@ -20,10 +20,10 @@ class HighlightService {
   constructor(
     model = HighlightModel,
     cache?: CacheManager,
-    annService?: AnnouncementService
+    annService?: AnnouncementService,
   ) {
     this.model = model;
-    this.cache = cache || new CacheManager(getRedisClient());
+    this.cache = cache || CacheManager.getInstance();
     this.annService = annService || new AnnouncementService();
   }
 
@@ -39,7 +39,7 @@ class HighlightService {
         await this.annService.changeStatus(
           data.announcementId,
           "published",
-          currentUser
+          currentUser,
         );
       } catch (error) {
         logger.error(`Error changing announcement status: ${error}`);
@@ -128,7 +128,7 @@ class HighlightService {
   async update(
     id: string,
     data: HighlightDTO,
-    currentUser: JWTPayload
+    currentUser: JWTPayload,
   ): Promise<any> {
     const highlight = await this.model.findById(id);
     if (!highlight) {

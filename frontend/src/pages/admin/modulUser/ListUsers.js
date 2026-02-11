@@ -42,7 +42,9 @@ export const UserManagement = () => {
     try {
       setLoading(true);
       const response = await getAllUser(page, limit, search);
+      console.log("response data user", response);
       setUsers(response.data.users);
+
       setTotalPages(response.data.meta.totalPage);
 
       if (response.statusCode !== 200)
@@ -60,12 +62,17 @@ export const UserManagement = () => {
   }, []);
 
   // Filter users based on search
-  const filteredUsers = users.filter(
-    (user) =>
-      user.fullname?.toLowerCase().includes(search.toLowerCase()) ||
-      user.email?.toLowerCase().includes(search.toLowerCase()) ||
-      user.username?.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredUsers =
+    search && users.length > 0
+      ? users.filter(
+          (user) =>
+            user.fullname?.toLowerCase().includes(search.toLowerCase()) ||
+            user.email?.toLowerCase().includes(search.toLowerCase()) ||
+            user.username?.toLowerCase().includes(search.toLowerCase()),
+        )
+      : users.length > 0
+        ? users
+        : [];
 
   const handleCreate = () => {
     setModalMode("create");

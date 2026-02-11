@@ -7,12 +7,12 @@ import { logger } from "./logger";
 import { JWTPayload } from "./jwt";
 
 class HistoryService {
-  private cache: CacheManager | null = new CacheManager(getRedisClient());
+  private cache: CacheManager | null;
   private model: typeof HistoryModel;
 
-  constructor(model = HistoryModel, cache?: CacheManager) {
+  constructor(model = HistoryModel) {
     this.model = model;
-    this.cache = cache || null;
+    this.cache = CacheManager.getInstance();
   }
 
   async create(data: IHistoryInput) {

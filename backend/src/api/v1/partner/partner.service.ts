@@ -17,7 +17,7 @@ export class PartnerService {
     history?: typeof historyService,
   ) {
     this.model = model;
-    this.cache = cache || new CacheManager(getRedisClient());
+    this.cache = cache || CacheManager.getInstance();
     this.history = history || historyService;
   }
 
