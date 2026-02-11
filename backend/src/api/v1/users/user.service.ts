@@ -12,12 +12,13 @@ export class UserService {
   private model: typeof UserModel;
   private history: typeof historyService;
   private cache: CacheManager | null;
-  private lecturerService: LecturerService;
-  constructor(model = UserModel) {
+  private lecturerService: LecturerService | null;
+  constructor(model = UserModel, lecturerService?: LecturerService) {
     this.model = model;
     this.history = historyService;
     this.cache = CacheManager.getInstance();
-    this.lecturerService = new LecturerService();
+    this.lecturerService =
+      lecturerService || new LecturerService(undefined, this);
   }
 
   getAllUser = async (page = 1, limit = 10, search = "") => {
@@ -69,7 +70,7 @@ export class UserService {
           externalLink: "",
           photo: "",
         };
-        await this.lecturerService.create(lecturerData, curentUser);
+        await this.lecturerService?.create(lecturerData, curentUser);
       }
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
       await this.cache?.incr("users:version");
@@ -106,7 +107,7 @@ export class UserService {
       if (!user) throw ApiError.notFound("User not found");
 
       if (user?.role === "dosen" && data.role !== "dosen") {
-        const lecturer = await this.lecturerService.deleteByEmail(
+        const lecturer = await this.lecturerService?.deleteByEmail(
           user.email,
           currentUser,
         );
@@ -129,7 +130,7 @@ export class UserService {
           externalLink: "",
           photo: "",
         };
-        const lecturer = await this.lecturerService.create(
+        const lecturer = await this.lecturerService?.create(
           lecturerData,
           user.email,
         );
@@ -210,7 +211,7 @@ export class UserService {
   deleteUser = async (id: string, currentUser: JWTPayload) => {
     const user = await this.model.findById(id).lean().exec();
     if (user?.role === "dosen") {
-      await this.lecturerService.deleteByEmail(user.email, currentUser);
+      await this.lecturerService?.deleteByEmail(user.email, currentUser);
     }
     const deleted = await this.model.findByIdAndDelete(id).lean().exec();
     if (!deleted) throw ApiError.conflict("Gagal menghapus user!");

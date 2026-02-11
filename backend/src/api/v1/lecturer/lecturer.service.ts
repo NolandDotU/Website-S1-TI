@@ -18,11 +18,11 @@ export class LecturerService {
   private history: typeof historyService;
   private userService: UserService;
 
-  constructor(model = LecturerModel, cache?: CacheManager) {
+  constructor(model = LecturerModel, userService?: UserService) {
     this.model = model;
-    this.cache = cache || CacheManager.getInstance();
+    this.cache = CacheManager.getInstance();
     this.history = historyService;
-    this.userService = new UserService();
+    this.userService = userService || new UserService(undefined, this);
     logger.info("this.cache lecture service : ", this.cache);
   }
 
