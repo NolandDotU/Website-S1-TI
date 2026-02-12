@@ -25,6 +25,9 @@ import { UserManagement } from "./pages/admin/modulUser/ListUsers";
 import ListPartners from "./pages/admin/modulPartners/listPartners";
 import DashboardDosen from "./pages/dosen/dashboard.dosen";
 
+import { ChatModal } from "./components/chatbot/ChatModal";
+import { FloatingChatButton } from "./components/chatbot/FloatingChatButton";
+
 function App() {
   // Initialize theme from localStorage or default to 'light'
   const [theme, setTheme] = useState(() => {
@@ -55,14 +58,26 @@ function App() {
   const shouldShowLayout =
     !noLayoutRoutes.includes(location.pathname) && !isAdminRoute;
 
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       {shouldShowLayout && <Navbar theme={theme} toggleTheme={toggleTheme} />}
 
       <main
-        className={`flex-grow ${
-          shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
-        } bg-white dark:bg-gray-900`}>
+        className={`flex-grow ${shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
+          } bg-white dark:bg-gray-900`}>
+        <div>
+          <FloatingChatButton
+            onOpen={() => setIsChatOpen(true)}
+            isOpen={isChatOpen}
+          />
+
+          <ChatModal
+            isOpen={isChatOpen}
+            onClose={() => setIsChatOpen(false)}
+          />
+        </div>
         <Routes>
           {/* ========== PUBLIC ROUTES ========== */}
           <Route path="/" element={<HomePage />} />

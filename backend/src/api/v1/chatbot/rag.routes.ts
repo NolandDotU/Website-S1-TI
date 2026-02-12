@@ -1,12 +1,35 @@
 import express from "express";
 import { ragServiceInstance } from "./rag.service";
+import { wlcMessage } from "./welcomeMessage";
 
 const router = express.Router();
 
-router.post("/stream", async (req, res) => {
-  const { query } = req.body;
+// router.post("/stream", async (req, res) => {
+//   const { query } = req.body;
 
-  if (!query || typeof query !== "string") {
+//   if (!query || typeof query !== "string") {
+//     res.status(400).end();
+//     return;
+//   }
+
+//   res.setHeader("Content-Type", "text/event-stream");
+//   res.setHeader("Cache-Control", "no-cache");
+//   res.setHeader("Connection", "keep-alive");
+
+//   try {
+//     await ragServiceInstance.queryStream(query, chunk => {
+//       res.write(`data: ${chunk}\n\n`);
+//     });
+//   } catch (err) {
+//     res.write(`data: [ERROR]\n\n`);
+//   } finally {
+//     res.end();
+//   }
+// });
+router.get("/stream", async (req, res) => {
+  const query = req.query.message as string;
+
+  if (!query) {
     res.status(400).end();
     return;
   }
@@ -16,15 +39,18 @@ router.post("/stream", async (req, res) => {
   res.setHeader("Connection", "keep-alive");
 
   try {
-    await ragServiceInstance.queryStream(query, chunk => {
-      res.write(`data: ${chunk}\n\n`);
+    await ragServiceInstance.queryStream(query, (chunk) => {
+      res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
     });
+
+    res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
   } catch (err) {
-    res.write(`data: [ERROR]\n\n`);
+    res.write(`data: ${JSON.stringify({ error: true })}\n\n`);
   } finally {
     res.end();
   }
 });
+
 
 router.post("/non-stream", async (req, res) => {
   try {
@@ -53,5 +79,6 @@ router.post("/non-stream", async (req, res) => {
   }
 });
 
+router.get("/welcome", wlcMessage.getWelcomeMessage);
 
 export default router;
