@@ -21,7 +21,7 @@ export const authMiddleware = (roles: string[] | null) =>
       const user = verifyToken(accessToken);
       if (roles && !roles.includes(user.role)) {
         throw ApiError.forbidden(
-          `Access denied. Required roles: ${roles.join(", ")}`
+          `Access denied. Required roles: ${roles.join(", ")}`,
         );
       }
       req.user = user;
@@ -55,7 +55,7 @@ export const authMiddleware = (roles: string[] | null) =>
 
           if (roles && !roles.includes(user.role)) {
             throw ApiError.forbidden(
-              `Access denied. Required roles: ${roles.join(", ")}`
+              `Access denied. Required roles: ${roles.join(", ")}`,
             );
           }
 
@@ -78,7 +78,7 @@ export const authMiddleware = (roles: string[] | null) =>
         } catch (refreshError) {
           res.redirect("/no-access");
           throw ApiError.unauthorized(
-            "Invalid refresh token. Please login again"
+            "Invalid refresh token. Please login again",
           );
         }
       } else {

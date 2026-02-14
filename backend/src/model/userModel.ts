@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     username: {
       type: String,
-      required: true,
     },
     fullname: {
       type: String,
@@ -82,10 +81,6 @@ userSchema.index({ email: 1 }, { unique: true, name: "email_index_unique" });
 userSchema.index(
   { googleId: 1 },
   { unique: true, sparse: true, name: "googleId_index_unique_sparse" },
-);
-userSchema.index(
-  { username: 1 },
-  { unique: true, name: "username_index_unique" },
 );
 
 userSchema.pre("save", async function (next) {

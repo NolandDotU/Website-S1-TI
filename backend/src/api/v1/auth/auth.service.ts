@@ -1,5 +1,5 @@
 import userModel from "../../../model/userModel";
-import { ApiError, JWTPayload } from "../../../utils";
+import { ApiError, CacheManager, JWTPayload } from "../../../utils";
 import {
   AuthResponseDTO,
   LocalLoginSchema,
@@ -18,6 +18,11 @@ import mongoose from "mongoose";
 class AuthService {
   history: typeof historyService | null = historyService || null;
   private lecturerModel: typeof LecturerModel = LecturerModel;
+  private cache: CacheManager;
+
+  constructor() {
+    this.cache = CacheManager.getInstance();
+  }
 
   async madeHistory(
     action: string,
@@ -90,6 +95,9 @@ class AuthService {
         fullname: user.fullname,
       };
       const newLecture = await this.lecturerModel.create(payload);
+      if (this.cache !== null) {
+        await this.cache.incr("lecturers:version");
+      }
       return newLecture;
     } catch (error: any) {
       if (error.code === 11000) {
@@ -135,6 +143,9 @@ class AuthService {
 
       if (role === "dosen") await this.newLectureAcc(user);
 
+      if (this.cache !== null) {
+        await this.cache.incr("users:version");
+      }
       return user;
     } catch (error) {
       throw error;

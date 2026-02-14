@@ -4,6 +4,15 @@ import Sertifikat from "../assets/sertif-akreditasi.jpg";
 const TentangProdi = () => {
   const [activeTab, setActiveTab] = useState("visi-misi");
 
+  const handleDownloadSertifikat = () => {
+    const link = document.createElement("a");
+    link.href = Sertifikat;
+    link.download = "Sertifikat-Akreditasi-Teknik-Informatika-UKSW.jpg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const peminatanData = [
     {
       title: "Network Engineering",
@@ -86,11 +95,10 @@ const TentangProdi = () => {
         </div>
       </section>
 
-      {/* About Section with Certificate */}
       <section className="py-16 px-6 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
-            {/* Text Content */}
+            {/* Text Content - tetap sama */}
             <div className="flex-1 h-full bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8 border border-gray-200 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
                 Tentang Program Studi
@@ -110,7 +118,7 @@ const TentangProdi = () => {
               </p>
             </div>
 
-            {/* Certificate Image */}
+            {/* Certificate Image with Download Button */}
             <div className="lg:w-80 w-full h-full bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
               <div className="mb-3">
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 text-center">
@@ -124,9 +132,28 @@ const TentangProdi = () => {
                   className="w-full h-auto object-contain"
                 />
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3 mb-4">
                 Akreditasi Unggul dari BAN-PT
               </p>
+
+              {/* Download Button */}
+              <button
+                onClick={handleDownloadSertifikat}
+                className="w-full px-4 py-2.5 bg-blue-700 dark:bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-800 dark:hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  />
+                </svg>
+                Download Sertifikat
+              </button>
             </div>
           </div>
         </div>

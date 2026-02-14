@@ -30,6 +30,8 @@ export class UserService {
       if (cacheVersion)
         cacheKey = `users:v${cacheVersion}:p${page}:l${limit}:s${search}`;
       const cached = await this.cache.get<IUser[]>(cacheKey);
+      logger.debug(`Cache HIT: ${cacheKey}`);
+      logger.debug("Response:", cached);
       if (cached) return cached;
     }
     const query = search
@@ -46,8 +48,7 @@ export class UserService {
       this.model.find(query).sort({ username: 1 }).lean().exec(),
       this.model.countDocuments(query).lean().exec(),
     ]);
-    if (this.cache !== null) await this.cache.set(cacheKey, users, 1 * 60 * 30);
-    return {
+    const response = {
       users: users,
       meta: {
         page: page,
@@ -56,6 +57,11 @@ export class UserService {
         totalPage: Math.ceil(total / limit),
       },
     };
+
+    if (this.cache !== null)
+      await this.cache.set(cacheKey, response, 1 * 60 * 30);
+    logger.info("Response:", response);
+    return response;
   };
 
   newUser = async (data: IUser, curentUser: JWTPayload) => {
@@ -147,6 +153,7 @@ export class UserService {
         });
       }
 
+      logger.debug("updated user id", user.id);
       if (!update) throw ApiError.conflict("Gagal mengupdate user!");
       if (this.cache !== null) await this.cache.incr("users:version");
       setImmediate(() => {

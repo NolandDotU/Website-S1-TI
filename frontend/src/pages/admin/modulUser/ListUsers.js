@@ -63,14 +63,14 @@ export const UserManagement = () => {
 
   // Filter users based on search
   const filteredUsers =
-    search && users.length > 0
-      ? users.filter(
+    search && users?.length > 0
+      ? users?.filter(
           (user) =>
             user.fullname?.toLowerCase().includes(search.toLowerCase()) ||
             user.email?.toLowerCase().includes(search.toLowerCase()) ||
             user.username?.toLowerCase().includes(search.toLowerCase()),
         )
-      : users.length > 0
+      : users?.length > 0
         ? users
         : [];
 

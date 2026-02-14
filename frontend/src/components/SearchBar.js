@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
 
 const SearchBar = ({ onSearch, placeholder = "Cari berita" }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Debounce search to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearch(searchQuery);
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, onSearch]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      onSearch(searchQuery.trim());
-    }
+    onSearch(searchQuery.trim());
   };
 
   const handleClear = () => {
     setSearchQuery("");
-    onSearch("");
+    // onSearch will be triggered by useEffect
   };
 
   return (
@@ -24,7 +31,7 @@ const SearchBar = ({ onSearch, placeholder = "Cari berita" }) => {
         </div>
 
         <input
-          type="search"
+          type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={placeholder}

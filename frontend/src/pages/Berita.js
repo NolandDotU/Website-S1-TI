@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import NewsCard from "../components/announcement/NewsCard";
 import MDEditor from "@uiw/react-md-editor";
 import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
@@ -21,7 +21,7 @@ const Berita = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [limit] = useState(9); // 9 items per page for 3x3 grid
+  const [limit] = useState(9);
 
   const categories = [
     { value: "all", label: "Semua" },
@@ -46,20 +46,28 @@ const Berita = () => {
     console.log("parameter ann : ", announcement);
   };
 
-  const fetchAnnouncement = async (currentPage = 1) => {
+  const fetchAnnouncement = async (currentPage = 1, query = "") => {
     setLoading(true);
     try {
       console.log("Fetching announcements...");
-      const response = await getAnnouncements(currentPage, limit);
+      const response = await getAnnouncements(
+        currentPage,
+        query ? 100 : limit, // Fetch more items when searching
+        query,
+      );
       console.log("response", response);
 
       setAnnouncements(response.announcements);
-      applyFilters(response.announcements, searchQuery, selectedCategory);
       setTotalPages(response.meta.totalPage);
       setPage(response.meta.page);
+
+      // Apply filters after fetching
+      applyFilters(response.announcements, query, selectedCategory);
     } catch (error) {
       toast.error(`Terjadi kesalahan! (${error.response?.data?.message})`);
       console.log(error);
+      setAnnouncements([]);
+      setFilteredAnnouncements([]);
     } finally {
       setLoading(false);
     }
@@ -67,57 +75,67 @@ const Berita = () => {
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      fetchAnnouncement(newPage);
+      setPage(newPage);
+      fetchAnnouncement(newPage, searchQuery);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const applyFilters = (data, query, category) => {
-    let filtered = data;
+  const applyFilters = useCallback((data, query, category) => {
+    let filtered = [...data];
 
-    // Apply category filter
+    // Apply category filter first
     if (category !== "all") {
       filtered = filtered.filter((ann) => ann.category === category);
     }
 
     // Apply search filter
-    if (query.trim()) {
-      const lowerQuery = query.toLowerCase();
+    if (query && query.trim()) {
+      const lowerQuery = query.toLowerCase().trim();
       filtered = filtered.filter(
         (ann) =>
-          ann.title.toLowerCase().includes(lowerQuery) ||
-          ann.content.toLowerCase().includes(lowerQuery),
+          ann.title?.toLowerCase().includes(lowerQuery) ||
+          ann.content?.toLowerCase().includes(lowerQuery) ||
+          ann.category?.toLowerCase().includes(lowerQuery),
       );
     }
 
     setFilteredAnnouncements(filtered);
-  };
+  }, []);
 
-  const handleSearch = async (query) => {
-    setSearchQuery(query);
+  const handleSearch = useCallback(
+    (query) => {
+      setSearchQuery(query);
+      setPage(1); // Reset to first page when searching
 
-    if (!query.trim()) {
-      applyFilters(announcements, "", selectedCategory);
-      return;
-    }
+      if (!query || !query.trim()) {
+        // If search is cleared, fetch normal data
+        fetchAnnouncement(1, "");
+        return;
+      }
 
-    try {
-      const filtered = await getAnnouncements(1, 20, query);
-      applyFilters(filtered.announcements, query, selectedCategory);
-    } catch (error) {
-      console.log(error);
-      applyFilters(announcements, query, selectedCategory);
-    }
-  };
+      // Fetch with search query
+      fetchAnnouncement(1, query);
+    },
+    [selectedCategory],
+  );
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    setPage(1); // Reset to first page when changing category
     applyFilters(announcements, searchQuery, category);
   };
 
   useEffect(() => {
     fetchAnnouncement(1);
   }, []);
+
+  // Reapply filters when announcements or filters change
+  useEffect(() => {
+    applyFilters(announcements, searchQuery, selectedCategory);
+  }, [announcements, searchQuery, selectedCategory, applyFilters]);
+
+  const isFiltering = searchQuery.trim() || selectedCategory !== "all";
 
   return (
     <>
@@ -134,10 +152,7 @@ const Berita = () => {
             </p>
           </div>
           <div className="w-full md:w-auto">
-            <SearchBar
-              onSearch={handleSearch}
-              placeholder="Cari berita atau pengumuman..."
-            />
+            <SearchBar onSearch={handleSearch} placeholder="Cari berita..." />
           </div>
         </div>
 
@@ -164,7 +179,7 @@ const Berita = () => {
         </div>
 
         {/* Search/Filter Results Info */}
-        {(searchQuery || selectedCategory !== "all") && (
+        {isFiltering && (
           <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Menampilkan{" "}
@@ -190,12 +205,12 @@ const Berita = () => {
                   </span>
                 </span>
               )}
-              {filteredAnnouncements.length === 0 && (
-                <span className="ml-2">
-                  - Coba kata kunci atau kategori lain
-                </span>
-              )}
             </p>
+            {filteredAnnouncements.length === 0 && (
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Coba kata kunci atau kategori lain
+              </p>
+            )}
           </div>
         )}
 
@@ -259,7 +274,7 @@ const Berita = () => {
                     Tidak ada hasil ditemukan
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {searchQuery || selectedCategory !== "all"
+                    {isFiltering
                       ? "Coba gunakan kata kunci atau kategori yang berbeda"
                       : "Tidak ada pengumuman tersedia"}
                   </p>
@@ -267,8 +282,8 @@ const Berita = () => {
               )}
             </div>
 
-            {/* Pagination - Only show when not searching/filtering */}
-            {!searchQuery && selectedCategory === "all" && totalPages > 1 && (
+            {/* Pagination - Only show when not filtering */}
+            {!isFiltering && totalPages > 1 && (
               <div className="mt-10 flex items-center justify-center gap-2">
                 <button
                   onClick={() => handlePageChange(page - 1)}

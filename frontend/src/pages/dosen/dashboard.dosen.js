@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/Context";
-import { getLecturersDetail, updateLecturerByEmail } from "../../services/api";
+import {
+  getLecturersDetail,
+  updateLecturerByEmail,
+  uploadPhotoDosen,
+} from "../../services/api";
 import { useToast } from "../../context/toastProvider";
 import { env } from "../../services/utils/env";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 const DashboardDosen = () => {
   const user = useAuth().user;
@@ -11,8 +17,21 @@ const DashboardDosen = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
 
+  // Image crop states
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [imgSrc, setImgSrc] = useState("");
+  const [crop, setCrop] = useState({
+    unit: "%",
+    width: 90,
+    aspect: 1,
+  });
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [rotate, setRotate] = useState(0);
+  const imgRef = useRef(null);
+
   // State untuk form data
-  const [formData, setFormData] = useState({
+  const [payload, setPayload] = useState({
     username: "",
     fullname: "",
     expertise: [],
@@ -20,7 +39,7 @@ const DashboardDosen = () => {
     email: "",
     kontak: "",
     externalLink: "",
-    photo: "",
+    photo: "", // String path atau null
     isActive: true,
   });
 
@@ -32,7 +51,7 @@ const DashboardDosen = () => {
     try {
       const data = await getLecturersDetail();
       console.log("Fetched lecturer data:", data);
-      setFormData(data.data);
+      setPayload(data.data);
     } catch (error) {
       toast.error("Gagal memuat data dosen.");
       console.error("Error fetching lecturer data:", error);
@@ -45,8 +64,8 @@ const DashboardDosen = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setPayload({
+      ...payload,
       [name]: type === "checkbox" ? checked : value,
     });
   };
@@ -54,84 +73,346 @@ const DashboardDosen = () => {
   const handleAddExpertise = () => {
     if (
       newExpertise.trim() &&
-      !formData.expertise.includes(newExpertise.trim())
+      !payload.expertise.includes(newExpertise.trim())
     ) {
-      setFormData({
-        ...formData,
-        expertise: [...formData.expertise, newExpertise.trim()],
+      setPayload({
+        ...payload,
+        expertise: [...payload.expertise, newExpertise.trim()],
       });
       setNewExpertise("");
     }
   };
 
   const handleRemoveExpertise = (index) => {
-    setFormData({
-      ...formData,
-      expertise: formData.expertise.filter((_, i) => i !== index),
+    setPayload({
+      ...payload,
+      expertise: payload.expertise.filter((_, i) => i !== index),
     });
   };
 
   const handleAddMatakuliah = () => {
     if (
       newMatakuliah.trim() &&
-      !formData.matakuliah.includes(newMatakuliah.trim())
+      !payload.matakuliah.includes(newMatakuliah.trim())
     ) {
-      setFormData({
-        ...formData,
-        matakuliah: [...formData.matakuliah, newMatakuliah.trim()],
+      setPayload({
+        ...payload,
+        matakuliah: [...payload.matakuliah, newMatakuliah.trim()],
       });
       setNewMatakuliah("");
     }
   };
 
   const handleRemoveMatakuliah = (index) => {
-    setFormData({
-      ...formData,
-      matakuliah: formData.matakuliah.filter((_, i) => i !== index),
+    setPayload({
+      ...payload,
+      matakuliah: payload.matakuliah.filter((_, i) => i !== index),
     });
+  };
+
+  // Validate image size (max 5MB)
+  const validateImageSize = (file) => {
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      toast.error(
+        `Ukuran file terlalu besar! Maksimal 5MB. Ukuran file Anda: ${(file.size / 1024 / 1024).toFixed(2)}MB`,
+      );
+      return false;
+    }
+    return true;
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file size
+      if (!validateImageSize(file)) {
+        e.target.value = ""; // Reset input
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("File harus berupa gambar!");
+        e.target.value = "";
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result);
-        setFormData({
-          ...formData,
-          photo: reader.result,
+        setImgSrc(reader.result);
+        setShowCropModal(true);
+        // Reset crop settings
+        setScale(1);
+        setRotate(0);
+        setCrop({
+          unit: "%",
+          width: 90,
+          aspect: 1,
         });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e) => {
-    try {
-      const email = user.email;
-      const response = await updateLecturerByEmail(email, formData);
-      console.log("response", response);
-      toast.success("Profil dosen berhasil diperbarui.");
-      setIsEditing(false);
-      setIsSaving(false);
-      fetchData();
-      setPreviewImage(null);
-    } catch (error) {
-      toast.error("Gagal memperbarui profil dosen.");
-      console.error("Error updating lecturer profile:", error);
+  // Generate cropped image and convert to File
+  // Generate cropped image and convert to File (FIXED VERSION)
+  const getCroppedImgAsFile = async () => {
+    if (!completedCrop || !imgRef.current) {
+      return null;
     }
+
+    const image = imgRef.current;
+    const canvas = document.createElement("canvas");
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext("2d");
+
+    const pixelRatio = window.devicePixelRatio || 1;
+    canvas.width = completedCrop.width * scaleX * pixelRatio;
+    canvas.height = completedCrop.height * scaleY * pixelRatio;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+    );
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            console.error("Canvas is empty");
+            reject(new Error("Failed to create blob from canvas"));
+            return;
+          }
+
+          console.log("Blob created:", {
+            size: blob.size,
+            type: blob.type,
+          });
+
+          // IMPORTANT: Create File with ALL required properties
+          const timestamp = Date.now();
+          const fileName = `profile-photo-${timestamp}.jpg`;
+
+          // Create File object from blob
+          const file = new File([blob], fileName, {
+            type: "image/jpeg",
+            lastModified: timestamp,
+          });
+
+          console.log("File created:", {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+            isFile: file instanceof File,
+            isBlob: file instanceof Blob,
+          });
+
+          // Create preview URL from blob
+          const previewUrl = URL.createObjectURL(blob);
+
+          resolve({ file, previewUrl });
+        },
+        "image/jpeg",
+        0.95,
+      );
+    });
+  };
+
+  const handleCropSave = async () => {
+    try {
+      console.log("=== Starting crop save ===");
+
+      const result = await getCroppedImgAsFile();
+
+      if (!result || !result.file) {
+        throw new Error("Failed to generate cropped image");
+      }
+
+      console.log("Crop result:", {
+        hasFile: !!result.file,
+        hasPreview: !!result.previewUrl,
+        fileDetails: {
+          name: result.file.name,
+          size: result.file.size,
+          type: result.file.type,
+        },
+      });
+
+      setPreviewImage(result.previewUrl);
+
+      // Store the File object in payload
+      setPayload((prev) => ({ ...prev, photo: result.file }));
+
+      setShowCropModal(false);
+      toast.success("Foto berhasil dipotong!");
+    } catch (error) {
+      console.error("=== Error cropping image ===", error);
+      toast.error("Gagal memotong foto! " + error.message);
+    }
+  };
+
+  const handleCropCancel = () => {
+    setShowCropModal(false);
+    setImgSrc("");
+    setCrop({
+      unit: "%",
+      width: 90,
+      aspect: 1,
+    });
+    setScale(1);
+    setRotate(0);
+    // Reset file input
+    const fileInput = document.getElementById("photo-upload");
+    if (fileInput) fileInput.value = "";
+  };
+
+  // Helper function to get photo preview (same as AnnouncementModal)
+  const getPhotoPreview = () => {
+    if (!payload.photo) return null;
+
+    // If it's a File object (new upload)
+    if (payload.photo instanceof File) {
+      return previewImage; // Use the preview URL we already created
+    }
+
+    // If it's a string (existing photo from backend)
+    if (typeof payload.photo === "string") {
+      // Check if it already has the full URL
+      if (payload.photo.startsWith("http")) {
+        return payload.photo;
+      }
+      // Otherwise, prepend the backend URL
+      const path = `${env.IMAGE_BASE_URL}${payload.photo}`;
+      console.log("PATH :", path);
+      return path;
+    }
+
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
+
+    try {
+      const email = user.email;
+      let updatedPayload = { ...payload };
+
+      // Upload photo if it's a File object
+      if (payload.photo !== null && typeof payload.photo !== "string") {
+        console.log("=== Starting photo upload process ===");
+
+        // Validate that photo is actually a File object
+        if (!(payload.photo instanceof File)) {
+          console.error("Photo is not a File object:", payload.photo);
+          toast.error("Format foto tidak valid. Silakan coba upload ulang.");
+          setIsSaving(false);
+          return;
+        }
+
+        console.log("Photo validation passed:", {
+          name: payload.photo.name,
+          size: payload.photo.size,
+          type: payload.photo.type,
+          lastModified: payload.photo.lastModified,
+          constructor: payload.photo.constructor.name,
+        });
+
+        try {
+          // PENTING: Kirim File object langsung, bukan FormData!
+          // API service akan membuat FormData sendiri
+          console.log("=== Calling uploadPhotoDosen API ===");
+          const uploads = await uploadPhotoDosen(payload.photo); // ✅ Kirim File object
+
+          console.log("=== Upload response ===", uploads);
+
+          if (uploads.statusCode !== 200) {
+            toast.error("Gagal menyimpan foto, coba lagi!");
+            setIsSaving(false);
+            return;
+          }
+
+          if (!uploads.data?.path) {
+            throw new Error("Upload response missing photo path");
+          }
+
+          // Update payload with uploaded photo path
+          updatedPayload = {
+            ...payload,
+            photo: uploads.data.path,
+          };
+
+          console.log("Photo uploaded successfully, path:", uploads.data.path);
+          toast.success("Foto berhasil diunggah!");
+        } catch (uploadError) {
+          console.error("=== Photo upload failed ===");
+          console.error("Error:", uploadError);
+          console.error("Error response:", uploadError.response?.data);
+          console.error("Error status:", uploadError.response?.status);
+
+          toast.error(
+            uploadError.response?.data?.message ||
+              uploadError.message ||
+              "Terjadi kesalahan saat menyimpan foto!",
+          );
+          setIsSaving(false);
+          return;
+        }
+      } else {
+        console.log("No new photo to upload, photo value:", payload.photo);
+      }
+
+      // Update lecturer profile
+      console.log("=== Updating lecturer profile ===");
+      console.log("Payload:", updatedPayload);
+
+      const response = await updateLecturerByEmail(email, updatedPayload);
+      console.log("=== Profile updated successfully ===", response);
+
+      toast.success("Profil dosen berhasil diperbarui.");
+      setIsEditing(false);
+      setPreviewImage(null);
+
+      // Clear file input
+      const fileInput = document.getElementById("photo-upload");
+      if (fileInput) fileInput.value = "";
+
+      fetchData();
+    } catch (error) {
+      console.error("=== Profile update failed ===");
+      console.error("Error:", error);
+      console.error("Error response:", error.response?.data);
+
+      const errorMessage =
+        error.response?.data?.message || error.message || "Terjadi kesalahan";
+      toast.error(`Gagal memperbarui profil dosen. ${errorMessage}`);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
     setPreviewImage(null);
+    fetchData(); // Reset form data
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header Section */}
+      {/* Header Section - SAMA */}
       <section className="relative h-64 bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-800 dark:to-gray-900 flex items-center justify-center">
         <div className="absolute inset-0 bg-black opacity-20 dark:opacity-30"></div>
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
@@ -150,7 +431,7 @@ const DashboardDosen = () => {
       {/* Main Content */}
       <section className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
-          {/* Action Buttons */}
+          {/* Action Buttons - SAMA */}
           <div className="mb-6 flex justify-end gap-3">
             {!isEditing ? (
               <button
@@ -235,11 +516,9 @@ const DashboardDosen = () => {
                 <div className="mb-6 flex flex-col items-center">
                   <div className="relative">
                     <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 border-4 border-gray-300 dark:border-gray-600">
-                      {previewImage || formData.photo ? (
+                      {getPhotoPreview() ? (
                         <img
-                          src={
-                            previewImage || env.IMAGE_BASE_URL + formData.photo
-                          }
+                          src={getPhotoPreview()}
                           alt="Profile"
                           className="w-full h-full object-cover"
                         />
@@ -293,12 +572,15 @@ const DashboardDosen = () => {
                     )}
                   </div>
                   {isEditing && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
                       Klik ikon kamera untuk mengunggah foto profil
+                      <br />
+                      <span className="text-red-500">Maksimal 5MB</span>
                     </p>
                   )}
                 </div>
 
+                {/* Rest of the form fields remain the same... */}
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Username */}
                   <div>
@@ -309,7 +591,7 @@ const DashboardDosen = () => {
                       <input
                         type="text"
                         name="username"
-                        value={formData.username}
+                        value={payload.username}
                         onChange={handleInputChange}
                         required
                         minLength={4}
@@ -318,7 +600,7 @@ const DashboardDosen = () => {
                       />
                     ) : (
                       <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                        {formData.username}
+                        {payload.username}
                       </p>
                     )}
                   </div>
@@ -332,7 +614,7 @@ const DashboardDosen = () => {
                       <input
                         type="text"
                         name="fullname"
-                        value={formData.fullname}
+                        value={payload.fullname}
                         onChange={handleInputChange}
                         required
                         minLength={4}
@@ -341,7 +623,7 @@ const DashboardDosen = () => {
                       />
                     ) : (
                       <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                        {formData.fullname}
+                        {payload.fullname}
                       </p>
                     )}
                   </div>
@@ -352,7 +634,7 @@ const DashboardDosen = () => {
                       Email
                     </label>
                     <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                      {formData.email}
+                      {payload.email}
                     </p>
                   </div>
 
@@ -365,14 +647,14 @@ const DashboardDosen = () => {
                       <input
                         type="text"
                         name="kontak"
-                        value={formData.kontak}
+                        value={payload.kontak}
                         onChange={handleInputChange}
                         placeholder="+62 812-xxxx-xxxx"
                         className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     ) : (
                       <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                        {formData.kontak || "-"}
+                        {payload.kontak || "-"}
                       </p>
                     )}
                   </div>
@@ -386,20 +668,20 @@ const DashboardDosen = () => {
                       <input
                         type="url"
                         name="externalLink"
-                        value={formData.externalLink}
+                        value={payload.externalLink}
                         onChange={handleInputChange}
                         placeholder="https://scholar.google.com/..."
                         className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     ) : (
                       <p className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300">
-                        {formData.externalLink ? (
+                        {payload.externalLink ? (
                           <a
-                            href={formData.externalLink}
+                            href={payload.externalLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 dark:text-blue-400 hover:underline">
-                            {formData.externalLink}
+                            {payload.externalLink}
                           </a>
                         ) : (
                           "-"
@@ -414,7 +696,7 @@ const DashboardDosen = () => {
                       <input
                         type="checkbox"
                         name="isActive"
-                        checked={formData.isActive}
+                        checked={payload.isActive}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                         className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -456,8 +738,8 @@ const DashboardDosen = () => {
                 )}
 
                 <div className="flex flex-wrap gap-2">
-                  {formData.expertise.length > 0 ? (
-                    formData.expertise.map((item, index) => (
+                  {payload.expertise.length > 0 ? (
+                    payload.expertise.map((item, index) => (
                       <div
                         key={index}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200 dark:border-blue-700">
@@ -520,8 +802,8 @@ const DashboardDosen = () => {
                 )}
 
                 <div className="space-y-2">
-                  {formData.matakuliah.length > 0 ? (
-                    formData.matakuliah.map((item, index) => (
+                  {payload.matakuliah.length > 0 ? (
+                    payload.matakuliah.map((item, index) => (
                       <div
                         key={index}
                         className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
@@ -605,6 +887,89 @@ const DashboardDosen = () => {
           )}
         </div>
       </section>
+
+      {/* Image Crop Modal */}
+      {showCropModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                  Sesuaikan Foto Profil
+                </h3>
+                <button
+                  onClick={handleCropCancel}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Crop Controls */}
+              <div className="mb-4 space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Zoom: {scale.toFixed(1)}x
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="3"
+                    step="0.1"
+                    value={scale}
+                    onChange={(e) => setScale(Number(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Crop Area */}
+              <div className="flex justify-center mb-4 bg-gray-100 dark:bg-gray-900 rounded-lg p-4">
+                <ReactCrop
+                  crop={crop}
+                  onChange={(c) => setCrop(c)}
+                  onComplete={(c) => setCompletedCrop(c)}
+                  aspect={1}
+                  circularCrop>
+                  <img
+                    ref={imgRef}
+                    src={imgSrc}
+                    alt="Crop preview"
+                    style={{
+                      transform: `scale(${scale}) rotate(${rotate}deg)`,
+                      maxHeight: "400px",
+                    }}
+                  />
+                </ReactCrop>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={handleCropCancel}
+                  className="px-6 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-2 border-gray-300 dark:border-gray-600 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                  Batal
+                </button>
+                <button
+                  onClick={handleCropSave}
+                  className="px-6 py-2.5 bg-blue-700 dark:bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-800 dark:hover:bg-blue-700 transition-colors shadow-sm">
+                  Gunakan Foto Ini
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
