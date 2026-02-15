@@ -1,5 +1,6 @@
 import React, {useRef, useEffect, useState} from "react";
 import {MessageBubble} from "./MessageBubble";
+import { TypingIndicator } from "./MessageBubble";
 import {InputArea} from "./InputArea";
 import {getWelcomeMessage, streamChat} from "../../services/chatbot/chatAPI";
 
@@ -13,8 +14,11 @@ export function ChatInterface({ isModal = false }) {
     const sessionId = "default";
 
     useEffect(() => {
-        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+        messageEndRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
+    }, [messages, loading]);
 
     useEffect(() => {
         async function loadWelcome(){
@@ -24,15 +28,12 @@ export function ChatInterface({ isModal = false }) {
                     id: "welcome",
                     text: data.data.message,
                     sender: "ai",
-                    timestamp: new Date(),
-                    source: "system",
                 });
             }catch {
                 setWelcomeMessage({
                     id: "welcome-fallback",
                     text: "Halo! 👋 Saya Mr. Wacana. ada yang bisa saya bantu?",
                     sender: "ai",
-                    timestamp: new Date(),
                 });
             }
         } loadWelcome();
@@ -43,44 +44,38 @@ export function ChatInterface({ isModal = false }) {
             id: "user-" + Date.now(),
             text,
             sender: "user",
-            timestamp: new Date(),
         };
 
         setMessages((prev) => [...prev,userMsg]);
         setLoading(true);
 
         let accum = "";
-        let firstChunk = true;
+        const aiId = "ai-" + Date.now();
 
         streamChat(
             text,
             sessionId,
             (chunk) => {
-                if (firstChunk) {
-                    setLoading(false);
-                    firstChunk = false;
-                }
-
                 accum += chunk;
 
-                const aiMsg = {
-                    id: "ai-" + Date.now(),
-                    text: accum,
-                    sender: "ai",
-                    timestamp: new Date(),
-                    source: "rag",
-                };
-
                 setMessages((prev) => {
-                    const last = prev[prev.length - 1];
-                    if (last?.sender === "ai") {
-                        return [...prev.slice(0, -1), aiMsg];
+                    const index = prev.findIndex((m) => m.id === aiId);
+                    const aiMsg = {
+                        id: aiId,
+                        text: accum,
+                        sender: "ai",
+                    };
+                    if (index !== -1){
+                        const copy = [...prev];
+                        copy[index] = aiMsg;
+                        return copy;
                     }
+
                     return [...prev, aiMsg];
                 });
-            },
-            () => setLoading(false),
-            () => setLoading(false)
+
+                setLoading(false);
+            }, () => setLoading(false), () => setLoading(false)
         );
     };
 
@@ -91,14 +86,12 @@ export function ChatInterface({ isModal = false }) {
                 {displayMessages.map((m) => (
                     <MessageBubble key={m.id} message={m}/>
                 ))}
-                {loading && <div> AI sedang mengetik...</div>}
-                <div ref={messageEndRef} />
+                {loading && <TypingIndicator/>}
+
+                <div ref={messageEndRef}/>
             </div>
 
-            <InputArea
-            onSendMessage={handleSendMessage}
-            isLoading={loading}
-            />
+            <InputArea onSendMessage={handleSendMessage} isLoading={loading}/>
         </div>
-    )
+    );
 }
