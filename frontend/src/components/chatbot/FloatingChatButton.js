@@ -5,7 +5,7 @@ export function FloatingChatButton({ onOpen, isOpen }) {
     if (isOpen) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 group z-50">
+        <div className="fixed bottom-5 right-5 group z-50 md:bottom-6 md:right-6">
             <div className="
           absolute bottom-full mb-2 right-0
           bg-gray-900 text-white text-sm
@@ -31,6 +31,7 @@ export function FloatingChatButton({ onOpen, isOpen }) {
           flex items-center justify-center
           shadow-2xl
           hover:scale-110 hover:shadow-blue-400/50
+          active:scale-90
           transition-all duration-300">
                 <MessageCircle size={26} />
             </button>

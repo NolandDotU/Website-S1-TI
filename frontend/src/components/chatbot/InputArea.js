@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import { SendHorizonalIcon } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 export function InputArea({ onSendMessage, isLoading }) {
     const [message, setMessage] = useState("");
+    const textareaRef = useRef(null);
+
+    useEffect(() => {
+        textareaRef.current?.focus();
+    }, []);
 
     const handleSubmit = () => {
         if (!message.trim() || isLoading) return;
@@ -9,10 +15,18 @@ export function InputArea({ onSendMessage, isLoading }) {
         setMessage("");
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit();
+        }
+    };
+
     return (
-        <div className="p-3 border-t border-gray-300 bg-white rounded-lg">
+        <div className="p-3 pb-[env(safe-area-inset-bottom)]">
             <div className="flex items-end gap-2">
                 <textarea
+                    ref={textareaRef}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={1}
@@ -22,7 +36,7 @@ export function InputArea({ onSendMessage, isLoading }) {
                 />
                 <button onClick={handleSubmit} disabled={isLoading}
                     className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                    Kirim
+                    <SendHorizonalIcon size={18} />
                 </button>
             </div>
         </div>

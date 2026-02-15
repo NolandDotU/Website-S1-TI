@@ -1,8 +1,8 @@
-import React, {useRef, useEffect, useState} from "react";
-import {MessageBubble} from "./MessageBubble";
+import React, { useRef, useEffect, useState } from "react";
+import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./MessageBubble";
-import {InputArea} from "./InputArea";
-import {getWelcomeMessage, streamChat} from "../../services/chatbot/chatAPI";
+import { InputArea } from "./InputArea";
+import { getWelcomeMessage, streamChat } from "../../services/chatbot/chatAPI";
 
 export function ChatInterface({ isModal = false }) {
     const messageEndRef = useRef(null);
@@ -21,7 +21,7 @@ export function ChatInterface({ isModal = false }) {
     }, [messages, loading]);
 
     useEffect(() => {
-        async function loadWelcome(){
+        async function loadWelcome() {
             try {
                 const data = await getWelcomeMessage();
                 setWelcomeMessage({
@@ -29,7 +29,7 @@ export function ChatInterface({ isModal = false }) {
                     text: data.data.message,
                     sender: "ai",
                 });
-            }catch {
+            } catch {
                 setWelcomeMessage({
                     id: "welcome-fallback",
                     text: "Halo! 👋 Saya Mr. Wacana. ada yang bisa saya bantu?",
@@ -46,7 +46,7 @@ export function ChatInterface({ isModal = false }) {
             sender: "user",
         };
 
-        setMessages((prev) => [...prev,userMsg]);
+        setMessages((prev) => [...prev, userMsg]);
         setLoading(true);
 
         let accum = "";
@@ -65,7 +65,7 @@ export function ChatInterface({ isModal = false }) {
                         text: accum,
                         sender: "ai",
                     };
-                    if (index !== -1){
+                    if (index !== -1) {
                         const copy = [...prev];
                         copy[index] = aiMsg;
                         return copy;
@@ -84,14 +84,16 @@ export function ChatInterface({ isModal = false }) {
         <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"}`}>
             <div className="flex-1 overflow-y-auto p-4">
                 {displayMessages.map((m) => (
-                    <MessageBubble key={m.id} message={m}/>
+                    <MessageBubble key={m.id} message={m} />
                 ))}
-                {loading && <TypingIndicator/>}
+                {loading && <TypingIndicator />}
 
-                <div ref={messageEndRef}/>
+                <div ref={messageEndRef} />
+            </div>
+            <div className="border-t bg-white pb-3 rounded-lg">
+                <InputArea onSendMessage={handleSendMessage} isLoading={loading} />
             </div>
 
-            <InputArea onSendMessage={handleSendMessage} isLoading={loading}/>
         </div>
     );
 }

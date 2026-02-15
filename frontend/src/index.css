@@ -10,6 +10,10 @@
     border-color 0.3s ease;
 }
 
+html, body {
+  overscroll-behavior: none;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
