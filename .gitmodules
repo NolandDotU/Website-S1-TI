@@ -1,0 +1,3 @@
+[submodule "model/indo-embed"]
+	path = model/indo-embed
+	url = https://huggingface.co/chvr/indonesian-embedding-small-custom
