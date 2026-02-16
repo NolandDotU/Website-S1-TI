@@ -2,13 +2,13 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-export function MessageBubble({ message }) {
+export function MessageBubble({ message, theme }) {
     const isUser = message.sender === "user";
 
     return (
         <div className={`flex mb-3 ${isUser ? "justify-end" : "justify-start"}`}>
             <div className={`px-4 py-2 rounded-2xl max-w-[75%] shadow-sm transition-all duration-300 animate-fadeUp
-            ${isUser ? "bg-blue-500 text-white rounded-br-md" : "bg-gray-100 text-gray-800 rounded-bl-md"}`}>
+            ${isUser ? "bg-blue-500 text-white rounded-br-md" : theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800 rounded-bl-md"}`}>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {message.text}
                 </ReactMarkdown>
