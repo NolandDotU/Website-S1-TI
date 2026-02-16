@@ -6,7 +6,7 @@ export class welcomeMessage {
             status: "OK",
             data: {
                 message:
-                "Hallo!! Saya Mr. Wacana, Asisten Virtual Program Studi Teknik Informatika UKSW. Silahkan tanyakan seputar Pengumuman, Dosen, atau informasi kmapus lainnya.",
+                "Hallo!!👋 Saya Mr. Wacana, Asisten Virtual Program Studi Teknik Informatika UKSW. Silahkan tanyakan seputar Pengumuman, Dosen, atau informasi kampus lainnya.😊",
             },
         });
     };

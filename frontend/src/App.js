@@ -70,6 +70,7 @@ function App() {
         <FloatingChatButton
           onOpen={() => setIsChatOpen(true)}
           isOpen={isChatOpen}
+          theme={theme}
         />
 
         <ChatModal

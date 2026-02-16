@@ -60,7 +60,7 @@ export function ChatModal({ isOpen, onClose, theme }) {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`relative bg-white w-full h-dvh md:w-full md:max-w-md md:h-[80vh]
+            className={`relative w-full h-dvh md:w-full md:max-w-md md:h-[80vh]
             md:rounded-2xl shadow-2xl flex flex-col
             transform transition-all duration-300 ease-out
             ${visible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"}

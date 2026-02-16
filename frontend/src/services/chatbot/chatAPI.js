@@ -4,7 +4,7 @@ import { env } from "../utils/env";
 const apiBaseURL = `${env.BACKEND_URL}`;
 
 const apiClient = axios.create({
-    baseURL: `${env.BACKEND_URL}/api/v1/chat`,
+    baseURL: `${env.BACKEND_URL}/v1/chat`,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export const streamChat = (
     onDone,
     onError
 ) => {
-    const url = new URL(apiBaseURL + "/api/v1/chat/stream");
+    const url = new URL(apiBaseURL + "/v1/chat/stream");
     url.searchParams.append("message", message);
     url.searchParams.append("session_id", sessionId);
 
