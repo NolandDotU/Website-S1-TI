@@ -1,10 +1,10 @@
 import express from "express";
-import { EmbeddingServiceInstance } from "../service/embeddingService";
-import NewsModel from "../model/AnnouncementModel";
+import { EmbeddingServiceInstance } from "./embedding.service";
+import NewsModel from "../../../model/AnnouncementModel";
 
 const router = express.Router();
 
-router.post("/news", async (req, res) => {
+router.post("/embedding", async (req, res) => {
   try {
     const { question } = req.body;
 
@@ -14,7 +14,7 @@ router.post("/news", async (req, res) => {
 
     const matches = await EmbeddingServiceInstance.semanticSearch(
       question,
-      "news",
+      ["announcement", "lecturer", "partners"],
       5
     );
 

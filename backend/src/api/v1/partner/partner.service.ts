@@ -6,11 +6,14 @@ import { CacheManager, logger, JWTPayload, ApiError } from "../../../utils";
 import historyService from "../../../utils/history";
 import { PartnerDTO, ResponsePartnerDTO } from "./partner.dto";
 import { deleteImage } from "../../../middleware/uploads.middleware";
+import EmbeddingInsertService from "../embeddings/embeddingInsert.service";
 
 export class PartnerService {
   private model: typeof PartnersModel;
   private cache: CacheManager | null;
   private history: typeof historyService;
+
+  private embedding = EmbeddingInsertService;
   constructor(
     model = PartnersModel,
     cache?: CacheManager,
@@ -55,6 +58,15 @@ export class PartnerService {
         if (this.cache !== null) {
           this.cache.incr("partner:version");
         }
+
+        this.embedding
+        .upsertOne(
+          "partner",
+          newPartner._id.toString(),
+          `${newPartner.company}\n${newPartner.link}`
+        ).catch(err => 
+          logger.error("Error inserting embedding: ", newPartner.id.toString(), err.message)
+        );
       });
       return newPartner;
     } catch (error: any) {
@@ -83,6 +95,10 @@ export class PartnerService {
     const updatedPartner = await this.model.findByIdAndUpdate(id, data, {
       new: true,
     });
+
+    if (!updatedPartner) {
+      throw ApiError.notFound("Partner tidak ditemukan");0
+    }
     setImmediate(() => {
       const historyData: IHistoryInput = {
         action: "UPDATE",
@@ -95,6 +111,15 @@ export class PartnerService {
       if (this.cache !== null) {
         this.cache.incr("partner:version");
       }
+
+      this.embedding
+      .upsertOne(
+        "partner",
+        updatedPartner._id.toString(),
+        `${updatedPartner.company}\n${updatedPartner.link}`
+      ).catch(err => 
+        logger.error("Error inserting embedding: ", updatedPartner.id.toString(), err.message)
+      );
     });
     return updatedPartner;
   };
@@ -122,6 +147,9 @@ export class PartnerService {
       if (this.cache !== null) {
         this.cache.incr("partner:version");
       }
+
+      this.embedding
+      .deleteOne("partner", id).catch( err => logger.error("Error deleting embedding: ", id, err.message) );
     });
     return deletedPartner;
   };

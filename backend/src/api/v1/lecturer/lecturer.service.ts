@@ -11,12 +11,17 @@ import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
 import { UserService } from "../users/user.service";
+import { isCancel } from "axios";
+import EmbeddingInsertService from "../embeddings/embeddingInsert.service";
+import e from "express";
 
 export class LecturerService {
   private model: typeof LecturerModel;
   private cache: CacheManager;
   private history: typeof historyService;
   private userService: UserService;
+
+  private embedding = EmbeddingInsertService;
 
   constructor(model = LecturerModel, userService?: UserService) {
     this.model = model;
@@ -51,6 +56,20 @@ export class LecturerService {
 
       this.history.create(historyData);
     });
+
+    this.embedding
+      .upsertOne(
+        "lecturer",
+        lecturerDoc._id.toString(),
+        `${lecturerDoc.fullname}\n${lecturerDoc.email}\n${lecturerDoc.expertise}\n${lecturerDoc.externalLink}`,
+      )
+      .catch((err) =>
+        logger.error(
+          "Embedding Failed",
+          lecturerDoc._id.toString(),
+          err.massage,
+        ),
+      );
 
     return lecturerDoc.toJSON() as unknown as ILecturerResponse;
   }
@@ -253,6 +272,20 @@ export class LecturerService {
         this.cache.incr("lecturers:active:version");
         this.cache.del(`lecturers:item:${id}`);
         this.cache.del(`lecturers:item:${email}`);
+
+        if (!lecturerDoc?._id) {
+          logger.error("Missing lecturer _id for embedding");
+          return;
+        }
+        this.embedding
+          .upsertOne(
+            "lecturer",
+            lecturerDoc?._id.toString(),
+            `${lecturerDoc?.fullname}\n${lecturerDoc?.email}\n${lecturerDoc?.expertise}\n${lecturerDoc?.externalLink}`,
+          )
+          .catch((err) =>
+            logger.error("Embedding update Failed", id, err.massage),
+          );
       });
 
       return lecturerDoc?.toJSON() as unknown as ILecturerResponse;
@@ -332,6 +365,12 @@ export class LecturerService {
       }
 
       setImmediate(() => {
+        this.embedding
+          .deleteOne("lecturer", id)
+          .catch((err) =>
+            logger.error("Embedding delete Failed", id, err.message),
+          );
+
         const historyData: IHistoryInput = {
           action: "DELETE",
           entityId: new mongoose.Types.ObjectId(lecturerDoc.id),

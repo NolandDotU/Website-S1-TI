@@ -10,10 +10,13 @@ import historyService from "../../../utils/history";
 import { IHistoryInput } from "../../../model/historyModels";
 import mongoose, { mongo } from "mongoose";
 import { deleteImage } from "../../../middleware/uploads.middleware";
+import EmbeddingInsertService from "../embeddings/embeddingInsert.service";
 export class AnnouncementService {
   private model: typeof AnnouncementModel;
   private cache: CacheManager;
   private history: typeof historyService | null = historyService || null;
+
+  private embedding = EmbeddingInsertService;
 
   constructor(model = AnnouncementModel, cache?: CacheManager) {
     this.model = model;
@@ -178,6 +181,22 @@ export class AnnouncementService {
       });
       this.cache.incr("news:version");
       this.cache.del(`news:item:${newsDoc.id}`);
+
+      if (newsDoc.status === "published") {
+        this.embedding
+          .upsertOne(
+            "announcement",
+            newsDoc._id.toString(),
+            `${newsDoc.title}\n${newsDoc.category}\n${newsDoc.content}`,
+          )
+          .catch((err) =>
+            logger.error(
+              "Embedding Failed",
+              newsDoc._id.toString(),
+              err.message,
+            ),
+          );
+      }
     });
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
@@ -226,6 +245,20 @@ export class AnnouncementService {
         this.cache.incr("history:version");
         this.cache.del(`news:item:${id}`);
       }
+
+      this.embedding
+        .upsertOne(
+          "announcement",
+          newsDoc._id.toString(),
+          `${newsDoc.title}\n${newsDoc.category}\n${newsDoc.content}`,
+        )
+        .catch((err) =>
+          logger.error(
+            "Embedding Update Failed",
+            newsDoc._id.toString(),
+            err.message,
+          ),
+        );
     });
 
     return newsDoc.toJSON() as unknown as IAnnouncementResponse;
@@ -289,18 +322,27 @@ export class AnnouncementService {
     return updated.modifiedCount;
   }
 
-  async delete(id?: string, createdBy?: any): Promise<boolean> {
+  async delete(id: string, createdBy?: any): Promise<boolean> {
     const newsDoc = await this.model.findOne({ _id: id });
     if (!newsDoc) throw ApiError.notFound("News not found");
-    deleteImage(newsDoc.photo || "").catch((err) => {
-      logger.error("Error deleting announcement image: ", err);
-    });
 
     await this.model.deleteOne({ _id: id }).catch((err) => {
       throw ApiError.internal("Failed to delete announcement");
     });
 
     setImmediate(() => {
+      if (newsDoc.photo) {
+        deleteImage(newsDoc.photo || "").catch((err) => {
+          logger.error("Error deleting announcement image: ", err);
+        });
+      }
+
+      this.embedding
+        .deleteOne("announcement", id)
+        .catch((err) =>
+          logger.error("Error deleting embedding: ", id, err.message),
+        );
+
       const historyData: IHistoryInput = {
         user: new mongoose.Types.ObjectId(createdBy.id),
         action: "DELETE",

@@ -1,7 +1,12 @@
-import { EmbeddingServiceInstance } from "./embeddingService";
-import { modelServiceInstance } from "./modelService";
-import NewsModel from "../model/AnnouncementModel";
+import { EmbeddingServiceInstance } from "../embeddings/embedding.service";
+import { modelServiceInstance } from "./model.service";
+import NewsModel from "../../../model/AnnouncementModel";
 import mongoose from "mongoose";
+import AnnouncementModel from "../../../model/AnnouncementModel";
+import { LecturerModel } from "../../../model/lecturerModel";
+import PartnersModel from "../../../model/partnersModel";
+import { buildSemanticContext } from "./buildSematicContext.utils";
+
 
 type ChatbotIdentity = {
   name: string;
@@ -45,31 +50,29 @@ export class RagService {
   private async retrieveSemanticContext(query: string): Promise<string> {
     const matches = await EmbeddingServiceInstance.semanticSearch(
       query,
-      "news",
+      ["announcement", "lecturer", "partner"],
       5,
       0.5
     );
 
-    if (matches.length === 0) {
-      return "";
-    }
+    return buildSemanticContext(matches);
 
     // Preserve ranking
-    const orderedIds = matches.map((m) => new mongoose.Types.ObjectId(m.rowId));
-    const docs = await NewsModel.find({ _id: { $in: orderedIds } });
+    //     const orderedIds = matches.map((m) => new mongoose.Types.ObjectId(m.rowId));
+    //     const docs = await NewsModel.find({ _id: { $in: orderedIds } });
 
-    const docMap = new Map(docs.map((d) => [d._id.toString(), d]));
+    //     const docMap = new Map(docs.map((d) => [d._id.toString(), d]));
 
-    return matches
-      .map((m) => {
-        const doc = docMap.get(m.rowId.toString());
-        if (!doc) return null;
-        return `Judul: ${doc.title}
-Kategori: ${doc.category}
-Isi: ${doc.content}`;
-      })
-      .filter(Boolean)
-      .join("\n\n");
+    //     return matches
+    //       .map((m) => {
+    //         const doc = docMap.get(m.rowId.toString());
+    //         if (!doc) return null;
+    //         return `Judul: ${doc.title}
+    // Kategori: ${doc.category}
+    // Isi: ${doc.content}`;
+    //       })
+    //       .filter(Boolean)
+    //       .join("\n\n");
   }
 
   private buildPrompt(query: string, context: string): string {
@@ -124,7 +127,7 @@ JAWABAN:
 
     const context = await this.retrieveSemanticContext(userQuery);
     if (!context) {
-      return "Maaf, saya tidak menemukan informasi tersebut di database kampus.";
+      return "Maaf, saya tidak menemukan informasi tersebut di database kampus. (non-stream)";
     }
 
     const prompt = this.buildPrompt(userQuery, context);

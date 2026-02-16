@@ -1,13 +1,13 @@
 import axios from "axios";
-import EmbeddingModel from "../model/embeddingModel";
-import { env } from "../config/env";
+import EmbeddingModel from "../../../model/embeddingModel";
+import { env } from "../../../config/env";
 
 export class EmbeddingService {
   //pakai yang di comment ini kalau mau pake hugging face
   // private apiKey = env.HF_API_KEY;
   // private baseUrl = env.HF_BASE_URL;
   // private modelName = env.HF_MODEL_NAME;
-  // private modelName = env.HF_MODEL_NAME;
+  // private dimension = Number(env.EMBEDDING_DIMENSION);
 
   // constructor() {
   //   if (!this.apiKey || !this.baseUrl || !this.modelName) {
@@ -38,7 +38,7 @@ export class EmbeddingService {
       //     timeout: 180_000,
       //   }
       // );
-      
+
       const res = await axios.post(
         `${this.baseUrl}/embed`,
         {
@@ -73,14 +73,15 @@ export class EmbeddingService {
     if (texts.length === 0) return [];
 
     const res = await axios.post(`${this.baseUrl}/embed`, { texts });
+    // const res = await axios.post(`${this.baseUrl}/v1/embeddings`, { texts });
     return res.data.embeddings;
   }
 
   async semanticSearch(
     query: string,
-    tableName: string,
+    tableName: string[],
     limit = 5,
-    minScore = 0.75
+    minScore = 0.5
   ) {
     const queryVector = await this.generateEmbedding(query);
 
@@ -90,14 +91,15 @@ export class EmbeddingService {
           index: "vector_index",
           path: "vector",
           queryVector,
-          numCandidates: 100,
+          numCandidates: 50,
           limit,
-          filter: { tableName },
+          filter: { tableName: { $in: tableName } },
         },
       },
       {
         $project: {
           rowId: 1,
+          tableName: 1,
           similarity: { $meta: "vectorSearchScore" },
         },
       },
