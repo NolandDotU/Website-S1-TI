@@ -63,6 +63,9 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       {shouldShowLayout && <Navbar theme={theme} toggleTheme={toggleTheme} />}
+      <main
+        className={`flex-grow ${shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
+          } bg-white dark:bg-gray-900`}>
         <FloatingChatButton
           onOpen={() => setIsChatOpen(true)}
           isOpen={isChatOpen}
@@ -71,10 +74,8 @@ function App() {
         <ChatModal
           isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
+          theme={theme}
         />
-      <main
-        className={`flex-grow ${shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
-          } bg-white dark:bg-gray-900`}>
         <Routes>
           {/* ========== PUBLIC ROUTES ========== */}
           <Route path="/" element={<HomePage />} />

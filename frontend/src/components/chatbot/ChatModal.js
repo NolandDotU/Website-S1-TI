@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChatInterface } from "./ChatInterface";
 import { X } from "lucide-react";
 
-export function ChatModal({ isOpen, onClose }) {
+export function ChatModal({ isOpen, onClose, theme }) {
     const [visible, setVisible] = useState(false);
     const [mounted, setMounted] = useState(false);
     const modalRef = useRef(null);
@@ -63,11 +63,14 @@ export function ChatModal({ isOpen, onClose }) {
             className={`relative bg-white w-full h-dvh md:w-full md:max-w-md md:h-[80vh]
             md:rounded-2xl shadow-2xl flex flex-col
             transform transition-all duration-300 ease-out
-            ${visible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"}`}>
+            ${visible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"}
+            ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
                 <div className="flex justify-center pt-2 md:hidden">
                     <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
                 </div>
-                <div className="flex justify-between items-center px-5 py-4 border-b bg-gradient-to-r from-blue-500 to-blue-600 text-white md:rounded-t-2xl">
+                <div className={`flex justify-between items-center px-5 py-4 border-b  
+                    md:rounded-t-2xl
+                    ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"}`}>
                     <h3 className="font-semibold text-lg">Asisten TI</h3>
                     <button onClick={onClose}
                     className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-all duration-300 hover:rotate-90 active:scale-90">
@@ -75,7 +78,7 @@ export function ChatModal({ isOpen, onClose }) {
                     </button>
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-                    <ChatInterface isModal={true}/>
+                    <ChatInterface isModal={true} theme={theme}/>
                 </div>
             </div>
         </div>

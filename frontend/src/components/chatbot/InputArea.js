@@ -1,7 +1,7 @@
 import { SendHorizonalIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-export function InputArea({ onSendMessage, isLoading }) {
+export function InputArea({ onSendMessage, isLoading, theme }) {
     const [message, setMessage] = useState("");
     const textareaRef = useRef(null);
 
@@ -23,7 +23,8 @@ export function InputArea({ onSendMessage, isLoading }) {
     };
 
     return (
-        <div className="p-3 pb-[env(safe-area-inset-bottom)]">
+        <div className={`p-3 pb-[env(safe-area-inset-bottom)]
+        ${theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-white border-gray-300"}`}>
             <div className="flex items-end gap-2">
                 <textarea
                     ref={textareaRef}
@@ -32,7 +33,10 @@ export function InputArea({ onSendMessage, isLoading }) {
                     onKeyDown={handleKeyDown}
                     rows={1}
                     disabled={isLoading}
-                    className="resize-none flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                    className={`resize-none flex-1 rounded-lg focus:outline-none px-3 py-2 focus:ring-2 border
+                    ${theme === "dark" ? "bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-500 disabled:opacity-50"
+                        : "bg-white border-gray-300 focus:ring-blue-500 disabled:opacity-50"
+                    }`}
                     placeholder="Ketik Pesan..."
                 />
                 <button onClick={handleSubmit} disabled={isLoading}

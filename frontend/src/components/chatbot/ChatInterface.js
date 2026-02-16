@@ -5,7 +5,7 @@ import { InputArea } from "./InputArea";
 import { getWelcomeMessage, streamChat } from "../../services/chatbot/chatAPI";
 import { QuickAction } from "./QuickAction";
 
-export function ChatInterface({ isModal = false }) {
+export function ChatInterface({ isModal = false, theme }) {
     const messageEndRef = useRef(null);
 
     const [welcomeMessage, setWelcomeMessage] = useState(null);
@@ -83,19 +83,21 @@ export function ChatInterface({ isModal = false }) {
     const displayMessages = welcomeMessage ? [welcomeMessage, ...messages] : messages;
     return (
         <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"}`}>
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className={`flex-1 overflow-y-auto p-4
+                ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
                 {displayMessages.map((m) => (
-                    <MessageBubble key={m.id} message={m} />
+                    <MessageBubble key={m.id} message={m} theme={theme} />
                 ))}
                 {messages.length === 0 && !loading && (
-                    <QuickAction onSelect={handleSendMessage} />
+                    <QuickAction onSelect={handleSendMessage} theme={theme}/>
                 )}
                 {loading && <TypingIndicator />}
 
                 <div ref={messageEndRef} />
             </div>
-            <div className="border-t bg-white pb-3 rounded-lg">
-                <InputArea onSendMessage={handleSendMessage} isLoading={loading} />
+            <div className={`pb-3 rounded-lg
+                ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
+                <InputArea onSendMessage={handleSendMessage} isLoading={loading} theme={theme} />
             </div>
 
         </div>
