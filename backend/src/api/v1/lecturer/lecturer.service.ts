@@ -328,6 +328,7 @@ export class LecturerService {
         await this.cache.incr("lecturers:version");
         await this.cache.incr("lecturers:active:version");
         await this.cache.del(`lecturers:item:${id}`);
+        await this.cache.incr("users:version");
       }
 
       setImmediate(() => {
