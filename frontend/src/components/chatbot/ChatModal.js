@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 
 export function ChatModal({ isOpen, onClose }) {
     const [visible, setVisible] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const modalRef = useRef(null);
     const startY = useRef(0);
     const currentY = useRef(0);
@@ -11,13 +12,16 @@ export function ChatModal({ isOpen, onClose }) {
 
     useEffect(() => {
         if (isOpen) {
+            setMounted(true);
             setTimeout(() => setVisible(true), 10);
         } else {
             setVisible(false);
+            setTimeout(() => setMounted(false), 300);
         }
     }, [isOpen]);
 
-    if (!isOpen) return null;
+    // if (!isOpen) return null;
+    if (!mounted) return null;
 
     const handleTouchStart = (e) => {
         startY.current = e.touches[0].clientY;
@@ -71,7 +75,7 @@ export function ChatModal({ isOpen, onClose }) {
                     </button>
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-                    <ChatInterface isModal/>
+                    <ChatInterface isModal={true}/>
                 </div>
             </div>
         </div>

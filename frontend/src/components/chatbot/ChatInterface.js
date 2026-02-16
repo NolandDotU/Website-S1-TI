@@ -3,6 +3,7 @@ import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./MessageBubble";
 import { InputArea } from "./InputArea";
 import { getWelcomeMessage, streamChat } from "../../services/chatbot/chatAPI";
+import { QuickAction } from "./QuickAction";
 
 export function ChatInterface({ isModal = false }) {
     const messageEndRef = useRef(null);
@@ -86,6 +87,9 @@ export function ChatInterface({ isModal = false }) {
                 {displayMessages.map((m) => (
                     <MessageBubble key={m.id} message={m} />
                 ))}
+                {messages.length === 0 && !loading && (
+                    <QuickAction onSelect={handleSendMessage} />
+                )}
                 {loading && <TypingIndicator />}
 
                 <div ref={messageEndRef} />

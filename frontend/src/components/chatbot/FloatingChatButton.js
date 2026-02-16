@@ -33,7 +33,7 @@ export function FloatingChatButton({ onOpen, isOpen }) {
           hover:scale-110 hover:shadow-blue-400/50
           active:scale-90
           transition-all duration-300">
-                <MessageCircle size={26} />
+                <MessageCircle size={30} />
             </button>
         </div>
     );
