@@ -5,15 +5,12 @@ import {
   IPaginatedLecturerResponse,
 } from "./lecturer.dto";
 import { CacheManager, logger, ApiError } from "../../../utils/index";
-import { getRedisClient, connectRedis } from "../../../config/redis";
 import { deleteImage } from "../../../middleware/uploads.middleware";
 import { IHistoryInput } from "../../../model/historyModels";
 import historyService from "../../../utils/history";
 import mongoose from "mongoose";
 import { UserService } from "../users/user.service";
-import { isCancel } from "axios";
 import EmbeddingInsertService from "../embeddings/embeddingInsert.service";
-import e from "express";
 
 export class LecturerService {
   private model: typeof LecturerModel;
