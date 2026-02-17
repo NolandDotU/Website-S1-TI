@@ -22,7 +22,7 @@ export const streamChat = (
     url.searchParams.append("message", message);
     url.searchParams.append("session_id", sessionId);
 
-    const es = new EventSource(url.toString());
+    const es = new EventSource(url.toString(), { withCredentials: true });
 
     es.onmessage = (evt) => {
         try {
@@ -48,4 +48,26 @@ export const streamChat = (
 export const getWelcomeMessage = async () => {
     const res = await apiClient.get("/welcome");
     return res.data;
-}
+};
+
+export const getChatHistory = async (sessionId) => {
+    const res = await apiClient.get("/history", {
+        params: { session_id: sessionId },
+    });
+    return res.data;
+};
+
+export const getOrCreateChatSessionId = () => {
+    const key = "chat_session_id";
+    const current = localStorage.getItem(key);
+
+    if (current) return current;
+
+    const nextId =
+        typeof crypto !== "undefined" && crypto.randomUUID
+            ? crypto.randomUUID()
+            : `chat-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+    localStorage.setItem(key, nextId);
+    return nextId;
+};

@@ -1,10 +1,5 @@
 import { EmbeddingServiceInstance } from "../embeddings/embedding.service";
 import { modelServiceInstance } from "./model.service";
-import NewsModel from "../../../model/AnnouncementModel";
-import mongoose from "mongoose";
-import AnnouncementModel from "../../../model/AnnouncementModel";
-import { LecturerModel } from "../../../model/lecturerModel";
-import PartnersModel from "../../../model/partnersModel";
 import { buildSemanticContext } from "./buildSematicContext.utils";
 
 
@@ -16,6 +11,11 @@ type ChatbotIdentity = {
   tone: string;
   language: string;
   limitation: string;
+};
+
+type HistoryMessage = {
+  role: "user" | "assistant";
+  content: string;
 };
 
 export class RagService {
@@ -75,8 +75,22 @@ export class RagService {
     //       .join("\n\n");
   }
 
-  private buildPrompt(query: string, context: string): string {
+  private buildPrompt(
+    query: string,
+    context: string,
+    history: HistoryMessage[] = [],
+  ): string {
     const id = this.identity;
+    const historyText =
+      history.length > 0
+        ? history
+            .map((item) =>
+              item.role === "user"
+                ? `User: ${item.content}`
+                : `Assistant: ${item.content}`,
+            )
+            .join("\n")
+        : "BELUM ADA";
 
     return `
 Anda adalah ${id.name}, ${id.role} dari ${id.department} di ${id.university}.
@@ -87,6 +101,9 @@ ATURAN KERAS:
 - Jangan mengarang.
 - Jawab hanya berdasarkan konteks.
 - Gunakan bahasa sopan dan jelas.
+
+RIWAYAT PERCAKAPAN:
+${historyText}
 
 KONTEKS:
 ${context || "TIDAK ADA DATA RELEVAN"}
@@ -100,7 +117,8 @@ JAWABAN:
 
   async queryStream(
     userQuery: string,
-    onChunk: (chunk: string) => void
+    onChunk: (chunk: string) => void,
+    history: HistoryMessage[] = [],
   ): Promise<void> {
     const identityReply = this.handleIdentityQuery(userQuery);
     if (identityReply) {
@@ -117,11 +135,14 @@ JAWABAN:
       return;
     }
 
-    const prompt = this.buildPrompt(userQuery, context);
+    const prompt = this.buildPrompt(userQuery, context, history);
     await modelServiceInstance.generateStreamedResponse(prompt, onChunk);
   }
 
-  async queryOnce(userQuery: string): Promise<string> {
+  async queryOnce(
+    userQuery: string,
+    history: HistoryMessage[] = [],
+  ): Promise<string> {
     const identityReply = this.handleIdentityQuery(userQuery);
     if (identityReply) return identityReply;
 
@@ -130,7 +151,7 @@ JAWABAN:
       return "Maaf, saya tidak menemukan informasi tersebut di database kampus. (non-stream)";
     }
 
-    const prompt = this.buildPrompt(userQuery, context);
+    const prompt = this.buildPrompt(userQuery, context, history);
     return modelServiceInstance.generateResponseOnce(prompt);
   }
 }

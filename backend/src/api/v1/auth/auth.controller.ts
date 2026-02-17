@@ -5,6 +5,7 @@ import { ApiError } from "../../../utils/ApiError";
 import { asyncHandler } from "../../../utils/asyncHandler";
 import { ApiResponse, JWTPayload } from "../../../utils";
 import { env } from "../../../config/env";
+import { chatHistoryService } from "../chatbot/chatHistory.service";
 class AuthController {
   service = authService;
 
@@ -39,6 +40,13 @@ class AuthController {
 
   localLogin = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.service.localLogin(req.body);
+    const guestId = req.cookies?.chatGuestId;
+
+    if (guestId && user.user?.id) {
+      await chatHistoryService.mergeGuestHistoryToUser(guestId, user.user.id);
+      res.clearCookie("chatGuestId");
+    }
+
     this.setCookies(res, user.accessToken, user.refreshToken);
     return res.send(
       ApiResponse.success(null, "Admin logged in successfully", 200),
@@ -66,6 +74,12 @@ class AuthController {
     }
 
     const result = await authService.handleGoogleAuth(req.user);
+    const guestId = req.cookies?.chatGuestId;
+
+    if (guestId && result.user?.id) {
+      await chatHistoryService.mergeGuestHistoryToUser(guestId, result.user.id);
+      res.clearCookie("chatGuestId");
+    }
 
     this.setCookies(res, result.accessToken, result.refreshToken);
 

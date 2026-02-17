@@ -1,31 +1,10 @@
 import express from "express";
 import { ragServiceInstance } from "./rag.service";
 import { wlcMessage } from "./welcomeMessage";
+import { chatHistoryService } from "./chatHistory.service";
 
 const router = express.Router();
 
-// router.post("/stream", async (req, res) => {
-//   const { query } = req.body;
-
-//   if (!query || typeof query !== "string") {
-//     res.status(400).end();
-//     return;
-//   }
-
-//   res.setHeader("Content-Type", "text/event-stream");
-//   res.setHeader("Cache-Control", "no-cache");
-//   res.setHeader("Connection", "keep-alive");
-
-//   try {
-//     await ragServiceInstance.queryStream(query, chunk => {
-//       res.write(`data: ${chunk}\n\n`);
-//     });
-//   } catch (err) {
-//     res.write(`data: [ERROR]\n\n`);
-//   } finally {
-//     res.end();
-//   }
-// });
 router.get("/stream", async (req, res) => {
   const query = req.query.message as string;
 
@@ -39,18 +18,50 @@ router.get("/stream", async (req, res) => {
   res.setHeader("Connection", "keep-alive");
 
   try {
-    await ragServiceInstance.queryStream(query, (chunk) => {
-      res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+    const { ownerType, ownerId, sessionId } = chatHistoryService.resolveOwner(
+      req,
+      res,
+    );
+    const history = await chatHistoryService.getRecentMessages(
+      ownerType,
+      ownerId,
+      sessionId,
+    );
+
+    await chatHistoryService.saveMessage({
+      ownerType,
+      ownerId,
+      sessionId,
+      role: "user",
+      content: query,
     });
 
-    res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+    let fullAssistantReply = "";
+
+    await ragServiceInstance.queryStream(
+      query,
+      (chunk) => {
+        fullAssistantReply += chunk;
+        res.write(`data: ${JSON.stringify({ chunk, sessionId })}\n\n`);
+      },
+      history,
+    );
+
+    await chatHistoryService.saveMessage({
+      ownerType,
+      ownerId,
+      sessionId,
+      role: "assistant",
+      content: fullAssistantReply,
+    });
+
+    res.write(`data: ${JSON.stringify({ done: true, sessionId })}\n\n`);
   } catch (err) {
     res.write(`data: ${JSON.stringify({ error: true })}\n\n`);
   } finally {
     res.end();
   }
 });
-
 
 router.post("/non-stream", async (req, res) => {
   try {
@@ -63,15 +74,75 @@ router.post("/non-stream", async (req, res) => {
       });
     }
 
-    const answer = await ragServiceInstance.queryOnce(query);
+    const { ownerType, ownerId, sessionId } = chatHistoryService.resolveOwner(
+      req,
+      res,
+    );
+    const history = await chatHistoryService.getRecentMessages(
+      ownerType,
+      ownerId,
+      sessionId,
+    );
+
+    await chatHistoryService.saveMessage({
+      ownerType,
+      ownerId,
+      sessionId,
+      role: "user",
+      content: query,
+    });
+
+    const answer = await ragServiceInstance.queryOnce(query, history);
+
+    await chatHistoryService.saveMessage({
+      ownerType,
+      ownerId,
+      sessionId,
+      role: "assistant",
+      content: answer,
+    });
 
     res.json({
       status: "OK",
       answer,
+      sessionId,
     });
   } catch (err: any) {
     console.error("RAG error:", err);
 
+    res.status(500).json({
+      status: "FAILED",
+      message: err.message || "Internal server error",
+    });
+  }
+});
+
+router.get("/history", async (req, res) => {
+  try {
+    const sessionId = req.query.session_id as string;
+
+    if (!sessionId) {
+      return res.status(400).json({
+        status: "FAILED",
+        message: "session_id is required",
+      });
+    }
+
+    const owner = chatHistoryService.resolveOwner(req, res);
+    const messages = await chatHistoryService.getSessionMessages(
+      owner.ownerType,
+      owner.ownerId,
+      sessionId,
+    );
+
+    res.json({
+      status: "OK",
+      data: {
+        sessionId,
+        messages,
+      },
+    });
+  } catch (err: any) {
     res.status(500).json({
       status: "FAILED",
       message: err.message || "Internal server error",

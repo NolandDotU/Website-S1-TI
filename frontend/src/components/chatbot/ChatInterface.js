@@ -2,8 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./MessageBubble";
 import { InputArea } from "./InputArea";
-import { getWelcomeMessage, streamChat } from "../../services/chatbot/chatAPI";
+import {
+    getChatHistory,
+    getOrCreateChatSessionId,
+    getWelcomeMessage,
+    streamChat,
+} from "../../services/chatbot/chatAPI";
 import { QuickAction } from "./QuickAction";
+import { useToast } from "../../context/toastProvider";
 
 export function ChatInterface({ isModal = false, theme }) {
     const messageEndRef = useRef(null);
@@ -12,7 +18,8 @@ export function ChatInterface({ isModal = false, theme }) {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const sessionId = "default";
+    const [sessionId] = useState(() => getOrCreateChatSessionId());
+    const toast = useToast();
 
     useEffect(() => {
         messageEndRef.current?.scrollIntoView({
@@ -39,6 +46,40 @@ export function ChatInterface({ isModal = false, theme }) {
             }
         } loadWelcome();
     }, []);
+
+    useEffect(() => {
+        let mounted = true;
+
+        async function loadHistory() {
+            try {
+                const response = await getChatHistory(sessionId);
+                const history = response?.data?.messages || [];
+                const mapped = history.map((item, index) => ({
+                    id: item._id || `history-${index}-${item.createdAt || Date.now()}`,
+                    text: item.content,
+                    sender: item.role === "assistant" ? "ai" : "user",
+                }));
+
+                if (mounted) {
+                    setMessages(mapped);
+                }
+            } catch (error) {
+                console.error ("Failed to create chat history: ", error);
+                if (mounted) {
+                    setMessages([]);
+                    toast.error("Failed to load old message, please try again later.", {
+                        duration: 4000,
+                        position: 'top-center',
+                    });
+                }
+            }
+        }
+
+        loadHistory();
+        return () => {
+            mounted = false;
+        };
+    }, [sessionId, toast]);
 
     const handleSendMessage = (text) => {
         const userMsg = {
@@ -82,8 +123,8 @@ export function ChatInterface({ isModal = false, theme }) {
 
     const displayMessages = welcomeMessage ? [welcomeMessage, ...messages] : messages;
     return (
-        <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"}`}>
-            <div className={`flex-1 overflow-y-auto p-4
+        <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"} overflow-y-auto scroll-smooth`}>
+            <div className={`flex-1 p-4
                 ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
                 {displayMessages.map((m) => (
                     <MessageBubble key={m.id} message={m} theme={theme} />
