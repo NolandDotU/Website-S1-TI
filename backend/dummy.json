@@ -1,0 +1,100 @@
+[
+  {
+    "title": "Seminar AI untuk Industri 4.0",
+    "category": "event",
+    "content": "Program Studi Informatika akan mengadakan seminar nasional tentang penerapan AI dalam smart manufacturing dan Industry 4.0.",
+    "link": "https://kampus.ac.id/seminar-ai",
+    "photo": "https://kampus.ac.id/images/seminar-ai.jpg",
+    "source": "Humas FTI",
+    "publishDate": "2026-02-15T08:00:00.000Z",
+    "status": "published",
+    "views": 124,
+    "eventDate": "2026-03-01T09:00:00.000Z"
+  },
+  {
+    "title": "Lowongan Backend Developer Startup AI",
+    "category": "lowongan",
+    "content": "Startup berbasis AI membuka lowongan backend developer dengan pengalaman Node.js dan MongoDB.",
+    "link": "https://startup-ai.com/career/backend",
+    "source": "Career Center",
+    "publishDate": "2026-02-10T07:30:00.000Z",
+    "status": "published",
+    "views": 87
+  },
+  {
+    "title": "Pengumuman Jadwal UTS Semester Genap",
+    "category": "pengumuman",
+    "content": "Berikut adalah jadwal resmi Ujian Tengah Semester untuk seluruh mahasiswa FTI.",
+    "source": "BAAK",
+    "publishDate": "2026-02-14T06:00:00.000Z",
+    "status": "published",
+    "views": 203
+  },
+  {
+    "title": "Alumni Berprestasi Raih Penghargaan Nasional",
+    "category": "alumni",
+    "content": "Salah satu alumni Informatika berhasil meraih penghargaan nasional di bidang teknologi pendidikan.",
+    "photo": "https://kampus.ac.id/images/alumni-award.jpg",
+    "source": "Ikatan Alumni",
+    "publishDate": "2026-01-20T10:00:00.000Z",
+    "status": "archived",
+    "views": 340
+  },
+  {
+    "title": "Workshop Docker dan Deployment Modern",
+    "category": "event",
+    "content": "Workshop intensif mengenai Docker, CI/CD, dan deployment aplikasi modern untuk mahasiswa tingkat akhir.",
+    "link": "https://kampus.ac.id/workshop-docker",
+    "publishDate": "2026-02-18T09:00:00.000Z",
+    "status": "scheduled",
+    "scheduleDate": "2026-02-20T08:00:00.000Z",
+    "eventDate": "2026-02-25T08:30:00.000Z"
+  },
+  {
+    "title": "Lowongan Data Analyst Perusahaan Manufaktur",
+    "category": "lowongan",
+    "content": "Perusahaan manufaktur membuka posisi Data Analyst dengan pengalaman Machine Learning.",
+    "link": "https://manufacture.co.id/jobs/data-analyst",
+    "source": "Career Center",
+    "publishDate": "2026-02-05T08:45:00.000Z",
+    "status": "published",
+    "views": 156
+  },
+  {
+    "title": "Pengumuman Libur Nasional",
+    "category": "pengumuman",
+    "content": "Seluruh kegiatan akademik diliburkan dalam rangka Hari Raya Nasional.",
+    "publishDate": "2026-02-12T06:30:00.000Z",
+    "status": "published",
+    "views": 411
+  },
+  {
+    "title": "Alumni Sharing Session: Karier di Big Tech",
+    "category": "alumni",
+    "content": "Sharing session bersama alumni yang kini bekerja di perusahaan teknologi global.",
+    "link": "https://kampus.ac.id/alumni-sharing",
+    "publishDate": "2026-02-01T09:15:00.000Z",
+    "status": "published",
+    "views": 190,
+    "eventDate": "2026-02-28T13:00:00.000Z"
+  },
+  {
+    "title": "Event Hackathon Smart City 2026",
+    "category": "event",
+    "content": "Hackathon 48 jam untuk membangun solusi digital dalam pengembangan Smart City.",
+    "photo": "https://kampus.ac.id/images/hackathon.jpg",
+    "source": "BEM FTI",
+    "status": "draft",
+    "views": 0,
+    "eventDate": "2026-04-10T08:00:00.000Z"
+  },
+  {
+    "title": "Lowongan Mobile Developer React Native",
+    "category": "lowongan",
+    "content": "Perusahaan teknologi membuka posisi React Native Developer untuk pengembangan aplikasi mobile.",
+    "link": "https://techcorp.com/jobs/mobile-dev",
+    "source": "Career Center",
+    "status": "draft",
+    "views": 12
+  }
+]

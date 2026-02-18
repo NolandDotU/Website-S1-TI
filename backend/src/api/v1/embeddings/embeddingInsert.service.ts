@@ -3,15 +3,11 @@ import { EmbeddingServiceInstance } from "./embedding.service";
 import { env } from "../../../config/env";
 
 export class EmbeddingInsertService {
-  static async upsertOne(
-    tableName: string,
-    rowId: string,
-    content: string
-  ) {
+  static async upsertOne(tableName: string, rowId: string, content: string) {
     if (!content.trim()) {
       console.warn("Empty content, skip embedding");
       return;
-    };
+    }
 
     const vector = await EmbeddingServiceInstance.generateEmbedding(content);
     if (!vector) return;
@@ -28,7 +24,7 @@ export class EmbeddingInsertService {
         content,
         vector,
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
   }
 

@@ -37,7 +37,7 @@ export const ActivityCard = ({ history }) => {
             <div className="flex items-center gap-x-2">
               <User className="h-5 w-5 bg-gray-200 text-gray-800 rounded-full p-1" />
               <p className="text-sm text-gray-500 dark:text-gray-300">
-                {history.user.username}
+                {history.user?.username}
               </p>
             </div>
             <div>

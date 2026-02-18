@@ -2,7 +2,6 @@ import { EmbeddingServiceInstance } from "../embeddings/embedding.service";
 import { modelServiceInstance } from "./model.service";
 import { buildSemanticContext } from "./buildSematicContext.utils";
 
-
 type ChatbotIdentity = {
   name: string;
   role: string;
@@ -52,7 +51,7 @@ export class RagService {
       query,
       ["announcement", "lecturer", "partner"],
       5,
-      0.5
+      0.5,
     );
 
     return buildSemanticContext(matches);
@@ -130,7 +129,7 @@ JAWABAN:
 
     if (!context) {
       onChunk(
-        "Maaf, saya tidak menemukan informasi tersebut di database kampus."
+        "Maaf, saya tidak menemukan informasi tersebut di database kampus.",
       );
       return;
     }

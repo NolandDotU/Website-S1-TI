@@ -12,13 +12,14 @@ services:
     depends_on:
       - frontend
       - backend
+      - embedding-api
     networks:
       - website-s1ti-network
     restart: unless-stopped
 
   # MongoDB Database
   mongodb:
-    image: mongo:7.0
+    image: mongo/atlas:7.0
     container_name: website-s1ti-mongodb
     restart: unless-stopped
     environment:
@@ -55,6 +56,39 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
+
+  #embedding-model
+  embedding-api:
+    build:
+      context: ./embedding-model
+      dockerfile: Dockerfile
+    container_name: embedding-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/model
+      - USE_ONNX=true
+      - USE_QUANTIZED=true
+      - MAX_WORKERS=4
+      - LOG_LEVEL=info
+    volumes:
+      - ./indonesian-embedding-small:/app/model:ro
+      - ./app:/app/app:ro
+      - ./logs:/app/logs
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - website-s1ti-network
 
   # Backend API
   backend:

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { env } from "../../../config/env";
+import { logger } from "../../../utils";
 
 export class ModelService {
   private apiKey = env.OPENROUTER_API_KEY;
@@ -17,8 +18,10 @@ export class ModelService {
 
   async generateStreamedResponse(
     prompt: string,
-    onChunk: (chunk: string) => void
+    onChunk: (chunk: string) => void,
   ): Promise<void> {
+    logger.debug(`OPEN ROUTER PROMPT ${prompt}`);
+
     let response;
 
     try {
@@ -42,11 +45,12 @@ export class ModelService {
           },
           responseType: "stream",
           timeout: 120_000,
-        }
+        },
       );
+      logger.debug(`OPEN ROUTER RESPONSE ${response.data}`);
     } catch (err: any) {
       throw new Error(
-        `OpenRouter request failed: ${err.response?.status || err.message}`
+        `OpenRouter request failed: ${err.response?.status || err.message}`,
       );
     }
 
@@ -101,11 +105,11 @@ export class ModelService {
             "X-Title": "S1 TI Chatbot",
           },
           timeout: 120_000,
-        }
+        },
       );
     } catch (err: any) {
       throw new Error(
-        `OpenRouter request failed: ${err.response?.status || err.message}`
+        `OpenRouter request failed: ${err.response?.status || err.message}`,
       );
     }
 

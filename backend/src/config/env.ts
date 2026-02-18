@@ -90,7 +90,7 @@ const envSchema = z.object({
     .default("http://localhost:8001")
     .optional(),
   EMBEDDING_DIMENSION: z.coerce.number().default(384),
-
+  USE_ATLAS_VECTOR_SEARCH: z.boolean().default(false),
   // OpenRouter AI Configuration
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_MODEL: z.string().default("google/gemma-3-27b-it:free").optional(),
