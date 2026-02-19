@@ -24,6 +24,7 @@ const AnnouncementModal = ({
     category: "pengumuman",
     photo: null,
     status: "draft",
+    eventDate: null,
     scheduleDate: null,
   });
 
@@ -37,6 +38,7 @@ const AnnouncementModal = ({
         category: announcement.category,
         photo: announcement.photo,
         status: announcement.status,
+        eventDate: announcement.eventDate,
         scheduleDate: announcement.scheduleDate,
       });
     } else {
@@ -46,6 +48,7 @@ const AnnouncementModal = ({
         photo: null,
         category: "",
         status: "draft",
+        eventDate: null,
         scheduleDate: null,
       });
     }
@@ -305,24 +308,22 @@ const AnnouncementModal = ({
                   transition-colors">
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
-                <option value="scheduled">Scheduled</option>
               </select>
               {errors.status && (
                 <p className="text-red-500 text-xs mt-1">{errors.status[0]}</p>
               )}
             </div>
 
-            {/* Schedule Date (if scheduled) */}
-            {formData.status === "scheduled" && (
+            {formData.category === "event" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Tanggal Publikasi
+                  Tanggal Event
                 </label>
                 <input
-                  type="datetime-local"
-                  value={formData.scheduleDate || ""}
+                  type="date"
+                  value={formData.date}
                   onChange={(e) =>
-                    setFormData({ ...formData, scheduleDate: e.target.value })
+                    setFormData({ ...formData, date: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
                     dark:border-gray-600 bg-white dark:bg-gray-900 
@@ -330,10 +331,8 @@ const AnnouncementModal = ({
                     focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
                     transition-colors"
                 />
-                {errors.scheduleDate && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.scheduleDate[0]}
-                  </p>
+                {errors.date && (
+                  <p className="text-red-500 text-xs mt-1">{errors.date[0]}</p>
                 )}
               </div>
             )}

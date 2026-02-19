@@ -107,7 +107,7 @@ export class EmbeddingService {
     query: string,
     tableName: TableName[],
     limit = 5,
-    minScore = 0.5,
+    minScore = 0.1,
   ): Promise<SematicMatch[]> {
     if (env.USE_ATLAS_VECTOR_SEARCH === true) {
       return this._searchAtlas(query, tableName, limit, minScore);

@@ -14,8 +14,8 @@ router.post("/embedding", async (req, res) => {
 
     const matches = await EmbeddingServiceInstance.semanticSearch(
       question,
-      ["announcement", "lecturer", "partners"],
-      5
+      ["announcement", "lecturer", "partner"],
+      5,
     );
 
     const idOrder = matches.map((m: any) => m.rowId);

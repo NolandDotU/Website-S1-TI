@@ -19,7 +19,7 @@ services:
 
   # MongoDB Database
   mongodb:
-    image: mongo/atlas:7.0
+    image: mongo:7.0
     container_name: website-s1ti-mongodb
     restart: unless-stopped
     environment:
@@ -57,30 +57,26 @@ services:
       timeout: 3s
       retries: 5
 
-  #embedding-model
+  # Embedding Model Service (Indonesian Embedding API)
   embedding-api:
     build:
       context: ./embedding-model
       dockerfile: Dockerfile
-    container_name: embedding-api
-    ports:
-      - "8000:8000"
-    environment:
-      - MODEL_PATH=/app/model
-      - USE_ONNX=true
-      - USE_QUANTIZED=true
-      - MAX_WORKERS=4
-      - LOG_LEVEL=info
-    volumes:
-      - ./indonesian-embedding-small:/app/model:ro
-      - ./app:/app/app:ro
-      - ./logs:/app/logs
+    container_name: website-s1ti-embedding-api
     restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
     deploy:
       resources:
         limits:
           cpus: "2"
           memory: 1G
+        reservations:
+          cpus: "1"
+          memory: 512M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
