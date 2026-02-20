@@ -13,18 +13,12 @@ function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length || a.length === 0) return 0;
 
   let dot = 0;
-  let normA = 0;
-  let normB = 0;
 
   for (let i = 0; i < a.length; i++) {
     dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
   }
 
-  if (normA === 0 || normB === 0) return 0;
-
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  return dot; // karena sudah normalized
 }
 
 // ─── Service ──────────────────────────────────────────────────────────────────
@@ -107,8 +101,15 @@ export class EmbeddingService {
     query: string,
     tableName: TableName[],
     limit = 5,
-    minScore = 0.1,
+    minScore = 0.3,
   ): Promise<SematicMatch[]> {
+    logger.debug(
+      `Starting semantic search with query: "${query}", tableName: ${tableName}, limit: ${limit}, minScore: ${minScore}`,
+    );
+    logger.debug(`USE_ATLAS_VECTOR_SEARCH: ${env.USE_ATLAS_VECTOR_SEARCH}`);
+    logger.debug(`Embedding dimension: ${env.EMBEDDING_DIMENSION}`);
+    logger.debug(`limit ${limit}`);
+    logger.debug(`minScore ${minScore}`);
     if (env.USE_ATLAS_VECTOR_SEARCH === true) {
       return this._searchAtlas(query, tableName, limit, minScore);
     }
@@ -166,26 +167,16 @@ export class EmbeddingService {
   ): Promise<SematicMatch[]> {
     const queryVector = await this.generateEmbedding(query);
 
-    logger.debug(`queryVector ${queryVector}`);
-    logger.debug(`tableName : ${tableName}`);
-    logger.debug(`limit : ${limit}`);
-    logger.debug(`minScore : ${minScore}`);
-
-    // Ambil hanya field yang dibutuhkan — hemat memory
     const docs = await EmbeddingModel.find(
       { tableName: { $in: tableName } },
       { rowId: 1, tableName: 1, vector: 1, _id: 0 },
     ).lean<{ rowId: string; tableName: TableName; vector: number[] }[]>();
 
-    const scored = docs.map((doc) => ({
-      rowId: doc.rowId,
-      tableName: doc.tableName,
-      similarity: cosineSimilarity(queryVector, doc.vector),
-    }));
-
-    logger.debug(
-      `Scores before filter: ${JSON.stringify(scored.map((d) => ({ rowId: d.rowId, similarity: d.similarity })))}`,
-    );
+    // 🔎 DEBUG NORMALIZATION CHECK
+    if (docs.length > 0) {
+      const norm = Math.sqrt(docs[0].vector.reduce((sum, v) => sum + v * v, 0));
+      console.log("Vector norm sample:", norm);
+    }
 
     return docs
       .map((doc) => ({

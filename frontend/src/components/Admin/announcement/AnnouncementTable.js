@@ -77,15 +77,15 @@ const AnnouncementTable = ({
                         announcement.status === "published"
                           ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                           : announcement.status === "draft"
-                          ? "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                            ? "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                            : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                       }`}>
                       {announcement.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                     {new Date(announcement.createdAt).toLocaleDateString(
-                      "id-ID"
+                      "id-ID",
                     )}
                   </td>
                   <td className="px-6 py-4">
@@ -133,7 +133,7 @@ const AnnouncementTable = ({
                           dark:hover:bg-yellow-900/30 rounded-lg transition"
                         title="Preview"
                         onClick={() =>
-                          navigate(`/admin/berita/${announcement.id}`)
+                          navigate(`/cms/berita/${announcement.id}`)
                         }>
                         <View className="w-4 h-4" />
                       </button>

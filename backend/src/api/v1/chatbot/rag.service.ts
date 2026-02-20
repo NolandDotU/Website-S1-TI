@@ -23,13 +23,35 @@ export class RagService {
   constructor() {
     this.identity = {
       name: "Mr. Wacana",
-      role: "Asisten Virtual Program Studi Teknologi Informasi UKSW",
+      role: "Asisten Virtual Program Studi Teknik Informatika UKSW",
       department: "Fakultas Teknologi Informasi",
       university: "Universitas Kristen Satya Wacana",
       tone: "gen-z dan informatif",
       language: "Bahasa Indonesia yang baik dan benar",
       limitation: "Hanya menjawab berdasarkan data kampus",
     };
+  }
+
+  private handleSmallTalk(query: string): string | null {
+    const q = query.toLowerCase().trim();
+
+    if (
+      /^(halo+|hai+|hi+|hello+|hey+|bro+|pak+|chat+)(\s.*)?[!.?]*$/i.test(q)
+    ) {
+      return "Halo! Ada yang bisa saya bantu terkait informasi Program Studi Teknik Informatika?";
+    }
+
+    if (
+      /^terima kasih[!.?]*$/i.test(q) ||
+      /^makasih[!.?]*$/i.test(q) ||
+      /^thanks[!.?]*$/i.test(q) ||
+      /^thx[!.?]*$/i.test(q) ||
+      /^ty[!.?]*$/i.test(q)
+    ) {
+      return "Sama-sama. Senang bisa membantu.";
+    }
+
+    return null;
   }
 
   private handleIdentityQuery(query: string): string | null {
@@ -51,7 +73,7 @@ export class RagService {
       query,
       ["announcement", "lecturer", "partner"],
       5,
-      0.5,
+      0.1,
     );
 
     return buildSemanticContext(matches);
@@ -80,37 +102,36 @@ export class RagService {
     history: HistoryMessage[] = [],
   ): string {
     const id = this.identity;
+
     const historyText =
       history.length > 0
         ? history
             .map((item) =>
               item.role === "user"
-                ? `User: ${item.content}`
-                : `Assistant: ${item.content}`,
+                ? `Pengguna: ${item.content}`
+                : `Asisten: ${item.content}`,
             )
             .join("\n")
-        : "BELUM ADA";
+        : "Belum ada riwayat sebelumnya.";
 
     return `
-Anda adalah ${id.name}, ${id.role} dari ${id.department} di ${id.university}.
-Bahasa: ${id.language}. Gaya: ${id.tone}.
+Anda adalah ${id.name}, ${id.role} di ${id.department}, ${id.university}.
 
-ATURAN KERAS:
-- Jika konteks kosong, jawab: "Saya tidak menemukan informasi tersebut di database kampus."
-- Jangan mengarang.
-- Jawab hanya berdasarkan konteks.
-- Gunakan bahasa sopan dan jelas.
+Gunakan bahasa Indonesia yang sopan, jelas, dan profesional.
+Jawaban harus sepenuhnya berdasarkan informasi yang tersedia pada DATA.
+Jangan menambahkan asumsi atau informasi di luar DATA.
+Jika informasi tidak cukup, sampaikan bahwa data yang tersedia belum memadai untuk menjawab pertanyaan.
 
-RIWAYAT PERCAKAPAN:
+RIWAYAT:
 ${historyText}
 
-KONTEKS:
-${context || "TIDAK ADA DATA RELEVAN"}
+DATA:
+${context}
 
 PERTANYAAN:
 ${query}
 
-JAWABAN:
+Berikan jawaban yang ringkas namun informatif.
 `;
   }
 
@@ -119,6 +140,11 @@ JAWABAN:
     onChunk: (chunk: string) => void,
     history: HistoryMessage[] = [],
   ): Promise<void> {
+    const smallTalkReply = this.handleSmallTalk(userQuery);
+    if (smallTalkReply) {
+      onChunk(smallTalkReply);
+      return;
+    }
     const identityReply = this.handleIdentityQuery(userQuery);
     if (identityReply) {
       onChunk(identityReply);
@@ -129,7 +155,7 @@ JAWABAN:
 
     if (!context) {
       onChunk(
-        "Maaf, saya tidak menemukan informasi tersebut di database kampus.",
+        "Saya belum menemukan informasi yang sesuai pada data yang tersedia.",
       );
       return;
     }

@@ -20,8 +20,6 @@ export class ModelService {
     prompt: string,
     onChunk: (chunk: string) => void,
   ): Promise<void> {
-    logger.debug(`OPEN ROUTER PROMPT ${prompt}`);
-
     let response;
 
     try {
@@ -47,7 +45,6 @@ export class ModelService {
           timeout: 120_000,
         },
       );
-      logger.debug(`OPEN ROUTER RESPONSE ${response.data}`);
     } catch (err: any) {
       throw new Error(
         `OpenRouter request failed: ${err.response?.status || err.message}`,

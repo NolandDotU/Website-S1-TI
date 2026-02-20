@@ -6,7 +6,7 @@ const Status = z
 
 const scheduleDate = z.preprocess(
   (val) => (val ? new Date(val as string) : undefined),
-  z.date().optional()
+  z.date().optional(),
 );
 
 export const StatusSchema = z
@@ -34,9 +34,12 @@ export const AnnouncementSchema = z
     category: z
       .string()
       .lowercase()
-      .refine((val) => ["event", "lowongan", "pengumuman"].includes(val), {
-        message: "Category tidak valid",
-      }),
+      .refine(
+        (val) => ["event", "lowongan", "pengumuman", "alumni"].includes(val),
+        {
+          message: "Kategori tidak valid",
+        },
+      ),
 
     content: z
       .string()
@@ -45,7 +48,7 @@ export const AnnouncementSchema = z
 
     link: z.preprocess(
       (val) => (val === "" || val === null ? undefined : val),
-      z.string().url("Link harus berupa URL valid").optional()
+      z.string().url("Link harus berupa URL valid").optional(),
     ),
 
     photo: z.string().optional().nullable(),
@@ -68,7 +71,7 @@ export const AnnouncementSchema = z
 
     eventDate: z.preprocess(
       (val) => (val ? new Date(val as string) : undefined),
-      z.date().optional()
+      z.date().optional(),
     ),
   })
   .superRefine((data, ctx) => {

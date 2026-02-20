@@ -97,7 +97,7 @@ const ListAnnouncement = () => {
       console.error("Error changing status:", error);
       toast.error(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengubah status"
+          "Terjadi kesalahan saat mengubah status",
       );
     }
   };
@@ -115,12 +115,12 @@ const ListAnnouncement = () => {
       const response = await delAnnouncement(id);
       if (response.statusCode !== 200) {
         return toast.error(
-          response.data?.message || "Gagal menghapus pengumuman"
+          response.data?.message || "Gagal menghapus pengumuman",
         );
       }
       toast.success("Berhasil menghapus pengumuman secara permanen!");
       setAnnouncements(
-        announcements.filter((a) => a.id !== selectedAnnouncement.id)
+        announcements.filter((a) => a.id !== selectedAnnouncement.id),
       );
       setIsDeleteModalOpen(false);
       setSelectedAnnouncement(null);
@@ -128,7 +128,7 @@ const ListAnnouncement = () => {
       console.error("Error deleting announcement:", error);
       toast.error(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat menghapus pengumuman"
+          "Terjadi kesalahan saat menghapus pengumuman",
       );
     }
   };

@@ -55,9 +55,6 @@ const AnnouncementModal = ({
   }, [announcement, mode, isOpen]);
 
   const handleSave = async () => {
-    //===================================
-    // MASIHH NGEBUGGG!!!!!!!!!!!!!!!!!
-    //===================================
     try {
       let payload = { ...formData };
 
@@ -94,7 +91,10 @@ const AnnouncementModal = ({
           return toast.error(response.message || "Gagal mengupdate pengumuman");
         }
       }
+
+      toast.success("Berhasil menyimpan pengumuman!");
       onSuccess();
+      onClose();
     } catch (error) {
       if (
         error.response?.status === 400 &&
@@ -321,9 +321,9 @@ const AnnouncementModal = ({
                 </label>
                 <input
                   type="date"
-                  value={formData.date}
+                  value={formData.eventDate}
                   onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
+                    setFormData({ ...formData, eventDate: e.target.value })
                   }
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
                     dark:border-gray-600 bg-white dark:bg-gray-900 
@@ -331,8 +331,10 @@ const AnnouncementModal = ({
                     focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
                     transition-colors"
                 />
-                {errors.date && (
-                  <p className="text-red-500 text-xs mt-1">{errors.date[0]}</p>
+                {errors.eventDate && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.eventDate[0]}
+                  </p>
                 )}
               </div>
             )}

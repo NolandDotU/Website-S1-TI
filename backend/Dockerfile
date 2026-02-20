@@ -9,7 +9,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install ALL dependencies (including devDependencies for build)
-RUN npm ci
+# Use --frozen-lockfile to ensure reproducible builds
+RUN npm ci --frozen-lockfile
 
 # Copy source code and config files
 COPY . .
@@ -34,7 +35,8 @@ ENV NODE_ENV=production
 COPY package*.json ./
 
 # Install ONLY production dependencies
-RUN npm ci --omit=dev && \
+# Use --frozen-lockfile to ensure reproducible builds
+RUN npm ci --frozen-lockfile --omit=dev && \
     npm cache clean --force
 
 # Copy built files from builder stage

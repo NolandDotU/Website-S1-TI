@@ -289,7 +289,6 @@ const History = () => {
               <option value="highlight">Highlight</option>
               <option value="user">User</option>
               <option value="auth">Authentication</option>
-              <option value="settings">Settings</option>
             </select>
             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           </div>

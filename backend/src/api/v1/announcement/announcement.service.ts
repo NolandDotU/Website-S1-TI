@@ -167,6 +167,11 @@ export class AnnouncementService {
 
     const newsDoc = await this.model.create(data);
 
+    if (this.cache !== null && this.cache) {
+      await this.cache.incr("news:version");
+      await this.cache.del(`news:item:${newsDoc.id}`);
+    }
+
     setImmediate(() => {
       const historyData: IHistoryInput = {
         user: new mongoose.Types.ObjectId(createdBy.id),
@@ -179,8 +184,6 @@ export class AnnouncementService {
       this.history?.create(historyData).catch((err) => {
         logger.error("Error creating history: ", err);
       });
-      this.cache.incr("news:version");
-      this.cache.del(`news:item:${newsDoc.id}`);
 
       if (newsDoc.status === "published") {
         this.embedding
@@ -218,6 +221,13 @@ export class AnnouncementService {
     });
     if (!newsDoc) throw ApiError.notFound("News not found");
 
+    if (this.cache !== null && this.cache) {
+      await this.cache.incr("news:version");
+      await this.cache.incr("highlights:version");
+      await this.cache.incr("history:version");
+      await this.cache.del(`news:item:${id}`);
+    }
+
     setImmediate(() => {
       if (data.photo !== announ?.photo) {
         logger.info("DELETING IMAGE..", announ?.photo);
@@ -239,12 +249,6 @@ export class AnnouncementService {
       this.history?.create(historyData).catch((err) => {
         logger.error("Error creating history: ", err);
       });
-      if (this.cache !== null && this.cache) {
-        this.cache.incr("news:version");
-        this.cache.incr("highlights:version");
-        this.cache.incr("history:version");
-        this.cache.del(`news:item:${id}`);
-      }
 
       this.embedding
         .upsertOne(
@@ -269,7 +273,7 @@ export class AnnouncementService {
     status?: string,
     createdBy?: any,
   ): Promise<boolean> {
-    let newsDoc;
+    let newsDoc: any = null;
     if (status === "published") {
       const publishDate = new Date();
       logger.info(`REQUEST ID : ${id}`);
@@ -278,13 +282,27 @@ export class AnnouncementService {
         { status: status, publishDate: publishDate },
         { new: true },
       );
+      this.embedding
+        .upsertOne(
+          "announcement",
+          newsDoc._id.toString(),
+          `${newsDoc.title}\n${newsDoc.category}\n${newsDoc.content}`,
+        )
+        .catch((err) =>
+          logger.error("Embedding Failed", newsDoc._id.toString(), err.message),
+        );
     }
-    if (status === "archived") {
+    if (status === "archived" && id) {
       newsDoc = await this.model.findOneAndUpdate(
         { _id: id },
         { status: status },
         { new: true },
       );
+      this.embedding
+        .deleteOne("announcement", id)
+        .catch((err) =>
+          logger.error("Error deleting embedding: ", id, err.message),
+        );
     }
     if (!newsDoc) throw ApiError.notFound("News not found");
     logger.info(`REQUEST ID : ${id} updated to ${status}`);

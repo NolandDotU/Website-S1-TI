@@ -27,10 +27,10 @@ class ChatHistoryService {
       try {
         return verifyToken(accessToken).id;
       } catch (error: any) {
-        if (error.name === 'TokenExpiredError') {
-          console.warn('Access token expired, try refresh token...');
+        if (error.name === "TokenExpiredError") {
+          console.warn("Access token expired, try refresh token...");
         } else {
-          console.error('Access token not valid: ', error.message);
+          console.error("Access token not valid: ", error.message);
         }
       }
     }
@@ -39,7 +39,7 @@ class ChatHistoryService {
       try {
         return verifyToken(refreshToken, true).id;
       } catch (error: any) {
-        console.error('Refresh token failed to validate: ', error.message);
+        console.error("Refresh token failed to validate: ", error.message);
       }
     }
 
@@ -138,7 +138,10 @@ class ChatHistoryService {
       .lean();
   }
 
-  async mergeGuestHistoryToUser(guestId: string, userId: string): Promise<void> {
+  async mergeGuestHistoryToUser(
+    guestId: string,
+    userId: string,
+  ): Promise<void> {
     if (!guestId || !userId) return;
 
     try {
