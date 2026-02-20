@@ -14,6 +14,9 @@ export class ModelService {
     if (!this.apiKey || !this.baseUrl || !this.model) {
       throw new Error("Missing OpenRouter config");
     }
+    logger.info(
+      `[ModelService] initialized provider=openrouter model="${this.model}" baseUrl="${this.baseUrl}"`,
+    );
   }
 
   async generateStreamedResponse(
@@ -106,7 +109,7 @@ export class ModelService {
       );
     } catch (err: any) {
       throw new Error(
-        `OpenRouter request failed: ${err.response?.status || err.message}`,
+        `OpenRouter request failed: ${err.message}`,
       );
     }
 

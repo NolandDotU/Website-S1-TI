@@ -103,13 +103,6 @@ export class EmbeddingService {
     limit = 5,
     minScore = 0.3,
   ): Promise<SematicMatch[]> {
-    logger.debug(
-      `Starting semantic search with query: "${query}", tableName: ${tableName}, limit: ${limit}, minScore: ${minScore}`,
-    );
-    logger.debug(`USE_ATLAS_VECTOR_SEARCH: ${env.USE_ATLAS_VECTOR_SEARCH}`);
-    logger.debug(`Embedding dimension: ${env.EMBEDDING_DIMENSION}`);
-    logger.debug(`limit ${limit}`);
-    logger.debug(`minScore ${minScore}`);
     if (env.USE_ATLAS_VECTOR_SEARCH === true) {
       return this._searchAtlas(query, tableName, limit, minScore);
     }
@@ -153,7 +146,8 @@ export class EmbeddingService {
       },
     ]);
 
-    return results.filter((r) => r.similarity >= minScore);
+    const filtered = results.filter((r) => r.similarity >= minScore);
+    return filtered;
   }
 
   // ─── Fallback: Cosine Similarity ────────────────────────────────────────────
@@ -169,20 +163,25 @@ export class EmbeddingService {
 
     const docs = await EmbeddingModel.find(
       { tableName: { $in: tableName } },
-      { rowId: 1, tableName: 1, vector: 1, _id: 0 },
-    ).lean<{ rowId: string; tableName: TableName; vector: number[] }[]>();
+      { rowId: 1, tableName: 1, content: 1, vector: 1, _id: 0 },
+    ).lean<
+      { rowId: string; tableName: TableName; content: string; vector: number[] }[]
+    >();
 
-    // 🔎 DEBUG NORMALIZATION CHECK
-    if (docs.length > 0) {
-      const norm = Math.sqrt(docs[0].vector.reduce((sum, v) => sum + v * v, 0));
-      console.log("Vector norm sample:", norm);
-    }
+    const scored = docs.map((doc) => ({
+      rowId: doc.rowId,
+      tableName: doc.tableName,
+      contentSnippet: (doc.content || "").slice(0, 80),
+      similarity: cosineSimilarity(queryVector, doc.vector),
+    }));
 
-    return docs
+    const ranked = scored.sort((a, b) => b.similarity - a.similarity);
+
+    return ranked
       .map((doc) => ({
         rowId: doc.rowId,
         tableName: doc.tableName,
-        similarity: cosineSimilarity(queryVector, doc.vector),
+        similarity: doc.similarity,
       }))
       .filter((doc) => doc.similarity >= minScore)
       .sort((a, b) => b.similarity - a.similarity)

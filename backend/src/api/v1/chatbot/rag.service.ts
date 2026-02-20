@@ -32,37 +32,43 @@ export class RagService {
     };
   }
 
-  private handleSmallTalk(query: string): string | null {
-    const q = query.toLowerCase().trim();
+  private intents = [
+    {
+      patterns: ["halo", "hai", "hello", "hi", "hallo", "yuhu", "woi"],
+      response: () =>
+        `Halo👋! Saya ${this.identity.name}, ${this.identity.role}. Ada yang bisa saya bantu terkait informasi Program Studi Teknik Informatika?🤔`,
+    },
+    {
+      patterns: ["siapa kamu", "nama kamu", "kamu siapa"],
+      response: () =>
+        `Saya ${this.identity.name}, ${this.identity.role}😊.`,
+    },
+    {
+      patterns: ["pembuat kamu", "developer", "siapa yang buat", "dibuat oleh"],
+      response: () =>
+        `Saya dikembangkan oleh ${this.identity.department} di ${this.identity.university}🏫.`,
+    },
+    {
+      patterns: ["terima kasih", "makasih", "thanks", "thx", "ty", "thank you", "thank u", "terimakasih"],
+      response: () =>
+        `Sama-sama. Senang bisa membantu🤗☺️.`,
+    },
+  ];
 
-    if (
-      /^(halo+|hai+|hi+|hello+|hey+|bro+|pak+|chat+)(\s.*)?[!.?]*$/i.test(q)
-    ) {
-      return "Halo! Ada yang bisa saya bantu terkait informasi Program Studi Teknik Informatika?";
-    }
-
-    if (
-      /^terima kasih[!.?]*$/i.test(q) ||
-      /^makasih[!.?]*$/i.test(q) ||
-      /^thanks[!.?]*$/i.test(q) ||
-      /^thx[!.?]*$/i.test(q) ||
-      /^ty[!.?]*$/i.test(q)
-    ) {
-      return "Sama-sama. Senang bisa membantu.";
-    }
-
-    return null;
+  private normalize(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .trim();
   }
 
-  private handleIdentityQuery(query: string): string | null {
-    const q = query.toLowerCase();
+  private handleIntent(query: string): string | null {
+    const q = this.normalize(query);
 
-    if (q.includes("siapa kamu") || q.includes("nama kamu")) {
-      return `Halo! Saya ${this.identity.name}, ${this.identity.role}.`;
-    }
-
-    if (q.includes("pembuat kamu") || q.includes("developer")) {
-      return `Saya dikembangkan oleh ${this.identity.department} di ${this.identity.university}.`;
+    for (const intent of this.intents) {
+      if (intent.patterns.some((p) => q.includes(p))) {
+        return intent.response();
+      }
     }
 
     return null;
@@ -106,21 +112,24 @@ export class RagService {
     const historyText =
       history.length > 0
         ? history
-            .map((item) =>
-              item.role === "user"
-                ? `Pengguna: ${item.content}`
-                : `Asisten: ${item.content}`,
-            )
-            .join("\n")
+          .map((item) =>
+            item.role === "user"
+              ? `Pengguna: ${item.content}`
+              : `Asisten: ${item.content}`,
+          )
+          .join("\n")
         : "Belum ada riwayat sebelumnya.";
 
     return `
 Anda adalah ${id.name}, ${id.role} di ${id.department}, ${id.university}.
 
-Gunakan bahasa Indonesia yang sopan, jelas, dan profesional.
-Jawaban harus sepenuhnya berdasarkan informasi yang tersedia pada DATA.
-Jangan menambahkan asumsi atau informasi di luar DATA.
-Jika informasi tidak cukup, sampaikan bahwa data yang tersedia belum memadai untuk menjawab pertanyaan.
+PERATURAN WAJIB:
+- Jawaban harus sepenuhnya berdasarkan informasi yang tersedia pada DATA.
+- Dilarang menambahkan asumsi atau informasi di luar DATA.
+- Jika DATA kosong atau tidak relevan, jawab: "Saya tidak menemukan informasi tersebut pada data yang tersedia."
+
+Bahasa: ${id.language}
+Tone: ${id.tone}
 
 RIWAYAT:
 ${historyText}
@@ -131,7 +140,8 @@ ${context}
 PERTANYAAN:
 ${query}
 
-Berikan jawaban yang ringkas namun informatif.
+JAWABAN: 
+Berikan jawaban yang ringkas namun informatif (Boleh tambahkan emote jika perlu).
 `;
   }
 
@@ -140,14 +150,9 @@ Berikan jawaban yang ringkas namun informatif.
     onChunk: (chunk: string) => void,
     history: HistoryMessage[] = [],
   ): Promise<void> {
-    const smallTalkReply = this.handleSmallTalk(userQuery);
-    if (smallTalkReply) {
-      onChunk(smallTalkReply);
-      return;
-    }
-    const identityReply = this.handleIdentityQuery(userQuery);
-    if (identityReply) {
-      onChunk(identityReply);
+    const intentsReply = this.handleIntent(userQuery);
+    if (intentsReply) {
+      onChunk(intentsReply);
       return;
     }
 
@@ -168,8 +173,8 @@ Berikan jawaban yang ringkas namun informatif.
     userQuery: string,
     history: HistoryMessage[] = [],
   ): Promise<string> {
-    const identityReply = this.handleIdentityQuery(userQuery);
-    if (identityReply) return identityReply;
+    const intentsReply = this.handleIntent(userQuery);
+    if (intentsReply) return intentsReply;
 
     const context = await this.retrieveSemanticContext(userQuery);
     if (!context) {

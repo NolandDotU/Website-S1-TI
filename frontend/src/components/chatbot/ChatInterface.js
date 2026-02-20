@@ -123,8 +123,8 @@ export function ChatInterface({ isModal = false, theme }) {
 
     const displayMessages = welcomeMessage ? [welcomeMessage, ...messages] : messages;
     return (
-        <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"} overflow-y-auto scroll-smooth`}>
-            <div className={`flex-1 p-4
+        <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"} overflow-hidden`}>
+            <div className={`flex-1 min-h-0 overflow-y-auto scroll-smooth p-4 hide-scrollbar
                 ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
                 {displayMessages.map((m) => (
                     <MessageBubble key={m.id} message={m} theme={theme} />
@@ -136,7 +136,7 @@ export function ChatInterface({ isModal = false, theme }) {
 
                 <div ref={messageEndRef} />
             </div>
-            <div className={`pb-3 rounded-lg
+            <div className={`sticky bottom-0 z-10 pb-3 rounded-lg
                 ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
                 <InputArea onSendMessage={handleSendMessage} isLoading={loading} theme={theme} />
             </div>

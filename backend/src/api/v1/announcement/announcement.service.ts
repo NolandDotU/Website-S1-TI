@@ -332,10 +332,33 @@ export class AnnouncementService {
   }
 
   async publishMany() {
+    const now = new Date();
+    const scheduledAnnouncements = await this.model.find({
+      status: "scheduled",
+      scheduleDate: { $lte: now },
+    });
+
+    if (!scheduledAnnouncements.length) return 0;
+
+    const ids = scheduledAnnouncements.map((doc) => doc._id);
     const updated = await this.model.updateMany(
-      { status: "scheduled" },
-      { status: "published" },
+      { _id: { $in: ids } },
+      { status: "published", publishDate: now },
     );
+
+    setImmediate(() => {
+      scheduledAnnouncements.forEach((doc) => {
+        this.embedding
+          .upsertOne(
+            "announcement",
+            doc._id.toString(),
+            `${doc.title}\n${doc.category}\n${doc.content}`,
+          )
+          .catch((err) =>
+            logger.error("Embedding Failed", doc._id.toString(), err.message),
+          );
+      });
+    });
 
     return updated.modifiedCount;
   }

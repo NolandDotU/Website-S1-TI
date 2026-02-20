@@ -73,7 +73,7 @@ class ChatHistoryService {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      ...(userId ? { maxAge: 30 * 24 * 60 * 60 * 1000 } : {}), // guest: session cookie 1 bulan
     });
 
     if (userId) {
@@ -93,7 +93,7 @@ class ChatHistoryService {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      // session cookie: clear on browser close
     });
 
     return {
