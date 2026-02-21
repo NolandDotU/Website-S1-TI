@@ -7,13 +7,14 @@ export const getAllHistory = async (
 ) => {
   const isAdmin = user.role === "admin" ? true : false;
   try {
-    let response;
     if (isAdmin) {
-      response = await api.get(
+      const response = await api.get(
         `/history/?limit=${limit}&page=${page}&search=${search}`,
       );
+      return response.data;
     }
-    response = await api.get(
+
+    const response = await api.get(
       `/history/user/?limit=${limit}&page=${page}&search=${search}`,
     );
     return response.data;

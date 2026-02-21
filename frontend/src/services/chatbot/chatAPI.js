@@ -27,6 +27,13 @@ export const streamChat = (
     es.onmessage = (evt) => {
         try {
             const data = JSON.parse(evt.data);
+
+            if (data?.error) {
+                onError(new Error(data?.message || "Streaming failed"));
+                es.close();
+                return;
+            }
+
             if (data.chunk) onChunk(data.chunk);
             if (data.done) {
                 onDone();
@@ -34,11 +41,13 @@ export const streamChat = (
             }
         } catch (err) {
             console.error("SSE parse error: ", err);
+            onError(new Error("Invalid stream payload from server"));
+            es.close();
         }
     };
 
     es.onerror = (err) => {
-        onError(err);
+        onError(new Error("Stream connection failed or interrupted"));
         es.close();
     };
 

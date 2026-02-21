@@ -2,6 +2,7 @@ import express from "express";
 import { ragServiceInstance } from "./rag.service";
 import { wlcMessage } from "./welcomeMessage";
 import { chatHistoryService } from "./chatHistory.service";
+import { logger } from "../../../utils";
 
 const router = express.Router();
 
@@ -9,8 +10,10 @@ router.get("/stream", async (req, res) => {
   const query = req.query.message as string;
 
   if (!query) {
-    res.status(400).end();
-    return;
+    return res.status(400).json({
+      status: "FAILED",
+      message: "message query param is required",
+    });
   }
 
   res.setHeader("Content-Type", "text/event-stream");
@@ -57,7 +60,18 @@ router.get("/stream", async (req, res) => {
 
     res.write(`data: ${JSON.stringify({ done: true, sessionId })}\n\n`);
   } catch (err) {
-    res.write(`data: ${JSON.stringify({ error: true })}\n\n`);
+    const message =
+      err instanceof Error ? err.message : "Internal server error";
+
+    logger.error("RAG stream error", {
+      error: message,
+      path: req.originalUrl,
+      method: req.method,
+      sessionId: req.query.session_id,
+    });
+
+    res.write(`data: ${JSON.stringify({ error: true, message })}\n\n`);
+    res.write(`data: ${JSON.stringify({ done: true, failed: true })}\n\n`);
   } finally {
     res.end();
   }

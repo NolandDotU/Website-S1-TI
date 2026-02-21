@@ -117,7 +117,18 @@ export function ChatInterface({ isModal = false, theme }) {
                 });
 
                 setLoading(false);
-            }, () => setLoading(false), () => setLoading(false)
+            },
+            () => setLoading(false),
+            (error) => {
+                setLoading(false);
+                toast.error(
+                    error?.message || "Failed to get response from chatbot.",
+                    {
+                        duration: 4000,
+                        position: "top-center",
+                    }
+                );
+            }
         );
     };
 
