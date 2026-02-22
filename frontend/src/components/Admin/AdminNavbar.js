@@ -18,6 +18,7 @@ import {
   HistoryIcon,
   UserCog2,
   Building2Icon,
+  BookText,
 } from "lucide-react";
 
 export const AdminNavbar = () => {
@@ -86,6 +87,11 @@ export const AdminNavbar = () => {
       icon: Building2Icon,
       path: "/cms/partners",
       label: "Company Partners",
+    },
+    {
+      icon: BookText,
+      path: "/cms/knowledge",
+      label: "Knowledge",
     },
     // {
     //   icon: Settings,

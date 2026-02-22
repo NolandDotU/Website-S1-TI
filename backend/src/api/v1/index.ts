@@ -8,6 +8,7 @@ import historyRoutes from "./history/history.routes";
 import dashboardRoutes from "./dashboard/dashboard.routes";
 import userRoutes from "./users/user.routes";
 import partnerRoutes from "./partner/partner.routes";
+import knowledgeRoutes from "./knowledge/knowledge.routes";
 
 import ragRoutes from "./chatbot/rag.routes";
 
@@ -25,5 +26,6 @@ router.use("/history", historyRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/user", userRoutes);
 router.use("/partners", partnerRoutes);
+router.use("/knowledge", knowledgeRoutes);
 
 export default router;

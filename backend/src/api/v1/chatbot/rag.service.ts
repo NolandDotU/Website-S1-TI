@@ -77,7 +77,7 @@ export class RagService {
   private async retrieveSemanticContext(query: string): Promise<string> {
     const matches = await EmbeddingServiceInstance.semanticSearch(
       query,
-      ["announcement", "lecturer", "partner"],
+      ["announcement", "lecturer", "partner", "knowledge"],
       5,
       0.1,
     );

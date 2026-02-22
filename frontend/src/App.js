@@ -24,6 +24,7 @@ import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
 import { UserManagement } from "./pages/admin/modulUser/ListUsers";
 import ListPartners from "./pages/admin/modulPartners/listPartners";
+import KnowledgeManagement from "./pages/admin/modulKnowledge/listKnowledge";
 import DashboardDosen from "./pages/dosen/dashboard.dosen";
 
 import { ChatModal } from "./components/chatbot/ChatModal";
@@ -104,6 +105,7 @@ function App() {
             <Route path="highlight" element={<HighlightManage />} />
             <Route path="history" element={<History />} />
             <Route path="partners" element={<ListPartners />} />
+            <Route path="knowledge" element={<KnowledgeManagement />} />
             <Route path="berita" element={<Outlet />}>
               <Route index element={<ListAnnouncement />} />
               <Route path=":id" element={<PreviewAnnouncement />} />

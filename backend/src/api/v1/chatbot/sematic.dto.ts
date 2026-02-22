@@ -18,8 +18,17 @@ export interface PartnerDoc {
     link: string;
 }
 
+export interface KnowledgeDoc {
+    _id: any;
+    kind: "contact" | "service";
+    title: string;
+    content: string;
+    link?: string;
+    synonyms: string[];
+}
+
 export interface SematicMatch {
     rowId: string;
-    tableName: "announcement" | "lecturer" | "partner";
+    tableName: "announcement" | "lecturer" | "partner" | "knowledge";
     similarity: number;
 }

@@ -1,9 +1,11 @@
 import AnnouncementModel from "../../../model/AnnouncementModel";
 import { LecturerModel } from "../../../model/lecturerModel";
 import PartnersModel from "../../../model/partnersModel";
+import KnowledgeModel from "../../../model/knowledgeModel";
 import { fetchByIdsPreserveOrder } from "./fetchByIdsPreserveOrder.utils";
 import {
   AnnouncementDoc,
+  KnowledgeDoc,
   LecturerDoc,
   PartnerDoc,
   SematicMatch,
@@ -60,6 +62,24 @@ Keahlian: ${d.expertise}`
         `Partner: ${d.company}
 Link: ${d.link}`
       )
+    );
+  }
+
+  if (grouped.knowledge) {
+    const docs = await fetchByIdsPreserveOrder<KnowledgeDoc>(
+      KnowledgeModel,
+      grouped.knowledge
+    );
+
+    contexts.push(
+      ...docs.map(d => {
+        const kindLabel = d.kind === "contact" ? "Kontak" : "Layanan";
+        const synonymText = (d.synonyms || []).join(", ");
+
+        return `Jenis: ${kindLabel}
+Judul: ${d.title}
+Isi: ${d.content}${d.link ? `\nLink: ${d.link}` : ""}${synonymText ? `\nSinonim: ${synonymText}` : ""}`;
+      })
     );
   }
 
