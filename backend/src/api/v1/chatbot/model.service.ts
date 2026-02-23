@@ -2,57 +2,156 @@ import axios from "axios";
 import { env } from "../../../config/env";
 import { logger } from "../../../utils";
 
+export type ModelRequestMeta = {
+  model: string;
+  attemptedModels: string[];
+  totalAttempts: number;
+  fallbackUsed: boolean;
+  fallbackCount: number;
+};
+
 export class ModelService {
   private apiKey = env.OPENROUTER_API_KEY;
   private baseUrl = env.OPENROUTER_BASE_URL;
-  private model = env.OPENROUTER_MODEL;
+  private models: string[];
+  private activeModelIndex = 0;
 
   private systemPrompt =
     "Anda adalah Mr. Wacana, asisten virtual Program Studi Teknologi Informasi UKSW. Jawablah dengan sopan dan informatif dalam Bahasa Indonesia.";
 
   constructor() {
-    if (!this.apiKey || !this.baseUrl || !this.model) {
+    const primaryModel = env.OPENROUTER_MODEL?.trim();
+    const fallbackModels =
+      env.OPENROUTER_FALLBACK_MODELS
+        ?.split(",")
+        .map((model) => model.trim())
+        .filter(Boolean) ?? [];
+
+    this.models = Array.from(new Set([primaryModel, ...fallbackModels])).filter(
+      Boolean,
+    ) as string[];
+
+    if (!this.apiKey || !this.baseUrl || this.models.length === 0) {
       throw new Error("Missing OpenRouter config");
     }
+
     logger.info(
-      `[ModelService] initialized provider=openrouter model="${this.model}" baseUrl="${this.baseUrl}"`,
+      `[ModelService] initialized provider=openrouter models="${this.models.join(",")}" activeModel="${this.getActiveModel()}" baseUrl="${this.baseUrl}"`,
+    );
+  }
+
+  private getActiveModel(): string {
+    return this.models[this.activeModelIndex];
+  }
+
+  private getErrorDetail(err: any): string {
+    return err?.response?.status
+      ? `${err.response.status} ${err.response.statusText || ""}`.trim()
+      : err?.code || err?.message || "unknown_error";
+  }
+
+  private isRetryableOpenRouterError(err: any): boolean {
+    const status = err?.response?.status;
+    const code = err?.code;
+
+    if (status && [408, 409, 425, 429, 500, 502, 503, 504].includes(status)) {
+      return true;
+    }
+
+    return ["ECONNABORTED", "ETIMEDOUT", "ECONNRESET", "EAI_AGAIN"].includes(
+      code,
+    );
+  }
+
+  private trySwitchToNextModel(reason: string): boolean {
+    const nextIndex = this.activeModelIndex + 1;
+    if (nextIndex >= this.models.length) return false;
+
+    const previousModel = this.getActiveModel();
+    this.activeModelIndex = nextIndex;
+    const nextModel = this.getActiveModel();
+
+    logger.warn(
+      `[ModelService] switching model from="${previousModel}" to="${nextModel}" reason="${reason}"`,
+    );
+    return true;
+  }
+
+  private async requestWithModelFallback<T>(
+    operationType: "stream" | "non-stream",
+    requestFn: (model: string) => Promise<T>,
+  ): Promise<{ result: T; meta: ModelRequestMeta }> {
+    let lastError: any;
+    const attemptedModels: string[] = [];
+
+    for (let attempt = 1; attempt <= this.models.length; attempt++) {
+      const currentModel = this.getActiveModel();
+      attemptedModels.push(currentModel);
+
+      try {
+        const result = await requestFn(currentModel);
+        return {
+          result,
+          meta: {
+            model: currentModel,
+            attemptedModels: [...attemptedModels],
+            totalAttempts: attemptedModels.length,
+            fallbackUsed: attemptedModels.length > 1,
+            fallbackCount: Math.max(0, attemptedModels.length - 1),
+          },
+        };
+      } catch (err: any) {
+        const errorDetail = this.getErrorDetail(err);
+        lastError = err;
+
+        logger.error(
+          `[ModelService] ${operationType} request failed attempt=${attempt}/${this.models.length} model="${currentModel}" detail="${errorDetail}"`,
+        );
+
+        if (!this.isRetryableOpenRouterError(err)) break;
+
+        const switched = this.trySwitchToNextModel(errorDetail);
+        if (!switched) break;
+      }
+    }
+
+    throw new Error(
+      `OpenRouter ${operationType} request failed: ${this.getErrorDetail(lastError)}`,
     );
   }
 
   async generateStreamedResponse(
     prompt: string,
     onChunk: (chunk: string) => void,
+    onMeta?: (meta: ModelRequestMeta) => void,
   ): Promise<void> {
-    let response;
-
-    try {
-      response = await axios.post(
-        `${this.baseUrl}/chat/completions`,
-        {
-          model: this.model,
-          messages: [
-            { role: "system", content: this.systemPrompt },
-            { role: "user", content: prompt },
-          ],
-          temperature: 0.5,
-          stream: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": env.APP_URL,
-            "X-Title": "S1 TI Chatbot",
+    const { result: response, meta } = await this.requestWithModelFallback(
+      "stream",
+      async (model) =>
+        axios.post(
+          `${this.baseUrl}/chat/completions`,
+          {
+            model,
+            messages: [
+              { role: "system", content: this.systemPrompt },
+              { role: "user", content: prompt },
+            ],
+            temperature: 0.5,
+            stream: true,
           },
-          responseType: "stream",
-          timeout: 120_000,
-        },
-      );
-    } catch (err: any) {
-      throw new Error(
-        `OpenRouter request failed: ${err.response?.status || err.message}`,
-      );
-    }
+          {
+            headers: {
+              Authorization: `Bearer ${this.apiKey}`,
+              "Content-Type": "application/json",
+              "HTTP-Referer": env.APP_URL,
+              "X-Title": "S1 TI Chatbot",
+            },
+            responseType: "stream",
+            timeout: 120_000,
+          },
+        ),
+    );
+    onMeta?.(meta);
 
     const stream = response.data as NodeJS.ReadableStream;
     let buffer = "";
@@ -82,36 +181,36 @@ export class ModelService {
     }
   }
 
-  async generateResponseOnce(prompt: string): Promise<string> {
-    let res;
-
-    try {
-      res = await axios.post(
-        `${this.baseUrl}/chat/completions`,
-        {
-          model: this.model,
-          messages: [
-            { role: "system", content: this.systemPrompt },
-            { role: "user", content: prompt },
-          ],
-          temperature: 0.7,
-          stream: false,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.apiKey}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": env.APP_URL,
-            "X-Title": "S1 TI Chatbot",
+  async generateResponseOnce(
+    prompt: string,
+    onMeta?: (meta: ModelRequestMeta) => void,
+  ): Promise<string> {
+    const { result: res, meta } = await this.requestWithModelFallback(
+      "non-stream",
+      async (model) =>
+        axios.post(
+          `${this.baseUrl}/chat/completions`,
+          {
+            model,
+            messages: [
+              { role: "system", content: this.systemPrompt },
+              { role: "user", content: prompt },
+            ],
+            temperature: 0.7,
+            stream: false,
           },
-          timeout: 120_000,
-        },
-      );
-    } catch (err: any) {
-      throw new Error(
-        `OpenRouter request failed: ${err.message}`,
-      );
-    }
+          {
+            headers: {
+              Authorization: `Bearer ${this.apiKey}`,
+              "Content-Type": "application/json",
+              "HTTP-Referer": env.APP_URL,
+              "X-Title": "S1 TI Chatbot",
+            },
+            timeout: 120_000,
+          },
+        ),
+    );
+    onMeta?.(meta);
 
     const content = res.data?.choices?.[0]?.message?.content;
     if (!content) {

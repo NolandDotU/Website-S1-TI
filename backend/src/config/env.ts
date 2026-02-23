@@ -95,6 +95,7 @@ const envSchema = z.object({
   OPENROUTER_API_KEY: z.string().optional(),
   // OPENROUTER_MODEL: z.string().default("stepfun/step-3.5-flash:free").optional(),
   OPENROUTER_MODEL: z.string().default("google/gemma-3-27b-it:free").optional(),
+  OPENROUTER_FALLBACK_MODELS: z.string().default("").optional(),
   OPENROUTER_BASE_URL: z
     .string()
     .url()

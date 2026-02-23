@@ -12,6 +12,10 @@ import {
   History,
   ArrowRight,
   ListRestart,
+  Bot,
+  Timer,
+  ShieldAlert,
+  Shuffle,
 } from "lucide-react";
 import { getAllHistory, getdashboardData } from "../../services/api";
 import { StatCard } from "../../components/Admin/dashboard/StatCard";
@@ -64,11 +68,14 @@ const Dashboard = () => {
     announcements,
     userPercentage,
     announcementPercentage,
+    chatbotRequestPercentage,
     topFiveAnn,
+    chatbot,
   } = dashboardData;
   const userTrend = parseFloat(userPercentage) > 0 ? "up" : "down";
   const announcementTrend =
     parseFloat(announcementPercentage) > 0 ? "up" : "down";
+  const chatbotTrend = parseFloat(chatbotRequestPercentage) > 0 ? "up" : "down";
 
   const totalPublished =
     typeof announcements.totalPublishedAnnouncement === "object"
@@ -129,6 +136,43 @@ const Dashboard = () => {
           transition={{ delay: 0.2 }}>
           <MostViewedCard announcement={announcements.mostViewedThisMonth} />
         </motion.div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          title="Request Chatbot"
+          value={chatbot?.totalRequests || 0}
+          subtitle={`${chatbot?.uniqueSessions || 0} sesi unik`}
+          icon={Bot}
+          trend={chatbotTrend}
+          trendValue={Math.abs(parseFloat(chatbotRequestPercentage || "0")).toFixed(2)}
+          bgColor="bg-cyan-100 dark:bg-cyan-900/30"
+          iconColor="text-cyan-700 dark:text-cyan-300"
+        />
+        <StatCard
+          title="Success Rate Chatbot"
+          value={Math.round(chatbot?.successRate || 0)}
+          subtitle={`${chatbot?.successfulRequests || 0} sukses`}
+          icon={Timer}
+          bgColor="bg-emerald-100 dark:bg-emerald-900/30"
+          iconColor="text-emerald-700 dark:text-emerald-300"
+        />
+        <StatCard
+          title="Error Rate Chatbot"
+          value={Math.round(chatbot?.errorRate || 0)}
+          subtitle={`${chatbot?.failedRequests || 0} gagal`}
+          icon={ShieldAlert}
+          bgColor="bg-rose-100 dark:bg-rose-900/30"
+          iconColor="text-rose-700 dark:text-rose-300"
+        />
+        <StatCard
+          title="Fallback Model"
+          value={Math.round(chatbot?.fallbackRate || 0)}
+          subtitle={`${chatbot?.fallbackRequests || 0} request fallback`}
+          icon={Shuffle}
+          bgColor="bg-amber-100 dark:bg-amber-900/30"
+          iconColor="text-amber-700 dark:text-amber-300"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

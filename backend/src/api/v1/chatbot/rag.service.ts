@@ -1,5 +1,5 @@
 import { EmbeddingServiceInstance } from "../embeddings/embedding.service";
-import { modelServiceInstance } from "./model.service";
+import { modelServiceInstance, type ModelRequestMeta } from "./model.service";
 import { buildSemanticContext } from "./buildSematicContext.utils";
 
 type ChatbotIdentity = {
@@ -15,6 +15,11 @@ type ChatbotIdentity = {
 type HistoryMessage = {
   role: "user" | "assistant";
   content: string;
+};
+
+export type RagQueryMeta = {
+  source: "intent" | "semantic_no_context" | "openrouter";
+  model?: ModelRequestMeta;
 };
 
 export class RagService {
@@ -149,11 +154,11 @@ Berikan jawaban yang ringkas namun informatif (Boleh tambahkan emote jika perlu)
     userQuery: string,
     onChunk: (chunk: string) => void,
     history: HistoryMessage[] = [],
-  ): Promise<void> {
+  ): Promise<RagQueryMeta> {
     const intentsReply = this.handleIntent(userQuery);
     if (intentsReply) {
       onChunk(intentsReply);
-      return;
+      return { source: "intent" };
     }
 
     const context = await this.retrieveSemanticContext(userQuery);
@@ -162,27 +167,41 @@ Berikan jawaban yang ringkas namun informatif (Boleh tambahkan emote jika perlu)
       onChunk(
         "Saya belum menemukan informasi yang sesuai pada data yang tersedia.",
       );
-      return;
+      return { source: "semantic_no_context" };
     }
 
     const prompt = this.buildPrompt(userQuery, context, history);
-    await modelServiceInstance.generateStreamedResponse(prompt, onChunk);
+    let modelMeta: ModelRequestMeta | undefined;
+    await modelServiceInstance.generateStreamedResponse(prompt, onChunk, (meta) => {
+      modelMeta = meta;
+    });
+    return { source: "openrouter", model: modelMeta };
   }
 
   async queryOnce(
     userQuery: string,
     history: HistoryMessage[] = [],
-  ): Promise<string> {
+  ): Promise<{ answer: string; meta: RagQueryMeta }> {
     const intentsReply = this.handleIntent(userQuery);
-    if (intentsReply) return intentsReply;
+    if (intentsReply) {
+      return { answer: intentsReply, meta: { source: "intent" } };
+    }
 
     const context = await this.retrieveSemanticContext(userQuery);
     if (!context) {
-      return "Maaf, saya tidak menemukan informasi tersebut di database kampus. (non-stream)";
+      return {
+        answer:
+          "Maaf, saya tidak menemukan informasi tersebut di database kampus. (non-stream)",
+        meta: { source: "semantic_no_context" },
+      };
     }
 
     const prompt = this.buildPrompt(userQuery, context, history);
-    return modelServiceInstance.generateResponseOnce(prompt);
+    let modelMeta: ModelRequestMeta | undefined;
+    const answer = await modelServiceInstance.generateResponseOnce(prompt, (meta) => {
+      modelMeta = meta;
+    });
+    return { answer, meta: { source: "openrouter", model: modelMeta } };
   }
 }
 

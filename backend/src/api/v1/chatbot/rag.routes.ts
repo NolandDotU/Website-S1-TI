@@ -3,8 +3,25 @@ import { ragServiceInstance } from "./rag.service";
 import { wlcMessage } from "./welcomeMessage";
 import { chatHistoryService } from "./chatHistory.service";
 import { logger } from "../../../utils";
+import ChatbotRequestMetricModel from "../../../model/chatbotRequestMetricModel";
 
 const router = express.Router();
+
+const extractErrorCode = (err: unknown): string => {
+  const anyErr = err as any;
+  return (
+    anyErr?.response?.status?.toString() ||
+    anyErr?.code ||
+    anyErr?.name ||
+    "UNKNOWN_ERROR"
+  );
+};
+
+const extractErrorMessage = (err: unknown): string => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === "string") return err;
+  return "Internal server error";
+};
 
 router.get("/stream", async (req, res) => {
   const query = req.query.message as string;
@@ -20,48 +37,70 @@ router.get("/stream", async (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
 
+  const startedAt = Date.now();
+  let ownerType: "guest" | "user" | null = null;
+  let ownerId: string | null = null;
+  let sessionId: string | null = null;
+
   try {
-    const { ownerType, ownerId, sessionId } = chatHistoryService.resolveOwner(
+    const owner = chatHistoryService.resolveOwner(
       req,
       res,
     );
+    ownerType = owner.ownerType;
+    ownerId = owner.ownerId;
+    sessionId = owner.sessionId;
+
     const history = await chatHistoryService.getRecentMessages(
-      ownerType,
-      ownerId,
-      sessionId,
+      owner.ownerType,
+      owner.ownerId,
+      owner.sessionId,
     );
 
     await chatHistoryService.saveMessage({
-      ownerType,
-      ownerId,
-      sessionId,
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
       role: "user",
       content: query,
     });
 
     let fullAssistantReply = "";
 
-    await ragServiceInstance.queryStream(
+    const ragMeta = await ragServiceInstance.queryStream(
       query,
       (chunk) => {
         fullAssistantReply += chunk;
-        res.write(`data: ${JSON.stringify({ chunk, sessionId })}\n\n`);
+        res.write(`data: ${JSON.stringify({ chunk, sessionId: owner.sessionId })}\n\n`);
       },
       history,
     );
 
     await chatHistoryService.saveMessage({
-      ownerType,
-      ownerId,
-      sessionId,
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
       role: "assistant",
       content: fullAssistantReply,
     });
 
-    res.write(`data: ${JSON.stringify({ done: true, sessionId })}\n\n`);
+    await ChatbotRequestMetricModel.create({
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
+      mode: "stream",
+      status: "success",
+      source: ragMeta.source,
+      modelName: ragMeta.model?.model,
+      attemptedModels: ragMeta.model?.attemptedModels || [],
+      fallbackUsed: ragMeta.model?.fallbackUsed || false,
+      fallbackCount: ragMeta.model?.fallbackCount || 0,
+      durationMs: Date.now() - startedAt,
+    });
+
+    res.write(`data: ${JSON.stringify({ done: true, sessionId: owner.sessionId })}\n\n`);
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Internal server error";
+    const message = extractErrorMessage(err);
 
     logger.error("RAG stream error", {
       error: message,
@@ -69,6 +108,23 @@ router.get("/stream", async (req, res) => {
       method: req.method,
       sessionId: req.query.session_id,
     });
+
+    if (ownerType && ownerId && sessionId) {
+      await ChatbotRequestMetricModel.create({
+        ownerType,
+        ownerId,
+        sessionId,
+        mode: "stream",
+        status: "failed",
+        source: "openrouter",
+        attemptedModels: [],
+        fallbackUsed: false,
+        fallbackCount: 0,
+        durationMs: Date.now() - startedAt,
+        errorCode: extractErrorCode(err),
+        errorMessage: message,
+      });
+    }
 
     res.write(`data: ${JSON.stringify({ error: true, message })}\n\n`);
     res.write(`data: ${JSON.stringify({ done: true, failed: true })}\n\n`);
@@ -78,6 +134,11 @@ router.get("/stream", async (req, res) => {
 });
 
 router.post("/non-stream", async (req, res) => {
+  const startedAt = Date.now();
+  let ownerType: "guest" | "user" | null = null;
+  let ownerId: string | null = null;
+  let sessionId: string | null = null;
+
   try {
     const { query } = req.body;
 
@@ -88,41 +149,76 @@ router.post("/non-stream", async (req, res) => {
       });
     }
 
-    const { ownerType, ownerId, sessionId } = chatHistoryService.resolveOwner(
+    const owner = chatHistoryService.resolveOwner(
       req,
       res,
     );
+    ownerType = owner.ownerType;
+    ownerId = owner.ownerId;
+    sessionId = owner.sessionId;
+
     const history = await chatHistoryService.getRecentMessages(
-      ownerType,
-      ownerId,
-      sessionId,
+      owner.ownerType,
+      owner.ownerId,
+      owner.sessionId,
     );
 
     await chatHistoryService.saveMessage({
-      ownerType,
-      ownerId,
-      sessionId,
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
       role: "user",
       content: query,
     });
 
-    const answer = await ragServiceInstance.queryOnce(query, history);
+    const { answer, meta } = await ragServiceInstance.queryOnce(query, history);
 
     await chatHistoryService.saveMessage({
-      ownerType,
-      ownerId,
-      sessionId,
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
       role: "assistant",
       content: answer,
+    });
+
+    await ChatbotRequestMetricModel.create({
+      ownerType: owner.ownerType,
+      ownerId: owner.ownerId,
+      sessionId: owner.sessionId,
+      mode: "non-stream",
+      status: "success",
+      source: meta.source,
+      modelName: meta.model?.model,
+      attemptedModels: meta.model?.attemptedModels || [],
+      fallbackUsed: meta.model?.fallbackUsed || false,
+      fallbackCount: meta.model?.fallbackCount || 0,
+      durationMs: Date.now() - startedAt,
     });
 
     res.json({
       status: "OK",
       answer,
-      sessionId,
+      sessionId: owner.sessionId,
     });
   } catch (err: any) {
     console.error("RAG error:", err);
+
+    if (ownerType && ownerId && sessionId) {
+      await ChatbotRequestMetricModel.create({
+        ownerType,
+        ownerId,
+        sessionId,
+        mode: "non-stream",
+        status: "failed",
+        source: "openrouter",
+        attemptedModels: [],
+        fallbackUsed: false,
+        fallbackCount: 0,
+        durationMs: Date.now() - startedAt,
+        errorCode: extractErrorCode(err),
+        errorMessage: extractErrorMessage(err),
+      });
+    }
 
     res.status(500).json({
       status: "FAILED",
