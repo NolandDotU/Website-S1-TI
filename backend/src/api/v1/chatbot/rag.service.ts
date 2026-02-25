@@ -64,14 +64,31 @@ export class RagService {
     return text
       .toLowerCase()
       .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
+  }
+
+  private escapeRegex(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  private hasIntentPattern(normalizedQuery: string, rawPattern: string): boolean {
+    const pattern = this.normalize(rawPattern);
+    if (!pattern) return false;
+
+    // Match as whole word/phrase to avoid false positives, e.g. "hi" in "akhir".
+    const regex = new RegExp(
+      `(^|\\s)${this.escapeRegex(pattern).replace(/\s+/g, "\\s+")}(?=\\s|$)`,
+    );
+
+    return regex.test(normalizedQuery);
   }
 
   private handleIntent(query: string): string | null {
     const q = this.normalize(query);
 
     for (const intent of this.intents) {
-      if (intent.patterns.some((p) => q.includes(p))) {
+      if (intent.patterns.some((p) => this.hasIntentPattern(q, p))) {
         return intent.response();
       }
     }
