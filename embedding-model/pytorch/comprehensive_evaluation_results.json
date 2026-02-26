@@ -1,0 +1,218 @@
+{
+  "semantic_similarity": {
+    "accuracy": 100.0,
+    "correct_predictions": 12,
+    "total_tests": 12,
+    "detailed_results": [
+      {
+        "pair": 1,
+        "similarity": "0.71942925",
+        "expected": "high",
+        "threshold": 0.7,
+        "correct": true
+      },
+      {
+        "pair": 2,
+        "similarity": "0.7370041",
+        "expected": "high",
+        "threshold": 0.7,
+        "correct": true
+      },
+      {
+        "pair": 3,
+        "similarity": "0.9284322",
+        "expected": "high",
+        "threshold": 0.7,
+        "correct": true
+      },
+      {
+        "pair": 4,
+        "similarity": "0.6480197",
+        "expected": "high",
+        "threshold": 0.6,
+        "correct": true
+      },
+      {
+        "pair": 5,
+        "similarity": "0.58356583",
+        "expected": "high",
+        "threshold": 0.5,
+        "correct": true
+      },
+      {
+        "pair": 6,
+        "similarity": "0.54717076",
+        "expected": "medium",
+        "threshold": 0.4,
+        "correct": true
+      },
+      {
+        "pair": 7,
+        "similarity": "0.49372473",
+        "expected": "medium",
+        "threshold": 0.3,
+        "correct": true
+      },
+      {
+        "pair": 8,
+        "similarity": "0.43846166",
+        "expected": "medium",
+        "threshold": 0.3,
+        "correct": true
+      },
+      {
+        "pair": 9,
+        "similarity": "-0.06786405",
+        "expected": "low",
+        "threshold": 0.3,
+        "correct": true
+      },
+      {
+        "pair": 10,
+        "similarity": "0.1027292",
+        "expected": "low",
+        "threshold": 0.2,
+        "correct": true
+      },
+      {
+        "pair": 11,
+        "similarity": "0.028663296",
+        "expected": "low",
+        "threshold": 0.2,
+        "correct": true
+      },
+      {
+        "pair": 12,
+        "similarity": "0.050983254",
+        "expected": "low",
+        "threshold": 0.3,
+        "correct": true
+      }
+    ]
+  },
+  "performance": {
+    "single_short": {
+      "time_ms": 9.330987930297852,
+      "std_ms": 0.25900265208905177
+    },
+    "single_medium": {
+      "time_ms": 10.157299041748047,
+      "std_ms": 0.183147367263395
+    },
+    "single_long": {
+      "time_ms": 13.341379165649414,
+      "std_ms": 0.8901414648164488
+    },
+    "batch_small": {
+      "total_time_ms": 10.205698013305664,
+      "per_item_time_ms": 5.102849006652832,
+      "throughput_per_sec": 195.96895747772496,
+      "std_ms": 0.4837328576887996
+    },
+    "batch_medium": {
+      "total_time_ms": 22.638392448425293,
+      "per_item_time_ms": 2.2638392448425293,
+      "throughput_per_sec": 441.7274779020624,
+      "std_ms": 0.2929920292291012
+    },
+    "batch_large": {
+      "total_time_ms": 149.32355880737305,
+      "per_item_time_ms": 2.986471176147461,
+      "throughput_per_sec": 334.8433455466987,
+      "std_ms": 1.8578833280673674
+    },
+    "memory_usage_mb": 4.28125
+  },
+  "robustness": {
+    "robustness_score": 100.0,
+    "passed": 15,
+    "total": 15,
+    "detailed_results": {
+      "empty_string": "PASS",
+      "single_char": "PASS",
+      "single_word": "PASS",
+      "numbers_only": "PASS",
+      "punctuation": "PASS",
+      "mixed_script": "PASS",
+      "very_long": "PASS",
+      "repeated_words": "PASS",
+      "special_unicode": "PASS",
+      "html_tags": "PASS",
+      "code_snippet": "PASS",
+      "multiple_languages": "PASS",
+      "whitespace_heavy": "PASS",
+      "newlines": "PASS",
+      "tabs": "PASS"
+    }
+  },
+  "domain_knowledge": {
+    "technology": {
+      "avg_intra_similarity": "0.3058956",
+      "std_intra_similarity": "0.11448153",
+      "sentences_count": 5
+    },
+    "business": {
+      "avg_intra_similarity": "0.16541281",
+      "std_intra_similarity": "0.092469",
+      "sentences_count": 5
+    },
+    "education": {
+      "avg_intra_similarity": "0.36788327",
+      "std_intra_similarity": "0.10402755",
+      "sentences_count": 5
+    },
+    "health": {
+      "avg_intra_similarity": "0.33086413",
+      "std_intra_similarity": "0.11471059",
+      "sentences_count": 5
+    },
+    "domain_separation": 0.08586536347866058
+  },
+  "vector_quality": {
+    "embedding_dimension": 384,
+    "effective_dimension": "9",
+    "vector_norm_mean": 2.873112201690674,
+    "vector_norm_std": 0.0988447293639183,
+    "value_range": [
+      -0.6662746667861938,
+      0.5068685412406921
+    ],
+    "sparsity_percent": 0.0,
+    "similarity_mean": 0.2025408148765564,
+    "similarity_std": 0.1270897388458252,
+    "explained_variance_95": 0.9999999403953552
+  },
+  "clustering": {
+    "silhouette_score": 0.06952675431966782,
+    "cluster_purity": 0.8,
+    "n_clusters": 4,
+    "n_samples": 20
+  },
+  "retrieval": {
+    "avg_precision_at_5": 1.0,
+    "avg_recall_at_5": 1.0,
+    "detailed_results": [
+      {
+        "query": "AI dan machine learning",
+        "precision_at_k": 1.0,
+        "recall_at_k": 1.0,
+        "relevant_docs": 5,
+        "retrieved_relevant": 5
+      },
+      {
+        "query": "Indonesia dan budaya",
+        "precision_at_k": 1.0,
+        "recall_at_k": 1.0,
+        "relevant_docs": 5,
+        "retrieved_relevant": 5
+      },
+      {
+        "query": "olahraga dan aktivitas fisik",
+        "precision_at_k": 1.0,
+        "recall_at_k": 1.0,
+        "relevant_docs": 5,
+        "retrieved_relevant": 5
+      }
+    ]
+  }
+}

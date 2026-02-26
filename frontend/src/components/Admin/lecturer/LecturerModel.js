@@ -39,7 +39,9 @@ const LecturerModal = ({ isOpen, onClose, onSave, lecturer, mode }) => {
         photo: lecturer.photo || "",
         photoFile: null,
       });
-      setPhotoPreview(lecturer.photo ? env.BACKEND_URL + lecturer.photo : "");
+      setPhotoPreview(
+        lecturer.photo ? env.IMAGE_BASE_URL + lecturer.photo : "",
+      );
     } else {
       setFormData({
         username: "",

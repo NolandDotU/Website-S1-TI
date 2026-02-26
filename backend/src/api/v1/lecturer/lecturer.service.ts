@@ -281,7 +281,7 @@ export class LecturerService {
             `${lecturerDoc?.fullname}\n${lecturerDoc?.email}\n${lecturerDoc?.expertise}\n${lecturerDoc?.externalLink}`,
           )
           .catch((err) =>
-            logger.error("Embedding update Failed", id, err.massage),
+            logger.error("Embedding update Failed", id, err.message),
           );
       });
 
@@ -324,16 +324,19 @@ export class LecturerService {
 
   async delete(id: string, currentUser?: any): Promise<ILecturerResponse> {
     try {
-      const lecturerDoc = await this.model
-        .findOne({
-          _id: id,
-        })
-        .exec();
-      await this.userService.updateUser(
-        lecturerDoc?.email as string,
-        { role: "user" },
-        currentUser,
+      const lecturerDoc = await this.model.findOne({ _id: id }).exec();
+      const user = await this.userService.getUserByParam(
+        "email",
+        lecturerDoc?.email || "",
       );
+
+      if (user) {
+        await this.userService.updateUser(
+          lecturerDoc?.email as string,
+          { role: "user" },
+          currentUser,
+        );
+      }
       logger.info(`Deleting lecturer ${lecturerDoc}`);
       if (!lecturerDoc) {
         throw ApiError.notFound("Lecturer not found");

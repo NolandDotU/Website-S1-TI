@@ -1,0 +1,51 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+.eggs
+dist
+build
+.venv
+.venv-1
+venv
+env
+.env
+*.egg
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+*.cover
+tests
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project structure
+model
+docs
+eval
+examples
+.git
+.gitignore
+.gitattributes
+
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Other
+README.md
+*.md
+.dockerignore
+Dockerfile

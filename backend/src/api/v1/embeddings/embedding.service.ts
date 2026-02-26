@@ -79,10 +79,7 @@ export class EmbeddingService {
 
       return embedding.map(Number);
     } catch (err: any) {
-      console.error(
-        "Embedding service error:",
-        err.response?.data || err.message,
-      );
+      console.error("Embedding service error:", err);
       throw new Error(`Embedding service unavailable: ${err.message}`);
     }
   }
@@ -165,7 +162,12 @@ export class EmbeddingService {
       { tableName: { $in: tableName } },
       { rowId: 1, tableName: 1, content: 1, vector: 1, _id: 0 },
     ).lean<
-      { rowId: string; tableName: TableName; content: string; vector: number[] }[]
+      {
+        rowId: string;
+        tableName: TableName;
+        content: string;
+        vector: number[];
+      }[]
     >();
 
     const scored = docs.map((doc) => ({

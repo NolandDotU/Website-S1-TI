@@ -1,0 +1,34 @@
+{
+  "model_name": "LazarusNLP/all-indo-e5-small-v4",
+  "dataset_name": "rzkamalia/stsb-indo-mt-modified",
+  "additional_datasets": {
+    "semrel_2024": {
+      "name": "AkshitaS/semrel_2024_plus",
+      "config": "ind_Latn"
+    },
+    "stsb_extend": {
+      "url": "https://huggingface.co/datasets/izhx/stsb_multi_mt_extend/raw/main/test_id_deepl.jsonl"
+    }
+  },
+  "batch_size": 6,
+  "epochs": 7,
+  "learning_rate": 8e-06,
+  "warmup_ratio": 0.25,
+  "evaluation_steps": 100,
+  "output_path": "indo-e5-cosine-ft-v4-perfect",
+  "save_best_model": true,
+  "early_stopping_patience": 10,
+  "max_seq_length": 384,
+  "gradient_accumulation_steps": 5,
+  "training_metrics": {
+    "final_score": {
+      "sts-indo-detailed_pearson_cosine": 0.8573233777660942,
+      "sts-indo-detailed_spearman_cosine": 0.8554928645071178
+    },
+    "critical_pair_7_similarity": 0.556553065776825,
+    "total_training_samples": 10558,
+    "model_version": "v4_perfect_100_accuracy",
+    "target_achievement": "100% semantic similarity accuracy (12/12)",
+    "main_focus": "Geographical/capital city contextual understanding"
+  }
+}

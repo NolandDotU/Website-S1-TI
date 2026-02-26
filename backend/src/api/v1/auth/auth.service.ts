@@ -109,6 +109,8 @@ class AuthService {
   private roleMaker = (email: string) => {
     const domain = email.split("@")[1];
     if (email === "fti.hmp.s1.ti@uksw.edu") return "hmp";
+    if (email === "fti.hmp.s1.ti@adm.uksw.edu") return "hmp";
+    if (email === "fti.sekretaris.s1.ti@uksw.edu") return "admin";
     if (domain === "uksw.edu") return "dosen";
     if (domain === "student.uksw.edu") return "mahasiswa";
     return "user";

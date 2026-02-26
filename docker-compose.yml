@@ -142,6 +142,7 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       OPENROUTER_MODEL: ${OPENROUTER_MODEL}
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL}
+      EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-http://embedding-api}
     expose:
       - "5000"
     volumes:

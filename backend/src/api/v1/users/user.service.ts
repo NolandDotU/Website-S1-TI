@@ -21,47 +21,108 @@ export class UserService {
       lecturerService || new LecturerService(undefined, this);
   }
 
-  getAllUser = async (page = 1, limit = 10, search = "") => {
-    let cacheKey = "";
-    if (this.cache !== null && this.cache) {
-      const cacheVersion =
-        (await this.cache.get<string>("users:version")) || "0";
+  getUserByParam = async (param: string, value: string) => {
+    try {
+      let cacheKey = "";
 
-      if (cacheVersion)
-        cacheKey = `users:v${cacheVersion}:p${page}:l${limit}:s${search}`;
-      const cached = await this.cache.get<IUser[]>(cacheKey);
-      logger.debug(`Cache HIT: ${cacheKey}`);
-      logger.debug("Response:", cached);
-      if (cached) return cached;
-    }
-    const query = search
-      ? {
-          $or: [
-            { username: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-          ],
-          limit: limit,
-          skip: (page - 1) * limit,
+      if (this.cache !== null && this.cache) {
+        const cacheVersion =
+          (await this.cache.get<string>("users:version")) || "0";
+
+        cacheKey = `users:v${cacheVersion}:param:${param}:${value}`;
+        const cached = await this.cache.get<IUser>(cacheKey);
+
+        if (cached) {
+          logger.debug(`Cache HIT: ${cacheKey}`);
+          logger.debug("Response:", cached);
+          return cached;
         }
-      : {};
-    const [users, total] = await Promise.all([
-      this.model.find(query).sort({ username: 1 }).lean().exec(),
-      this.model.countDocuments(query).lean().exec(),
-    ]);
-    const response = {
-      users: users,
-      meta: {
-        page: page,
-        limit: limit,
-        total: total,
-        totalPage: Math.ceil(total / limit),
-      },
-    };
 
-    if (this.cache !== null)
-      await this.cache.set(cacheKey, response, 1 * 60 * 30);
-    logger.info("Response:", response);
-    return response;
+        logger.debug(`Cache MISS: ${cacheKey}`);
+      }
+
+      const query = { [param]: value };
+      const user = await this.model.findOne(query).lean().exec();
+
+      if (!user) {
+        logger.warn(`User not found: ${param}=${value}`);
+        return null;
+      }
+
+      if (this.cache !== null && this.cache && cacheKey)
+        await this.cache.set(cacheKey, user, 1 * 60 * 30);
+
+      logger.info(`User found: ${param}=${value}`);
+      return user;
+    } catch (error) {
+      logger.error(`getUserByParam error [${param}=${value}]:`, error);
+      throw new Error(
+        `Failed to fetch user by ${param}: ${(error as Error).message}`,
+      );
+    }
+  };
+
+  getAllUser = async (page = 1, limit = 10, search = "") => {
+    try {
+      let cacheKey = "";
+
+      if (this.cache !== null && this.cache) {
+        const cacheVersion =
+          (await this.cache.get<string>("users:version")) || "0";
+
+        cacheKey = `users:v${cacheVersion}:p${page}:l${limit}:s${search}`;
+        const cached = await this.cache.get<IUser[]>(cacheKey);
+
+        if (cached) {
+          logger.debug(`Cache HIT: ${cacheKey}`);
+          logger.debug("Response:", cached);
+          return cached;
+        }
+
+        logger.debug(`Cache MISS: ${cacheKey}`);
+      }
+
+      // BUG FIX: `limit` dan `skip` bukan bagian dari MongoDB query filter,
+      // harus dipisah ke method chain .skip() dan .limit()
+      const filter = search
+        ? {
+            $or: [
+              { username: { $regex: search, $options: "i" } },
+              { email: { $regex: search, $options: "i" } },
+            ],
+          }
+        : {};
+
+      const [users, total] = await Promise.all([
+        this.model
+          .find(filter)
+          .sort({ username: 1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .lean()
+          .exec(),
+        this.model.countDocuments(filter).exec(), // BUG FIX: countDocuments tidak support .lean()
+      ]);
+
+      const response = {
+        users,
+        meta: {
+          page,
+          limit,
+          total,
+          totalPage: Math.ceil(total / limit),
+        },
+      };
+
+      if (this.cache !== null && this.cache && cacheKey)
+        await this.cache.set(cacheKey, response, 1 * 60 * 30);
+
+      logger.info("Response:", response);
+      return response;
+    } catch (error) {
+      logger.error("getAllUser error:", error);
+      throw new Error(`Failed to fetch users: ${(error as Error).message}`);
+    }
   };
 
   newUser = async (data: IUser, curentUser: JWTPayload) => {
