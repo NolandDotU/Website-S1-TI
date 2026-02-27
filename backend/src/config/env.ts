@@ -2,7 +2,6 @@ import { z } from "zod";
 import dotenv from "dotenv";
 import path from "path";
 
-// Load .env file - in Docker, env vars are passed directly, but still support .env for local dev
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const envSchema = z.object({
@@ -109,10 +108,6 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GOOGLE_CALLBACK_URL: z.string().url().optional(),
-  ALLOWED_DOMAIN_EMAIL: z
-    .string()
-    .default("@student.uksw.edu,@uksw.edu")
-    .transform((val) => val.split(",").map((d) => d.trim())),
 });
 
 /**

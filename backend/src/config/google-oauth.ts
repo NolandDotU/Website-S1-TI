@@ -3,8 +3,6 @@ import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
 import { env } from "./env";
 import { logger, ApiError } from "../utils";
 
-const allowedDomain = env.ALLOWED_DOMAIN_EMAIL;
-
 export interface GoogleOAuthUser {
   googleId: string;
   email: string;
@@ -13,10 +11,6 @@ export interface GoogleOAuthUser {
   emailVerified: boolean;
   fullname: string;
 }
-
-export const isUKSWEmail = (email: string): boolean => {
-  return allowedDomain.some((domain) => email.endsWith(domain));
-};
 
 export const configureGoogleOAuth = () => {
   passport.use(

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # NGINX Reverse Proxy
   nginx:
@@ -81,7 +79,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - type=gha
-    image: website-s1ti-embedding-api:latest
+    image: website-s1ti-embedding-api:1.0.0
     container_name: website-s1ti-embedding-api
     restart: unless-stopped
     expose:
@@ -113,7 +111,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - type=gha
-    image: website-s1ti-backend:latest
+    image: website-s1ti-backend:1.0.0
     container_name: website-s1ti-backend
     restart: unless-stopped
     depends_on:
@@ -141,7 +139,8 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-info}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       OPENROUTER_MODEL: ${OPENROUTER_MODEL}
-      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL}
+      OPENROUTER_BASE_URL: https://openrouter.ai/api/v1
+      OPENROUTER_FALLBACK_MODELS: ${OPENROUTER_FALLBACK_MODELS:-stepfun/step-3.5-flash:free,google/gemma-3-27b-it:free,z-ai/glm-4.5-air:free,qwen/qwen3-next-80b-a3b-instruct:free}
       EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-http://embedding-api}
     expose:
       - "5000"
@@ -178,7 +177,7 @@ services:
         REACT_APP_IMAGE_BASE_URL: /api/app
       cache_from:
         - type=gha
-    image: website-s1ti-frontend:latest
+    image: website-s1ti-frontend:1.0.0
     container_name: website-s1ti-frontend
     restart: unless-stopped
     depends_on:

@@ -68,7 +68,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://siakad.uksw.edu/"
+                    href="https://siasat.uksw.edu/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-gray-300 transition">
@@ -86,7 +86,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://flexiblelearning.uksw.edu/"
+                    href="https://flearn.uksw.edu/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-gray-300 transition">
@@ -110,17 +110,6 @@ const Footer = () => {
               © 2025 Fakultas Teknologi Informasi Universitas Kristen Satya
               Wacana
             </p>
-            <div className="flex flex-wrap gap-4 text-gray-400">
-              <a href="/privacy" className="hover:text-gray-200">
-                Privacy Policy
-              </a>
-              <a href="/terms" className="hover:text-gray-200">
-                Terms of Service
-              </a>
-              <a href="/help" className="hover:text-gray-200">
-                Help
-              </a>
-            </div>
           </div>
         </div>
       </div>
