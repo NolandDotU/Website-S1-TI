@@ -20,6 +20,43 @@ export function ChatModal({ isOpen, onClose, theme }) {
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        if (!mounted) return;
+
+        const scrollY = window.scrollY;
+        const bodyStyle = document.body.style;
+        const htmlStyle = document.documentElement.style;
+
+        const prev = {
+            bodyPosition: bodyStyle.position,
+            bodyTop: bodyStyle.top,
+            bodyLeft: bodyStyle.left,
+            bodyRight: bodyStyle.right,
+            bodyWidth: bodyStyle.width,
+            bodyOverflow: bodyStyle.overflow,
+            htmlOverflow: htmlStyle.overflow,
+        };
+
+        bodyStyle.position = "fixed";
+        bodyStyle.top = `-${scrollY}px`;
+        bodyStyle.left = "0";
+        bodyStyle.right = "0";
+        bodyStyle.width = "100%";
+        bodyStyle.overflow = "hidden";
+        htmlStyle.overflow = "hidden";
+
+        return () => {
+            bodyStyle.position = prev.bodyPosition;
+            bodyStyle.top = prev.bodyTop;
+            bodyStyle.left = prev.bodyLeft;
+            bodyStyle.right = prev.bodyRight;
+            bodyStyle.width = prev.bodyWidth;
+            bodyStyle.overflow = prev.bodyOverflow;
+            htmlStyle.overflow = prev.htmlOverflow;
+            window.scrollTo(0, scrollY);
+        };
+    }, [mounted]);
+
     // if (!isOpen) return null;
     if (!mounted) return null;
 
@@ -33,7 +70,7 @@ export function ChatModal({ isOpen, onClose, theme }) {
         currentY.current = e.touches[0].clientY;
 
         const diff = currentY.current - startY.current;
-        if (diff > 0 && modalRef.curent) {
+        if (diff > 0 && modalRef.current) {
             modalRef.current.style.transform = `translateY(${diff}px)`;
         }
     };
@@ -51,7 +88,7 @@ export function ChatModal({ isOpen, onClose, theme }) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex md:items-end md:justify-end p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-end md:p-4">
             <div className={`fixed inset-0 bg-black/40 backdrop-blur-sm
             transition-opacity duration-300 ${visible ? "opacity-100" : "opacity-0"}`} onClick={onClose} />
 
@@ -60,7 +97,7 @@ export function ChatModal({ isOpen, onClose, theme }) {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`relative w-full h-dvh md:w-full md:max-w-md md:h-[80vh]
+            className={`relative w-screen h-[100dvh] md:w-full md:max-w-md md:h-[80vh]
             md:rounded-2xl shadow-2xl flex flex-col
             transform transition-all duration-300 ease-out
             ${visible ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"}

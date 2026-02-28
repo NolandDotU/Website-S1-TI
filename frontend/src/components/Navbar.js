@@ -4,11 +4,13 @@ import Logo from "../assets/logo/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
 import { env } from "../services/utils/env";
 import Toggle from "./Toggle";
-import { User2 } from "lucide-react";
+import { Menu, User2, X } from "lucide-react";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownUser, setIsDropDownUser] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
   const dropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -48,6 +50,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const handleLogout = () => {
     logout();
     setIsDropDownUser(false);
+    setIsMobileMenuOpen(false);
   };
 
   const getAvatarSrc = () => {
@@ -70,13 +73,16 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <nav className="sticky top-0 z-50 w-full text-black dark:text-white bg-white dark:bg-gray-900">
-      <div className="max-w-full mx-auto px-10 pt-2">
-        <div className="flex h-16 items-center justify-between gap-8">
-          <div className="flex items-center gap-20">
-            <Link to="/" className="text-2xl font-bold hover:text-gray-300">
+      <div className="max-w-full mx-auto px-4 md:px-10 pt-2">
+        <div className="flex h-16 items-center justify-between gap-3 md:gap-8">
+          <div className="flex items-center gap-4 md:gap-20">
+            <Link
+              to="/"
+              className="text-2xl font-bold hover:text-gray-300"
+              onClick={() => setIsMobileMenuOpen(false)}>
               <img src={Logo} alt="Logo" className="h-14" />
             </Link>
-            <ul className="flex bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
+            <ul className="hidden md:flex bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
               <li>
                 <Link
                   to="/"
@@ -130,7 +136,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               </li>
             </ul>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-1 md:gap-2">
             <div className="p-2">
               <Toggle theme={theme} toggleTheme={toggleTheme} />
             </div>
@@ -189,12 +195,87 @@ const Navbar = ({ theme, toggleTheme }) => {
             ) : (
               <Link
                 to="/login"
-                className="py-2 px-4 rounded-2xl border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white transition">
+                className="hidden md:inline-block py-2 px-4 rounded-2xl border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white transition">
                 Login
               </Link>
             )}
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition"
+              onClick={() =>
+                setIsMobileMenuOpen((prev) => {
+                  const next = !prev;
+                  if (!next) setIsMobileMoreOpen(false);
+                  return next;
+                })
+              }
+              aria-label="Toggle menu">
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {isMobileMenuOpen && (
+          <div className="md:hidden pb-4">
+            <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-2 space-y-1">
+              <Link
+                to="/"
+                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                onClick={() => setIsMobileMenuOpen(false)}>
+                Home
+              </Link>
+              <Link
+                to="/berita"
+                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                onClick={() => setIsMobileMenuOpen(false)}>
+                Berita
+              </Link>
+
+              <button
+                className="w-full text-left py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center justify-between"
+                onClick={() => setIsMobileMoreOpen((prev) => !prev)}>
+                Lainnya
+                <svg
+                  className={`w-4 h-4 transition-transform ${isMobileMoreOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isMobileMoreOpen && (
+                <div className="ml-3 mr-1 my-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+                  <Link
+                    to="/profil-dosen"
+                    className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    onClick={() => setIsMobileMenuOpen(false)}>
+                    Daftar Profil Dosen
+                  </Link>
+                  <Link
+                    to="/tentang-program-studi"
+                    className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    onClick={() => setIsMobileMenuOpen(false)}>
+                    Tentang Program Studi
+                  </Link>
+                </div>
+              )}
+
+              {!user && (
+                <Link
+                  to="/login"
+                  className="block py-2 px-3 rounded border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white transition"
+                  onClick={() => setIsMobileMenuOpen(false)}>
+                  Login
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

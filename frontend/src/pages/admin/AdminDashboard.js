@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -16,6 +16,11 @@ import {
   Timer,
   ShieldAlert,
   Shuffle,
+  PlugZap,
+  Cpu,
+  Database,
+  Workflow,
+  Activity,
 } from "lucide-react";
 import { getAllHistory, getdashboardData } from "../../services/api";
 import { StatCard } from "../../components/Admin/dashboard/StatCard";
@@ -29,7 +34,7 @@ const Dashboard = () => {
   const [newestActivities, setNewestActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       const [responseDashboard, responseHistory] = await Promise.all([
@@ -44,11 +49,11 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   if (loading) {
     return (
@@ -82,6 +87,35 @@ const Dashboard = () => {
       ? announcements.totalPublishedAnnouncement?.views ||
         announcements.totalAnnouncement
       : announcements.totalPublishedAnnouncement;
+
+  const chatbotInfo = chatbot?.info || {};
+  const chatbotConnections = chatbot?.connections || {};
+  const chatbotTopModels = chatbot?.topUsedModels || [];
+  const chatbotConfiguredModels = chatbot?.configuredModels || [];
+
+  const formatConnectionStatus = (status) => {
+    const normalized = (status || "").toString().toLowerCase();
+    if (["connected", "configured"].includes(normalized)) {
+      return {
+        label: normalized === "connected" ? "Connected" : "Configured",
+        style:
+          "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+      };
+    }
+
+    if (["connecting", "disconnecting"].includes(normalized)) {
+      return {
+        label: normalized === "connecting" ? "Connecting" : "Disconnecting",
+        style:
+          "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+      };
+    }
+
+    return {
+      label: normalized ? normalized.replace(/_/g, " ") : "Unknown",
+      style: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
+    };
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
@@ -429,6 +463,220 @@ const Dashboard = () => {
                   }}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            Informasi Chatbot
+            <Cpu className="w-5 h-5 text-gray-400" />
+          </h2>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            Snapshot bulan berjalan
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
+              <Bot className="w-4 h-4" />
+              Konfigurasi Model
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Provider</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbotInfo.provider || "-"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Model Utama</span>
+                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
+                  {chatbotInfo.primaryModel || "-"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Fallback Model
+                </span>
+                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
+                  {chatbotInfo.fallbackModels?.length > 0
+                    ? chatbotInfo.fallbackModels.join(", ")
+                    : "-"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Total Model Terdaftar
+                </span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbotInfo.modelCount ?? chatbotConfiguredModels.length}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Model Terpakai Bulan Ini
+                </span>
+                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
+                  {chatbotConfiguredModels.length > 0
+                    ? chatbotConfiguredModels.join(", ")
+                    : "-"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
+              <Workflow className="w-4 h-4" />
+              RAG & Response Pipeline
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">
+                  OpenRouter Responses
+                </span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbot?.openrouterResponses || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Intent Responses</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbot?.intentResponses || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">No Context Responses</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbot?.noContextResponses || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Mode Stream</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbot?.streamRequests || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Mode Non-Stream</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbot?.nonStreamRequests || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Avg Response Time</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {(chatbot?.avgResponseTimeMs || 0).toLocaleString()} ms
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
+              <PlugZap className="w-4 h-4" />
+              Status Koneksi
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { label: "MongoDB", value: chatbotConnections.mongodb, icon: Database },
+                { label: "Redis", value: chatbotConnections.redis, icon: Database },
+                { label: "OpenRouter", value: chatbotConnections.openrouter, icon: Bot },
+                { label: "Embedding", value: chatbotConnections.embedding, icon: Cpu },
+              ].map((item) => {
+                const status = formatConnectionStatus(item.value);
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.label}
+                    className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-700/40 p-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                      <Icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      {item.label}
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full capitalize ${status.style}`}>
+                      {status.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
+              <Activity className="w-4 h-4" />
+              Operasional & Integrasi
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Embedding Endpoint</span>
+                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
+                  {chatbotInfo.embeddingBaseUrl || "-"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Embedding Dimension</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbotInfo.embeddingDimension || 0}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Vector Search Mode</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {chatbotInfo.vectorSearchMode || "-"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Timeout Request Model</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {(chatbotInfo.requestTimeoutMs || 0).toLocaleString()} ms
+                </span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-gray-500 dark:text-gray-400">Last Request</span>
+                <span className="font-medium text-gray-900 dark:text-white text-right">
+                  {chatbot?.lastRequestAt
+                    ? new Date(chatbot.lastRequestAt).toLocaleString("id-ID")
+                    : "-"}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
+                Top Model Usage (Bulan Ini)
+              </p>
+              {chatbotTopModels.length > 0 ? (
+                <div className="space-y-2">
+                  {chatbotTopModels.map((item, index) => (
+                    <div
+                      key={`${item.model}-${index}`}
+                      className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700 dark:text-gray-300 break-all pr-3">
+                        {item.model}
+                      </span>
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {item.count}x
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Belum ada data penggunaan model.
+                </p>
+              )}
             </div>
           </div>
         </div>

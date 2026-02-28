@@ -28,5 +28,30 @@ export interface IDashboard {
     uniqueUsers: number;
     intentResponses: number;
     noContextResponses: number;
+    lastRequestAt?: Date;
+    streamRequests: number;
+    nonStreamRequests: number;
+    openrouterResponses: number;
+    configuredModels: string[];
+    topUsedModels: {
+      model: string;
+      count: number;
+    }[];
+    info: {
+      provider: string;
+      primaryModel: string | null;
+      fallbackModels: string[];
+      modelCount: number;
+      embeddingBaseUrl: string | null;
+      embeddingDimension: number;
+      vectorSearchMode: "atlas" | "fallback_cosine";
+      requestTimeoutMs: number;
+    };
+    connections: {
+      mongodb: "connected" | "connecting" | "disconnecting" | "disconnected";
+      redis: "connected" | "disconnected";
+      openrouter: "configured" | "missing_config";
+      embedding: "configured" | "missing_config";
+    };
   };
 }

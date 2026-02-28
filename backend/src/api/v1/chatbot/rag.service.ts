@@ -24,6 +24,7 @@ export type RagQueryMeta = {
 
 export class RagService {
   private identity: ChatbotIdentity;
+  private readonly compactContextLimit = 2500;
 
   constructor() {
     this.identity = {
@@ -167,6 +168,15 @@ Berikan jawaban yang ringkas namun informatif (Boleh tambahkan emote jika perlu)
 `;
   }
 
+  private buildCompactPrompt(query: string, context: string): string {
+    const compactContext =
+      context.length > this.compactContextLimit
+        ? `${context.slice(0, this.compactContextLimit)}...`
+        : context;
+
+    return this.buildPrompt(query, compactContext, []);
+  }
+
   async queryStream(
     userQuery: string,
     onChunk: (chunk: string) => void,
@@ -189,9 +199,22 @@ Berikan jawaban yang ringkas namun informatif (Boleh tambahkan emote jika perlu)
 
     const prompt = this.buildPrompt(userQuery, context, history);
     let modelMeta: ModelRequestMeta | undefined;
-    await modelServiceInstance.generateStreamedResponse(prompt, onChunk, (meta) => {
-      modelMeta = meta;
-    });
+    try {
+      await modelServiceInstance.generateStreamedResponse(prompt, onChunk, (meta) => {
+        modelMeta = meta;
+      });
+    } catch {
+      // Fallback: if streaming request fails (e.g. intermittent 400), retry once
+      // using non-stream with compact prompt to keep chat UX responsive.
+      const compactPrompt = this.buildCompactPrompt(userQuery, context);
+      const answer = await modelServiceInstance.generateResponseOnce(
+        compactPrompt,
+        (meta) => {
+          modelMeta = meta;
+        },
+      );
+      onChunk(answer);
+    }
     return { source: "openrouter", model: modelMeta };
   }
 

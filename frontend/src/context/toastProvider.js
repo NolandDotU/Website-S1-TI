@@ -8,7 +8,33 @@ const ToastContext = createContext(null);
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = useCallback((message, type = "info", duration = 2000) => {
+  const normalizeDuration = useCallback((type, durationOrOptions) => {
+    const rawDuration =
+      typeof durationOrOptions === "number"
+        ? durationOrOptions
+        : durationOrOptions && typeof durationOrOptions.duration === "number"
+          ? durationOrOptions.duration
+          : undefined;
+
+    const defaultDuration = type === "error" || type === "info" ? 1500 : 2000;
+    const parsedDuration = Number.isFinite(rawDuration)
+      ? rawDuration
+      : defaultDuration;
+
+    // Per request: toast info/error hanya 1-2 detik.
+    if (type === "error" || type === "info") {
+      return Math.min(2000, Math.max(1000, parsedDuration));
+    }
+
+    return parsedDuration;
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  }, []);
+
+  const addToast = useCallback((message, type = "info", durationOrOptions) => {
+    const duration = normalizeDuration(type, durationOrOptions);
     const id = Date.now();
     const newToast = { id, message, type, duration };
 
@@ -20,17 +46,17 @@ export const ToastProvider = ({ children }) => {
         removeToast(id);
       }, duration);
     }
-  }, []);
-
-  const removeToast = useCallback((id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
+  }, [normalizeDuration, removeToast]);
 
   const toast = {
-    success: (message, duration) => addToast(message, "success", duration),
-    error: (message, duration) => addToast(message, "error", duration),
-    warning: (message, duration) => addToast(message, "warning", duration),
-    info: (message, duration) => addToast(message, "info", duration),
+    success: (message, durationOrOptions) =>
+      addToast(message, "success", durationOrOptions),
+    error: (message, durationOrOptions) =>
+      addToast(message, "error", durationOrOptions),
+    warning: (message, durationOrOptions) =>
+      addToast(message, "warning", durationOrOptions),
+    info: (message, durationOrOptions) =>
+      addToast(message, "info", durationOrOptions),
   };
 
   return (

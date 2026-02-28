@@ -4,6 +4,9 @@ import { AnnouncementService } from "../announcement/announcement.service";
 import { IDashboard } from "./dashboard.dto";
 import { logger } from "../../../utils";
 import ChatbotRequestMetricModel from "../../../model/chatbotRequestMetricModel";
+import { env } from "../../../config/env";
+import { getDBStatus } from "../../../config/database";
+import { isRedisReady } from "../../../config/redis";
 
 export default class DashboardService {
   private highlightService: typeof highlightService;
@@ -57,12 +60,23 @@ export default class DashboardService {
             $sum: { $cond: [{ $eq: ["$source", "semantic_no_context"] }, 1, 0] },
           },
           totalDurationMs: { $sum: { $ifNull: ["$durationMs", 0] } },
+          streamRequests: {
+            $sum: { $cond: [{ $eq: ["$mode", "stream"] }, 1, 0] },
+          },
+          nonStreamRequests: {
+            $sum: { $cond: [{ $eq: ["$mode", "non-stream"] }, 1, 0] },
+          },
+          openrouterResponses: {
+            $sum: { $cond: [{ $eq: ["$source", "openrouter"] }, 1, 0] },
+          },
           uniqueSessions: { $addToSet: "$sessionId" },
           uniqueOwners: {
             $addToSet: {
               $concat: ["$ownerType", ":", "$ownerId"],
             },
           },
+          modelNames: { $addToSet: "$modelName" },
+          lastRequestAt: { $max: "$createdAt" },
         },
       },
       {
@@ -74,6 +88,17 @@ export default class DashboardService {
           fallbackRequests: 1,
           intentResponses: 1,
           noContextResponses: 1,
+          streamRequests: 1,
+          nonStreamRequests: 1,
+          openrouterResponses: 1,
+          modelNames: {
+            $filter: {
+              input: "$modelNames",
+              as: "model",
+              cond: { $and: [{ $ne: ["$$model", null] }, { $ne: ["$$model", ""] }] },
+            },
+          },
+          lastRequestAt: 1,
           avgResponseTimeMs: {
             $cond: [
               { $gt: ["$totalRequests", 0] },
@@ -152,8 +177,55 @@ export default class DashboardService {
         uniqueUsers: 0,
         intentResponses: 0,
         noContextResponses: 0,
+        streamRequests: 0,
+        nonStreamRequests: 0,
+        openrouterResponses: 0,
+        modelNames: [],
+        lastRequestAt: null,
       }
     );
+  }
+
+  private async getTopUsedModels(startDate: Date, endDate: Date) {
+    return ChatbotRequestMetricModel.aggregate<{ model: string; count: number }>([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+          modelName: { $exists: true, $ne: "" },
+        },
+      },
+      {
+        $group: {
+          _id: "$modelName",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 3 },
+      {
+        $project: {
+          _id: 0,
+          model: "$_id",
+          count: 1,
+        },
+      },
+    ]);
+  }
+
+  private getConfiguredModels() {
+    const primaryModel = env.OPENROUTER_MODEL?.trim() || null;
+    const fallbackModels = (env.OPENROUTER_FALLBACK_MODELS || "")
+      .split(",")
+      .map((model) => model.trim())
+      .filter(Boolean);
+
+    return {
+      primaryModel,
+      fallbackModels,
+      configuredModels: Array.from(
+        new Set([primaryModel, ...fallbackModels].filter(Boolean)),
+      ) as string[],
+    };
   }
 
   getDashboardData = async () => {
@@ -162,7 +234,7 @@ export default class DashboardService {
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
-    const [users, announcements, topFiveAnn, chatbotCurrent, chatbotLast] =
+    const [users, announcements, topFiveAnn, chatbotCurrent, chatbotLast, topUsedModels] =
       await Promise.all([
       this.userService.getStatistics(
         startOfMonth,
@@ -179,6 +251,7 @@ export default class DashboardService {
       this.annService.topTierAnnouncements(),
       this.getChatbotMetrics(startOfMonth, now),
       this.getChatbotMetrics(startOfLastMonth, endOfLastMonth),
+      this.getTopUsedModels(startOfMonth, now),
     ]);
 
     const [userPercentage, announcementPercentage, chatbotRequestPercentage] =
@@ -195,6 +268,19 @@ export default class DashboardService {
     ]);
 
     logger.info(`ANNOUCEMENT : ${JSON.stringify(announcements)}`);
+
+    const { primaryModel, fallbackModels, configuredModels } =
+      this.getConfiguredModels();
+    const mongodbStatus = getDBStatus();
+    const redisStatus = isRedisReady() ? "connected" : "disconnected";
+    const openrouterStatus =
+      env.OPENROUTER_API_KEY && env.OPENROUTER_BASE_URL
+        ? "configured"
+        : "missing_config";
+    const embeddingStatus = env.EMBEDDING_BASE_URL
+      ? "configured"
+      : "missing_config";
+
     return {
       users: {
         totalUser: users.totalUser,
@@ -212,7 +298,33 @@ export default class DashboardService {
       announcementPercentage,
       chatbotRequestPercentage,
       topFiveAnn: topFiveAnn.announcements,
-      chatbot: chatbotCurrent,
+      chatbot: {
+        ...chatbotCurrent,
+        topUsedModels,
+        configuredModels,
+        info: {
+          provider: "openrouter",
+          primaryModel,
+          fallbackModels,
+          modelCount: configuredModels.length,
+          embeddingBaseUrl: env.EMBEDDING_BASE_URL || null,
+          embeddingDimension: Number(env.EMBEDDING_DIMENSION),
+          vectorSearchMode: env.USE_ATLAS_VECTOR_SEARCH
+            ? "atlas"
+            : "fallback_cosine",
+          requestTimeoutMs: 120000,
+        },
+        connections: {
+          mongodb: mongodbStatus as
+            | "connected"
+            | "connecting"
+            | "disconnecting"
+            | "disconnected",
+          redis: redisStatus,
+          openrouter: openrouterStatus,
+          embedding: embeddingStatus,
+        },
+      },
     } as IDashboard;
   };
 }

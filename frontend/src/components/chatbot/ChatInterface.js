@@ -13,6 +13,7 @@ import { useToast } from "../../context/toastProvider";
 
 export function ChatInterface({ isModal = false, theme }) {
     const messageEndRef = useRef(null);
+    const [keyboardInset, setKeyboardInset] = useState(0);
 
     const [welcomeMessage, setWelcomeMessage] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -81,6 +82,43 @@ export function ChatInterface({ isModal = false, theme }) {
         };
     }, [sessionId, toast]);
 
+    useEffect(() => {
+        if (!isModal) return;
+
+        const updateKeyboardInset = () => {
+            const isMobile = window.matchMedia("(max-width: 767px)").matches;
+            if (!isMobile) {
+                setKeyboardInset(0);
+                return;
+            }
+
+            const vv = window.visualViewport;
+            if (!vv) {
+                setKeyboardInset(0);
+                return;
+            }
+
+            const inset = Math.max(
+                0,
+                Math.round(window.innerHeight - vv.height - vv.offsetTop),
+            );
+
+            // Ignore tiny viewport movement from browser chrome animation.
+            setKeyboardInset(inset > 80 ? inset : 0);
+        };
+
+        updateKeyboardInset();
+        window.addEventListener("resize", updateKeyboardInset);
+        window.visualViewport?.addEventListener("resize", updateKeyboardInset);
+        window.visualViewport?.addEventListener("scroll", updateKeyboardInset);
+
+        return () => {
+            window.removeEventListener("resize", updateKeyboardInset);
+            window.visualViewport?.removeEventListener("resize", updateKeyboardInset);
+            window.visualViewport?.removeEventListener("scroll", updateKeyboardInset);
+        };
+    }, [isModal]);
+
     const handleSendMessage = (text) => {
         const userMsg = {
             id: "user-" + Date.now(),
@@ -135,7 +173,7 @@ export function ChatInterface({ isModal = false, theme }) {
     const displayMessages = welcomeMessage ? [welcomeMessage, ...messages] : messages;
     return (
         <div className={`flex flex-col ${isModal ? "h-full" : "h-screen"} overflow-hidden`}>
-            <div className={`flex-1 min-h-0 overflow-y-auto scroll-smooth p-4 hide-scrollbar
+            <div className={`flex-1 min-h-0 overflow-y-auto overscroll-contain scroll-smooth p-4 hide-scrollbar
                 ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
                 {displayMessages.map((m) => (
                     <MessageBubble key={m.id} message={m} theme={theme} />
@@ -147,8 +185,10 @@ export function ChatInterface({ isModal = false, theme }) {
 
                 <div ref={messageEndRef} />
             </div>
-            <div className={`sticky bottom-0 z-10 pb-3 rounded-lg
-                ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
+            <div
+                style={{ bottom: keyboardInset }}
+                className={`sticky bottom-0 z-10 pb-3 rounded-lg
+                ${theme === "dark" ? "bg-gray-900" : "bg-blue-50"}`}>
                 <InputArea onSendMessage={handleSendMessage} isLoading={loading} theme={theme} />
             </div>
 
