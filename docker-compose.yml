@@ -17,6 +17,11 @@ services:
     networks:
       - website-s1ti-network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: 128M
     healthcheck:
       test:
         [
@@ -25,7 +30,7 @@ services:
           "--quiet",
           "--tries=1",
           "--spider",
-          "http://localhost/health",
+          "http://127.0.0.1/health",
         ]
       interval: 30s
       timeout: 5s
@@ -48,6 +53,11 @@ services:
       - mongodb_config:/data/configdb
     networks:
       - website-s1ti-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -66,6 +76,11 @@ services:
       - redis_data:/data
     networks:
       - website-s1ti-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: 128M
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -81,26 +96,24 @@ services:
         - type=gha
     image: website-s1ti-embedding-api:1.0.0
     container_name: website-s1ti-embedding-api
-    restart: unless-stopped
+    restart: on-failure:5
     expose:
       - "8000"
     environment:
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
+      MODEL_PATH: "./onnx/indonesian_embedding_q8.onnx"
     deploy:
       resources:
         limits:
-          cpus: "4"
-          memory: 2G
-        reservations:
-          cpus: "2"
-          memory: 1G
+          cpus: "0.50"
+          memory: 512M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      timeout: 30s
+      retries: 5
+      start_period: 120s
     networks:
       - website-s1ti-network
 
@@ -149,6 +162,11 @@ services:
       - backend_logs:/app/logs
     networks:
       - website-s1ti-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
     healthcheck:
       test:
         [
@@ -187,6 +205,11 @@ services:
       - "3000"
     networks:
       - website-s1ti-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
     healthcheck:
       test:
         [

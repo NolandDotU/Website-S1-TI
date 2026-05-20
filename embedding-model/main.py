@@ -2,11 +2,13 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from embedding_engine import IndonesianEmbeddingEngine
 from typing import List
+import os
 import time
 
 app = FastAPI(title="Indonesian Embedding Service")
 
-engine = IndonesianEmbeddingEngine()
+model_path = os.getenv("MODEL_PATH", "./onnx/indonesian_embedding.onnx")
+engine = IndonesianEmbeddingEngine(model_path=model_path)
 
 class EmbedRequest(BaseModel):
     texts: List[str]

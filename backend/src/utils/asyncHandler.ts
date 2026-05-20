@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
+import { logger } from "./logger";
 
 type AsyncFunction = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => Promise<any>;
 
 export const asyncHandler = (fn: AsyncFunction) => {
@@ -18,6 +19,7 @@ export const catchAsync = (fn: AsyncFunction) => {
     try {
       await fn(req, res, next);
     } catch (error) {
+      logger.error("Async error caught:", error);
       next(error);
     }
   };

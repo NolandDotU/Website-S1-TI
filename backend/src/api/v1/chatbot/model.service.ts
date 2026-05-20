@@ -54,7 +54,7 @@ export class ModelService {
     const status = err?.response?.status;
     const code = err?.code;
 
-    if (status && [408, 409, 425, 429, 500, 502, 503, 504].includes(status)) {
+    if (status && [404, 408, 409, 425, 429, 500, 502, 503, 504].includes(status)) {
       return true;
     }
 
