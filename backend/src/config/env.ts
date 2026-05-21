@@ -73,21 +73,11 @@ const envSchema = z.object({
   // API Timeout
   API_TIMEOUT: z.coerce.number().default(30000), // 30 seconds
 
-  // Hugging Face Embedding Configuration
-  HF_API_KEY: z.string().optional(),
-  HF_BASE_URL: z
-    .string()
-    .url()
-    .default("https://router.huggingface.co")
-    .optional(),
-  HF_MODEL_NAME: z.string().default("Qwen/Qwen3-Embedding-8B").optional(),
+  // Jina AI Embedding Configuration
+  JINA_API_KEY: z.string().optional(),
+  JINA_MODEL: z.string().default("jina-embeddings-v3").optional(),
 
-  // Custom Embedding Service Configuration
-  EMBEDDING_BASE_URL: z
-    .string()
-    .url()
-    .default("http://localhost:8001")
-    .optional(),
+  // Embedding Configuration
   EMBEDDING_DIMENSION: z.coerce.number().default(384),
   USE_ATLAS_VECTOR_SEARCH: z.boolean().default(false),
   // OpenRouter AI Configuration

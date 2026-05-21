@@ -102,7 +102,7 @@ export class RagService {
       query,
       ["announcement", "lecturer", "partner", "knowledge"],
       5,
-      0.1,
+      0.01,
     );
 
     return buildSemanticContext(matches);

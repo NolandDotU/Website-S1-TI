@@ -12,8 +12,6 @@ services:
         condition: service_healthy
       backend:
         condition: service_healthy
-      embedding-api:
-        condition: service_healthy
     networks:
       - website-s1ti-network
     restart: unless-stopped
@@ -87,35 +85,7 @@ services:
       timeout: 3s
       retries: 5
 
-  # Embedding Model Service (Indonesian Embedding API)
-  embedding-api:
-    build:
-      context: ./embedding-model
-      dockerfile: Dockerfile
-      cache_from:
-        - type=gha
-    image: website-s1ti-embedding-api:1.0.0
-    container_name: website-s1ti-embedding-api
-    restart: on-failure:5
-    expose:
-      - "8000"
-    environment:
-      PYTHONUNBUFFERED: "1"
-      PYTHONDONTWRITEBYTECODE: "1"
-      MODEL_PATH: "./onnx/indonesian_embedding_q8.onnx"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 30s
-      retries: 5
-      start_period: 120s
-    networks:
-      - website-s1ti-network
+
 
   # Backend API
   backend:
@@ -153,8 +123,10 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       OPENROUTER_MODEL: ${OPENROUTER_MODEL}
       OPENROUTER_BASE_URL: https://openrouter.ai/api/v1
-      OPENROUTER_FALLBACK_MODELS: ${OPENROUTER_FALLBACK_MODELS:-stepfun/step-3.5-flash:free,google/gemma-3-27b-it:free,z-ai/glm-4.5-air:free,qwen/qwen3-next-80b-a3b-instruct:free}
-      EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-http://embedding-api}
+      OPENROUTER_FALLBACK_MODELS: ${OPENROUTER_FALLBACK_MODELS:-google/gemma-4-26b-a4b-it:free,z-ai/glm-4.5-air:free,openrouter/free}
+      JINA_API_KEY: ${JINA_API_KEY}
+      JINA_MODEL: ${JINA_MODEL:-jina-embeddings-v3}
+      EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-384}
     expose:
       - "5000"
     volumes:

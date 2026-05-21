@@ -23,74 +23,91 @@ function cosineSimilarity(a: number[], b: number[]): number {
 
 // ─── Service ──────────────────────────────────────────────────────────────────
 export class EmbeddingService {
-  //pakai yang di comment ini kalau mau pake hugging face
-  // private apiKey = env.HF_API_KEY;
-  // private baseUrl = env.HF_BASE_URL;
-  // private modelName = env.HF_MODEL_NAME;
-  // private dimension = Number(env.EMBEDDING_DIMENSION);
+  private readonly apiKey: string;
+  private readonly modelName: string;
+  private readonly dimension: number;
+  private readonly baseUrl = "https://api.jina.ai/v1/embeddings";
 
-  // constructor() {
-  //   if (!this.apiKey || !this.baseUrl || !this.modelName) {
-  //     throw new Error("Missing embedding service configuration");
-  //   }
-  // }
+  constructor() {
+    this.apiKey = env.JINA_API_KEY || "";
+    this.modelName = env.JINA_MODEL || "jina-embeddings-v3";
+    this.dimension = Number(env.EMBEDDING_DIMENSION);
 
-  private baseUrl = env.EMBEDDING_BASE_URL;
-  private dimension = Number(env.EMBEDDING_DIMENSION);
+    if (!this.apiKey) {
+      logger.warn("[EmbeddingService] JINA_API_KEY not set – embedding calls will fail");
+    } else {
+      logger.info(
+        `[EmbeddingService] initialized provider=jina model="${this.modelName}" dimension=${this.dimension}`,
+      );
+    }
+  }
 
-  // ─── Generate Single Embedding ──────────────────────────────────────────────
+  /**
+   * Call Jina AI Embeddings API.
+   * @param texts  - array of texts to embed
+   * @param task   - "retrieval.query" for search queries, "retrieval.passage" for document indexing
+   */
+  private async callJina(
+    texts: string[],
+    task: "retrieval.query" | "retrieval.passage" = "retrieval.query",
+  ): Promise<number[][]> {
+    const res = await axios.post(
+      this.baseUrl,
+      {
+        model: this.modelName,
+        input: texts,
+        task,
+        dimensions: this.dimension,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 60_000,
+      },
+    );
+
+    const items = res.data?.data;
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new Error("Empty response from Jina Embeddings API");
+    }
+
+    // Sort by index to preserve input order
+    items.sort((a: any, b: any) => a.index - b.index);
+    return items.map((item: any) => item.embedding);
+  }
+
+  // ─── Generate Single Embedding (for search queries) ─────────────────────────
   async generateEmbedding(text: string): Promise<number[]> {
     if (!text.trim()) {
       throw new Error("Empty text for embedding");
     }
 
     try {
-      // const res = await axios.post(
-      //   `${this.baseUrl}/v1/embeddings`,
-      //   {
-      //     model: this.modelName,
-      //     input: text,
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${this.apiKey}`,
-      //       "Content-Type": "application/json",
-      //     },
-      //     timeout: 180_000,
-      //   }
-      // );
-
-      const res = await axios.post(
-        `${this.baseUrl}/embed`,
-        { texts: [text] },
-        { timeout: 180_000 },
-      );
-
-      // const embedding = res.data?.data?.[0]?.embedding;
-      const embedding = res.data?.embeddings?.[0];
+      const [embedding] = await this.callJina([text], "retrieval.query");
 
       if (!Array.isArray(embedding)) {
         throw new Error("Invalid embedding response format");
       }
 
       if (embedding.length !== this.dimension) {
-        throw new Error(`Embedding dimension mismatch: ${embedding.length}`);
+        throw new Error(
+          `Embedding dimension mismatch: got ${embedding.length}, expected ${this.dimension}`,
+        );
       }
 
       return embedding.map(Number);
     } catch (err: any) {
-      console.error("Embedding service error:", err);
+      logger.error(`[EmbeddingService] error: ${err.message}`);
       throw new Error(`Embedding service unavailable: ${err.message}`);
     }
   }
 
-  // ─── Generate Multiple Embeddings ───────────────────────────────────────────
+  // ─── Generate Multiple Embeddings (for document indexing) ───────────────────
   async genereateEmbeddings(texts: string[]): Promise<number[][]> {
     if (texts.length === 0) return [];
-
-    const res = await axios.post(`${this.baseUrl}/embed`, { texts });
-    // const res = await axios.post(`${this.baseUrl}/v1/embeddings`, { texts });
-    return res.data.embeddings;
+    return this.callJina(texts, "retrieval.passage");
   }
 
   // ─── Semantic Search (auto switch Atlas / Fallback) ──────────────────────────

@@ -42,7 +42,8 @@ export interface IDashboard {
       primaryModel: string | null;
       fallbackModels: string[];
       modelCount: number;
-      embeddingBaseUrl: string | null;
+      embeddingProvider: string;
+      embeddingModel: string;
       embeddingDimension: number;
       vectorSearchMode: "atlas" | "fallback_cosine";
       requestTimeoutMs: number;

@@ -277,7 +277,7 @@ export default class DashboardService {
       env.OPENROUTER_API_KEY && env.OPENROUTER_BASE_URL
         ? "configured"
         : "missing_config";
-    const embeddingStatus = env.EMBEDDING_BASE_URL
+    const embeddingStatus = env.JINA_API_KEY
       ? "configured"
       : "missing_config";
 
@@ -307,7 +307,8 @@ export default class DashboardService {
           primaryModel,
           fallbackModels,
           modelCount: configuredModels.length,
-          embeddingBaseUrl: env.EMBEDDING_BASE_URL || null,
+          embeddingProvider: "jina",
+          embeddingModel: env.JINA_MODEL || "jina-embeddings-v3",
           embeddingDimension: Number(env.EMBEDDING_DIMENSION),
           vectorSearchMode: env.USE_ATLAS_VECTOR_SEARCH
             ? "atlas"
