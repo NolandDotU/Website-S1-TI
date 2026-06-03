@@ -4,7 +4,7 @@ import { connectRedis, getRedisClient } from "./config/redis";
 import { CacheManager } from "./utils/cacheManager";
 import { logger } from "./utils/logger";
 import { env } from "./config/env";
-import { seedAdmin } from "./seed/seedAdmin";
+import { seedAdmin, seedLecturerUsers } from "./seed/seedAdmin";
 import { scheduller } from "./jobs/scheduller";
 
 const PORT = env.PORT || 5000; //ini PORT nya
@@ -14,6 +14,7 @@ const startServer = async () => {
     await mongoConnect(); //ini connect ke mongodb
     await connectRedis(); //ini connect ke redis
     await seedAdmin();
+    await seedLecturerUsers();
     scheduller();
     const server = app.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT}`);
