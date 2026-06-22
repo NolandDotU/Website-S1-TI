@@ -22,6 +22,29 @@ export const seedAdmin = async () => {
   }
 };
 
+export const seedHMPTI = async () => {
+  try {
+    const data = {
+      username: "hmpti",
+      email: "fti.hmp.s1.ti@uksw.edu",
+      fullname: "HMPTI S1 Teknik Informatika",
+      password: "hmpti123",
+      role: "hmp",
+      authProvider: "local",
+      isActive: true,
+    };
+    const exist = await UserModel.findOne({ username: data.username });
+    if (exist) return;
+
+    const seed = await UserModel.create(data);
+    logger.info("HMPTI account created");
+    return;
+  } catch (error) {
+    logger.error("Error seeding HMPTI: ", error);
+    throw error;
+  }
+};
+
 export const seedLecturerUsers = async () => {
   try {
     const lecturers = [

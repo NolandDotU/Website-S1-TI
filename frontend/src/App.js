@@ -11,7 +11,6 @@ import LecturerProfiles from "./pages/LecturerProfiles";
 import Berita from "./pages/Berita";
 import Login from "./pages/Login";
 import { AdminDashboard } from "./pages/admin";
-import { GoogleAuthError } from "./pages/middleware/googleAuth_error";
 import { NoAccessPage } from "./pages/middleware/notHaveAccess";
 import AdminLayout from "./components/Admin/AdminLayout";
 import LecturerManagement from "./pages/admin/modulLecturer/listLecture";
@@ -54,7 +53,7 @@ function App() {
   };
 
   // Routes yang ga perlu navbar/footer
-  const noLayoutRoutes = ["/login", "/auth/google/error", "/no-access"];
+  const noLayoutRoutes = ["/login", "/no-access"];
   const isAdminRoute = location.pathname.startsWith("/cms");
 
   const shouldShowLayout =
@@ -90,7 +89,6 @@ function App() {
 
           {/* ========== AUTH ROUTES ========== */}
           <Route path="/login" element={<Login />} />
-          <Route path="/auth/google/error" element={<GoogleAuthError />} />
           <Route path="/no-access" element={<NoAccessPage />} />
 
           {/* ========== PROTECTED ADMIN & HMP ROUTES ========== */}

@@ -12,8 +12,6 @@ import {
   uploadUserPhoto,
 } from "../../../middleware/uploads.middleware";
 import authController from "./auth.controller";
-import passport from "passport";
-import { env } from "../../../config/env";
 
 const router = express.Router();
 
@@ -55,20 +53,8 @@ router.post(
   authController.createAdmin,
 );
 
-// Google
+// Local Login
 router.post("/login", validate(LocalLoginSchema), authController.localLogin);
-router.get("/google", authController.googleAuth);
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: `${env.FRONTEND_ORIGIN}/auth/google/error`,
-    session: false,
-  }),
-  authController.googleAuthCallback,
-);
-router.get("/google/failure", (req, res) => {
-  res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`);
-});
 
 // Logout
 router.post("/logout", authController.logout);

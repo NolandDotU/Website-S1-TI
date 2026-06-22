@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { env } from "../services/utils/env";
 import api from "../services/utils/api";
 import { useToast } from "./toastProvider";
 
@@ -86,11 +85,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Google OAuth
-  const loginWithGoogle = () => {
-    // console.log("loginWithGoogle :", env.URL_LOGIN_GOOGLE);
-    window.location.href = `${env.URL_LOGIN_GOOGLE}`;
-  };
 
   // ✅ Logout
   const logout = async () => {
@@ -111,7 +105,6 @@ export const AuthProvider = ({ children }) => {
     loading,
     checkAuth,
     localLogin,
-    loginWithGoogle,
     logout,
     updateUser,
   };

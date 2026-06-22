@@ -5,12 +5,10 @@ import { motion } from "framer-motion";
 import { useAuth } from "../context/Context";
 import { useToast } from "../context/toastProvider";
 import loginIllustration from "../assets/illustration/login.svg";
-import googleIcon from "../assets/icon/google-icon.svg";
-import { env } from "../services/utils/env";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, localLogin, loginWithGoogle } = useAuth();
+  const { user, localLogin } = useAuth();
   const toast = useToast();
 
   const [credentials, setCredentials] = useState({
@@ -51,14 +49,6 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    toast.info("Redirecting to Google...");
-    console.log("Redirecting to Google...", env.URL_LOGIN_GOOGLE);
-    setTimeout(() => {
-      loginWithGoogle();
-    }, 500);
   };
 
   return (
@@ -120,7 +110,7 @@ const Login = () => {
                   focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 
                   transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
                   placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50"
-                placeholder="username"
+                placeholder="Email / Username"
               />
             </div>
 
@@ -159,25 +149,6 @@ const Login = () => {
               ) : (
                 "Sign In"
               )}
-            </button>
-
-            <div className="flex items-center my-6">
-              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
-              <span className="mx-3 text-gray-400 dark:text-gray-500 text-sm">
-                Or Sign in with
-              </span>
-              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full flex items-center justify-center py-3 border 
-                border-gray-200 dark:border-gray-700 rounded-xl 
-                hover:bg-gray-50 dark:hover:bg-gray-800 transition-all 
-                disabled:opacity-50 bg-white dark:bg-gray-800">
-              <img src={googleIcon} alt="Google" className="w-6 h-6" />
             </button>
           </form>
         </div>

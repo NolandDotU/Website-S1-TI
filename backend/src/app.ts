@@ -7,7 +7,6 @@ import { corsOptions } from "./config/cors";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { logger, morganMiddleware } from "./utils/logger";
 import apiV1Router from "./api/v1";
-import { configureGoogleOAuth } from "./config/google-oauth";
 import { handleMulterError } from "./middleware/uploads.middleware";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -28,9 +27,6 @@ app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(compression());
 app.use(cookieParser());
-
-// Configure Google OAuth
-configureGoogleOAuth();
 
 // Body parsing
 app.use(express.json({ limit: "10mb" }));

@@ -31,7 +31,6 @@ api.interceptors.response.use(
     if (statusCode === 401) {
       const isAuthEndpoint =
         error.config?.url?.includes("/auth/admin") ||
-        error.config?.url?.includes("/auth/google") ||
         error.config?.url?.includes("/auth/me");
 
       if (!isAuthEndpoint) {
