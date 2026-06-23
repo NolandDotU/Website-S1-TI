@@ -29,6 +29,7 @@ import { useAuth } from "../../context/Context";
 const History = () => {
   const user = useAuth().user;
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterAction, setFilterAction] = useState("all");
   const [dateRange, setDateRange] = useState("all");
@@ -39,9 +40,24 @@ const History = () => {
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 50;
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setCurrentPage(1);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Fetch when server-side filters change
   useEffect(() => {
     fetchData();
-  }, [currentPage, searchQuery]);
+  }, [currentPage, debouncedSearch, filterType, filterAction, dateRange]);
+
+  // Reset page on filter change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterType, filterAction, dateRange]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -49,8 +65,11 @@ const History = () => {
       const response = await getAllHistory(
         itemsPerPage,
         currentPage,
-        searchQuery,
+        debouncedSearch,
         user,
+        filterAction !== "all" ? filterAction : "",
+        filterType !== "all" ? filterType : "",
+        dateRange !== "all" ? dateRange : "all",
       );
 
       if (response.statusCode !== 200) {
@@ -69,77 +88,21 @@ const History = () => {
     }
   };
 
-  const filterByDateRange = (item) => {
-    if (dateRange === "all") return true;
-
-    const itemDate = new Date(item.datetime || item.createdAt);
-    const now = new Date();
-
-    // Create proper date boundaries
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    switch (dateRange) {
-      case "today":
-        return itemDate >= today;
-      case "week":
-        return itemDate >= startOfWeek;
-      case "month":
-        return itemDate >= startOfMonth;
-      default:
-        return true;
-    }
-  };
-
-  const filteredHistory = history.filter((item) => {
-    // Search filter - check if any of these fields match
-    const matchesSearch =
-      searchQuery === "" ||
-      item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.entity?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.user?.fullname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.user?.email?.toLowerCase().includes(searchQuery.toLowerCase());
-
-    // Type/Entity filter
-    const matchesType = filterType === "all" || item.entity === filterType;
-
-    // Action filter
-    const matchesAction =
-      filterAction === "all" ||
-      item.action?.toUpperCase() === filterAction.toUpperCase();
-
-    // Date filter
-    const matchesDate = filterByDateRange(item);
-
-    return matchesSearch && matchesType && matchesAction && matchesDate;
-  });
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    if (currentPage !== 1) {
-      setCurrentPage(1);
-    }
-  }, [filterType, filterAction, dateRange]);
+  // Count active filters
+  const activeFiltersCount = [
+    filterType !== "all",
+    filterAction !== "all",
+    dateRange !== "all",
+    searchQuery !== "",
+  ].filter(Boolean).length;
 
   // Pagination handlers
   const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const handlePageClick = (pageNum) => {
@@ -150,48 +113,28 @@ const History = () => {
   const getPageNumbers = () => {
     const pages = [];
     const maxPagesToShow = 5;
-
     if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else if (currentPage <= 3) {
+      for (let i = 1; i <= 4; i++) pages.push(i);
+      pages.push("...");
+      pages.push(totalPages);
+    } else if (currentPage >= totalPages - 2) {
+      pages.push(1);
+      pages.push("...");
+      for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
     } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push("...");
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push("...");
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push("...");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i);
-        }
-        pages.push("...");
-        pages.push(totalPages);
-      }
+      pages.push(1);
+      pages.push("...");
+      for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+      pages.push("...");
+      pages.push(totalPages);
     }
-
     return pages;
   };
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-
-  // Count active filters
-  const activeFiltersCount = [
-    filterType !== "all",
-    filterAction !== "all",
-    dateRange !== "all",
-    searchQuery !== "",
-  ].filter(Boolean).length;
 
   // Clear all filters
   const handleClearFilters = () => {
@@ -346,7 +289,7 @@ const History = () => {
               Loading history...
             </p>
           </div>
-        ) : filteredHistory.length === 0 ? (
+        ) : history.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-4">
               <Clock className="w-8 h-8 text-gray-400" />
@@ -369,7 +312,7 @@ const History = () => {
           </div>
         ) : (
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredHistory.map((item) => (
+            {history.map((item) => (
               <div
                 key={item.id || item._id}
                 className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group">
@@ -435,7 +378,7 @@ const History = () => {
       </div>
 
       {/* Pagination */}
-      {!loading && filteredHistory.length > 0 && (
+      {!loading && history.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">

@@ -222,8 +222,7 @@ export const seedLecturerUsers = async () => {
         fullname: "VIRGELIUS HENDRAWAN TARALANDU, S.Kom",
         email: "virgelius.taralandu@uksw.edu",
         expertise: ["Data Science"],
-        externalLink:
-          "https://hendraatara91.github.io/hendratara.github.io/?fbclid=PAdGRjcAMjhApleHRuA2FlbQIxMQABp6ZXRWeKMfwtJ71IqSKiLbOyC17C8Hgq5fj6A4avG2r3xhWDXfTakWZ3CwLr_aem_xuwuH6D7mJ4dwTQ0jDxwQw",
+        externalLink: "https://hendraatara91.github.io/hendratara.github.io/",
       },
       {
         username: "martza.swastikasari",

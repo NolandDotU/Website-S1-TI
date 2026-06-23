@@ -139,11 +139,11 @@ const Berita = () => {
 
   return (
     <>
-      <section className="mx-auto w-full py-12 px-6 md:px-12">
+      <section className="mx-auto w-full py-10 sm:py-12 px-4 sm:px-6 md:px-12">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
           <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
               Berita
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">
@@ -216,7 +216,7 @@ const Berita = () => {
 
         {/* Loading State */}
         {loading ? (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(limit)].map((_, index) => (
               <div
                 key={index}
@@ -234,7 +234,7 @@ const Berita = () => {
         ) : (
           <>
             {/* Announcements Grid */}
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAnnouncements.length > 0 ? (
                 filteredAnnouncements.map((ann) => (
                   <NewsCard

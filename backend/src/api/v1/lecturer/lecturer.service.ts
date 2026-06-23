@@ -42,7 +42,38 @@ export class LecturerService {
       await this.cache.incr("lecturers:version");
       await this.cache.incr("lecturers:active:version");
     }
-    setImmediate(() => {
+
+    // Otomatis buat user dengan role dosen jika belum ada
+    setImmediate(async () => {
+      try {
+        const existingUser = await this.userService.getUserByParam(
+          "email",
+          data.email,
+        );
+        if (!existingUser) {
+          await this.userService.newUser(
+            {
+              username: data.username,
+              fullname: data.fullname,
+              email: data.email,
+              password: data.username, // password default = username
+              role: "dosen",
+              isActive: true,
+              authProvider: "local",
+            } as any,
+            currentUser,
+          );
+          logger.info(
+            `User account for lecturer ${data.username} created automatically`,
+          );
+        }
+      } catch (err) {
+        logger.error(
+          `Failed to auto-create user for lecturer ${data.username}:`,
+          err,
+        );
+      }
+
       const historyData: IHistoryInput = {
         action: "POST",
         entityId: new mongoose.Types.ObjectId(lecturerDoc.id),

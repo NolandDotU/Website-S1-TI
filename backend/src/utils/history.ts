@@ -5,6 +5,7 @@ import { IHistory, IHistoryResponse } from "../model/historyModels";
 import { CacheManager } from "./cacheManager";
 import { logger } from "./logger";
 import { JWTPayload } from "./jwt";
+import { FilterQuery } from "mongoose";
 
 class HistoryService {
   private cache: CacheManager | null;
@@ -24,7 +25,15 @@ class HistoryService {
     return history;
   }
 
-  async getAll(page = 1, limit = 50, search = "", user?: JWTPayload) {
+  async getAll(
+    page = 1,
+    limit = 50,
+    search = "",
+    user?: JWTPayload,
+    action = "",
+    entity = "",
+    dateRange = "all",
+  ) {
     let cacheKey = "";
     let cacheVersion = "";
 
@@ -33,12 +42,12 @@ class HistoryService {
         cacheVersion =
           (await this.cache.get<string>(`history:${user.id}:version`)) || "0";
         if (cacheVersion) {
-          cacheKey = `history:${user.id}:v${cacheVersion}:p${page}:l${limit}:s${search}`;
+          cacheKey = `history:${user.id}:v${cacheVersion}:p${page}:l${limit}:s${search}:a${action}:e${entity}:d${dateRange}`;
         }
       } else {
         cacheVersion = (await this.cache.get<string>("history:version")) || "0";
         if (cacheVersion) {
-          cacheKey = `history:v${cacheVersion}:p${page}:l${limit}:s${search}`;
+          cacheKey = `history:v${cacheVersion}:p${page}:l${limit}:s${search}:a${action}:e${entity}:d${dateRange}`;
         }
       }
 
@@ -56,36 +65,78 @@ class HistoryService {
       }
     }
 
-    const userFilter = user ? { user: user.id } : {};
-    const query = search
-      ? {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { description: { $regex: search, $options: "i" } },
-          ],
-          ...userFilter,
-        }
-      : {
-          ...userFilter,
-        };
+    const userFilter = user && user.role !== "admin" ? { user: user.id } : {};
 
+    // Build search filter
+    const searchFilter = search
+      ? {
+        $or: [
+          { description: { $regex: search, $options: "i" } },
+          { entity: { $regex: search, $options: "i" } },
+          { action: { $regex: search, $options: "i" } },
+        ],
+      }
+      : {};
+
+    // Build action filter
+    const actionFilter = action ? { action: action.toUpperCase() } : {};
+
+    // Build entity filter
+    const entityFilter = entity ? { entity: entity.toLowerCase() } : {};
+
+    // Build date range filter
+    let dateFilter: Record<string, any> = {};
+    if (dateRange && dateRange !== "all") {
+      const now = new Date();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const startOfWeek = new Date();
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
+
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      startOfMonth.setHours(0, 0, 0, 0);
+
+      switch (dateRange) {
+        case "today":
+          dateFilter = { createdAt: { $gte: today } };
+          break;
+        case "week":
+          dateFilter = { createdAt: { $gte: startOfWeek } };
+          break;
+        case "month":
+          dateFilter = { createdAt: { $gte: startOfMonth } };
+          break;
+      }
+    }
+
+    const query: FilterQuery<IHistory> = {
+      ...userFilter,
+      ...searchFilter,
+      ...actionFilter,
+      ...entityFilter,
+      ...dateFilter,
+    };
+
+    const model = this.model as any;
     const [history, total] = await Promise.all([
-      this.model
+      model
         .find(query)
         .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .populate("user"),
-      this.model.countDocuments(query),
+        .skip((Number(page) - 1) * Number(limit))
+        .limit(Number(limit))
+        .populate("user") as Promise<IHistory[]>,
+      this.model.countDocuments(query as any),
     ]);
 
     const result = {
       history: history,
       meta: {
         total,
-        page,
-        limit,
-        totalPage: Math.ceil(total / limit),
+        page: Number(page),
+        limit: Number(limit),
+        totalPage: Math.ceil(total / Number(limit)),
       },
     };
 

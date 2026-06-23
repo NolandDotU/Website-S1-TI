@@ -73,7 +73,7 @@ const TentangProdi = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Hero Section */}
-      <section className="relative h-96 bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-800 dark:to-gray-900 flex items-center justify-center">
+      <section className="relative min-h-[280px] sm:min-h-[320px] md:h-96 bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-800 dark:to-gray-900 flex items-center justify-center">
         <div className="absolute inset-0 bg-black opacity-20 dark:opacity-30"></div>
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
           <div className="inline-block mb-4 px-6 py-2 bg-white bg-opacity-20 dark:bg-opacity-10 rounded-full border border-white border-opacity-30">
@@ -81,7 +81,7 @@ const TentangProdi = () => {
               AKREDITASI UNGGUL
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Program Studi Teknik Informatika
           </h1>
           <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-95 dark:opacity-90">
@@ -95,7 +95,7 @@ const TentangProdi = () => {
         </div>
       </section>
 
-      <section className="py-16 px-6 bg-gray-50 dark:bg-gray-800">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
             {/* Text Content - tetap sama */}
@@ -160,12 +160,12 @@ const TentangProdi = () => {
       </section>
 
       {/* Bidang Peminatan */}
-      <section className="py-16 px-6 bg-white dark:bg-gray-900">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-12">
             Bidang Peminatan
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
             {peminatanData.map((item, idx) => (
               <div
                 key={idx}
@@ -197,7 +197,7 @@ const TentangProdi = () => {
       </section>
 
       {/* Tabs Section */}
-      <section className="py-16 px-6 bg-gray-50 dark:bg-gray-800">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {["visi-misi", "profil-lulusan", "kurikulum"].map((tab) => (
@@ -406,7 +406,7 @@ const TentangProdi = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-6 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">
             Informasi Lebih Lanjut

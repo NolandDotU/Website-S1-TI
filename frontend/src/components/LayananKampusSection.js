@@ -24,7 +24,7 @@ const LayananKampusSection = () => {
   }, []);
 
   return (
-    <section className="py-12 px-12" aria-labelledby="layanan-kampus-heading">
+    <section className="py-10 sm:py-12 px-4 sm:px-6 md:px-12" aria-labelledby="layanan-kampus-heading">
       <h2
         id="layanan-kampus-heading"
         className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">

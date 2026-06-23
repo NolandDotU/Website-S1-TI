@@ -9,12 +9,15 @@ router.get(
   "/",
   authMiddleware(["admin"]),
   asyncHandler(async (req: Request, res: Response) => {
-    const { page, limit, search } = req.query as {
+    const { page, limit, search, action, entity, dateRange } = req.query as {
       page?: number;
       limit?: number;
       search?: string;
+      action?: string;
+      entity?: string;
+      dateRange?: string;
     };
-    const data = await historyService.getAll(page, limit, search);
+    const data = await historyService.getAll(page, limit, search, undefined, action, entity, dateRange);
     res.send(ApiResponse.success(data, "History fetched successfully", 200));
   }),
 );
@@ -23,14 +26,17 @@ router.get(
   "/user",
   authMiddleware(null),
   asyncHandler(async (req: Request, res: Response) => {
-    const { page, limit, search } = req.query as {
+    const { page, limit, search, action, entity, dateRange } = req.query as {
       page?: number;
       limit?: number;
       search?: string;
+      action?: string;
+      entity?: string;
+      dateRange?: string;
     };
     const user = req.user as JWTPayload;
     logger.info("HIT BY USER : ", user);
-    const data = await historyService.getAll(page, limit, search, user);
+    const data = await historyService.getAll(page, limit, search, user, action, entity, dateRange);
     res.send(ApiResponse.success(data, "History fetched successfully", 200));
   }),
 );

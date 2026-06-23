@@ -84,7 +84,7 @@ const LecturerProfiles = () => {
   }, [searchTerm, selectedExpertise]);
 
   return (
-    <div className="min-h-screen py-16 px-4 md:px-8 lg:px-12">
+      <div className="min-h-screen py-12 sm:py-16 px-4 sm:px-6 md:px-8 lg:px-12">
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 text-center">
@@ -169,7 +169,7 @@ const LecturerProfiles = () => {
       {/* Lecturer Cards Grid */}
       {!loading && !error && (
         <>
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
             {paginatedLecturers.map((lecturer) => (
               <LecturerCard
                 key={lecturer._id || lecturer.id}
@@ -181,38 +181,25 @@ const LecturerProfiles = () => {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="max-w-7xl mx-auto mt-12 flex items-center justify-center gap-2">
+            <div className="max-w-7xl mx-auto mt-10 sm:mt-12 flex items-center justify-center gap-2 flex-wrap">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: currentPage === 1 ? "#d1d5db" : "#2563eb",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                  fontWeight: "600",
-                }}>
+                className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white">
                 ← Previous
               </button>
 
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div className="flex items-center gap-1.5 flex-wrap justify-center">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      style={{
-                        padding: "10px 16px",
-                        backgroundColor:
-                          currentPage === page ? "#2563eb" : "#f3f4f6",
-                        color: currentPage === page ? "white" : "#000000",
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                      }}>
+                      className={`min-w-[2.5rem] px-3 py-2 rounded-lg font-semibold text-sm transition-colors ${
+                        currentPage === page
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      }`}>
                       {page}
                     </button>
                   ),
@@ -224,17 +211,7 @@ const LecturerProfiles = () => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor:
-                    currentPage === totalPages ? "#d1d5db" : "#2563eb",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor:
-                    currentPage === totalPages ? "not-allowed" : "pointer",
-                  fontWeight: "600",
-                }}>
+                className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white">
                 Next →
               </button>
             </div>

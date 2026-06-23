@@ -19,10 +19,10 @@ const Footer = () => {
 
       <div className="bg-gray-950 text-white rounded-[20px] shadow-2xl p-10 relative z-10">
         <div className="max-w-7xl mx-auto space-y-10">
-          <div className="grid gap-10 md:grid-cols-3">
+          <div className="grid gap-8 sm:gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {/* Column 1: Logo */}
             <div className="space-y-4">
-              <img src={K2I} alt="FTI UKSW Logo" className="h-56 w-auto" />
+              <img src={K2I} alt="FTI UKSW Logo" className="h-32 sm:h-40 md:h-56 w-auto" />
               <p className="font-semibold text-lg">
                 Fakultas Teknologi Informasi
               </p>

@@ -8,6 +8,7 @@ import { deleteImage } from "../../../middleware/uploads.middleware";
 import { LecturerService } from "../lecturer/lecturer.service";
 import { ILecturerInput } from "../lecturer/lecturer.dto";
 
+
 export class UserService {
   private model: typeof UserModel;
   private history: typeof historyService;
@@ -86,11 +87,11 @@ export class UserService {
       // harus dipisah ke method chain .skip() dan .limit()
       const filter = search
         ? {
-            $or: [
-              { username: { $regex: search, $options: "i" } },
-              { email: { $regex: search, $options: "i" } },
-            ],
-          }
+          $or: [
+            { username: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+          ],
+        }
         : {};
 
       const [users, total] = await Promise.all([
@@ -128,17 +129,6 @@ export class UserService {
   newUser = async (data: IUser, curentUser: JWTPayload) => {
     try {
       const user = await this.model.create(data);
-      if (data.role === "dosen") {
-        const lecturerData: ILecturerInput = {
-          username: data.username,
-          email: data.email,
-          fullname: data.fullname,
-          expertise: [],
-          externalLink: "",
-          photo: "",
-        };
-        await this.lecturerService?.create(lecturerData, curentUser);
-      }
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
       await this.cache?.incr("users:version");
       setImmediate(() => {
