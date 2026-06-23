@@ -65,7 +65,7 @@ export const updateLecturerByEmail = async (email, lecturerData) => {
 
 export const deleteLecturer = async (lecturerId, url) => {
   try {
-    console.log("Deleting lecturer with ID:", lecturerId);
+
     const response = await api.delete(`/lecturers/${lecturerId}`, {
       photo: url,
     });

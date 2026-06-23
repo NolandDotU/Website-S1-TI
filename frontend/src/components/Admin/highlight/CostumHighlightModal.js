@@ -114,7 +114,7 @@ const HighlightModal = ({ isOpen, onClose, isSave, item, mode }) => {
         },
       };
 
-      console.log("SUBMITED PAYLOAD :", payload);
+
       if (mode === "create") {
         const response = await createHighlight(payload);
         if (response.statusCode !== 201) return toast.error(response.message);
@@ -127,7 +127,7 @@ const HighlightModal = ({ isOpen, onClose, isSave, item, mode }) => {
       isSave();
     } catch (error) {
       if (error.response?.data?.errors) {
-        console.log("ERRORS VALIDAITION :", error.response?.data?.errors);
+
 
         Object.keys(error.response?.data?.errors).forEach((key) => {
           setError((prev) => ({

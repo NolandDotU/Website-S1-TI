@@ -50,7 +50,7 @@ const DashboardDosen = () => {
   const fetchData = async () => {
     try {
       const data = await getLecturersDetail();
-      console.log("Fetched lecturer data:", data);
+
       setPayload(data.data);
     } catch (error) {
       toast.error("Gagal memuat data dosen.");
@@ -196,10 +196,7 @@ const DashboardDosen = () => {
             return;
           }
 
-          console.log("Blob created:", {
-            size: blob.size,
-            type: blob.type,
-          });
+
 
           // IMPORTANT: Create File with ALL required properties
           const timestamp = Date.now();
@@ -211,14 +208,7 @@ const DashboardDosen = () => {
             lastModified: timestamp,
           });
 
-          console.log("File created:", {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            lastModified: file.lastModified,
-            isFile: file instanceof File,
-            isBlob: file instanceof Blob,
-          });
+
 
           // Create preview URL from blob
           const previewUrl = URL.createObjectURL(blob);
@@ -233,7 +223,7 @@ const DashboardDosen = () => {
 
   const handleCropSave = async () => {
     try {
-      console.log("=== Starting crop save ===");
+
 
       const result = await getCroppedImgAsFile();
 
@@ -241,15 +231,7 @@ const DashboardDosen = () => {
         throw new Error("Failed to generate cropped image");
       }
 
-      console.log("Crop result:", {
-        hasFile: !!result.file,
-        hasPreview: !!result.previewUrl,
-        fileDetails: {
-          name: result.file.name,
-          size: result.file.size,
-          type: result.file.type,
-        },
-      });
+
 
       setPreviewImage(result.previewUrl);
 
@@ -296,7 +278,7 @@ const DashboardDosen = () => {
       }
       // Otherwise, prepend the backend URL
       const path = `${env.IMAGE_BASE_URL}${payload.photo}`;
-      console.log("PATH :", path);
+
       return path;
     }
 
@@ -313,7 +295,7 @@ const DashboardDosen = () => {
 
       // Upload photo if it's a File object
       if (payload.photo !== null && typeof payload.photo !== "string") {
-        console.log("=== Starting photo upload process ===");
+
 
         // Validate that photo is actually a File object
         if (!(payload.photo instanceof File)) {
@@ -323,21 +305,15 @@ const DashboardDosen = () => {
           return;
         }
 
-        console.log("Photo validation passed:", {
-          name: payload.photo.name,
-          size: payload.photo.size,
-          type: payload.photo.type,
-          lastModified: payload.photo.lastModified,
-          constructor: payload.photo.constructor.name,
-        });
+
 
         try {
           // PENTING: Kirim File object langsung, bukan FormData!
           // API service akan membuat FormData sendiri
-          console.log("=== Calling uploadPhotoDosen API ===");
+
           const uploads = await uploadPhotoDosen(payload.photo); // ✅ Kirim File object
 
-          console.log("=== Upload response ===", uploads);
+
 
           if (uploads.statusCode !== 200) {
             toast.error("Gagal menyimpan foto, coba lagi!");
@@ -355,7 +331,7 @@ const DashboardDosen = () => {
             photo: uploads.data.path,
           };
 
-          console.log("Photo uploaded successfully, path:", uploads.data.path);
+
           toast.success("Foto berhasil diunggah!");
         } catch (uploadError) {
           console.error("=== Photo upload failed ===");
@@ -372,15 +348,15 @@ const DashboardDosen = () => {
           return;
         }
       } else {
-        console.log("No new photo to upload, photo value:", payload.photo);
+
       }
 
       // Update lecturer profile
-      console.log("=== Updating lecturer profile ===");
-      console.log("Payload:", updatedPayload);
+
+
 
       const response = await updateLecturerByEmail(email, updatedPayload);
-      console.log("=== Profile updated successfully ===", response);
+
 
       toast.success("Profil dosen berhasil diperbarui.");
       setIsEditing(false);

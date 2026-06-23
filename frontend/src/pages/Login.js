@@ -36,7 +36,6 @@ const Login = () => {
         credentials.username,
         credentials.password,
       );
-      console.log("login result ", result);
 
       if (result.success) {
         toast.success("Login successful! Redirecting...");
@@ -44,7 +43,6 @@ const Login = () => {
         toast.error(result.error || "Login failed");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);

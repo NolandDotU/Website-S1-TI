@@ -10,6 +10,8 @@ import {
   XCircle,
   Loader2,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import ModalConfirmation from "../../../components/Admin/ModalConfirmation";
 import { UserModal } from "../../../components/Admin/users/UserModal";
@@ -42,15 +44,12 @@ export const UserManagement = () => {
     try {
       setLoading(true);
       const response = await getAllUser(page, limit, search);
-      console.log("response data user", response);
+
       setUsers(response.data.users);
 
       setTotalPages(response.data.meta.totalPage);
 
-      if (response.statusCode !== 200)
-        console.log("response data user", response);
     } catch (error) {
-      console.log(error);
       toast.error(`Terjadi kesalahan ${error.response?.data?.message}`);
     } finally {
       setLoading(false);
@@ -58,21 +57,13 @@ export const UserManagement = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchData();
+    }, 500);
 
-  // Filter users based on search
-  const filteredUsers =
-    search && users?.length > 0
-      ? users?.filter(
-          (user) =>
-            user.fullname?.toLowerCase().includes(search.toLowerCase()) ||
-            user.email?.toLowerCase().includes(search.toLowerCase()) ||
-            user.username?.toLowerCase().includes(search.toLowerCase()),
-        )
-      : users?.length > 0
-        ? users
-        : [];
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, page, limit]);
+
 
   const handleCreate = () => {
     setModalMode("create");
@@ -131,7 +122,7 @@ export const UserManagement = () => {
       setSelectedUser(null);
       fetchData();
     } catch (error) {
-      console.log(error);
+
       toast.error(error.response?.data?.message || "Terjadi kesalahan server!");
     }
   };
@@ -231,7 +222,7 @@ export const UserManagement = () => {
                     </div>
                   </td>
                 </tr>
-              ) : filteredUsers.length === 0 ? (
+              ) : users?.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-16">
                     <div className="flex flex-col items-center justify-center text-center">
@@ -264,7 +255,7 @@ export const UserManagement = () => {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((user) => (
+                users.map((user) => (
                   <tr
                     key={user.id || user._id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
@@ -366,6 +357,46 @@ export const UserManagement = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Halaman{" "}
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {page}
+                </span>{" "}
+                dari{" "}
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {totalPages}
+                </span>
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                    text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === totalPages}
+                  className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                    text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* User Modal */}

@@ -34,28 +34,28 @@ const Berita = () => {
   const increamentView = async (id) => {
     try {
       const response = await updateViewCount(id);
-      console.log(response);
+
     } catch (error) {
-      console.log(error);
+
     }
   };
 
   const onClickAnnouncement = (announcement) => {
     increamentView(announcement.id);
     setSelectedAnnouncement(announcement);
-    console.log("parameter ann : ", announcement);
+
   };
 
   const fetchAnnouncement = async (currentPage = 1, query = "") => {
     setLoading(true);
     try {
-      console.log("Fetching announcements...");
+
       const response = await getAnnouncements(
         currentPage,
         query ? 100 : limit, // Fetch more items when searching
         query,
       );
-      console.log("response", response);
+
 
       setAnnouncements(response.announcements);
       setTotalPages(response.meta.totalPage);
@@ -65,7 +65,7 @@ const Berita = () => {
       applyFilters(response.announcements, query, selectedCategory);
     } catch (error) {
       toast.error(`Terjadi kesalahan! (${error.response?.data?.message})`);
-      console.log(error);
+
       setAnnouncements([]);
       setFilteredAnnouncements([]);
     } finally {

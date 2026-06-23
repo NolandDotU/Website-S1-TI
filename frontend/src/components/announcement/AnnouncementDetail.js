@@ -9,7 +9,7 @@ const AnnouncementDetail = ({ onClose, data }) => {
       console.error("Data is null");
       return;
     }
-    console.log("Data:", data);
+
   }, [data]);
   const getCategoryColor = (category) => {
     const colors = {

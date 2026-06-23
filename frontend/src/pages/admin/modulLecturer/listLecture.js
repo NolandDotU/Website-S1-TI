@@ -41,7 +41,11 @@ const LecturerManagement = () => {
   };
 
   useEffect(() => {
-    fetchLecturers();
+    const delayDebounceFn = setTimeout(() => {
+      fetchLecturers();
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
   }, [page, search]);
 
   const handleCreate = () => {
@@ -58,7 +62,7 @@ const LecturerManagement = () => {
 
   const handleDelete = (lecturer) => {
     setSelectedLecturer(lecturer);
-    console.log("Selected lecturer for deletion:", lecturer);
+
     setIsDeleteModalOpen(true);
   };
 
@@ -74,14 +78,14 @@ const LecturerManagement = () => {
   };
 
   const handleSave = async (data) => {
-    console.log("Saving lecturer data:", data);
+
     const { photoFile, ...lecturerData } = data;
     if (photoFile) {
       try {
         const uploadResult = await uploadPhotoDosen(photoFile);
-        console.log("Photo uploaded successfully:", uploadResult);
+
         lecturerData.photo = uploadResult.data.path;
-        console.log("Updated lecturer data:", lecturerData);
+
       } catch (error) {
         toast.error(error.message || "Failed to upload photo");
         return;

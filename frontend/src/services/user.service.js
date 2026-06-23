@@ -5,7 +5,7 @@ const getAllUser = async (page = 1, limit = 25, search = "") => {
     const response = await api.get(
       `/user?page=${page}&limit=${limit}&search=${search}`,
     );
-    console.log("response get all user", response);
+
     return response.data;
   } catch (error) {
     throw error;

@@ -45,7 +45,7 @@ const PreviewAnnouncement = () => {
   const getAnnoucement = async () => {
     try {
       const response = await getById(id);
-      console.log("API response for getAnnoucement:", response);
+
       if (response.statusCode !== 200) {
         toast.error(response.message);
       }

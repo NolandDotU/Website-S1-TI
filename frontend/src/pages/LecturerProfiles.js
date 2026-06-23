@@ -18,7 +18,7 @@ const LecturerProfiles = () => {
       try {
         setLoading(true);
         const response = await getActiveLecturers(1, 100); // Fetch all lecturers
-        console.log("Fetched lecturers data:", response);
+
         setLecturers(Array.isArray(response.data) ? response.data : []);
         setError(null);
       } catch (err) {

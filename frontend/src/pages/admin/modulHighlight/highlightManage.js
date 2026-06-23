@@ -88,7 +88,7 @@ const HighlightManage = () => {
 
   const handleDeleteCarousel = (item) => {
     setSelectedItem(item);
-    console.log("SELECTED DELETE ITEM", selectedItem);
+
     setDeleteType("carousel");
     setIsDeleteModalOpen(true);
   };

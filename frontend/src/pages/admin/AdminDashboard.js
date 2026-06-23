@@ -44,7 +44,7 @@ const Dashboard = () => {
       setDashboardData(responseDashboard.data);
 
       setNewestActivities(responseHistory.data.history);
-      console.log("history data", responseHistory.data.history);
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -230,7 +230,6 @@ const Dashboard = () => {
           </div>
           <div className="space-y-4">
             {newestActivities && newestActivities.length > 0 ? (
-              (console.log("newestActivities : ", newestActivities),
               newestActivities.map((activity, index) => (
                 <motion.div
                   key={activity._id || activity.id || index}
@@ -239,7 +238,7 @@ const Dashboard = () => {
                   transition={{ delay: 0.4 + index * 0.1 }}>
                   <ActivityCard history={activity} />
                 </motion.div>
-              )))
+              ))
             ) : (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 Belum ada aktivitas terbaru

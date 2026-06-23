@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         return response.data.data;
       } else {
         setUser(null);
-        console.log("❌ User not authenticated");
+
       }
     } catch (error) {
       // console.error(

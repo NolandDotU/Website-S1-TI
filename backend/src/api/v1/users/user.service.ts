@@ -131,15 +131,42 @@ export class UserService {
       const user = await this.model.create(data);
       if (!user) throw ApiError.conflict("Gagal membuat user baru!");
       await this.cache?.incr("users:version");
-      setImmediate(() => {
-        this.history.create({
-          action: "POST",
-          entityId: new mongoose.Types.ObjectId(user.id),
-          entity: "user",
-          user: new mongoose.Types.ObjectId(curentUser.id),
-          description: `User ${data.username} created by ${curentUser.username}`,
-        });
+      setImmediate(async () => {
+        try {
+          await this.history.create({
+            action: "POST",
+            entityId: new mongoose.Types.ObjectId(user.id),
+            entity: "user",
+            user: curentUser?.id ? new mongoose.Types.ObjectId(curentUser.id) : null as any,
+            description: `User ${data.username} created by ${curentUser?.username || "System"}`,
+          });
+        } catch (err) {
+          logger.error("Failed to create user history:", err);
+        }
       });
+      if (data.role === "dosen") {
+        setImmediate(async () => {
+          try {
+            const { LecturerModel } = await import("../../../model/lecturerModel");
+            const existingLecturer = await LecturerModel.findOne({ email: data.email });
+            if (!existingLecturer) {
+              await LecturerModel.create({
+                username: data.username,
+                fullname: data.fullname || data.username,
+                email: data.email,
+                expertise: ["Umum"],
+                isActive: true,
+              });
+              await this.cache?.incr("lecturers:version");
+              await this.cache?.incr("lecturers:active:version");
+              logger.info(`Lecturer profile auto-created for user ${data.username}`);
+            }
+          } catch (err) {
+            logger.error("Failed to auto-create lecturer for user " + data.username, err);
+          }
+        });
+      }
+
       return user;
     } catch (error: any) {
       if (error.code === 11000) {

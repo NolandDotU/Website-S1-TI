@@ -44,46 +44,48 @@ export class LecturerService {
     }
 
     // Otomatis buat user dengan role dosen jika belum ada
-    setImmediate(async () => {
-      try {
-        const existingUser = await this.userService.getUserByParam(
-          "email",
-          data.email,
+    try {
+      const existingUser = await this.userService.getUserByParam(
+        "email",
+        data.email,
+      );
+      if (!existingUser) {
+        await this.userService.newUser(
+          {
+            username: data.username,
+            fullname: data.fullname,
+            email: data.email,
+            password: data.username, // password default = username
+            role: "dosen",
+            isActive: true,
+            authProvider: "local",
+          } as any,
+          currentUser,
         );
-        if (!existingUser) {
-          await this.userService.newUser(
-            {
-              username: data.username,
-              fullname: data.fullname,
-              email: data.email,
-              password: data.username, // password default = username
-              role: "dosen",
-              isActive: true,
-              authProvider: "local",
-            } as any,
-            currentUser,
-          );
-          logger.info(
-            `User account for lecturer ${data.username} created automatically`,
-          );
-        }
-      } catch (err) {
-        logger.error(
-          `Failed to auto-create user for lecturer ${data.username}:`,
-          err,
+        logger.info(
+          `User account for lecturer ${data.username} created automatically`,
         );
       }
+    } catch (err) {
+      logger.error(
+        `Failed to auto-create user for lecturer ${data.username}:`,
+        err,
+      );
+    }
 
+    try {
       const historyData: IHistoryInput = {
         action: "POST",
         entityId: new mongoose.Types.ObjectId(lecturerDoc.id),
         entity: "lecturer",
-        user: currentUser?.id ?? null,
-        description: `Lecturer ${data.username} created by ${currentUser?.username}`,
+        user: currentUser?.id ? new mongoose.Types.ObjectId(currentUser.id) : null as any,
+        description: `Lecturer ${data.username} created by ${currentUser?.username || 'system'}`,
       };
 
-      this.history.create(historyData);
-    });
+      await this.history.create(historyData);
+    } catch (err) {
+      logger.error("Failed to create history for lecturer creation:", err);
+    }
 
     this.embedding
       .upsertOne(
@@ -126,7 +128,8 @@ export class LecturerService {
     const searchQuery = search
       ? {
           $or: [
-            { name: { $regex: search, $options: "i" } },
+            { username: { $regex: search, $options: "i" } },
+            { fullname: { $regex: search, $options: "i" } },
             { email: { $regex: search, $options: "i" } },
           ],
         }

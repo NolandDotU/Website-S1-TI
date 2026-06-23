@@ -30,7 +30,7 @@ const AccountSettings = () => {
   const fetch = async () => {
     try {
       const response = await checkAuth();
-      console.log("RESPONSE ", response);
+
       if (response) {
         setProfileData({
           username: response.username,
@@ -62,7 +62,7 @@ const AccountSettings = () => {
 
     try {
       const response = await updateUser(user.id, profileData);
-      console.log("RESPONSE : ", response);
+
       if (response.statusCode !== 200) throw new Error(response.message);
 
       if (updateUser) {
@@ -280,7 +280,7 @@ const AccountSettings = () => {
 
                 {/* Role (Read-only) */}
                 <div className="flex items-center justify-between w-full">
-                  <div className="flex flex-col w-1/2">
+                  <div className="flex flex-col w-full">
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       <div className="flex items-center gap-2">
                         <Shield className="w-4 h-4" />
@@ -293,19 +293,7 @@ const AccountSettings = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col w-1/2">
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      <div className="flex items-center gap-2">
-                        <GlobeLock className="w-4 h-4" />
-                        Provider Akun
-                      </div>
-                    </label>
-                    <div className="px-4 py-3 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300">
-                        {user?.authProvider?.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
+
                 </div>
 
                 {/* Action Buttons */}
@@ -352,8 +340,6 @@ const AccountSettings = () => {
           </div>
 
           {/* Password Security Card */}
-
-          {user?.authProvider !== "google" && (
             <>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-3 mb-6">
@@ -557,7 +543,6 @@ const AccountSettings = () => {
                 </div>
               </div>
             </>
-          )}
         </div>
       </section>
     </div>

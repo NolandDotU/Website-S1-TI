@@ -21,10 +21,7 @@ const ProtectedRoute = ({ children, requiredRole = [] }) => {
 
     // ✅ Redirect to login if not authenticated
     if (!user) {
-      console.log(
-        "ProtectedRoute - User not authenticated, redirecting to /login",
-        user,
-      );
+
       return <Navigate to="/login" replace />;
     }
 

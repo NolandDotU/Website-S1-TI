@@ -14,7 +14,7 @@ const apiClient = axios.create({
 export const streamChat = (message, sessionId, onChunk, onDone, onError) => {
   try {
     const url = new URL(apiBaseURL + "/v1/chat/stream", window.location.origin);
-    console.log("URL : ", url);
+
     url.searchParams.append("message", message);
     url.searchParams.append("session_id", sessionId);
 
@@ -49,7 +49,7 @@ export const streamChat = (message, sessionId, onChunk, onDone, onError) => {
 
     return es;
   } catch (error) {
-    console.log("Stream setup error: ", error);
+
     onError(new Error("Failed to initiate chat stream"));
   }
 };

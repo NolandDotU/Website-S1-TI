@@ -11,7 +11,7 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => {
-    // console.log("✅ API Success:", response.config.url, response.status);
+    //
     return response;
   },
   (error) => {
@@ -34,9 +34,7 @@ api.interceptors.response.use(
         error.config?.url?.includes("/auth/me");
 
       if (!isAuthEndpoint) {
-        console.log(
-          "🔐 Unauthorized - Session expired, redirecting to login...",
-        );
+
         // setTimeout(() => {
         //   window.location.href = "/login";
         // }, 1000);
@@ -44,22 +42,22 @@ api.interceptors.response.use(
     }
 
     if (statusCode === 403) {
-      console.log("🚫 Forbidden - Access denied, redirecting to no-access...");
+
       setTimeout(() => {
         window.location.href = "/no-access";
       }, 1000);
     }
 
     if (statusCode === 404) {
-      console.log("❓ Not Found - Resource does not exist");
+
     }
 
     if (statusCode === 409) {
-      console.log("⚠️ Conflict - Resource already exists");
+
     }
 
     if (statusCode >= 500) {
-      console.log("💥 Server Error - Internal server error");
+
     }
 
     return Promise.reject(error);
