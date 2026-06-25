@@ -31,7 +31,11 @@ const LecturerManagement = () => {
     setLoading(true);
     try {
       const response = await getLecturers(page, limit, search);
-      setLecturers(response.data);
+      if (page === 1) {
+        setLecturers(response.data);
+      } else {
+        setLecturers((prev) => [...prev, ...response.data]);
+      }
       setTotalPages(response.meta.totalPages);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch lecturers");

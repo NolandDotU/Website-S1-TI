@@ -56,8 +56,11 @@ const Berita = () => {
         query,
       );
 
-
-      setAnnouncements(response.announcements);
+      if (currentPage === 1) {
+        setAnnouncements(response.announcements);
+      } else {
+        setAnnouncements((prev) => [...prev, ...response.announcements]);
+      }
       setTotalPages(response.meta.totalPage);
       setPage(response.meta.page);
 
@@ -73,11 +76,11 @@ const Berita = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
+  const loadMore = () => {
+    if (page < totalPages) {
+      const newPage = page + 1;
       setPage(newPage);
       fetchAnnouncement(newPage, searchQuery);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -282,58 +285,14 @@ const Berita = () => {
               )}
             </div>
 
-            {/* Pagination - Only show when not filtering */}
-            {!isFiltering && totalPages > 1 && (
-              <div className="mt-10 flex items-center justify-center gap-2">
+            {/* Load More Button - Only show when not filtering */}
+            {!isFiltering && page < totalPages && (
+              <div className="mt-10 flex justify-center">
                 <button
-                  onClick={() => handlePageChange(page - 1)}
-                  disabled={page === 1}
-                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                <div className="flex items-center gap-2">
-                  {[...Array(totalPages)].map((_, index) => {
-                    const pageNumber = index + 1;
-
-                    if (
-                      pageNumber === 1 ||
-                      pageNumber === totalPages ||
-                      (pageNumber >= page - 1 && pageNumber <= page + 1)
-                    ) {
-                      return (
-                        <button
-                          key={pageNumber}
-                          onClick={() => handlePageChange(pageNumber)}
-                          className={`min-w-[2.5rem] px-4 py-2 rounded-lg border transition font-medium ${
-                            page === pageNumber
-                              ? "bg-blue-600 dark:bg-blue-600 text-white border-blue-600 dark:border-blue-600"
-                              : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          }`}>
-                          {pageNumber}
-                        </button>
-                      );
-                    } else if (
-                      pageNumber === page - 2 ||
-                      pageNumber === page + 2
-                    ) {
-                      return (
-                        <span
-                          key={pageNumber}
-                          className="px-2 text-gray-500 dark:text-gray-400">
-                          ...
-                        </span>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-
-                <button
-                  onClick={() => handlePageChange(page + 1)}
-                  disabled={page === totalPages}
-                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                  <ChevronRight className="w-5 h-5" />
+                  onClick={loadMore}
+                  disabled={loading}
+                  className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium">
+                  {loading ? "Memuat..." : "Muat Lebih Banyak"}
                 </button>
               </div>
             )}

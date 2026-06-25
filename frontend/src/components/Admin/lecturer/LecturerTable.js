@@ -201,7 +201,7 @@ const LecturerTable = ({
                 className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 {/* NO */}
                 <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-300">
-                  {(page - 1) * 10 + index + 1}
+                  {index + 1}
                 </td>
 
                 {/* NAMA dengan Avatar */}
@@ -284,43 +284,14 @@ const LecturerTable = ({
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Halaman{" "}
-              <span className="font-medium text-gray-900 dark:text-white">
-                {page}
-              </span>{" "}
-              dari{" "}
-              <span className="font-medium text-gray-900 dark:text-white">
-                {totalPages}
-              </span>
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => onPageChange(page - 1)}
-                disabled={page === 1}
-                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
-                  text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
-                  disabled:opacity-50 disabled:cursor-not-allowed 
-                  hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onPageChange(page + 1)}
-                disabled={page === totalPages}
-                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
-                  text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800
-                  disabled:opacity-50 disabled:cursor-not-allowed 
-                  hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+      {/* Load More */}
+      {page < totalPages && (
+        <div className="px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+          <button
+            onClick={() => onPageChange(page + 1)}
+            className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-medium">
+            Muat Lebih Banyak
+          </button>
         </div>
       )}
     </div>

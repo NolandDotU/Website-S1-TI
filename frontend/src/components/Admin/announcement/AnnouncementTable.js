@@ -61,7 +61,7 @@ const AnnouncementTable = ({
                   key={announcement.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
-                    {(page - 1) * 10 + index + 1}
+                    {index + 1}
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -146,32 +146,14 @@ const AnnouncementTable = ({
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => onPageChange(Math.max(1, page - 1))}
-              disabled={page === 1}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 
-                bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
-                rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 
-                disabled:cursor-not-allowed transition">
-              Previous
-            </button>
-            <span className="text-sm text-gray-700 dark:text-gray-300">
-              Page {page} of {totalPages}
-            </span>
-            <button
-              onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-              disabled={page === totalPages}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 
-                bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
-                rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 
-                disabled:cursor-not-allowed transition">
-              Next
-            </button>
-          </div>
+      {/* Load More */}
+      {page < totalPages && (
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+          <button
+            onClick={() => onPageChange(page + 1)}
+            className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-medium">
+            Muat Lebih Banyak
+          </button>
         </div>
       )}
     </div>

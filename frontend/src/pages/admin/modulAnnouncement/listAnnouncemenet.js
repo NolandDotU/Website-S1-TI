@@ -36,7 +36,11 @@ const ListAnnouncement = () => {
     setLoading(true);
     try {
       const response = await adminGetAnnouncements(page, 10, search);
-      setAnnouncements(response.announcements);
+      if (page === 1) {
+        setAnnouncements(response.announcements);
+      } else {
+        setAnnouncements((prev) => [...prev, ...response.announcements]);
+      }
       setTotalPages(response.meta.totalPages);
     } catch (error) {
       console.error("Error fetching announcements:", error);

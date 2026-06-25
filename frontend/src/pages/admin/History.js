@@ -78,7 +78,11 @@ const History = () => {
         return;
       }
 
-      setHistory(response.data.history);
+      if (currentPage === 1) {
+        setHistory(response.data.history);
+      } else {
+        setHistory((prev) => [...prev, ...response.data.history]);
+      }
       setTotalPages(response.data.meta.totalPage);
       setTotalItems(response.data.meta.total);
     } catch (error) {
@@ -377,66 +381,16 @@ const History = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      {!loading && history.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Showing{" "}
-              <span className="font-semibold">
-                {startItem}-{endItem}
-              </span>{" "}
-              of <span className="font-semibold">{totalItems}</span> results
-            </p>
-
-            <div className="flex items-center gap-2">
-              {/* Previous Button */}
-              <button
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-gray-200 dark:border-gray-700
-                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700
-                  disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              {/* Page Numbers */}
-              <div className="flex items-center gap-1">
-                {getPageNumbers().map((page, index) =>
-                  page === "..." ? (
-                    <span
-                      key={`ellipsis-${index}`}
-                      className="px-3 py-2 text-gray-500 dark:text-gray-400">
-                      ...
-                    </span>
-                  ) : (
-                    <button
-                      key={page}
-                      onClick={() => handlePageClick(page)}
-                      className={`min-w-[40px] px-3 py-2 rounded-lg transition-colors ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white font-semibold"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      }`}>
-                      {page}
-                    </button>
-                  ),
-                )}
-              </div>
-
-              {/* Next Button */}
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-gray-200 dark:border-gray-700
-                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700
-                  disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+        {/* Load More */}
+        {currentPage < totalPages && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 mt-6 flex justify-center">
+            <button
+              onClick={handleNextPage}
+              className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-medium">
+              Muat Lebih Banyak
+            </button>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

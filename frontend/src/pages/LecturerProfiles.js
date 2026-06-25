@@ -73,9 +73,7 @@ const LecturerProfiles = () => {
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredLecturers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedLecturers = filteredLecturers.slice(startIndex, endIndex);
+  const paginatedLecturers = filteredLecturers.slice(0, currentPage * itemsPerPage);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -179,40 +177,13 @@ const LecturerProfiles = () => {
             ))}
           </div>
 
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="max-w-7xl mx-auto mt-10 sm:mt-12 flex items-center justify-center gap-2 flex-wrap">
+          {/* Load More Controls */}
+          {currentPage < totalPages && (
+            <div className="max-w-7xl mx-auto mt-10 sm:mt-12 flex items-center justify-center flex-wrap">
               <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white">
-                ← Previous
-              </button>
-
-              <div className="flex items-center gap-1.5 flex-wrap justify-center">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`min-w-[2.5rem] px-3 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                      }`}>
-                      {page}
-                    </button>
-                  ),
-                )}
-              </div>
-
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white">
-                Next →
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-medium">
+                Muat Lebih Banyak
               </button>
             </div>
           )}
