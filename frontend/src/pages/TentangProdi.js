@@ -1,74 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sertifikat from "../assets/sertif-akreditasi.jpg";
+import { getProdiProfile } from "../services/api";
 
 const TentangProdi = () => {
   const [activeTab, setActiveTab] = useState("visi-misi");
+  const [prodiData, setProdiData] = useState(null);
+
+  useEffect(() => {
+    const fetchProdi = async () => {
+      try {
+        const response = await getProdiProfile();
+        setProdiData(response?.data || response);
+      } catch (error) {
+        console.error("Failed to load prodi data", error);
+      }
+    };
+    fetchProdi();
+  }, []);
 
   const handleDownloadSertifikat = () => {
+    const certUrl = prodiData?.sertifikatUrl 
+      ? `${process.env.REACT_APP_API_URL?.replace('/api/v1', '') || 'http://localhost:4738'}${prodiData.sertifikatUrl}`
+      : Sertifikat;
+
     const link = document.createElement("a");
-    link.href = Sertifikat;
+    link.href = certUrl;
     link.download = "Sertifikat-Akreditasi-Teknik-Informatika-UKSW.jpg";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const peminatanData = [
-    {
-      title: "Network Engineering",
-      description:
-        "Fokus pada perancangan, pembangunan, dan pengelolaan infrastruktur jaringan komputer yang handal dan aman.",
-    },
-    {
-      title: "Software Engineering",
-      description:
-        "Spesialisasi dalam pengembangan perangkat lunak dan aplikasi berbasis metodologi rekayasa perangkat lunak modern.",
-    },
-    {
-      title: "Data Science",
-      description:
-        "Mengolah dan menganalisis data untuk memberikan nilai tambah dan mendukung pengambilan keputusan organisasi.",
-    },
-  ];
+  const peminatanData = prodiData?.peminatan?.length ? prodiData.peminatan : [];
+  const profilLulusanData = prodiData?.profilLulusan?.length ? prodiData.profilLulusan : [];
 
-  const profilLulusanData = [
-    {
-      title: "Software Developer",
-      desc: "Mengembangkan perangkat lunak untuk perusahaan, instansi pemerintahan, atau wirausaha",
-    },
-    {
-      title: "Network Engineer",
-      desc: "Merancang dan mengelola infrastruktur jaringan",
-    },
-    {
-      title: "Data Scientist",
-      desc: "Mengumpulkan, mengolah, dan menganalisa data untuk keperluan bisnis",
-    },
-    {
-      title: "Data Engineer",
-      desc: "Mengelola arsitektur data perusahaan/instansi",
-    },
-    {
-      title: "Database Administrator",
-      desc: "Mengelola dan mengembangkan basis data operasional",
-    },
-    {
-      title: "System Analyst",
-      desc: "Merencanakan dan memberikan rekomendasi sistem IT",
-    },
-    {
-      title: "IT Support",
-      desc: "Mendukung kebutuhan IT seperti instalasi dan evaluasi sistem",
-    },
-    {
-      title: "Akademisi",
-      desc: "Mentransformasi dan mengembangkan ilmu pengetahuan",
-    },
-    {
-      title: "Peneliti",
-      desc: "Mengembangkan ilmu pengetahuan melalui penelitian",
-    },
-  ];
+  const kurikulumData = prodiData?.kurikulum || {
+    title: "Kurikulum Program Studi S1 Teknik Informatika 2021",
+    sk: "Disahkan dengan SK Rektor No. 318/Kep./Rek./8/2021 tentang Pemberlakuan Kurikulum Program Studi S1 Teknik Informatika Fakultas Teknologi Informasi Universitas Kristen Satya Wacana.",
+    perubahanUtama: [
+      {
+        title: "Program Merdeka Belajar Kampus Merdeka",
+        description: "Pemberlakuan program Merdeka Belajar Kampus Merdeka dimana mahasiswa bisa mengambil Mata Kuliah sebanyak 20 SKS di luar program studi S1 Teknik Informatika tetapi masih di dalam UKSW dan 24 SKS di luar UKSW. Untuk program yang bisa diambil di luar PT adalah: Magang Industri, KKN- Tematik, Penelitian, pertukaran pelajar, asistensi mengajar, Project Independen, kegiatan kemanusiaan dan kewirausahaan.",
+      },
+      {
+        title: "Kolaborasi dengan Industri",
+        description: "Penyesuaian perkembangan ilmu pengetahuan dan teknologi dengan menggandeng industri untuk memberikan pembelajaran di kelas dalam satu semester penuh. Hal ini diakomodasi dalam mata kuliah kapita selekta yang berisi topik khusus dari industri.",
+      },
+      {
+        title: "Penyesuaian Konsentrasi",
+        description: "Penyesuaian bidang kajian dalam konsentrasi sehingga lebih sesuai dengan kebutuhan industri. Antara lain penguatan untuk bidang Data Science.",
+      },
+    ],
+    strategiPembelajaran: [
+      { tahun: "Tahun 1", description: "Berfokus pada pemberian dasar-dasar teknik informatika." },
+      { tahun: "Tahun 2", description: "Berfokus pada peningkatan keterampilan di bidang teknik informatika." },
+      { tahun: "Tahun 3", description: "Berfokus pada pendalaman ketrampilan sesuai dengan peminatan mahasiswa." },
+      { tahun: "Tahun 4", description: "Berfokus pada pembelajaran di luar program studi dan tugas akhir." },
+    ],
+    notes: "Pengembangan Holistik:\nUntuk mencapai pusat keunggulan, maka Program Studi S1 Teknik Informatika mengkhususkan diri pada 3 bidang, yaitu: Software Engineering, Network Engineering dan Data Science. Kurikulum S1 Teknik Informatika memuat komponen pengembangan individu secara holistik, sehingga tidak hanya mengembangkan hard skill tetapi juga mengembangkan soft skill. Oleh karena, kurikulum S1 Teknik Informatika disusun untuk menghadirkan mata kuliah yang mendukung pengembangan hard skill dan soft skill sehingga lulusan dapat memiliki kemampuan yang baik dalam beradaptasi dengan perubahan dan perkembangan ilmu pengetahuan maupun teknologi."
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -82,15 +72,13 @@ const TentangProdi = () => {
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Program Studi Teknik Informatika
+            {prodiData?.title || "Program Studi Teknik Informatika"}
           </h1>
           <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-95 dark:opacity-90">
-            Memenuhi kebutuhan sumber daya manusia yang handal serta mampu
-            merencanakan dan mengimplementasikan teknologi informasi untuk
-            berbagai keperluan
+            {prodiData?.description || "Program Studi S1 Teknik Informatika UKSW hadir untuk memenuhi kebutuhan sumber daya manusia yang handal serta mampu merencanakan dan mengimplementasikan teknologi informasi untuk berbagai keperluan. Kurikulum yang dipergunakan di Program Studi S1 Teknik Informatika UKSW didasarkan pada Kerangka Kualifikasi Nasional Indonesia (KKNI) yang menekankan kualifikasi setiap lulusan yang dihasilkan."}
           </p>
           <p className="mt-6 text-sm opacity-80 dark:opacity-70">
-            BAN-PT No. 3925/SK/BAN-PT/Ak.KP/S/X/2023
+            {prodiData?.accreditationText || "BAN-PT No. 3925/SK/BAN-PT/Ak.KP/S/X/2023"}
           </p>
         </div>
       </section>
@@ -127,7 +115,7 @@ const TentangProdi = () => {
               </div>
               <div className="rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
                 <img
-                  src={Sertifikat}
+                  src={prodiData?.sertifikatUrl ? `${process.env.REACT_APP_API_URL?.replace('/api/v1', '') || 'http://localhost:4738'}${prodiData.sertifikatUrl}` : Sertifikat}
                   alt="Sertifikat Akreditasi BAN-PT"
                   className="w-full h-auto object-contain"
                 />
@@ -225,12 +213,7 @@ const TentangProdi = () => {
                   </h3>
                   <div className="bg-blue-50 dark:bg-gray-800 border-l-4 border-blue-700 dark:border-blue-500 p-6 rounded">
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                      Pada tahun 2030 menjadi pusat unggulan Teknik Informatika
-                      untuk menghasilkan pemimpin yang menjunjung tinggi nilai
-                      kebenaran dan iman Kristiani serta memiliki kepekaan
-                      terhadap perubahan dan berkontribusi terhadap pengembangan
-                      Teknik Informatika berlandaskan nilai kritis, kreatif, dan
-                      inovatif.
+                      {prodiData?.visi || "Pada tahun 2030 menjadi pusat unggulan Teknik Informatika untuk menghasilkan pemimpin yang menjunjung tinggi nilai kebenaran dan iman Kristiani serta memiliki kepekaan terhadap perubahan dan berkontribusi terhadap pengembangan Teknik Informatika berlandaskan nilai kritis, kreatif, dan inovatif."}
                     </p>
                   </div>
                 </div>
@@ -239,13 +222,13 @@ const TentangProdi = () => {
                     Misi Program Studi
                   </h3>
                   <ul className="space-y-3">
-                    {[
+                    {(prodiData?.misi?.length ? prodiData.misi : [
                       "Melaksanakan proses pembelajaran yang berbasis keunggulan dalam bidang teknik informatika yang menjunjung tinggi nilai kebenaran dan iman Kristiani.",
                       "Melaksanakan penelitian yang berbasis keunggulan dan selaras dengan perkembangan teknik informatika yang berciri kritis, kreatif, dan inovatif.",
                       "Melaksanakan pengabdian masyarakat yang berbasis keunggulan dalam bidang teknik informatika yang berciri pada semangat pelayanan.",
                       "Mengembangkan kepemimpinan yang mencerminkan sikap kritis, kreatif, dan inovatif serta memiliki kepekaan terhadap perubahan.",
                       "Menciptakan dan mengembangkan sinergi antara pengajaran, penelitian dan pengabdian masyarakat dalam semangat pelayanan dengan berbagai pihak, baik di dalam maupun luar negeri.",
-                    ].map((misi, idx) => (
+                    ]).map((misi, idx) => (
                       <li
                         key={idx}
                         className="flex items-start gap-3 bg-gray-50 dark:bg-gray-800 p-4 rounded border border-gray-200 dark:border-gray-700">
@@ -274,7 +257,17 @@ const TentangProdi = () => {
                   akademis.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {profilLulusanData.map((profil, idx) => (
+                  {(profilLulusanData.length ? profilLulusanData : [
+                    { title: "Software Developer", desc: "yaitu menjadi tenaga terampil untuk mengembangkan perangkat lunak baik di perusahaan swasta, instansi pemerintahan, LSM maupun usaha mandiri (freelancer, wirausaha)." },
+                    { title: "Network Engineer", desc: "yaitu menjadi tenaga terampil untuk merancang, membangun dan mengelola infrastruktur jaringan baik di perusahaan swasta, instansi pemerintahan, LSM maupun usaha mandiri (freelancer, wirausaha)." },
+                    { title: "Data Scientist", desc: "yaitu menjadi tenaga terampil untuk mengumpulkan, mengolah dan menganalisa data sehingga memberikan nilai tambah (untuk keperluan marketing, pengembangan produk, strategi bisnis, dll) bagi perusahaan maupun instansi pengguna." },
+                    { title: "Data Engineer", desc: "yaitu menjadi tenaga terampil untuk mengelola arsitektur data sehingga data-data yang dimiliki perusahaan/instansi bisa terdokumentasi, tersimpan serta dapat diakses dengan mudah untuk berbagai keperluan." },
+                    { title: "Database Administrator", desc: "yaitu tenaga terampil yang mengelola dan mengembangkan basis data di perusahaan/instansi untuk mendukung proses operasional perusahaan dan instansi tersebut." },
+                    { title: "System Analyst", desc: "yaitu tenaga terampil yang bertugas untuk merencanakan, mengkoordinasikan dan memberikan rekomendasi terkait perangkat lunak dan sistem untuk mengakomodasi kebutuhan perusahaan/instansi sehingga pengembangan sistem di perusahaan/instansi bisa tercukupi dengan baik." },
+                    { title: "IT Support", desc: "yaitu tenaga terampil yang bertugas untuk mendukung kebutuhan IT di perusahaan seperti melakukan instalasi, mengevaluasi dan mengembangkan object IT antara lain komputer, software dan jaringan." },
+                    { title: "Akademisi", desc: "yaitu tenaga profesional yang bertugas untuk mentransformasikan, mengembangkan dan menyebarluaskan ilmu pengetahuan dan teknologi melalui pendidikan, penelitian dan pengabdian kepada masyarakat." },
+                    { title: "Peneliti", desc: "yaitu tenaga profesional yang bertugas untuk mengembangkan ilmu pengetahuan." }
+                  ]).map((profil, idx) => (
                     <div
                       key={idx}
                       className="bg-gray-50 dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all">
@@ -308,11 +301,10 @@ const TentangProdi = () => {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
-                    Kurikulum 2021
+                    {kurikulumData.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-2">
-                    SK Rektor No. 318/Kep./Rek/8/2021 tentang Pemberlakuan
-                    Kurikulum Program Studi S1 Teknik Informatika
+                    {kurikulumData.sk}
                   </p>
                 </div>
 
@@ -321,20 +313,7 @@ const TentangProdi = () => {
                     Perubahan Utama
                   </h4>
                   <div className="space-y-4">
-                    {[
-                      {
-                        title: "Program Merdeka Belajar Kampus Merdeka",
-                        desc: "Mahasiswa dapat mengambil 20 SKS di luar prodi tetapi masih di UKSW, dan 24 SKS di luar UKSW melalui magang industri, KKN-Tematik, penelitian, pertukaran pelajar, asistensi mengajar, project independen, kegiatan kemanusiaan, dan kewirausahaan.",
-                      },
-                      {
-                        title: "Kolaborasi dengan Industri",
-                        desc: "Pembelajaran satu semester penuh oleh industri melalui mata kuliah kapita selekta untuk memastikan relevansi kurikulum dengan kebutuhan dunia kerja.",
-                      },
-                      {
-                        title: "Penyesuaian Konsentrasi",
-                        desc: "Penguatan bidang Data Science sesuai kebutuhan industri dan perkembangan teknologi terkini.",
-                      },
-                    ].map((item, idx) => (
+                    {kurikulumData.perubahanUtama.map((item, idx) => (
                       <div
                         key={idx}
                         className="bg-gray-50 dark:bg-gray-800 p-5 rounded border border-gray-200 dark:border-gray-700">
@@ -342,7 +321,7 @@ const TentangProdi = () => {
                           {item.title}
                         </h5>
                         <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                          {item.desc}
+                          {item.description}
                         </p>
                       </div>
                     ))}
@@ -354,34 +333,17 @@ const TentangProdi = () => {
                     Strategi Pembelajaran Bertahap
                   </h4>
                   <div className="space-y-3">
-                    {[
-                      {
-                        year: "Tahun 1",
-                        focus: "Dasar-dasar Teknik Informatika",
-                      },
-                      {
-                        year: "Tahun 2",
-                        focus: "Peningkatan Keterampilan",
-                      },
-                      {
-                        year: "Tahun 3",
-                        focus: "Pendalaman Sesuai Peminatan",
-                      },
-                      {
-                        year: "Tahun 4",
-                        focus: "Pembelajaran Luar Prodi & Tugas Akhir",
-                      },
-                    ].map((tahun, idx) => (
+                    {kurikulumData.strategiPembelajaran.map((tahap, idx) => (
                       <div
                         key={idx}
                         className="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 p-4 rounded border border-gray-200 dark:border-gray-700">
                         <div className="flex-shrink-0 w-20 h-20 bg-blue-700 dark:bg-blue-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white font-bold text-sm text-center">
-                            {tahun.year}
+                          <span className="text-white font-bold text-sm text-center px-1">
+                            {tahap.tahun}
                           </span>
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 font-medium">
-                          {tahun.focus}
+                          {tahap.description}
                         </p>
                       </div>
                     ))}
@@ -389,14 +351,8 @@ const TentangProdi = () => {
                 </div>
 
                 <div className="bg-blue-50 dark:bg-gray-800 border-l-4 border-blue-700 dark:border-blue-500 p-6 rounded">
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    <strong className="text-gray-800 dark:text-gray-100">
-                      Pengembangan Holistik:
-                    </strong>{" "}
-                    Kurikulum dirancang untuk mengembangkan tidak hanya hard
-                    skill tetapi juga soft skill, sehingga lulusan dapat
-                    beradaptasi dengan perubahan dan perkembangan ilmu
-                    pengetahuan serta teknologi.
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                    {kurikulumData.notes}
                   </p>
                 </div>
               </div>

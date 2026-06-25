@@ -9,6 +9,9 @@ import dashboardRoutes from "./dashboard/dashboard.routes";
 import userRoutes from "./users/user.routes";
 import partnerRoutes from "./partner/partner.routes";
 import knowledgeRoutes from "./knowledge/knowledge.routes";
+import settingsRoutes from "./settings/settings.routes";
+import prodiRoutes from "./prodi/prodi.routes";
+import { maintenanceMiddleware } from "../../middleware/maintenance.middleware";
 
 import ragRoutes from "./chatbot/rag.routes";
 
@@ -16,6 +19,9 @@ const router = express.Router();
 
 //chat routes
 router.use("/chat", ragRoutes);
+
+// Apply maintenance middleware globally for v1 APIs
+router.use(maintenanceMiddleware);
 
 // router.use(globalLimiter);
 router.use("/lecturers", lecturerRoutes);
@@ -27,5 +33,7 @@ router.use("/dashboard", dashboardRoutes);
 router.use("/user", userRoutes);
 router.use("/partners", partnerRoutes);
 router.use("/knowledge", knowledgeRoutes);
+router.use("/settings", settingsRoutes);
+router.use("/prodi", prodiRoutes);
 
 export default router;

@@ -23,7 +23,7 @@ const AnnouncementModal = ({
     content: "",
     category: "pengumuman",
     photo: null,
-    status: "draft",
+    status: "published",
     eventDate: null,
     scheduleDate: null,
   });
@@ -47,7 +47,7 @@ const AnnouncementModal = ({
         content: "",
         photo: null,
         category: "",
-        status: "draft",
+        status: "published",
         eventDate: null,
         scheduleDate: null,
       });

@@ -4,7 +4,7 @@ import { connectRedis, getRedisClient } from "./config/redis";
 import { CacheManager } from "./utils/cacheManager";
 import { logger } from "./utils/logger";
 import { env } from "./config/env";
-import { seedAdmin, seedHMPTI, seedLecturerUsers } from "./seed/seedAdmin";
+import { seedAdmin, seedHMPTI, seedLecturerUsers, seedProdiProfile } from "./seed/seedAdmin";
 import { scheduller } from "./jobs/scheduller";
 
 const PORT = env.PORT || 5000; //ini PORT nya
@@ -16,6 +16,7 @@ const startServer = async () => {
     await seedAdmin();
     await seedHMPTI();
     await seedLecturerUsers();
+    await seedProdiProfile();
     scheduller();
     const server = app.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT}`);

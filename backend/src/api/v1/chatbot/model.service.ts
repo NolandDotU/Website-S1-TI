@@ -159,14 +159,14 @@ export class ModelService {
     for await (const chunk of stream) {
       buffer += chunk.toString();
 
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
+      const lines = buffer.split(/\r?\n/);
+      buffer = lines.pop() ?? "";
 
-      for (const event of events) {
-        const line = event.trim();
-        if (!line.startsWith("data: ")) continue;
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data: ")) continue;
 
-        const payload = line.replace("data: ", "");
+        const payload = trimmed.substring(6).trim(); // Remove 'data: '
 
         if (payload === "[DONE]") return;
 

@@ -43,6 +43,8 @@ import {
   updateUser,
   activateUser,
 } from "./user.service";
+import { getSettings, updateSettings, updatePassword, updateAdminProfile } from "./settings.service";
+import { getProdiProfile, updateProdiProfile, uploadProdiSertifikat } from "./prodi.service";
 import api from "./utils/api";
 
 const simulateLatency = (ms = 300) => new Promise((r) => setTimeout(r, ms));
@@ -110,4 +112,11 @@ export {
   getActiveLecturers,
   getLecturersDetail,
   updateLecturerByEmail,
+  getSettings,
+  updateSettings,
+  updatePassword,
+  updateAdminProfile,
+  getProdiProfile,
+  updateProdiProfile,
+  uploadProdiSertifikat,
 };

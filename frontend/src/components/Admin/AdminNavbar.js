@@ -55,6 +55,16 @@ export const AdminNavbar = () => {
       path: "/cms/admin/users",
       label: "Daftar Pengguna",
     },
+    {
+      icon: FileText,
+      path: "/cms/admin/tentang-prodi",
+      label: "Tentang Prodi",
+    },
+    {
+      icon: Settings,
+      path: "/cms/admin/settings",
+      label: "Settings",
+    },
   ];
 
   const navLinks = [

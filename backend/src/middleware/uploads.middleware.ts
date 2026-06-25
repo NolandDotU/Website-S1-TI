@@ -134,6 +134,7 @@ export const uploadNewsPhoto = createUpload("news", 10 * 1024 * 1024);
 export const uploadUserPhoto = createUpload("users", 2 * 1024 * 1024);
 export const uploadCarouselPhoto = createUpload("highlights", 5 * 1024 * 1024);
 export const uploadPartnerPhoto = createUpload("partners", 5 * 1024 * 1024);
+export const uploadProdiPhoto = createUpload("prodi", 5 * 1024 * 1024);
 
 export const handleMulterError = (
   err: any,

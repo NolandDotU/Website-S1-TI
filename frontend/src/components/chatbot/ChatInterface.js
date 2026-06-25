@@ -159,10 +159,20 @@ export function ChatInterface({ isModal = false, theme }) {
             () => setLoading(false),
             (error) => {
                 setLoading(false);
+                let errorMessage = error?.message || "Failed to get response from chatbot.";
+                const isLimit = errorMessage.toLowerCase().includes("limit") || 
+                               errorMessage.toLowerCase().includes("quota") || 
+                               errorMessage.toLowerCase().includes("429") ||
+                               errorMessage.toLowerCase().includes("too many");
+                
+                if (isLimit) {
+                    errorMessage = "Asisten saat ini sedang sibuk melayani banyak pertanyaan. Mohon tunggu sebentar lalu coba lagi ya.";
+                }
+
                 toast.error(
-                    error?.message || "Failed to get response from chatbot.",
+                    errorMessage,
                     {
-                        duration: 4000,
+                        duration: 5000,
                         position: "top-center",
                     }
                 );

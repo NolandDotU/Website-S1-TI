@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 import UserModel from "../model/userModel";
+import ProdiProfileModel from "../model/ProdiProfileModel";
 import { LecturerModel } from "../model/lecturerModel";
 import { logger, hashingPassword } from "../utils";
+import EmbeddingInsertService from "../api/v1/embeddings/embeddingInsert.service";
+import EmbeddingModel from "../model/embeddingModel";
 
 export const seedAdmin = async () => {
   try {
@@ -275,12 +278,53 @@ export const seedLecturerUsers = async () => {
         const lecturerExist = await LecturerModel.findOne({
           email: lecturer.email,
         });
+        
+        let lecturerDocId = lecturerExist?._id;
+        
         if (!lecturerExist) {
-          await LecturerModel.create(lecturerData);
+          const newLecturer = await LecturerModel.create(lecturerData);
+          lecturerDocId = newLecturer._id;
           logger.info(`Lecturer profile ${lecturer.fullname} created`);
         }
 
-        logger.info(`User account for ${lecturer.fullname} created`);
+        if (lecturerDocId) {
+          const hasEmbedding = await EmbeddingModel.findOne({
+            tableName: "lecturer",
+            rowId: lecturerDocId.toString(),
+          });
+          
+          if (!hasEmbedding) {
+            await EmbeddingInsertService.upsertOne(
+              "lecturer",
+              lecturerDocId.toString(),
+              `${lecturer.fullname}\n${lecturer.email}\n${lecturer.expertise}\n${lecturer.externalLink}`
+            ).catch((err) => logger.error(`Failed to embed seeded lecturer ${lecturer.fullname}:`, err));
+            logger.info(`Generated embedding for ${lecturer.fullname}`);
+          }
+        }
+
+        logger.info(`User account for ${lecturer.fullname} created/verified`);
+      } else {
+        // If user exists, we still want to ensure their lecturer profile and embedding exists.
+        const lecturerExist = await LecturerModel.findOne({
+          email: lecturer.email,
+        });
+        
+        if (lecturerExist) {
+          const hasEmbedding = await EmbeddingModel.findOne({
+            tableName: "lecturer",
+            rowId: lecturerExist._id.toString(),
+          });
+          
+          if (!hasEmbedding) {
+            await EmbeddingInsertService.upsertOne(
+              "lecturer",
+              lecturerExist._id.toString(),
+              `${lecturer.fullname}\n${lecturer.email}\n${lecturer.expertise}\n${lecturer.externalLink}`
+            ).catch((err) => logger.error(`Failed to embed seeded lecturer ${lecturer.fullname}:`, err));
+            logger.info(`Generated embedding for existing seeded lecturer ${lecturer.fullname}`);
+          }
+        }
       }
     }
 
@@ -288,6 +332,19 @@ export const seedLecturerUsers = async () => {
     return;
   } catch (error) {
     logger.error("Error seeding lecturer users: ", error);
+    throw error;
+  }
+};
+
+export const seedProdiProfile = async () => {
+  try {
+    const exist = await ProdiProfileModel.findOne();
+    if (exist) return;
+
+    await ProdiProfileModel.create({} as any);
+    logger.info("Prodi Profile seeded");
+  } catch (error) {
+    logger.error("Error seeding Prodi Profile: ", error);
     throw error;
   }
 };

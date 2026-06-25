@@ -22,12 +22,16 @@ import AccountSettings from "./pages/AccountSettings";
 import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
 import { UserManagement } from "./pages/admin/modulUser/ListUsers";
+import Settings from "./pages/admin/modulSettings/Settings";
+import TentangProdiManage from "./pages/admin/modulTentangProdi/TentangProdiManage";
 import ListPartners from "./pages/admin/modulPartners/listPartners";
 import KnowledgeManagement from "./pages/admin/modulKnowledge/listKnowledge";
 import DashboardDosen from "./pages/dosen/dashboard.dosen";
 
 import { ChatModal } from "./components/chatbot/ChatModal";
 import { FloatingChatButton } from "./components/chatbot/FloatingChatButton";
+import Maintenance from "./pages/Maintenance";
+import { getSettings } from "./services/api";
 
 function App() {
   // Initialize theme from localStorage or default to 'light'
@@ -52,6 +56,25 @@ function App() {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
+  const [isMaintenance, setIsMaintenance] = useState(false);
+  const [isCheckingMaintenance, setIsCheckingMaintenance] = useState(true);
+
+  useEffect(() => {
+    const checkSettings = async () => {
+      try {
+        const settings = await getSettings();
+        if (settings?.isMaintenance) {
+          setIsMaintenance(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch system settings:", error);
+      } finally {
+        setIsCheckingMaintenance(false);
+      }
+    };
+    checkSettings();
+  }, []);
+
   // Routes yang ga perlu navbar/footer
   const noLayoutRoutes = ["/login", "/no-access"];
   const isAdminRoute = location.pathname.startsWith("/cms");
@@ -60,6 +83,15 @@ function App() {
     !noLayoutRoutes.includes(location.pathname) && !isAdminRoute;
 
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  if (isCheckingMaintenance) {
+    return <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">Loading...</div>;
+  }
+
+  // If maintenance is active, and we are not in admin or login route
+  if (isMaintenance && !isAdminRoute && location.pathname !== "/login") {
+    return <Maintenance />;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -119,6 +151,8 @@ function App() {
               }>
               <Route path="users" element={<UserManagement />} />
               <Route path="dosen" element={<LecturerManagement />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="tentang-prodi" element={<TentangProdiManage />} />
             </Route>
           </Route>
 
