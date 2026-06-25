@@ -27,8 +27,26 @@ export interface KnowledgeDoc {
     synonyms: string[];
 }
 
+export interface ProdiProfileDoc {
+    _id: any;
+    title: string;
+    description: string;
+    accreditationText: string;
+    visi: string;
+    misi: string[];
+    peminatan: { title: string; description: string }[];
+    profilLulusan: { title: string; desc: string }[];
+    kurikulum: {
+        title: string;
+        sk: string;
+        perubahanUtama: { title: string; description: string }[];
+        strategiPembelajaran: { tahun: string; description: string }[];
+        notes: string;
+    };
+}
+
 export interface SematicMatch {
     rowId: string;
-    tableName: "announcement" | "lecturer" | "partner" | "knowledge";
+    tableName: "announcement" | "lecturer" | "partner" | "knowledge" | "prodi_profile";
     similarity: number;
 }

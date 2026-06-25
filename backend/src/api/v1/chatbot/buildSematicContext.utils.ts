@@ -2,6 +2,7 @@ import AnnouncementModel from "../../../model/AnnouncementModel";
 import { LecturerModel } from "../../../model/lecturerModel";
 import PartnersModel from "../../../model/partnersModel";
 import KnowledgeModel from "../../../model/knowledgeModel";
+import ProdiProfileModel from "../../../model/ProdiProfileModel";
 import { fetchByIdsPreserveOrder } from "./fetchByIdsPreserveOrder.utils";
 import {
   AnnouncementDoc,
@@ -9,6 +10,7 @@ import {
   LecturerDoc,
   PartnerDoc,
   SematicMatch,
+  ProdiProfileDoc
 } from "./sematic.dto";
 
 export async function buildSemanticContext(matches: SematicMatch[]) {
@@ -80,6 +82,40 @@ Link: ${d.link}`
 Judul: ${d.title}
 Isi: ${d.content}${d.link ? `\nLink: ${d.link}` : ""}${synonymText ? `\nSinonim: ${synonymText}` : ""}`;
       })
+    );
+  }
+
+  if (grouped.prodi_profile) {
+    const docs = await fetchByIdsPreserveOrder<ProdiProfileDoc>(
+      ProdiProfileModel,
+      grouped.prodi_profile
+    );
+
+    contexts.push(
+      ...docs.map(d =>
+        `Program Studi: ${d.title}
+Deskripsi: ${d.description}
+Akreditasi: ${d.accreditationText}
+Visi: ${d.visi}
+Misi: 
+${d.misi?.map((m: string) => `- ${m}`).join('\n') || ''}
+
+Peminatan: 
+${d.peminatan?.map((p: any) => `- ${p.title}: ${p.description}`).join('\n') || ''}
+
+Profil Lulusan: 
+${d.profilLulusan?.map((p: any) => `- ${p.title}: ${p.desc}`).join('\n') || ''}
+
+Kurikulum: ${d.kurikulum?.title || ''}
+SK Kurikulum: ${d.kurikulum?.sk || ''}
+Perubahan Utama Kurikulum: 
+${d.kurikulum?.perubahanUtama?.map((p: any) => `- ${p.title}: ${p.description}`).join('\n') || ''}
+
+Strategi Pembelajaran: 
+${d.kurikulum?.strategiPembelajaran?.map((p: any) => `- ${p.tahun}: ${p.description}`).join('\n') || ''}
+
+Catatan Kurikulum: ${d.kurikulum?.notes || ''}`.trim().replace(/<[^>]*>?/gm, '')
+      )
     );
   }
 

@@ -338,11 +338,52 @@ export const seedLecturerUsers = async () => {
 
 export const seedProdiProfile = async () => {
   try {
-    const exist = await ProdiProfileModel.findOne();
-    if (exist) return;
+    let profile = await ProdiProfileModel.findOne();
+    if (!profile) {
+      profile = await new ProdiProfileModel().save();
+      logger.info("Prodi Profile seeded");
+    }
 
-    await ProdiProfileModel.create({} as any);
-    logger.info("Prodi Profile seeded");
+    if (profile) {
+      const hasEmbedding = await EmbeddingModel.findOne({
+        tableName: "prodi_profile",
+        rowId: profile._id.toString(),
+      });
+
+      if (!hasEmbedding) {
+        const textToEmbed = `
+Program Studi: ${profile.title}
+Deskripsi: ${profile.description}
+Akreditasi: ${profile.accreditationText}
+Visi: ${profile.visi}
+Misi: 
+${profile.misi?.map((m: string) => `- ${m}`).join('\n') || ''}
+
+Peminatan: 
+${profile.peminatan?.map((p: any) => `- ${p.title}: ${p.description}`).join('\n') || ''}
+
+Profil Lulusan: 
+${profile.profilLulusan?.map((p: any) => `- ${p.title}: ${p.desc}`).join('\n') || ''}
+
+Kurikulum: ${profile.kurikulum?.title || ''}
+SK Kurikulum: ${profile.kurikulum?.sk || ''}
+Perubahan Utama Kurikulum: 
+${profile.kurikulum?.perubahanUtama?.map((p: any) => `- ${p.title}: ${p.description}`).join('\n') || ''}
+
+Strategi Pembelajaran: 
+${profile.kurikulum?.strategiPembelajaran?.map((p: any) => `- ${p.tahun}: ${p.description}`).join('\n') || ''}
+
+Catatan Kurikulum: ${profile.kurikulum?.notes || ''}
+        `.trim().replace(/<[^>]*>?/gm, '');
+
+        await EmbeddingInsertService.upsertOne(
+          "prodi_profile",
+          profile._id.toString(),
+          textToEmbed
+        ).catch((err) => logger.error(`Failed to embed seeded Prodi Profile:`, err));
+        logger.info(`Generated embedding for Prodi Profile`);
+      }
+    }
   } catch (error) {
     logger.error("Error seeding Prodi Profile: ", error);
     throw error;
