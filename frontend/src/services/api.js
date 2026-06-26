@@ -47,12 +47,17 @@ import { getSettings, updateSettings, updatePassword, updateAdminProfile } from 
 import { getProdiProfile, updateProdiProfile, uploadProdiSertifikat } from "./prodi.service";
 import api from "./utils/api";
 
-const simulateLatency = (ms = 300) => new Promise((r) => setTimeout(r, ms));
+import {
+  getAchievements,
+  getAchievementById,
+  createAchievement,
+  updateAchievement,
+  deleteAchievement,
+  uploadAchievementImage,
+  uploadAchievementCertificate,
+} from "./achievement.service";
 
-// export async function getPartners() {
-//   await simulateLatency();
-//   return partners;
-// }
+const simulateLatency = (ms = 300) => new Promise((r) => setTimeout(r, ms));
 
 export async function getServices() {
   await simulateLatency();
@@ -119,4 +124,11 @@ export {
   getProdiProfile,
   updateProdiProfile,
   uploadProdiSertifikat,
+  getAchievements,
+  getAchievementById,
+  createAchievement,
+  updateAchievement,
+  deleteAchievement,
+  uploadAchievementImage,
+  uploadAchievementCertificate,
 };

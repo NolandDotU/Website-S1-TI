@@ -23,6 +23,7 @@ import {
   Activity,
 } from "lucide-react";
 import { getAllHistory, getdashboardData } from "../../services/api";
+import { getAllKnowledge } from "../../services/knowledge.service";
 import { StatCard } from "../../components/Admin/dashboard/StatCard";
 import { MostViewedCard } from "../../components/Admin/dashboard/MostViewedCard";
 import { ActivityCard } from "../../components/Admin/dashboard/ActivityCard";
@@ -32,18 +33,23 @@ const Dashboard = () => {
   const user = useAuth().user;
   const [dashboardData, setDashboardData] = useState(null);
   const [newestActivities, setNewestActivities] = useState([]);
+  const [recentKnowledge, setRecentKnowledge] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     try {
-      const [responseDashboard, responseHistory] = await Promise.all([
+      const [responseDashboard, responseHistory, responseKnowledge] = await Promise.all([
         getdashboardData(),
         getAllHistory(3, 1, "", user),
+        getAllKnowledge({ limit: 6 }),
       ]);
       setDashboardData(responseDashboard.data);
 
       setNewestActivities(responseHistory.data.history);
+
+      const knowledgesData = responseKnowledge?.data?.data || responseKnowledge?.data || responseKnowledge || [];
+      setRecentKnowledge(Array.isArray(knowledgesData) ? knowledgesData : []);
 
       setLoading(false);
     } catch (error) {
@@ -73,49 +79,17 @@ const Dashboard = () => {
     announcements,
     userPercentage,
     announcementPercentage,
-    chatbotRequestPercentage,
     topFiveAnn,
-    chatbot,
   } = dashboardData;
   const userTrend = parseFloat(userPercentage) > 0 ? "up" : "down";
   const announcementTrend =
     parseFloat(announcementPercentage) > 0 ? "up" : "down";
-  const chatbotTrend = parseFloat(chatbotRequestPercentage) > 0 ? "up" : "down";
 
   const totalPublished =
     typeof announcements.totalPublishedAnnouncement === "object"
       ? announcements.totalPublishedAnnouncement?.views ||
         announcements.totalAnnouncement
       : announcements.totalPublishedAnnouncement;
-
-  const chatbotInfo = chatbot?.info || {};
-  const chatbotConnections = chatbot?.connections || {};
-  const chatbotTopModels = chatbot?.topUsedModels || [];
-  const chatbotConfiguredModels = chatbot?.configuredModels || [];
-
-  const formatConnectionStatus = (status) => {
-    const normalized = (status || "").toString().toLowerCase();
-    if (["connected", "configured"].includes(normalized)) {
-      return {
-        label: normalized === "connected" ? "Connected" : "Configured",
-        style:
-          "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
-      };
-    }
-
-    if (["connecting", "disconnecting"].includes(normalized)) {
-      return {
-        label: normalized === "connecting" ? "Connecting" : "Disconnecting",
-        style:
-          "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-      };
-    }
-
-    return {
-      label: normalized ? normalized.replace(/_/g, " ") : "Unknown",
-      style: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300",
-    };
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
@@ -172,42 +146,7 @@ const Dashboard = () => {
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          title="Request Chatbot"
-          value={chatbot?.totalRequests || 0}
-          subtitle={`${chatbot?.uniqueSessions || 0} sesi unik`}
-          icon={Bot}
-          trend={chatbotTrend}
-          trendValue={Math.abs(parseFloat(chatbotRequestPercentage || "0")).toFixed(2)}
-          bgColor="bg-cyan-100 dark:bg-cyan-900/30"
-          iconColor="text-cyan-700 dark:text-cyan-300"
-        />
-        <StatCard
-          title="Success Rate Chatbot"
-          value={Math.round(chatbot?.successRate || 0)}
-          subtitle={`${chatbot?.successfulRequests || 0} sukses`}
-          icon={Timer}
-          bgColor="bg-emerald-100 dark:bg-emerald-900/30"
-          iconColor="text-emerald-700 dark:text-emerald-300"
-        />
-        <StatCard
-          title="Error Rate Chatbot"
-          value={Math.round(chatbot?.errorRate || 0)}
-          subtitle={`${chatbot?.failedRequests || 0} gagal`}
-          icon={ShieldAlert}
-          bgColor="bg-rose-100 dark:bg-rose-900/30"
-          iconColor="text-rose-700 dark:text-rose-300"
-        />
-        <StatCard
-          title="Fallback Model"
-          value={Math.round(chatbot?.fallbackRate || 0)}
-          subtitle={`${chatbot?.fallbackRequests || 0} request fallback`}
-          icon={Shuffle}
-          bgColor="bg-amber-100 dark:bg-amber-900/30"
-          iconColor="text-amber-700 dark:text-amber-300"
-        />
-      </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div
@@ -474,210 +413,38 @@ const Dashboard = () => {
         className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            Informasi Chatbot
-            <Cpu className="w-5 h-5 text-gray-400" />
+            Highlight Knowledge Base
+            <Database className="w-5 h-5 text-gray-400" />
           </h2>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            Snapshot bulan berjalan
-          </span>
+          <Link to="/cms/knowledges">
+            <button className="flex items-center text-xs gap-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">
+              lihat semua <ArrowRight className="w-3 h-3" />
+            </button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
-              <Bot className="w-4 h-4" />
-              Konfigurasi Model
-            </h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Provider</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbotInfo.provider || "-"}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Model Utama</span>
-                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
-                  {chatbotInfo.primaryModel || "-"}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Fallback Model
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
-                  {chatbotInfo.fallbackModels?.length > 0
-                    ? chatbotInfo.fallbackModels.join(", ")
-                    : "-"}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Total Model Terdaftar
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbotInfo.modelCount ?? chatbotConfiguredModels.length}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Model Terpakai Bulan Ini
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
-                  {chatbotConfiguredModels.length > 0
-                    ? chatbotConfiguredModels.join(", ")
-                    : "-"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
-              <Workflow className="w-4 h-4" />
-              RAG & Response Pipeline
-            </h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">
-                  OpenRouter Responses
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbot?.openrouterResponses || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Intent Responses</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbot?.intentResponses || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">No Context Responses</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbot?.noContextResponses || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Mode Stream</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbot?.streamRequests || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Mode Non-Stream</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbot?.nonStreamRequests || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Avg Response Time</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {(chatbot?.avgResponseTimeMs || 0).toLocaleString()} ms
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
-              <PlugZap className="w-4 h-4" />
-              Status Koneksi
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { label: "MongoDB", value: chatbotConnections.mongodb, icon: Database },
-                { label: "Redis", value: chatbotConnections.redis, icon: Database },
-                { label: "OpenRouter", value: chatbotConnections.openrouter, icon: Bot },
-                { label: "Embedding", value: chatbotConnections.embedding, icon: Cpu },
-              ].map((item) => {
-                const status = formatConnectionStatus(item.value);
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.label}
-                    className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-700/40 p-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                      <Icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                      {item.label}
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full capitalize ${status.style}`}>
-                      {status.label}
-                    </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recentKnowledge && recentKnowledge.length > 0 ? (
+            recentKnowledge.map((item, index) => (
+              <div key={item._id || item.id || index} className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-1">{item.title}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{item.content}</p>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-4">
-              <Activity className="w-4 h-4" />
-              Operasional & Integrasi
-            </h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Embedding Endpoint</span>
-                <span className="font-medium text-gray-900 dark:text-white text-right break-all">
-                  {chatbotInfo.embeddingBaseUrl || "-"}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Embedding Dimension</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbotInfo.embeddingDimension || 0}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Vector Search Mode</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {chatbotInfo.vectorSearchMode || "-"}
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Timeout Request Model</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {(chatbotInfo.requestTimeoutMs || 0).toLocaleString()} ms
-                </span>
-              </div>
-              <div className="flex justify-between gap-3">
-                <span className="text-gray-500 dark:text-gray-400">Last Request</span>
-                <span className="font-medium text-gray-900 dark:text-white text-right">
-                  {chatbot?.lastRequestAt
-                    ? new Date(chatbot.lastRequestAt).toLocaleString("id-ID")
-                    : "-"}
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
-                Top Model Usage (Bulan Ini)
-              </p>
-              {chatbotTopModels.length > 0 ? (
-                <div className="space-y-2">
-                  {chatbotTopModels.map((item, index) => (
-                    <div
-                      key={`${item.model}-${index}`}
-                      className="flex items-center justify-between text-sm">
-                      <span className="text-gray-700 dark:text-gray-300 break-all pr-3">
-                        {item.model}
-                      </span>
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {item.count}x
-                      </span>
-                    </div>
-                  ))}
                 </div>
-              ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Belum ada data penggunaan model.
-                </p>
-              )}
+                <div className="mt-3 flex">
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${item.kind === 'contact' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'}`}>
+                    {item.kind || 'Unknown'}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+              Belum ada data knowledge
             </div>
-          </div>
+          )}
         </div>
       </motion.div>
     </div>

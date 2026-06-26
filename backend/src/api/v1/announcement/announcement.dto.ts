@@ -10,6 +10,7 @@ export interface IAnnouncement {
   scheduleDate?: Date;
   views?: number;
   eventDate?: Date;
+  validUntil?: Date;
 }
 
 export interface IAnnouncementGet extends IAnnouncement {
@@ -38,6 +39,7 @@ export interface IAnnouncementInput {
   status?: string;
   scheduleDate?: Date;
   eventDate?: Date;
+  validUntil?: Date;
 }
 
 export interface IAnnouncementDoc extends IAnnouncement, Document {}

@@ -76,7 +76,7 @@ const AnnouncementDetail = ({ onClose, data }) => {
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <span className="text-sm">
-                {new Date(data.publishDate).toLocaleDateString("id-ID", {
+                {new Date(data.publishDate || data.createdAt || Date.now()).toLocaleDateString("id-ID", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",

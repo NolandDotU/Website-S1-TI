@@ -135,6 +135,65 @@ export const uploadUserPhoto = createUpload("users", 2 * 1024 * 1024);
 export const uploadCarouselPhoto = createUpload("highlights", 5 * 1024 * 1024);
 export const uploadPartnerPhoto = createUpload("partners", 5 * 1024 * 1024);
 export const uploadProdiPhoto = createUpload("prodi", 5 * 1024 * 1024);
+export const uploadAchievementPhoto = createUpload("achievements", 5 * 1024 * 1024);
+
+// ============================================
+// CREATE DOCUMENT UPLOAD MIDDLEWARE (For Certificates/PDFs)
+// ============================================
+const createDocumentUpload = (destination: string, maxSize = 10 * 1024 * 1024) => {
+  logger.info(`Creating document upload middleware for ${destination}`);
+  const storage = multer.diskStorage({
+    destination: async (req, file, cb) => {
+      const uploadPath = path.join("uploads", destination);
+      await fs.mkdir(uploadPath, { recursive: true });
+      cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = crypto.randomUUID();
+      const ext = path.extname(file.originalname);
+      cb(null, `${uniqueName}${ext}`);
+    },
+  });
+
+  return multer({
+    storage,
+    limits: { fileSize: maxSize, files: 1 },
+    fileFilter: (req, file, cb) => {
+      const allowedMimes = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+      if (allowedMimes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Invalid file type"));
+      }
+    },
+  }).single("file");
+};
+
+export const uploadCertificate = createDocumentUpload("certificates", 10 * 1024 * 1024);
+
+export const validateDocument = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.file) return next();
+
+    const buffer = await fs.readFile(req.file.path);
+    const type = await fileType.fromBuffer(buffer);
+    const allowed = ["image/jpeg", "image/png", "application/pdf"];
+
+    if (!type || !allowed.includes(type.mime)) {
+      await fs.unlink(req.file.path);
+      throw ApiError.badRequest("Invalid document file");
+    }
+
+    next();
+  } catch (error) {
+    if (req.file) await fs.unlink(req.file.path).catch(() => {});
+    next(error);
+  }
+};
 
 export const handleMulterError = (
   err: any,

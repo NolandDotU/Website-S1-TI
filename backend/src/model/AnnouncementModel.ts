@@ -14,7 +14,6 @@ const announcementSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
     },
     link: String,
     photo: String,
@@ -35,6 +34,7 @@ const announcementSchema = new mongoose.Schema(
       default: 0,
     },
     eventDate: Date,
+    validUntil: Date,
   },
   {
     timestamps: true,

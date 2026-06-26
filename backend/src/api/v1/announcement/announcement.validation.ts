@@ -43,8 +43,9 @@ export const AnnouncementSchema = z
 
     content: z
       .string()
-      .min(50, "Konten minimal 50 karakter")
-      .max(6000, "Konten maksimal 6000 karakter"),
+      .max(6000, "Konten maksimal 6000 karakter")
+      .optional()
+      .or(z.literal("")),
 
     link: z.preprocess(
       (val) => (val === "" || val === null ? undefined : val),

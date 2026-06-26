@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/Home";
 import LecturerProfiles from "./pages/LecturerProfiles";
 import Berita from "./pages/Berita";
+import Prestasi from "./pages/Prestasi";
 import Login from "./pages/Login";
 import { AdminDashboard } from "./pages/admin";
 import { NoAccessPage } from "./pages/middleware/notHaveAccess";
@@ -22,6 +23,7 @@ import AccountSettings from "./pages/AccountSettings";
 import TentangProdi from "./pages/TentangProdi";
 import History from "./pages/admin/History";
 import { UserManagement } from "./pages/admin/modulUser/ListUsers";
+import ListAchievement from "./pages/admin/modulAchievement/ListAchievement";
 import Settings from "./pages/admin/modulSettings/Settings";
 import TentangProdiManage from "./pages/admin/modulTentangProdi/TentangProdiManage";
 import ListPartners from "./pages/admin/modulPartners/listPartners";
@@ -114,6 +116,7 @@ function App() {
           {/* ========== PUBLIC ROUTES ========== */}
           <Route path="/" element={<HomePage />} />
           <Route path="/berita" element={<Berita />} />
+          <Route path="/prestasi" element={<Prestasi />} />
           <Route path="/profil-dosen" element={<LecturerProfiles />} />
           <Route path="/tentang-program-studi" element={<TentangProdi />} />
 
@@ -154,6 +157,12 @@ function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="tentang-prodi" element={<TentangProdiManage />} />
             </Route>
+            
+            <Route path="prestasi" element={
+              <ProtectedRoute requiredRole={["admin"]}>
+                <ListAchievement />
+              </ProtectedRoute>
+            } />
           </Route>
 
           {/* ========== PROTECTEDDOSEN ONLY ROUTES ========== */}

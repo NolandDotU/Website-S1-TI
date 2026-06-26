@@ -26,6 +26,7 @@ const AnnouncementModal = ({
     status: "published",
     eventDate: null,
     scheduleDate: null,
+    validUntil: null,
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const AnnouncementModal = ({
         status: announcement.status,
         eventDate: announcement.eventDate,
         scheduleDate: announcement.scheduleDate,
+        validUntil: announcement.validUntil,
       });
     } else {
       setFormData({
@@ -50,6 +52,7 @@ const AnnouncementModal = ({
         status: "published",
         eventDate: null,
         scheduleDate: null,
+        validUntil: null,
       });
     }
   }, [announcement, mode, isOpen]);
@@ -314,6 +317,54 @@ const AnnouncementModal = ({
               )}
             </div>
 
+            {/* Schedule Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Tanggal Rilis (opsional)
+              </label>
+              <input
+                type="date"
+                value={formData.scheduleDate ? new Date(formData.scheduleDate).toISOString().split('T')[0] : ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, scheduleDate: e.target.value })
+                }
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
+                  dark:border-gray-600 bg-white dark:bg-gray-900 
+                  text-gray-900 dark:text-white 
+                  focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
+                  transition-colors"
+              />
+              {errors.scheduleDate && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.scheduleDate[0]}
+                </p>
+              )}
+            </div>
+
+            {/* Valid Until */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Tanggal Berakhir (opsional)
+              </label>
+              <input
+                type="date"
+                value={formData.validUntil ? new Date(formData.validUntil).toISOString().split('T')[0] : ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, validUntil: e.target.value })
+                }
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 
+                  dark:border-gray-600 bg-white dark:bg-gray-900 
+                  text-gray-900 dark:text-white 
+                  focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
+                  transition-colors"
+              />
+              {errors.validUntil && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.validUntil[0]}
+                </p>
+              )}
+            </div>
+
             {formData.category === "event" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -321,7 +372,7 @@ const AnnouncementModal = ({
                 </label>
                 <input
                   type="date"
-                  value={formData.eventDate}
+                  value={formData.eventDate ? new Date(formData.eventDate).toISOString().split('T')[0] : ""}
                   onChange={(e) =>
                     setFormData({ ...formData, eventDate: e.target.value })
                   }

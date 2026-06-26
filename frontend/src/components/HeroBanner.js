@@ -84,12 +84,21 @@ const HeroBanner = () => {
           </a>
           <a
             href="#academics"
-            className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800 sm:ms-4"
+            className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800 sm:ms-4 mt-4 sm:mt-0"
             onClick={(e) => {
               e.preventDefault();
               window.open("/tentang-program-studi", "_blank");
             }}>
             Lihat Program
+          </a>
+          <a
+            href="/prestasi"
+            className="inline-flex items-center justify-center rounded-lg border border-blue-300 px-5 py-3 text-center text-base font-medium text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-100 dark:border-blue-700 dark:text-blue-400 dark:hover:bg-gray-800 dark:focus:ring-blue-900 sm:ms-4 mt-4 sm:mt-0"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/prestasi";
+            }}>
+            Prestasi / Achievment
           </a>
         </motion.div>
       </div>

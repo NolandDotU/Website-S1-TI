@@ -133,7 +133,7 @@ const PreviewAnnouncement = () => {
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
                   <span className="text-sm">
-                    {formatDate(announcement.publishedAt | Date.now())}
+                    {formatDate(announcement.publishDate || announcement.createdAt || Date.now())}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -169,12 +169,12 @@ const PreviewAnnouncement = () => {
               <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 pb-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  <span className="text-sm">{announcement.author}</span>
+                  <span className="text-sm">{announcement.author || "Admin"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
                   <span className="text-sm">
-                    {formatDate(announcement.publishedAt)}
+                    {formatDate(announcement.publishDate || announcement.createdAt || Date.now())}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

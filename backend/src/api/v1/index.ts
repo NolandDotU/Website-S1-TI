@@ -11,6 +11,7 @@ import partnerRoutes from "./partner/partner.routes";
 import knowledgeRoutes from "./knowledge/knowledge.routes";
 import settingsRoutes from "./settings/settings.routes";
 import prodiRoutes from "./prodi/prodi.routes";
+import achievementRoutes from "./achievement/achievement.routes";
 import { maintenanceMiddleware } from "../../middleware/maintenance.middleware";
 
 import ragRoutes from "./chatbot/rag.routes";
@@ -35,5 +36,6 @@ router.use("/partners", partnerRoutes);
 router.use("/knowledge", knowledgeRoutes);
 router.use("/settings", settingsRoutes);
 router.use("/prodi", prodiRoutes);
+router.use("/achievements", achievementRoutes);
 
 export default router;

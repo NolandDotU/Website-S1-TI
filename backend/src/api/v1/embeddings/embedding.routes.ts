@@ -33,7 +33,7 @@ router.post("/embedding", async (req, res) => {
       question,
       context: ordered.map((n) => ({
         title: n?.title,
-        content: n?.content.slice(0, 1_500), //batasi panjang konten
+        content: n?.content ? n.content.slice(0, 1_500) : "", //batasi panjang konten
       })),
     });
   } catch (err: any) {
