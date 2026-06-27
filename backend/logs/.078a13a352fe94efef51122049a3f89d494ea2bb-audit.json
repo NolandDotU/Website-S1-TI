@@ -9,6 +9,26 @@
             "date": 1781868194847,
             "name": "logs\\2026-06-19.log",
             "hash": "47cc57d55ef7c28e275902958524df6384a3332f352f7c0da2aae0d455467f05"
+        },
+        {
+            "date": 1782236288956,
+            "name": "logs\\2026-06-24.log",
+            "hash": "9440278df9d63552c6a3ce7c29ce92eff7b0125741b74d8fd7ee5bb2217e6b9d"
+        },
+        {
+            "date": 1782381057947,
+            "name": "logs\\2026-06-25.log",
+            "hash": "841ca80155beab5ad1f837821055e791168d541ef1d18ea7957799e0c6390c31"
+        },
+        {
+            "date": 1782470090080,
+            "name": "logs\\2026-06-26.log",
+            "hash": "8b0f56d226304b5e731b06cbf6137b51fe730c5d4d8c730a5faacb4b7f973db6"
+        },
+        {
+            "date": 1782554570746,
+            "name": "logs\\2026-06-27.log",
+            "hash": "ee84ee70d3dd966d2957efd438d66eb4987ef691eb3d011f94426026ece09f20"
         }
     ],
     "hashType": "sha256"

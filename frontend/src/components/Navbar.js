@@ -4,13 +4,15 @@ import Logo from "../assets/logo/Logo-DMl9ckBx.png";
 import { useAuth } from "../context/Context";
 import { env } from "../services/utils/env";
 import Toggle from "./Toggle";
-import { Menu, User2, X } from "lucide-react";
+import { Menu, User2, X, Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+import { getSettings } from "../services/settings.service";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownUser, setIsDropDownUser] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
+  const [settings, setSettings] = useState(null);
   const dropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -61,6 +63,12 @@ const Navbar = ({ theme, toggleTheme }) => {
   };
 
   useEffect(() => {
+    getSettings().then((res) => {
+      if (res && res.data) {
+        setSettings(res.data);
+      }
+    }).catch(console.error);
+
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -72,8 +80,39 @@ const Navbar = ({ theme, toggleTheme }) => {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 w-full text-black dark:text-white bg-white dark:bg-gray-900">
-      <div className="max-w-full mx-auto px-4 md:px-10 pt-2">
+    <nav className="sticky top-0 z-50 w-full text-black dark:text-white bg-white dark:bg-gray-900 shadow-sm flex flex-col">
+      {/* Top Bar */}
+      <div className="w-full bg-blue-700 dark:bg-gray-950 text-white py-2 px-4 md:px-10 hidden lg:flex justify-between items-center text-sm font-medium">
+        <div className="flex gap-6 items-center">
+          <div className="flex items-center gap-2">
+            <Phone className="w-4 h-4" />
+            <span>{settings?.prodiPhone || "(0298) 321212"}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Mail className="w-4 h-4" />
+            <span>{settings?.prodiEmail || "fti@uksw.edu"}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            <a href={settings?.prodiMapsLink || "#"} target="_blank" rel="noreferrer" className="truncate max-w-[200px] md:max-w-xs hover:underline cursor-pointer">
+              {settings?.prodiAddress || "Gedung Fakultas Teknologi Informasi..."}
+            </a>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <a href={settings?.socialFacebook || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+            <Facebook className="w-4 h-4" />
+          </a>
+          <a href={settings?.socialInstagram || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+            <Instagram className="w-4 h-4" />
+          </a>
+          <a href={settings?.socialYoutube || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+            <Youtube className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
+      <div className="max-w-full mx-auto px-4 md:px-10 pt-2 pb-2 w-full">
         <div className="flex h-16 items-center justify-between gap-3 md:gap-8">
           <div className="flex items-center gap-4 md:gap-20">
             <Link
@@ -105,9 +144,8 @@ const Navbar = ({ theme, toggleTheme }) => {
                 <button className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center gap-1">
                   Lainnya
                   <svg
-                    className={`w-4 h-4 transition-transform ${
-                      isDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""
+                      }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">

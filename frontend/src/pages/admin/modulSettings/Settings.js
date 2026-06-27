@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { getSettings, updateSettings } from "../../../services/api";
+import { useToast } from "../../../context/toastProvider";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("system");
+  const toast = useToast();
   
   // States for System Settings
   const [systemSettings, setSystemSettings] = useState({ 
     isMaintenance: false,
     theme: "light",
+    prodiPhone: "",
+    prodiEmail: "",
+    prodiAddress: "",
+    prodiMapsLink: "",
+    socialFacebook: "",
+    socialInstagram: "",
+    socialYoutube: "",
     SystemInfo: { version: "1.0.0", env: "development", developerContanct: "" }
   });
   const [systemLoading, setSystemLoading] = useState(false);
@@ -25,6 +34,13 @@ const Settings = () => {
         setSystemSettings({ 
           isMaintenance: settings.isMaintenance || false,
           theme: settings.theme || "light",
+          prodiPhone: settings.prodiPhone || "",
+          prodiEmail: settings.prodiEmail || "",
+          prodiAddress: settings.prodiAddress || "",
+          prodiMapsLink: settings.prodiMapsLink || "",
+          socialFacebook: settings.socialFacebook || "",
+          socialInstagram: settings.socialInstagram || "",
+          socialYoutube: settings.socialYoutube || "",
           SystemInfo: settings.SystemInfo || { version: "1.0.0", env: "development", developerContanct: "" }
         });
       }
@@ -39,9 +55,30 @@ const Settings = () => {
       const newStatus = !systemSettings.isMaintenance;
       await updateSettings({ isMaintenance: newStatus });
       setSystemSettings({ ...systemSettings, isMaintenance: newStatus });
-      alert(`Maintenance mode turned ${newStatus ? "ON" : "OFF"}!`);
+      toast.success(`Maintenance mode turned ${newStatus ? "ON" : "OFF"}!`);
     } catch (err) {
-      alert("Failed to update maintenance settings");
+      toast.error("Failed to update maintenance settings");
+      console.error(err);
+    } finally {
+      setSystemLoading(false);
+    }
+  };
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setSystemLoading(true);
+    try {
+      await updateSettings({
+        prodiPhone: systemSettings.prodiPhone,
+        prodiEmail: systemSettings.prodiEmail,
+        prodiAddress: systemSettings.prodiAddress,
+        prodiMapsLink: systemSettings.prodiMapsLink,
+        socialFacebook: systemSettings.socialFacebook,
+        socialInstagram: systemSettings.socialInstagram,
+        socialYoutube: systemSettings.socialYoutube,
+      });
+      toast.success("Contact settings updated successfully!");
+    } catch (err) {
+      toast.error("Failed to update contact settings");
       console.error(err);
     } finally {
       setSystemLoading(false);
@@ -53,9 +90,9 @@ const Settings = () => {
     setSystemLoading(true);
     try {
       await updateSettings({ theme: systemSettings.theme, SystemInfo: systemSettings.SystemInfo });
-      alert("System settings updated successfully!");
+      toast.success("System settings updated successfully!");
     } catch (err) {
-      alert("Failed to update system settings");
+      toast.error("Failed to update system settings");
       console.error(err);
     } finally {
       setSystemLoading(false);
@@ -79,9 +116,90 @@ const Settings = () => {
         >
           General
         </button>
+        <button
+          className={`py-2 px-4 font-semibold ${activeTab === 'contact' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+          onClick={() => setActiveTab('contact')}
+        >
+          Kontak & Sosial Media
+        </button>
       </div>
 
       <div className="max-w-2xl">
+        {activeTab === 'contact' && (
+          <form onSubmit={handleContactSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor Handphone / Telepon</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.prodiPhone}
+                onChange={(e) => setSystemSettings({ ...systemSettings, prodiPhone: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Program Studi</label>
+              <input
+                type="email"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.prodiEmail}
+                onChange={(e) => setSystemSettings({ ...systemSettings, prodiEmail: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat Program Studi</label>
+              <textarea
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                rows="2"
+                value={systemSettings.prodiAddress}
+                onChange={(e) => setSystemSettings({ ...systemSettings, prodiAddress: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link Google Maps (Alamat)</label>
+              <input
+                type="url"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.prodiMapsLink}
+                onChange={(e) => setSystemSettings({ ...systemSettings, prodiMapsLink: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link Facebook</label>
+              <input
+                type="url"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.socialFacebook}
+                onChange={(e) => setSystemSettings({ ...systemSettings, socialFacebook: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link Instagram</label>
+              <input
+                type="url"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.socialInstagram}
+                onChange={(e) => setSystemSettings({ ...systemSettings, socialInstagram: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link Youtube</label>
+              <input
+                type="url"
+                className="w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                value={systemSettings.socialYoutube}
+                onChange={(e) => setSystemSettings({ ...systemSettings, socialYoutube: e.target.value })}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={systemLoading}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            >
+              {systemLoading ? "Saving..." : "Save Contact Info"}
+            </button>
+          </form>
+        )}
+
         {activeTab === 'general' && (
           <form onSubmit={handleGeneralSubmit} className="space-y-4">
             <div>

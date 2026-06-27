@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/logo/Logo-DMl9ckBx.png";
 import K2I from "../assets/logo/K2I.png";
+import { getSettings } from "../services/settings.service";
 
 const Footer = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    getSettings().then((res) => {
+      if (res && res.data) {
+        setSettings(res.data);
+      }
+    }).catch(console.error);
+  }, []);
+
   return (
     <footer className="w-full p-5 relative">
       {/* Vertical lines extending through footer - aligned with page lines */}
@@ -33,25 +44,18 @@ const Footer = () => {
               <p className="text-sm">
                 Email:{" "}
                 <a
-                  href="mailto:fti@uksw.edu"
+                  href={`mailto:${settings?.prodiEmail || "fti@uksw.edu"}`}
                   className="underline hover:text-gray-300">
-                  fti@uksw.edu
+                  {settings?.prodiEmail || "fti@uksw.edu"}
                 </a>
               </p>
               <div className="space-y-1 text-xs text-gray-300">
                 <p>Senin - Jumat: 08.00 - 16.00 WIB</p>
-                <p>Telp (Kampus Pusat): (0298) 321212</p>
+                <p>Telp (Kampus Pusat): {settings?.prodiPhone || "(0298) 321212"}</p>
               </div>
-              <div className="space-y-2 text-sm leading-relaxed">
-                <p>
-                  Gedung Fakultas Teknologi Informasi,
-                  <br /> Kampus III Universitas Kristen Satya Wacana
-                </p>
-                <p>
-                  Jl. Dr. O. Notohamidjojo, Blotongan,
-                  <br /> Sidorejo, Kota Salatiga, 50715, Indonesia
-                </p>
-              </div>
+              <a href={settings?.prodiMapsLink || "#"} target="_blank" rel="noreferrer" className="space-y-2 text-sm leading-relaxed whitespace-pre-line hover:text-gray-300 transition block">
+                {settings?.prodiAddress || "Gedung Fakultas Teknologi Informasi,\nKampus III Universitas Kristen Satya Wacana\n\nJl. Dr. O. Notohamidjojo, Blotongan,\nSidorejo, Kota Salatiga, 50715, Indonesia"}
+              </a>
             </div>
             {/* Column 3: Resources */}
             <div className="space-y-5">
