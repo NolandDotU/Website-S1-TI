@@ -100,15 +100,21 @@ const Navbar = ({ theme, toggleTheme }) => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <a href={settings?.socialFacebook || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
-            <Facebook className="w-4 h-4" />
-          </a>
-          <a href={settings?.socialInstagram || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
-            <Instagram className="w-4 h-4" />
-          </a>
-          <a href={settings?.socialYoutube || "#"} target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
-            <Youtube className="w-4 h-4" />
-          </a>
+          {settings?.socialFacebook && settings.socialFacebook !== "#" && settings.socialFacebook !== "" && (
+            <a href={settings.socialFacebook} title="Facebook" target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+              <Facebook className="w-4 h-4" />
+            </a>
+          )}
+          {settings?.socialInstagram && settings.socialInstagram !== "#" && settings.socialInstagram !== "" && (
+            <a href={settings.socialInstagram} title="Instagram" target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+              <Instagram className="w-4 h-4" />
+            </a>
+          )}
+          {settings?.socialYoutube && settings.socialYoutube !== "#" && settings.socialYoutube !== "" && (
+            <a href={settings.socialYoutube} title="Youtube" target="_blank" rel="noreferrer" className="hover:opacity-80 transition">
+              <Youtube className="w-4 h-4" />
+            </a>
+          )}
         </div>
       </div>
 
