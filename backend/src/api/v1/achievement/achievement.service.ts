@@ -32,7 +32,7 @@ export class AchievementService {
       return cached;
     }
 
-    const searchQuery = search
+    const searchQuery: mongoose.FilterQuery<any> = search
       ? {
           $or: [
             { title: { $regex: normalizedSearch, $options: "i" } },
@@ -41,13 +41,14 @@ export class AchievementService {
         }
       : {};
 
+    // @ts-ignore - Bypass Mongoose complex union type inference issue
     const [docs, totalItems] = await Promise.all([
       this.model
-        .find(searchQuery)
-        .sort({ achievementDate: -1, createdAt: -1 })
+        .find(searchQuery as any)
+        .sort({ achievementDate: -1, createdAt: -1 } as any)
         .skip(skip)
         .limit(limit),
-      this.model.countDocuments(searchQuery),
+      this.model.countDocuments(searchQuery as any),
     ]);
 
     const response: IAchievementResponse = {
