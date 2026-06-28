@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/Home";
 import LecturerProfiles from "./pages/LecturerProfiles";
 import Berita from "./pages/Berita";
+import Pengumuman from "./pages/Pengumuman";
 import Prestasi from "./pages/Prestasi";
 import Login from "./pages/Login";
 import { AdminDashboard } from "./pages/admin";
@@ -98,9 +99,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       {shouldShowLayout && <Navbar theme={theme} toggleTheme={toggleTheme} />}
-      <main
-        className={`flex-grow ${shouldShowLayout ? "px-4 md:px-8 lg:px-12" : ""
-          } bg-white dark:bg-gray-900`}>
+      <main className="flex-grow bg-white dark:bg-gray-900">
         <FloatingChatButton
           onOpen={() => setIsChatOpen(true)}
           isOpen={isChatOpen}
@@ -116,6 +115,7 @@ function App() {
           {/* ========== PUBLIC ROUTES ========== */}
           <Route path="/" element={<HomePage />} />
           <Route path="/berita" element={<Berita />} />
+          <Route path="/pengumuman" element={<Pengumuman />} />
           <Route path="/prestasi" element={<Prestasi />} />
           <Route path="/profil-dosen" element={<LecturerProfiles />} />
           <Route path="/tentang-program-studi" element={<TentangProdi />} />
@@ -157,7 +157,7 @@ function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="tentang-prodi" element={<TentangProdiManage />} />
             </Route>
-            
+
             <Route path="prestasi" element={
               <ProtectedRoute requiredRole={["admin"]}>
                 <ListAchievement />

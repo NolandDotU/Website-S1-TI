@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sertifikat from "../assets/sertif-akreditasi.jpg";
 import { getProdiProfile } from "../services/api";
+import { useFadeIn, useSlideUp } from "../hooks/useAnimations";
 
 const TentangProdi = () => {
   const [activeTab, setActiveTab] = useState("visi-misi");
   const [prodiData, setProdiData] = useState(null);
+  const pageRef = useRef(null);
+  const slideRef1 = useRef(null);
+  const slideRef2 = useRef(null);
+
+  useFadeIn(pageRef);
+  useSlideUp(slideRef1);
+  useSlideUp(slideRef2);
 
   useEffect(() => {
     const fetchProdi = async () => {
@@ -61,7 +69,7 @@ const TentangProdi = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div ref={pageRef} className="min-h-screen bg-white dark:bg-gray-900">
       {/* Hero Section */}
       <section className="relative min-h-[280px] sm:min-h-[320px] md:h-96 bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-800 dark:to-gray-900 flex items-center justify-center">
         <div className="absolute inset-0 bg-black opacity-20 dark:opacity-30"></div>
@@ -83,7 +91,7 @@ const TentangProdi = () => {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800">
+      <section ref={slideRef1} className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
             {/* Text Content - tetap sama */}
@@ -148,7 +156,7 @@ const TentangProdi = () => {
       </section>
 
       {/* Bidang Peminatan */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white dark:bg-gray-900">
+      <section ref={slideRef2} className="py-12 sm:py-16 px-4 sm:px-6 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-12">
             Bidang Peminatan

@@ -1,58 +1,52 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const HeroBanner = () => {
+  const containerRef = useRef(null);
+
+  useGSAP(() => {
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      })
+      .fromTo(
+      ".hero-title",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+    )
+      .fromTo(
+        ".hero-desc",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        "-=0.4"
+      )
+      .fromTo(
+        ".hero-buttons a",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" },
+        "-=0.4"
+      );
+  }, { scope: containerRef });
+
   return (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.8, ease: "easeInOut" },
-        },
-      }}
+    <section
+      ref={containerRef}
       className="bg-white dark:bg-gray-900">
-      <div className="mx-auto max-w-screen-xl px-4 py-8 text-center lg:py-16">
-        <motion.h1
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.8, ease: "easeInOut", delay: 0.2 },
-            },
-          }}
-          className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+      <div className="mx-auto max-w-screen-xl px-4 py-8 text-left lg:py-16 border-r-2">
+        <h1 className="hero-title mb-4 text-4xl font-extrabold font-montserrat leading-none tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
           S1 Teknik Informatika
-        </motion.h1>
-        <motion.p
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.8, ease: "easeInOut", delay: 0.4 },
-            },
-          }}
-          className="mb-8 text-lg font-normal text-gray-500 dark:text-gray-400 sm:px-16 lg:px-48 lg:text-xl">
+        </h1>
+        <p className="hero-desc mb-8 text-lg font-normal text-gray-500 dark:text-gray-400 sm:px-16 lg:px-48 lg:text-xl">
           Lingkungan akademik modern, riset berkelas, dan komunitas yang
           mendorong inovasi. Jelajahi program, fasilitas, dan kesempatan untuk
           bertumbuh.
-        </motion.p>
-        <motion.div
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.8, ease: "easeInOut", delay: 0.6 },
-            },
-          }}
-          className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+        </p>
+        <div className="hero-buttons flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 pb-8">
           <a
             href="https://www.uksw.edu/informasi-pendaftaran/"
             className="inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
@@ -100,9 +94,9 @@ const HeroBanner = () => {
             }}>
             Prestasi / Achievment
           </a>
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

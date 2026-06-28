@@ -18,7 +18,7 @@ const defaultSlides = [
   },
 ];
 
-const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
+const Carousel = ({ slides = defaultSlides, autoPlayInterval = 10000 }) => {
   const BACKEND_URL = env.IMAGE_BASE_URL;
   const [index, setIndex] = useState(0);
 
@@ -94,8 +94,8 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
     }, autoPlayInterval);
     if (count <= 0) {
       return (
-        <div className="w-full max-w-full mx-auto py-8 px-4">
-          <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+        <div className="w-full max-w-full mx-auto">
+          <div className="relative h-[calc(100vh-80px)] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -148,8 +148,8 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   // Empty state component
   if (count <= 0) {
     return (
-      <div className="w-full max-w-full mx-auto py-8 px-4">
-        <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="w-full max-w-full mx-auto">
+        <div className="relative h-[calc(100vh-80px)] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -197,8 +197,8 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
   }
 
   return (
-    <div className="w-full max-w-full mx-auto py-8 px-4">
-      <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] rounded-2xl overflow-hidden">
+    <div className="w-full max-w-full mx-auto">
+      <div className="relative h-[calc(100vh-80px)] overflow-hidden">
         {/* Full Width Viewport */}
         <div className="overflow-hidden h-full">
           <AnimatePresence mode="wait">
@@ -310,11 +310,10 @@ const Carousel = ({ slides = defaultSlides, autoPlayInterval = 5000 }) => {
                   aria-label={`Go to slide ${i + 1}`}
                   className="group relative">
                   <div
-                    className={`h-1 rounded-full transition-all duration-500 ${
-                      i === index
-                        ? "w-12 bg-white"
-                        : "w-8 bg-white/50 hover:bg-white/70"
-                    }`}
+                    className={`h-1 rounded-full transition-all duration-500 ${i === index
+                      ? "w-12 bg-white"
+                      : "w-8 bg-white/50 hover:bg-white/70"
+                      }`}
                   />
                 </button>
               ))}

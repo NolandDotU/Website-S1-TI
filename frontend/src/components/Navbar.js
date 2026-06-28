@@ -6,6 +6,8 @@ import { env } from "../services/utils/env";
 import Toggle from "./Toggle";
 import { Menu, User2, X, Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
 import { getSettings } from "../services/settings.service";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,6 +15,8 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
   const [settings, setSettings] = useState(null);
+  const navRef = useRef(null);
+  const logoRef = useRef(null);
   const dropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -79,8 +83,21 @@ const Navbar = ({ theme, toggleTheme }) => {
     };
   }, []);
 
+  useGSAP(() => {
+    // Navbar slide down on load
+    gsap.fromTo(
+      navRef.current,
+      { y: -100, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+    );
+  }, { scope: navRef });
+
+  const handleLogoHover = () => {
+    gsap.to(logoRef.current, { rotation: "+=360", duration: 1, ease: "back.out(1.5)" });
+  };
+
   return (
-    <nav className="sticky top-0 z-50 w-full text-black dark:text-white bg-white dark:bg-gray-900 shadow-sm flex flex-col">
+    <nav ref={navRef} className="sticky top-0 z-50 w-full text-black dark:text-white bg-white dark:bg-gray-900 shadow-sm flex flex-col">
       {/* Top Bar */}
       <div className="w-full bg-blue-700 dark:bg-gray-950 text-white py-2 px-4 md:px-10 hidden lg:flex justify-between items-center text-sm font-medium">
         <div className="flex gap-6 items-center">
@@ -124,8 +141,9 @@ const Navbar = ({ theme, toggleTheme }) => {
             <Link
               to="/"
               className="text-2xl font-bold hover:text-gray-300"
-              onClick={() => setIsMobileMenuOpen(false)}>
-              <img src={Logo} alt="Logo" className="h-14" />
+              onClick={() => setIsMobileMenuOpen(false)}
+              onMouseEnter={handleLogoHover}>
+              <img ref={logoRef} src={Logo} alt="Logo" className="h-14" />
             </Link>
             <ul className="hidden md:flex bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
               <li>
@@ -140,6 +158,13 @@ const Navbar = ({ theme, toggleTheme }) => {
                   to="/berita"
                   className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
                   Berita
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pengumuman"
+                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                  Pengumuman
                 </Link>
               </li>
               <li
@@ -272,6 +297,12 @@ const Navbar = ({ theme, toggleTheme }) => {
                 className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
                 onClick={() => setIsMobileMenuOpen(false)}>
                 Berita
+              </Link>
+              <Link
+                to="/pengumuman"
+                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                onClick={() => setIsMobileMenuOpen(false)}>
+                Pengumuman
               </Link>
 
               <button

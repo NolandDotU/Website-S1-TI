@@ -7,7 +7,7 @@ import AnnouncementDetail from "./announcement/AnnouncementDetail";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-const FeaturedNews = () => {
+const FeaturedPengumuman = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -24,7 +24,7 @@ const FeaturedNews = () => {
       if (!response.announcements || response.announcements.length === 0) {
         setNews([]);
       } else {
-        const allowedCategories = ["event", "alumni", "berita"];
+        const allowedCategories = ["pengumuman", "lowongan"];
         const filtered = response.announcements.filter((item) =>
           allowedCategories.includes(item.category?.toLowerCase())
         );
@@ -42,13 +42,13 @@ const FeaturedNews = () => {
   }, []);
 
   let displayNews = news.slice(0, 4);
-  if (displayNews.length < 4) {
+  if (displayNews.length > 0 && displayNews.length < 4) {
     displayNews = [...displayNews, ...Array(4 - displayNews.length).fill(null)];
   }
 
   const increamentView = async (id) => {
     try {
-      const response = await updateViewCount(id);
+      await updateViewCount(id);
     } catch (error) {
       console.error("Error updating view count:", error);
     }
@@ -63,7 +63,7 @@ const FeaturedNews = () => {
     if (loading || error) return;
     
     gsap.fromTo(
-      ".news-card",
+      ".pengumuman-card",
       { opacity: 0, y: 50 },
       {
         opacity: 1,
@@ -79,7 +79,7 @@ const FeaturedNews = () => {
       }
     );
     gsap.fromTo(
-      ".news-header",
+      ".pengumuman-header",
       { opacity: 0, y: 30 },
       {
         opacity: 1,
@@ -95,15 +95,14 @@ const FeaturedNews = () => {
   }, { scope: containerRef, dependencies: [loading, news] });
 
   return (
-    <section ref={containerRef} className="bg-white dark:bg-gray-900">
+    <section ref={containerRef} className="bg-gray-50 dark:bg-gray-900/50">
       <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
-        <div className="news-header mx-auto mb-8 max-w-screen-sm text-center lg:mb-16">
+        <div className="pengumuman-header mx-auto mb-8 max-w-screen-sm text-center lg:mb-16">
           <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
-            Featured News
+            Pengumuman & Lowongan
           </h2>
           <p className="font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-            Temukan informasi terbaru tentang riset, prestasi mahasiswa,
-            kegiatan kampus, dan peluang menjadi asisten dosen.
+            Informasi penting terkait pengumuman resmi dan peluang lowongan terbaru.
           </p>
         </div>
 
@@ -113,7 +112,7 @@ const FeaturedNews = () => {
             {[...Array(4)].map((_, index) => (
               <div
                 key={`loading-${index}`}
-                className="rounded-lg border border-slate-200 bg-slate-50 p-6 h-64 animate-pulse">
+                className="rounded-lg border border-slate-200 bg-white p-6 h-64 animate-pulse">
                 <div className="h-4 bg-slate-200 rounded w-3/4 mb-4"></div>
                 <div className="h-3 bg-slate-200 rounded w-1/2 mb-4"></div>
                 <div className="h-3 bg-slate-200 rounded w-full mb-2"></div>
@@ -158,8 +157,8 @@ const FeaturedNews = () => {
         {/* Empty State */}
         {!loading && !error && news.length === 0 && (
           <div className="flex items-center justify-center w-full">
-            <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 shadow-md  px-4 rounded-md w-full">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 rounded-full mb-4">
+            <div className="text-center py-12 bg-white dark:bg-gray-800 shadow-md  px-4 rounded-md w-full">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 dark:bg-slate-800 rounded-full mb-4">
                 <svg
                   className="w-8 h-8 text-slate-400 dark:text-slate-500"
                   fill="none"
@@ -189,7 +188,7 @@ const FeaturedNews = () => {
             {displayNews.map((item, index) => (
               <div
                 key={item ? item.id : `empty-${index}`}
-                className="news-card">
+                className="pengumuman-card">
                 {item ? (
                   <NewsCard
                     onClick={() => onClickAnnouncement(item)}
@@ -207,8 +206,8 @@ const FeaturedNews = () => {
                     views={item.views}
                   />
                 ) : (
-                  <div className="rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-4 h-full min-h-[180px] flex items-center justify-center text-slate-400 dark:text-slate-500">
-                    Berita belum tersedia
+                  <div className="rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 p-4 h-full min-h-[180px] flex items-center justify-center text-slate-400 dark:text-slate-500">
+                    Pengumuman belum tersedia
                   </div>
                 )}
               </div>
@@ -227,4 +226,4 @@ const FeaturedNews = () => {
   );
 };
 
-export default FeaturedNews;
+export default FeaturedPengumuman;

@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Logo from "../assets/logo/Logo-DMl9ckBx.png";
 import K2I from "../assets/logo/K2I.png";
 import { getSettings } from "../services/settings.service";
+import { useSlideUp } from "../hooks/useAnimations";
 
 const Footer = () => {
   const [settings, setSettings] = useState(null);
+  const footerRef = useRef(null);
+
+  useSlideUp(footerRef);
 
   useEffect(() => {
     getSettings().then((res) => {
@@ -15,7 +19,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="w-full p-5 relative">
+    <footer ref={footerRef} className="w-full p-5 relative">
       {/* Vertical lines extending through footer - aligned with page lines */}
       <div className="absolute inset-0 pointer-events-none left-0 right-0">
         <div className="h-full flex justify-around">

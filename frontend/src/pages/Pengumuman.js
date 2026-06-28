@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import NewsCard from "../components/announcement/NewsCard";
-import MDEditor from "@uiw/react-md-editor";
-import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Filter } from "lucide-react";
 import {
   getAnnouncements,
   updateViewCount,
@@ -11,7 +10,7 @@ import { env } from "../services/utils/env";
 import AnnouncementDetail from "../components/announcement/AnnouncementDetail";
 import SearchBar from "../components/SearchBar";
 
-const Berita = () => {
+const Pengumuman = () => {
   const toast = useToast();
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
@@ -25,32 +24,27 @@ const Berita = () => {
 
   const categories = [
     { value: "all", label: "Semua" },
-    { value: "event", label: "Event" },
-    { value: "alumni", label: "Alumni" },
+    { value: "pengumuman", label: "Pengumuman" },
+    { value: "lowongan", label: "Lowongan" },
   ];
 
   const increamentView = async (id) => {
     try {
-      const response = await updateViewCount(id);
-
-    } catch (error) {
-
-    }
+      await updateViewCount(id);
+    } catch (error) {}
   };
 
   const onClickAnnouncement = (announcement) => {
     increamentView(announcement.id);
     setSelectedAnnouncement(announcement);
-
   };
 
   const fetchAnnouncement = async (currentPage = 1, query = "") => {
     setLoading(true);
     try {
-
       const response = await getAnnouncements(
         currentPage,
-        query ? 100 : limit, // Fetch more items when searching
+        query ? 100 : limit,
         query,
       );
 
@@ -62,11 +56,9 @@ const Berita = () => {
       setTotalPages(response.meta.totalPage);
       setPage(response.meta.page);
 
-      // Apply filters after fetching
       applyFilters(response.announcements, query, selectedCategory);
     } catch (error) {
-      toast.error(`Terjadi kesalahan! (${error.response?.data?.message})`);
-
+      toast.error(`Terjadi kesalahan! (${error.response?.data?.message || error.message})`);
       setAnnouncements([]);
       setFilteredAnnouncements([]);
     } finally {
@@ -84,16 +76,14 @@ const Berita = () => {
 
   const applyFilters = useCallback((data, query, category) => {
     let filtered = [...data];
-    const allowedCategories = ["event", "alumni", "berita"];
+    const allowedCategories = ["pengumuman", "lowongan"];
 
-    // Apply category filter first
     if (category !== "all") {
       filtered = filtered.filter((ann) => ann.category === category);
     } else {
       filtered = filtered.filter((ann) => allowedCategories.includes(ann.category?.toLowerCase()));
     }
 
-    // Apply search filter
     if (query && query.trim()) {
       const lowerQuery = query.toLowerCase().trim();
       filtered = filtered.filter(
@@ -110,31 +100,30 @@ const Berita = () => {
   const handleSearch = useCallback(
     (query) => {
       setSearchQuery(query);
-      setPage(1); // Reset to first page when searching
+      setPage(1);
 
       if (!query || !query.trim()) {
-        // If search is cleared, fetch normal data
         fetchAnnouncement(1, "");
         return;
       }
 
-      // Fetch with search query
       fetchAnnouncement(1, query);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedCategory],
   );
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setPage(1); // Reset to first page when changing category
+    setPage(1);
     applyFilters(announcements, searchQuery, category);
   };
 
   useEffect(() => {
     fetchAnnouncement(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Reapply filters when announcements or filters change
   useEffect(() => {
     applyFilters(announcements, searchQuery, selectedCategory);
   }, [announcements, searchQuery, selectedCategory, applyFilters]);
@@ -144,23 +133,20 @@ const Berita = () => {
   return (
     <>
       <section className="mx-auto w-full py-10 sm:py-12 px-4 sm:px-6 md:px-12">
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
           <div className="flex-1">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
-              Berita
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+              Pengumuman & Lowongan
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400 max-w-2xl">
-              Temukan berita, event, dan informasi alumni terbaru seputar program
-              studi dan kampus di halaman ini.
+              Temukan pengumuman resmi dan informasi lowongan terbaru di halaman ini.
             </p>
           </div>
           <div className="w-full md:w-auto">
-            <SearchBar onSearch={handleSearch} placeholder="Cari berita..." />
+            <SearchBar onSearch={handleSearch} placeholder="Cari pengumuman..." />
           </div>
         </div>
 
-        {/* Category Filter */}
         <div className="mb-6 flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
             <Filter className="w-4 h-4" />
@@ -182,7 +168,6 @@ const Berita = () => {
           </div>
         </div>
 
-        {/* Search/Filter Results Info */}
         {isFiltering && (
           <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -218,9 +203,8 @@ const Berita = () => {
           </div>
         )}
 
-        {/* Loading State */}
         {loading ? (
-            <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(limit)].map((_, index) => (
               <div
                 key={index}
@@ -237,8 +221,7 @@ const Berita = () => {
           </div>
         ) : (
           <>
-            {/* Announcements Grid */}
-              <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAnnouncements.length > 0 ? (
                 filteredAnnouncements.map((ann) => (
                   <NewsCard
@@ -286,7 +269,6 @@ const Berita = () => {
               )}
             </div>
 
-            {/* Load More Button - Only show when not filtering */}
             {!isFiltering && page < totalPages && (
               <div className="mt-10 flex justify-center">
                 <button
@@ -301,7 +283,6 @@ const Berita = () => {
         )}
       </section>
 
-      {/* Modal Popup */}
       {selectedAnnouncement !== null && (
         <AnnouncementDetail
           onClose={() => setSelectedAnnouncement(null)}
@@ -312,4 +293,4 @@ const Berita = () => {
   );
 };
 
-export default Berita;
+export default Pengumuman;

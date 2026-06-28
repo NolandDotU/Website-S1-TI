@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Import all home page sections
 import Carousel from "../components/Carousel";
 import HeroBanner from "../components/HeroBanner";
 import AdmissionsHighlights from "../components/AdmissionsHighlights";
 import FeaturedNews from "../components/FeaturedNews";
+import FeaturedPengumuman from "../components/FeaturedPengumuman";
 import TentangTISection from "../components/TentangTISection";
 import KerjaSamaSection from "../components/KerjaSamaSection";
 import LayananKampusSection from "../components/LayananKampusSection";
 import { getAllHighlight } from "../services/api";
+import { useFadeIn } from "../hooks/useAnimations";
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [carousel, setCarousel] = useState([]);
+  const pageRef = useRef(null);
+
+  useFadeIn(pageRef);
 
   const fetchCarousel = async () => {
     try {
@@ -98,15 +103,16 @@ const HomePage = () => {
     );
   }
   return (
-    <>
+    <div ref={pageRef}>
       <Carousel slides={carousel} />
       <HeroBanner />
       {/* <AdmissionsHighlights /> */}
       <FeaturedNews />
+      <FeaturedPengumuman />
       {/* <TentangTISection /> */}
       <KerjaSamaSection />
       <LayananKampusSection />
-    </>
+    </div>
   );
 };
 
