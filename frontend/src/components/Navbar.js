@@ -145,25 +145,25 @@ const Navbar = ({ theme, toggleTheme }) => {
               onMouseEnter={handleLogoHover}>
               <img ref={logoRef} src={Logo} alt="Logo" className="h-14" />
             </Link>
-            <ul className="hidden md:flex bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
+            <ul className="hidden md:flex bg-gradient-to-b from-blue-500 to-blue-600 dark:from-gray-800 dark:to-gray-900 items-center space-x-6 border-2 border-gray-300 dark:border-gray-700 p-2 rounded-xl">
               <li>
                 <Link
                   to="/"
-                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                  className="py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   to="/berita"
-                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                  className="py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                   Berita
                 </Link>
               </li>
               <li>
                 <Link
                   to="/pengumuman"
-                  className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                  className="py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                   Pengumuman
                 </Link>
               </li>
@@ -172,7 +172,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                 ref={dropdownRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}>
-                <button className="py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center gap-1">
+                <button className="py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition flex items-center gap-1">
                   Lainnya
                   <svg
                     className={`w-4 h-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""
@@ -189,15 +189,15 @@ const Navbar = ({ theme, toggleTheme }) => {
                   </svg>
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-gradient-to-b from-blue-500 to-blue-600 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
                     <Link
                       to="/profil-dosen"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                      className="block px-4 py-3 text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                       Daftar Profil Dosen
                     </Link>
                     <Link
                       to="/tentang-program-studi"
-                      className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                      className="block px-4 py-3 text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                       Tentang Program Studi
                     </Link>
                   </div>
@@ -216,7 +216,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                 onMouseEnter={handleUserMouseEnter}
                 onMouseLeave={handleUserMouseLeave}
                 onClick={() => setIsDropDownUser(!isDropDownUser)}>
-                <button className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                <button className="flex items-center gap-2 p-1 rounded-full text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                   {imgError ? (
                     <User2 />
                   ) : (
@@ -233,29 +233,29 @@ const Navbar = ({ theme, toggleTheme }) => {
                   )}
                 </button>
                 {isDropDownUser && (
-                  <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-gradient-to-b from-blue-500 to-blue-600 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
                     {(user.role === "admin" || user.role === "hmp") && (
                       <Link to="/cms/dashboard">
-                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <button className="w-full text-left px-4 py-3 text-sm text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                           Dashboard
                         </button>
                       </Link>
                     )}
                     {user.role === "dosen" && (
                       <Link to="/dosen/profile">
-                        <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <button className="w-full text-left px-4 py-3 text-sm text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                           Public Profile
                         </button>
                       </Link>
                     )}
                     <Link to="/user/profile">
-                      <button className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                      <button className="w-full text-left px-4 py-3 text-sm text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition">
                         Pengaturan Akun
                       </button>
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-100 text-sm dark:hover:bg-gray-700 transition text-red-600 dark:text-red-400">
+                      className="w-full text-left px-4 py-3 hover:bg-blue-700 text-sm dark:hover:bg-gray-700 transition text-red-100 font-medium">
                       Logout
                     </button>
                   </div>
@@ -285,28 +285,28 @@ const Navbar = ({ theme, toggleTheme }) => {
 
         {isMobileMenuOpen && (
           <div className="md:hidden pb-4">
-            <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-2 space-y-1">
+            <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-b from-blue-500 to-blue-600 dark:from-gray-800 dark:to-gray-900 p-2 space-y-1">
               <Link
                 to="/"
-                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                className="block py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition"
                 onClick={() => setIsMobileMenuOpen(false)}>
                 Home
               </Link>
               <Link
                 to="/berita"
-                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                className="block py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition"
                 onClick={() => setIsMobileMenuOpen(false)}>
                 Berita
               </Link>
               <Link
                 to="/pengumuman"
-                className="block py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+                className="block py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition"
                 onClick={() => setIsMobileMenuOpen(false)}>
                 Pengumuman
               </Link>
 
               <button
-                className="w-full text-left py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition flex items-center justify-between"
+                className="w-full text-left py-2 px-3 rounded text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition flex items-center justify-between"
                 onClick={() => setIsMobileMoreOpen((prev) => !prev)}>
                 Lainnya
                 <svg
@@ -324,16 +324,16 @@ const Navbar = ({ theme, toggleTheme }) => {
               </button>
 
               {isMobileMoreOpen && (
-                <div className="ml-3 mr-1 my-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+                <div className="ml-3 mr-1 my-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-blue-600 dark:bg-gray-800 overflow-hidden">
                   <Link
                     to="/profil-dosen"
-                    className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    className="block px-4 py-3 text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition"
                     onClick={() => setIsMobileMenuOpen(false)}>
                     Daftar Profil Dosen
                   </Link>
                   <Link
                     to="/tentang-program-studi"
-                    className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    className="block px-4 py-3 text-white hover:bg-blue-700 dark:hover:bg-gray-700 transition"
                     onClick={() => setIsMobileMenuOpen(false)}>
                     Tentang Program Studi
                   </Link>

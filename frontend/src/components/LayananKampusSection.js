@@ -43,14 +43,14 @@ const LayananKampusSection = () => {
               key={s.id}
               onClick={() => window.open(s.link)}
               className="relative rounded-2xl p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow hover:shadow-xl transition group overflow-hidden">
-              <div  
-                className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-br ${s.color} blur-sm`}
+              <div
+                className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-blue-500 to-blue-600 blur-sm`}
               />
               <div className="relative z-10">
-                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">
+                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-white transition">
                   {s.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 group-hover:text-white transition">
                   {s.desc}
                 </p>
                 <button className="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-black/20 backdrop-blur text-gray-700 dark:text-gray-300 group-hover:text-white transition">

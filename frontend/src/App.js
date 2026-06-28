@@ -178,7 +178,7 @@ function App() {
         </Routes>
       </main>
 
-      {shouldShowLayout && <Footer />}
+      <Footer />
     </div>
   );
 }
